@@ -16,12 +16,6 @@ from langchain_core.prompts import ChatPromptTemplate
 
 load_dotenv()
 
-# Cloud fallback: claude.ai cloud environments strip the reserved name
-# ANTHROPIC_API_KEY, so cloud routines provide the key as BOTBOT_API_KEY.
-import os
-if not os.environ.get("ANTHROPIC_API_KEY") and os.environ.get("BOTBOT_API_KEY"):
-    os.environ["ANTHROPIC_API_KEY"] = os.environ["BOTBOT_API_KEY"]
-
 # Explicit max_tokens: the interviewer re-emits the FULL form as JSON every
 # turn, so replies grow throughout the interview and must never be truncated.
 llm = ChatAnthropic(model="claude-sonnet-5", max_tokens=8000)
@@ -39,7 +33,9 @@ class BusinessRequirements(BaseModel):
     business_description: Optional[str] = None
     problem_to_solve: Optional[str] = None      # WHY they want a chatbot
     target_audience: Optional[str] = None        # who will talk to it
-    channels: Optional[list[str]] = None         # website, WhatsApp, Instagram...
+    channels: Optional[list[str]] = None         # where the BOT should live (WhatsApp, Instagram...);
+                                                 # other ways customers reach the business today
+                                                 # belong in business_description
     integrations: Optional[list[str]] = None     # booking system, CRM, order DB...
     conversation_volume: Optional[str] = None    # rough conversations/day, hours coverage
     languages: Optional[list[str]] = None
@@ -78,13 +74,13 @@ analysis_parser = PydanticOutputParser(pydantic_object=ConversationAnalysis)
 
 NO_MATERIALS = "No materials shared yet."
 
-# The interviewer's system prompt lives in its own file: it is the EVOLVABLE part
-# of BotBot — the self-improvement loop (evolve.py) may rewrite that file, never this code.
+# The interviewer's system prompt lives in its own file so it can be edited
+# and improved without touching this code.
 PROMPT_FILE = Path(__file__).parent / "interviewer_prompt.txt"
 
 def _build_interview_chain():
-    """Read the prompt file FRESH so improvements made by evolve take effect
-    on the very next turn, not on the next process restart."""
+    """Read the prompt file FRESH so prompt edits take effect on the very
+    next turn, not on the next process restart."""
     prompt = ChatPromptTemplate.from_messages(
         [
             ("system", PROMPT_FILE.read_text(encoding="utf-8")),

@@ -8,5 +8,4 @@ python-dotenv
 pydantic==2.13.5
 wikipedia
 ddgs
-reportlab==5.0.1
 pytest
