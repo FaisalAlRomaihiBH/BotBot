@@ -1,30 +1,29 @@
-[Mon, Apr 1, 9:14 AM] Denise (customer): Hi! Do you have any 10x10 units available and how much per month?
-[Mon, Apr 1, 9:22 AM] Frank: Hey yes we do! 129 a month right now, first month free too
-[Mon, Apr 1, 9:23 AM] Denise (customer): Great, is there a deposit?
-[Mon, Apr 1, 9:25 AM] Frank: No deposit needed, just sign and go
-[Mon, Apr 1, 11:40 AM] Frank: Actually hold on let me check with Yolanda on the deposit thing
-[Mon, Apr 1, 3:12 PM] Denise (customer): Any update?
-[Mon, Apr 1, 6:58 PM] Frank: yeah so it's actually 50 deposit, standard for all units, sorry for confusion
-[Tue, Apr 2, 10:02 AM] Sam (customer): Hi, are you open Sundays? Need to grab a unit this weekend
-[Tue, Apr 2, 10:15 AM] Frank: We're closed Sundays but I can meet you there, just text me Saturday
-[Tue, Apr 2, 10:16 AM] Sam (customer): Perfect thank you
-[Tue, Apr 2, 4:30 PM] Frank: Actually you know what forget Sunday appointments, insurance issue, we're strictly Mon-Sat now
-[Wed, Apr 3, 1:05 PM] Priya (customer): Does the 10x20 include 24hr gate access?
-[Wed, Apr 3, 1:20 PM] Frank: Yep included no extra charge
-[Wed, Apr 3, 5:47 PM] Priya (customer): Awesome, and is the first-month-free promo still on?
-[Wed, Apr 3, 5:50 PM] Frank: That ended in March unfortunately, prices are 219 flat
-[Wed, Apr 3, 5:51 PM] Priya (customer): Oh, someone told me it was still running?
-[Wed, Apr 3, 5:55 PM] Frank: hm let me look into that, might still be on for medium units only
-[Thu, Apr 4, 9:00 AM] Priya (customer): Any word on the promo?
-[Fri, Apr 11, 2:14 PM] Denise (customer): Hi again, just confirming - is the deposit 50 or is there also a lock fee I need?
-[Fri, Apr 11, 2:30 PM] Frank: No lock fee, just the 50, oh wait actually I think Yolanda's been charging 100 lately for medium/large, let me get back to you
-[Mon, Apr 14, 11:00 AM] Yolanda: Hi Denise, it's Yolanda - deposit is $50 flat for all sizes, Frank got confused, don't worry about the $100 thing
-[Tue, Apr 15, 8:45 AM] Sam (customer): Are you guys getting climate controlled units? Someone mentioned it
-[Tue, Apr 15, 9:10 AM] Frank: Yes! Basically confirmed for spring, east wing, gonna be great
-[Tue, Apr 15, 9:12 AM] Sam (customer): Nice, how much extra will that cost?
-[Tue, Apr 15, 9:30 AM] Frank: Honestly haven't figured pricing yet, could be 20-40 extra a month, still working it out with my partner
-[Wed, Apr 16, 4:00 PM] Priya (customer): Following up again on the promo question from last week
-[Thu, Apr 24, 7:20 PM] Frank: hey sorry been slammed, yeah the promo thing, I'll double check tomorrow and let you know for sure
-[Fri, May 2, 10:00 AM] Sam (customer): Hey any update on unit prices, heard they might be going up
-[Fri, May 2, 10:15 AM] Frank: Yeah we're raising everything 10% starting next month, locking in your rate now would be smart
-[Fri, May 2, 3:44 PM] Frank: actually scratch that, might hold off till summer, still deciding, I'll message you when it's official
+[Mon 9:12 AM] Sarah Kellerman: Hi! I'm interested in a 6-seat dining table in oak. What would that run me?
+[Mon 9:40 AM] Tomasz Wiśniewski: For 6-seat oak, standard finish, that's $1,450. Solid price, no surprises.
+[Mon 9:41 AM] Sarah Kellerman: Great, and how long for delivery?
+[Mon 11:15 AM] Tomasz Wiśniewski: Right now about 6 weeks from deposit to delivery.
+[Mon 11:16 AM] Sarah Kellerman: Perfect, how much deposit do you need?
+[Mon 11:20 AM] Tomasz Wiśniewski: 50% to start, that's standard, always has been.
+[Tue 8:03 AM] Sarah Kellerman: Sounds good, sending payment today!
+[Tue 2:47 PM] Tomasz Wiśniewski: Actually hold on, I looked at my board, that table with the finish you want is closer to $1,900. The $1,450 was for the plain sealed one, not the oiled walnut-stain look.
+[Tue 2:50 PM] Sarah Kellerman: Oh — I didn't ask for walnut stain though, I just wanted natural oak.
+[Tue 2:55 PM] Tomasz Wiśniewski: Right, natural is $1,450 like I said. Don't worry about it.
+[Tue 5:30 PM] Kasia (shop): Hi Sarah, this is Kasia, Tomasz's assistant — just to confirm your table order, I'll check the calendar and get back to you on exact dates!
+[Thu 10:02 AM] Sarah Kellerman: Hi, just following up on the delivery date?
+[Fri 4:15 PM] Sarah Kellerman: Hello?
+[Mon 9:00 AM] Sarah Kellerman: Kasia? Tomasz? Still there? Would love a timeline.
+[Wed 6:50 AM] James Okoro: Hi, do you guys still do delivery? Need a table brought to Oak Park, about 15 miles.
+[Wed 7:02 AM] Tomasz Wiśniewski: No, we stopped doing delivery, pickup only now.
+[Wed 7:03 AM] James Okoro: Ah that's a shame, ok I'll figure something out.
+[Wed 8:45 PM] Tomasz Wiśniewski: Actually for 15 miles I can do it, $100 flat. We do still deliver depending on distance.
+[Wed 8:46 PM] James Okoro: Oh perfect, so which is it — pickup only or delivery available?
+[Wed 8:50 PM] Tomasz Wiśniewski: Delivery available, always has been. Just not for everyone.
+[Thu 9:30 AM] James Okoro: Got it I think. Can I get a quote for built-in cabinets, 10 linear feet, walnut?
+[Thu 11:00 AM] Tomasz Wiśniewski: For walnut built-ins, 10ft, that's about $2,800 total.
+[Thu 11:32 AM] Tomasz Wiśniewski: Wait, I mean $300 per foot, so that's $3,000. My bad, math.
+[Fri 3:00 PM] James Okoro: Ok, and lead time on that?
+[Fri 3:04 PM] Tomasz Wiśniewski: I'll have to check the schedule properly and text you back tonight.
+[Sat 6:00 PM] James Okoro: Hey, any update on lead time?
+[the following Wed 1:00 PM] James Okoro: Still hoping to hear back on this when you get a chance.
+[Fri 8:15 AM] Sarah Kellerman: Tomasz I really need an answer, is my table still coming in 6 weeks or not??
+[Fri 8:50 AM] Tomasz Wiśniewski: Yes of course, 6 weeks, like I told you from the start. No changes.
