@@ -10,3 +10,4 @@ __pycache__/
 # Generated output from interview runs
 requirements_brief.json
 persona_sessions/
+parallel_runs/
