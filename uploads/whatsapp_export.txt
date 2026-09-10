@@ -1,36 +1,28 @@
-[14/03, 09:12] Bex - Spoke & Bone: Morning! Yes we can def do a tune-up this week, £45, no bother
-[14/03, 09:14] Bex - Spoke & Bone: actually hang on — if it's the hybrid with disc brakes it's more like £50, let me not promise 45
-[14/03, 09:15] Customer - Liam: haha ok, so is it 45 or 50?
-[14/03, 09:20] Bex - Spoke & Bone: 50 to be safe! Sorry, I keep doing that
-[14/03, 09:21] Customer - Liam: no worries, when can I drop it off
-[14/03, 09:25] Bex - Spoke & Bone: Thursday morning is good
-[14/03, 09:26] Bex - Spoke & Bone: oh wait no Thursday Dov's off and Jamie's got college, better make it Friday
-[14/03, 09:27] Customer - Liam: Friday it is, what time
-[14/03, 09:30] Bex - Spoke & Bone: 9am when we open!
-[15/03, 11:02] Customer - Priya M: Hi, wondering about a custom wheel build for a touring bike, how much roughly
-[15/03, 11:10] Bex - Spoke & Bone: For touring I'd say £220 all in, decent hubs
-[15/03, 11:12] Bex - Spoke & Bone: actually if you want the Ceres hubs it's more like £260, they're pricier than I remembered
-[15/03, 11:13] Customer - Priya M: ok! and how long would that take
-[15/03, 11:20] Bex - Spoke & Bone: 2-3 weeks typically
-[15/03, 11:21] Bex - Spoke & Bone: though honestly if we're not slammed it could be more like 10 days, I keep meaning to just pick one and tell people that
-[15/03, 11:22] Customer - Priya M: haha ok, so which is it for me specifically
-[15/03, 11:35] Bex - Spoke & Bone: let me check what's ahead of you in the queue and get back to you
-[19/03, 16:40] Customer - Priya M: hey, any update on the wheel build timing?
-[22/03, 08:05] Customer - Priya M: hi Bex, still hoping to hear re: timeline before I commit
-[02/04, 13:15] Customer - Grace T: Hi, do you guys still do same-day puncture repairs? Got a flat and need to get to work
-[02/04, 13:20] Bex - Spoke & Bone: yes! bring it in, £15, in and out
-[02/04, 13:22] Bex - Spoke & Bone: actually we might be stopping same-day stuff soon, it's been messing with the schedule, but today's fine, come now
-[02/04, 13:23] Customer - Grace T: ok great, on my way
-[04/04, 10:00] Customer - Marcus O: Interested in a custom steel frame, what's the starting price and deposit
-[04/04, 10:15] Bex - Spoke & Bone: Starting around £1200, deposit is 30% to lock in a build slot
-[04/04, 10:18] Bex - Spoke & Bone: actually you know what, thinking about steel prices lately I should probably start people at £1350 now, and maybe deposit should be 50% given how Ceres has been messing us on parts
-[04/04, 10:20] Customer - Marcus O: so which one do I pay upfront
-[04/04, 10:25] Bex - Spoke & Bone: let's say £1300 start, 40% deposit, does that work? sorry, I go back and forth on this too much
-[04/04, 10:26] Customer - Marcus O: that's fine, can you confirm in writing so we've got one number
-[04/04, 10:40] Bex - Spoke & Bone: will do! just need to double check something with my supplier first, back to you tomorrow
-[10/04, 09:00] Customer - Marcus O: hi, following up — did you confirm the number?
-[15/04, 14:02] Customer - Liam: hey, are you open Mondays? want to swing by for a quick brake check
-[15/04, 14:10] Bex - Spoke & Bone: Mondays are appointment only for custom clients really
-[15/04, 14:12] Bex - Spoke & Bone: although honestly Jamie's usually around Monday mornings so probably fine, come by 10ish
-[15/04, 14:13] Customer - Liam: so are you open or not lol
-[15/04, 14:20] Bex - Spoke & Bone: come by 10, if Jamie's not there just message me!
+[Mon 09:12] Dave H: Hi Nora, my rear derailleur's been skipping gears, can you take a look this week?
+[Mon 09:47] Nora: Oh no, skipping is annoying, could be the hanger's bent or cable's stretched or worse the derailleur itself is toast, hard to say without seeing it
+[Mon 09:48] Nora: I could maybe do Wednesday? But what if it's actually the hanger AND the cable, then it might run over the hour I'd normally block out
+[Mon 09:50] Dave H: That's fine, just book me in whenever works
+[Mon 10:15] Nora: Ok!! Let's tentatively say Wednesday 2pm but I'll confirm morning-of in case weather turns, forecast looks a bit grim honestly
+[Tue 18:03] Priya M: Hiya, do you do e-bike battery checks? Mine won't hold charge
+[Tue 19:40] Nora: Ooh e-bikes make me a bit nervous if I'm honest, especially battery stuff, what if there's a fire risk and I'm not insured properly for that
+[Tue 19:41] Nora: I can look but I might just tell you to go to the manufacturer, I don't want to make it worse
+[Tue 19:42] Priya M: Fair enough, can you at least diagnose it?
+[Tue 19:55] Nora: I'll check what my insurance actually covers and get back to you, sorry, this has been on my list forever
+[Wed 08:01] Nora: Morning Dave! Weather's not as bad as I feared, still on for 2pm x
+[Wed 14:05] Dave H: Great, all sorted, thanks!
+[Wed 14:20] Nora: Turned out to be the hanger AND the cable, sorry, so it ran a bit long, hope that's ok, only charged you the usual £45 though
+[Thu 11:30] Sam K: Hi, interested in a custom build, drop bar commuter, budget around £700
+[Thu 15:02] Nora: Oh exciting! Though I should say, parts availability has been dodgy lately, what if the groupset I want is out of stock, could push it past 6 weeks
+[Thu 15:03] Nora: Also worried £700 might not stretch as far as it used to, prices have crept up on me
+[Thu 15:10] Sam K: Ok, what would you estimate roughly?
+[Thu 15:40] Nora: Maybe £650-750 depending? I'll put together a proper quote tonight, don't want to promise wrong numbers
+[Fri 09:00] Sam K: Hey, any update on that quote?
+[Fri 09:00] Nora: Sorry!! Got a bit anxious about the numbers and didn't want to send something wrong, let me finish it today
+[Sat 16:45] Jamie (staff): Nora the card reader's playing up again, declined two customers today
+[Sat 16:50] Nora: Oh god, take cash or bank transfer, sorry, I keep meaning to replace it but what if the new one is worse
+[Sun 12:00] Emma T: Do you do puncture repairs on Sundays?
+[Sun 14:20] Nora: I'm not technically open Sundays but if it's urgent I could maybe swing by, though I do worry about work-life balance, my partner gets annoyed
+[Sun 14:22] Emma T: No worries, I'll wait till Tuesday
+[Sun 14:23] Nora: Are you sure? I don't want you stuck without a bike, but also Tuesday is definitely safer for me schedule-wise
+[Mon 10:00] Sam K: Still waiting on that custom build quote when you get a chance :)
+[Mon 10:30] Nora: Yes! Sorry, it's basically done, just double checking the fork price because what if it changed since I last looked, will send tonight for real

@@ -1,0 +1,18 @@
+Traceback (most recent call last):
+  File "/home/user/BotBot/evolve.py", line 423, in run_cycle
+    return _run_cycle_inner(cycle_no, stamp, run_dir, history, improve)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/BotBot/evolve.py", line 441, in _run_cycle_inner
+    result = run_interview(persona)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/BotBot/evolve.py", line 161, in run_interview
+    turn, raw = _ask_retry(owner_msg, chat_history, analysis_text)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/BotBot/evolve.py", line 131, in _ask_retry
+    raise last
+  File "/home/user/BotBot/evolve.py", line 125, in _ask_retry
+    return intake.ask(question, chat_history, analysis_text)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/BotBot/intake.py", line 111, in ask
+    raise ValueError(f"empty model reply (stop_reason={meta.get('stop_reason')})")
+ValueError: empty model reply (stop_reason=end_turn)
