@@ -1,30 +1,30 @@
-[14/07, 08:12] Thandi (customer): Morning! Do you have spekboom in stock right now?
-[14/07, 08:20] Nomsa - Sthandwa Sam: Sawubona sisi 🌿 yebo we have plenty, small ones ne big ones, R60 for the small pots kodwa the big ones R150 ish, it depends kancane on size ungazi
-[14/07, 08:21] Thandi (customer): Great, can I get 5 small ones?
-[14/07, 08:25] Nomsa - Sthandwa Sam: Yebo sure, that's like R300 nje, uzofika la or do you want Sipho to bring, delivery kuqhamuka R150 kodwa uma useduze it's less
-[14/07, 08:30] Thandi (customer): I'll come collect, thanks!
-[15/07, 10:03] Grant (customer): Hi, looking for a quote on a full garden makeover, front and back, about 400sqm total
-[15/07, 10:40] Nomsa - Sthandwa Sam: Hi Grant, ok that's a big job hhayi kancane, we'll need site visit first ukuze siqhamise kahle, consultation is R650 but if job goes over R8000 asikhokhi lokho
-[15/07, 10:41] Grant (customer): Understood, when can someone come out?
-[15/07, 10:52] Nomsa - Sthandwa Sam: Let me check with Sipho ngoba the bakkie is at the mechanic kancane, ngizokutshela ngomso
-[17/07, 09:15] Grant (customer): Hi, just following up on the site visit date?
-[17/07, 09:16] Nomsa - Sthandwa Sam: 😅 ai sorry Grant angikakhulumi noSipho namuhla, ngizoxhumana naye maduze
-[19/07, 16:40] Grant (customer): Any update?
-[03/08, 07:50] Priya (customer): Hi! What are your hours on Sunday?
-[03/08, 07:52] Nomsa - Sthandwa Sam: Sunday sivula ngo 7 kuya ku 4, same as everyday except Monday, ngoMsombuluko sivalile
-[03/08, 07:53] Priya (customer): Perfect, and do you do delivery to Howick?
-[03/08, 08:01] Nomsa - Sthandwa Sam: Yebo but that's out of the 15km, so it's more, kodwa angazi kahle manje ngoba ipetrol price ikhuphukile, let me work it out and come back kuwe
-[06/08, 12:30] Priya (customer): Any word on that delivery price?
-[10/08, 14:02] Mrs. Naidoo (customer): Hi Nomsa, can you do a maintenance contract for a small townhouse garden?
-[10/08, 14:10] Nomsa - Sthandwa Sam: Yebo definitely, small garden ilula, it's R900 a month, mostly mowing nokususa amakhula, Bheki uzokwenza monthly visit
-[10/08, 14:11] Mrs. Naidoo (customer): Great, can he come on Mondays? That's my only free day
-[10/08, 14:15] Nomsa - Sthandwa Sam: Ai ngoMsombuluko akalungi kahle u Bheki, usually u-off that side, kodwa asikhulume maybe siyamshintsha
-[10/08, 14:16] Mrs. Naidoo (customer): Ok let me know
-[22/08, 09:00] David (customer): Hi, interested in landscaping for a wedding venue, big job, need it done by October
-[22/08, 09:22] Nomsa - Sthandwa Sam: Ooh that sounds nice! October ah... angazi kahle if sizothola enough mature plants ngaleso sikhathi from the Durban market, ngizohlola and let you know, but generally big jobs like this are R15,000 kuya ku R45,000 kuya ngokuthi u-need what
-[22/08, 09:23] David (customer): Ok, when will you know about the timeline?
-[22/08, 09:30] Nomsa - Sthandwa Sam: Ngizoxhumana nabo ekuqaleni kwe-week ozayo, ngizok'tshela ngeplants availability
-[02/09, 11:00] David (customer): Hi Nomsa, following up, any news on October availability?
-[02/09, 11:45] Nomsa - Sthandwa Sam: Hhayibo sorry David, ngisakhumbula kahle, angikaxhumani nabo ma-suppliers, ngizok'buyela maduze ngiyathembisa
-[05/09, 09:00] Thandi (customer): Hi, are the small spekboom pots still R60? Want to order more
-[05/09, 09:10] Nomsa - Sthandwa Sam: Yebo kusekhona, R60 small ones, sikhona nje, come through anytime before 4
+[Mon, Apr 1, 9:14 AM] Denise (customer): Hi! Do you have any 10x10 units available and how much per month?
+[Mon, Apr 1, 9:22 AM] Frank: Hey yes we do! 129 a month right now, first month free too
+[Mon, Apr 1, 9:23 AM] Denise (customer): Great, is there a deposit?
+[Mon, Apr 1, 9:25 AM] Frank: No deposit needed, just sign and go
+[Mon, Apr 1, 11:40 AM] Frank: Actually hold on let me check with Yolanda on the deposit thing
+[Mon, Apr 1, 3:12 PM] Denise (customer): Any update?
+[Mon, Apr 1, 6:58 PM] Frank: yeah so it's actually 50 deposit, standard for all units, sorry for confusion
+[Tue, Apr 2, 10:02 AM] Sam (customer): Hi, are you open Sundays? Need to grab a unit this weekend
+[Tue, Apr 2, 10:15 AM] Frank: We're closed Sundays but I can meet you there, just text me Saturday
+[Tue, Apr 2, 10:16 AM] Sam (customer): Perfect thank you
+[Tue, Apr 2, 4:30 PM] Frank: Actually you know what forget Sunday appointments, insurance issue, we're strictly Mon-Sat now
+[Wed, Apr 3, 1:05 PM] Priya (customer): Does the 10x20 include 24hr gate access?
+[Wed, Apr 3, 1:20 PM] Frank: Yep included no extra charge
+[Wed, Apr 3, 5:47 PM] Priya (customer): Awesome, and is the first-month-free promo still on?
+[Wed, Apr 3, 5:50 PM] Frank: That ended in March unfortunately, prices are 219 flat
+[Wed, Apr 3, 5:51 PM] Priya (customer): Oh, someone told me it was still running?
+[Wed, Apr 3, 5:55 PM] Frank: hm let me look into that, might still be on for medium units only
+[Thu, Apr 4, 9:00 AM] Priya (customer): Any word on the promo?
+[Fri, Apr 11, 2:14 PM] Denise (customer): Hi again, just confirming - is the deposit 50 or is there also a lock fee I need?
+[Fri, Apr 11, 2:30 PM] Frank: No lock fee, just the 50, oh wait actually I think Yolanda's been charging 100 lately for medium/large, let me get back to you
+[Mon, Apr 14, 11:00 AM] Yolanda: Hi Denise, it's Yolanda - deposit is $50 flat for all sizes, Frank got confused, don't worry about the $100 thing
+[Tue, Apr 15, 8:45 AM] Sam (customer): Are you guys getting climate controlled units? Someone mentioned it
+[Tue, Apr 15, 9:10 AM] Frank: Yes! Basically confirmed for spring, east wing, gonna be great
+[Tue, Apr 15, 9:12 AM] Sam (customer): Nice, how much extra will that cost?
+[Tue, Apr 15, 9:30 AM] Frank: Honestly haven't figured pricing yet, could be 20-40 extra a month, still working it out with my partner
+[Wed, Apr 16, 4:00 PM] Priya (customer): Following up again on the promo question from last week
+[Thu, Apr 24, 7:20 PM] Frank: hey sorry been slammed, yeah the promo thing, I'll double check tomorrow and let you know for sure
+[Fri, May 2, 10:00 AM] Sam (customer): Hey any update on unit prices, heard they might be going up
+[Fri, May 2, 10:15 AM] Frank: Yeah we're raising everything 10% starting next month, locking in your rate now would be smart
+[Fri, May 2, 3:44 PM] Frank: actually scratch that, might hold off till summer, still deciding, I'll message you when it's official
