@@ -18,6 +18,7 @@ if __name__ == "__main__":
     bot.uploads_dir.mkdir(exist_ok=True)  # so the folder exists when the bot mentions it
     print("Bot:", RequirementsBot.GREETING)
 
+    turn = None  # latest turn, so an early exit can still save a partial brief
     while True:
         try:
             user_msg = input("\nYou: ").strip()
@@ -37,5 +38,13 @@ if __name__ == "__main__":
                 json.dump(bot.brief(turn), f, indent=2, ensure_ascii=False)
             print("\n[Saved the full brief to requirements_brief.json]")
             break
+
+    # The owner quit before confirming: don't lose what was gathered.
+    if not bot.complete and turn is not None:
+        brief = bot.brief(turn)
+        brief["partial"] = True
+        with open("requirements_brief.json", "w", encoding="utf-8") as f:
+            json.dump(brief, f, indent=2, ensure_ascii=False)
+        print("\n[Interview unfinished — saved a PARTIAL brief to requirements_brief.json]")
 
     print("\nGoodbye!")

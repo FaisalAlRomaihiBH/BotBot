@@ -233,9 +233,11 @@ class RequirementsBot:
             # Guard: the model sometimes flags completion mid-interview. A real
             # completion follows a confirmed summary, by which point the core
             # fields below are always filled — refuse the flag until they are.
+            # (Only the two essentials: requiring more can trap the bot in an
+            # endless goodbye loop when an owner disengages early — anything
+            # else missing belongs in open_items.)
             r = turn.requirements
-            if turn.interview_complete and not (r.problem_to_solve and r.channels
-                                                and r.success_criteria):
+            if turn.interview_complete and not (r.problem_to_solve and r.channels):
                 turn.interview_complete = False
             self.chat_history.append(("human", record_as or question))
             self.chat_history.append(("ai", output))
