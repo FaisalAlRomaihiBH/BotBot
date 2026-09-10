@@ -156,6 +156,9 @@ class RequirementsBot:
         self.analysis: Optional[ConversationAnalysis] = None
         self.analysis_text: str = self.NO_MATERIALS
         self.complete: bool = False
+        # Token accounting across the whole interview (cache_read tokens are
+        # billed at 10% of the fresh-input price).
+        self.usage = {"fresh_in": 0, "cache_read": 0, "cache_write": 0, "out": 0}
 
     # ---------------- public API ----------------
     def send(self, message: str) -> tuple[list[str], InterviewTurn]:
@@ -197,6 +200,7 @@ class RequirementsBot:
             "analysis": self.analysis.model_dump() if self.analysis else None,
             "analysis_text": self.analysis_text,
             "complete": self.complete,
+            "usage": self.usage,
         }
 
     @classmethod
@@ -207,6 +211,7 @@ class RequirementsBot:
             bot.analysis = ConversationAnalysis(**state["analysis"])
         bot.analysis_text = state["analysis_text"]
         bot.complete = state["complete"]
+        bot.usage = state.get("usage", bot.usage)  # older sessions lack it
         return bot
 
     # ---------------- internals ----------------
@@ -239,6 +244,11 @@ class RequirementsBot:
         last_error = None
         for _ in range(3):
             reply = self.llm.invoke(self._build_messages(question))
+            u = reply.response_metadata.get("usage") or {}
+            self.usage["fresh_in"] += u.get("input_tokens") or 0
+            self.usage["cache_read"] += u.get("cache_read_input_tokens") or 0
+            self.usage["cache_write"] += u.get("cache_creation_input_tokens") or 0
+            self.usage["out"] += u.get("output_tokens") or 0
             output = _blocks_to_text(reply.content)
             try:
                 turn = self.parser.parse(output)

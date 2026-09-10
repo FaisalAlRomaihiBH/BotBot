@@ -227,12 +227,18 @@ class ParallelPersonaRunner:
             if bot.complete:
                 break
 
+        u = bot.usage
+        total_in = u["fresh_in"] + u["cache_read"] + u["cache_write"]
+        hit = round(100 * u["cache_read"] / total_in) if total_in else 0
+        log(f"{tag} tokens: {u['fresh_in']} fresh + {u['cache_write']} cache-write "
+            f"+ {u['cache_read']} cache-read ({hit}% cached) -> {u['out']} out")
         return {
             "transcript": transcript,
             "brief": turn.requirements.model_dump(),
             "analysis": bot.analysis.model_dump() if bot.analysis else None,
             "completed": bot.complete,
             "turns": len(transcript),
+            "usage": u,
         }
 
     def evaluate(self, persona: Persona, result: dict) -> Evaluation:
@@ -306,6 +312,11 @@ class ParallelPersonaRunner:
             "errors": {r["index"]: r["error"] for r in records if r["error"]},
             "code_suggestions": sorted({s for r in scored
                                         for s in r["evaluation"].get("code_suggestions", [])}),
+            "bot_token_usage": {
+                key: sum(r["interview"]["usage"][key] for r in scored
+                         if r["interview"].get("usage"))
+                for key in ("fresh_in", "cache_read", "cache_write", "out")
+            },
         }
         (self.run_dir / "summary.json").write_text(
             json.dumps(summary, indent=2, ensure_ascii=False), encoding="utf-8")
