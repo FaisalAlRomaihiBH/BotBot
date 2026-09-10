@@ -1,45 +1,28 @@
-[Mon 9:14 AM] Jenna R: Hi! Do you do same-day flat repairs?
-[Mon 9:20 AM] Marcus: Yep, bring it in, we'll knock it out same day no problem
-[Mon 11:45 AM] Marcus: Actually hold on — we've got a big backlog this week, might be next day instead. Let's say next day to be safe
-[Mon 11:46 AM] Marcus: Actually you know what, if it's just a flat, yeah same day, that's quick. Ignore me. Same day.
-[Mon 11:47 AM] Jenna R: haha ok, same day it is?
-[Mon 11:50 AM] Marcus: Same day 👍
-
-[Tue 2:03 PM] Tom H: What's the price for a full overhaul on a road bike?
-[Tue 2:15 PM] Marcus: For you probably $180, pretty standard bike
-[Tue 2:16 PM] Marcus: Wait, is it carbon frame or aluminum?
-[Tue 2:17 PM] Tom H: Carbon
-[Tue 2:20 PM] Marcus: Ok that changes things, carbon needs more careful handling, gonna say $220
-[Wed 10:02 AM] Marcus: Been thinking about it overnight, let's do $200 flat, split the difference, that feels right
-[Wed 10:03 AM] Tom H: lol ok, $200 works for me
-
-[Wed 4:30 PM] Priya K: Do you still do custom frame painting?
-[Wed 4:50 PM] Marcus: Honestly? Thinking of dropping that service, eats up too much time
-[Thu 9:10 AM] Marcus: Actually reconsidering — I do enjoy it, and it's good money. Let's say yes still doing it for now
-[Thu 9:11 AM] Priya K: Ok great, what's the cost roughly?
-[Thu 9:30 AM] Marcus: Let me check on paint costs and get back to you
-[Sat 6:02 PM] Priya K: Hey just following up on the painting quote?
-[No further reply]
-
-[Fri 1:15 PM] Alex D: Interested in a custom build, mountain bike, what would that run me?
-[Fri 1:40 PM] Marcus: Ballpark $900 for a solid setup
-[Fri 5:00 PM] Marcus: Actually thinking more about the components you mentioned, probably closer to $1050
-[Sat 8:00 AM] Marcus: Slept on it — I think I was overestimating parts cost, let's go back to around $900-950
-[Sat 8:05 AM] Alex D: haha ok so which is it
-[Sat 8:10 AM] Marcus: $950, locking that in, promise
-[Sun 3:00 PM] Marcus: One more thought — if you want disc brakes that's extra, forgot to factor that in. Maybe $1000 total
-[Sun 3:02 PM] Alex D: Got it, I'll just plan for $1000
-
-[Sun 6:45 PM] Carla M: What are your hours on Saturdays?
-[Mon 9:00 AM] Marcus: 10-6 on Saturdays, Dani's usually here too
-
-[Tue 11:00 AM] Ben O: Do you require a deposit for custom builds?
-[Tue 11:20 AM] Marcus: Yeah 50% down usually
-[Tue 3:00 PM] Marcus: Actually you know, for regulars I usually skip that, I'll just trust it
-[Tue 3:01 PM] Ben O: I'm not a regular though, first time here
-[Tue 3:15 PM] Marcus: Right, let's do the deposit then, 50%, safer for both of us
-
-[Wed 8:00 AM] Nina F: Is the used blue Trek still available?
-[Wed 9:30 AM] Marcus: Let me check the floor and confirm
-[Thu 2:00 PM] Marcus: I think we sold it Saturday actually — let me double check with Dani
-[No further reply]
+[Mon, Feb 3, 9:12 AM] Marcus Feldt: Hey! Yeah we can definitely do a walnut dining table for you, probably looking at $2,200 all in
+[Mon, Feb 3, 9:14 AM] Customer (Rae): Great, and how long would that take?
+[Mon, Feb 3, 9:15 AM] Marcus Feldt: Oh easy, 4-5 weeks tops
+[Mon, Feb 3, 6:47 PM] Marcus Feldt: Actually scratch that on the price, walnut's gone up on me, more like $2,600
+[Mon, Feb 3, 6:48 PM] Marcus Feldt: Sorry didn't mean to flip on you like that lol just being honest with you now
+[Tue, Feb 4, 8:03 AM] Customer (Rae): Ok no worries — so is it 4-5 weeks still?
+[Tue, Feb 4, 8:41 AM] Marcus Feldt: Honestly rethinking that too, Dale's only in twice a week for finishing so realistically 8 weeks
+[Tue, Feb 4, 8:42 AM] Marcus Feldt: Let's just say 8 to be safe
+[Wed, Feb 5, 11:20 AM] Customer (Rae): Ok. And deposit, is that 50%?
+[Wed, Feb 5, 11:35 AM] Marcus Feldt: Yep 50% to start
+[Wed, Feb 5, 11:36 AM] Marcus Feldt: Actually you seem like good people, I'll do 30% for you
+[Wed, Feb 5, 11:36 AM] Marcus Feldt: Wait no let me not do that again, I got burned last time, 50% it is, sorry
+[Thu, Feb 6, 2:15 PM] Customer (new - Tom): Hi, do you guys do stain matching for an existing table? Trying to add a bench to match
+[Thu, Feb 6, 2:20 PM] Marcus Feldt: We do sometimes yeah, send a photo
+[Thu, Feb 6, 2:45 PM] Marcus Feldt: Actually you know what, we stopped doing that, too finicky to match old finishes
+[Thu, Feb 6, 2:46 PM] Marcus Feldt: I'll reconsider if the photo looks easy though, still send it
+[Thu, Feb 6, 3:02 PM] Customer (Tom): [image attached]
+[Thu, Feb 6, 6:30 PM] Marcus Feldt: got it, let me look this over properly tomorrow when the light's better in the shop
+[Mon, Feb 10, 10:00 AM] Customer (Tom): hey just checking in on that photo
+[Wed, Feb 12, 7:58 AM] Marcus Feldt: still here, sorry been slammed, will get back to you
+[Fri, Feb 3, 9:00 AM] Customer (Rae): Quick one — is barnwood still an option for the tabletop instead of walnut?
+[Fri, Feb 3, 9:40 AM] Marcus Feldt: honestly? going back and forth on whether we even keep offering that, sourcing's been a nightmare lately
+[Fri, Feb 3, 9:41 AM] Marcus Feldt: but yeah technically still an option for now, I'll let you know if that changes
+[Sat, Feb 15, 1:12 PM] Customer (Rae): So just to confirm before I send the deposit — final price and timeline?
+[Sat, Feb 15, 4:45 PM] Marcus Feldt: $2,600, 8 weeks, that's the real number this time
+[Sat, Feb 15, 4:46 PM] Marcus Feldt: unless the oak I'm eyeing for the legs comes in cheaper, then I'll knock some off
+[Sun, Feb 16, 10:03 AM] Customer (Rae): ok...I'll just go with $2,600 and 8 weeks then, sending deposit now
+[Sun, Feb 16, 10:20 AM] Marcus Feldt: sounds good! oh wait actually, let me check with Dale on his schedule before you send anything
