@@ -1,39 +1,30 @@
-[Mon, Mar 3, 9:14 AM] Customer (Renee): Hi! I have my grandmother's cookbook falling apart, spine's totally gone. What would it cost to fix?
-[Mon, Mar 3, 9:41 AM] Frank Oduya: Hey Renee! For a simple recase, probably around $60
-[Mon, Mar 3, 9:42 AM] Frank Oduya: actually wait, if the spine is fully gone that's more like a full restoration, so more like $150
-[Mon, Mar 3, 9:44 AM] Frank Oduya: hmm, honestly let me just see photos before I say a number, I don't want to lowball you
-[Mon, Mar 3, 9:50 AM] Customer (Renee): Sure, sending some now
-[Mon, Mar 3, 11:20 AM] Frank Oduya: ok looked at these, I think $120 is fair
-[Mon, Mar 3, 11:21 AM] Frank Oduya: though honestly it could creep to $150 once I get in there, hard to say till I open it up
-[Mon, Mar 3, 11:22 AM] Customer (Renee): Ok, and how long would it take?
-[Mon, Mar 3, 11:30 AM] Frank Oduya: 2-3 weeks typically
-[Mon, Mar 3, 11:31 AM] Frank Oduya: actually I've got a backlog right now so maybe say 4
-[Mon, Mar 3, 11:33 AM] Frank Oduya: you know what, let's just say 3 and I'll surprise you if it's sooner
-
-[Wed, Mar 5, 2:10 PM] Customer (Tom): Do you make custom leather journals? Looking for a gift, need it by April 10
-[Wed, Mar 5, 3:45 PM] Frank Oduya: Yes! Usually $150 for a standard 6x8 one with basic tooling
-[Wed, Mar 5, 3:47 PM] Frank Oduya: actually for something nice as a gift you'd probably want the upgraded leather, so more like $190
-[Wed, Mar 5, 3:48 PM] Frank Oduya: April 10th should be fine, that's plenty of lead time
-[Wed, Mar 5, 6:02 PM] Frank Oduya: wait, is that a Thursday? let me check my calendar, I might have a wedding invite job due around then too
-[Wed, Mar 5, 6:03 PM] Frank Oduya: I'll let you know tomorrow if that date works, don't want to promise and then be stuck
-[Fri, Mar 7, 10:15 AM] Customer (Tom): Hey just checking in on that date?
-[Fri, Mar 7, 10:16 AM] Customer (Tom): still there?
-
-[Sat, Mar 8, 1:00 PM] Customer (Angela): What are your hours? Want to drop off a book to repair
-[Sat, Mar 8, 1:20 PM] Frank Oduya: Tues-Sat 10-5! Come by anytime in there
-[Sat, Mar 8, 1:21 PM] Frank Oduya: well, Saturdays can be hit or miss since Delia's not always in, better make it a weekday to be safe
-
-[Mon, Mar 10, 4:30 PM] Customer (Renee): Any update on my cookbook?
-[Mon, Mar 10, 5:15 PM] Frank Oduya: Just started on it actually, going well so far
-[Mon, Mar 10, 5:16 PM] Frank Oduya: should be done end of next week
-[Mon, Mar 10, 5:17 PM] Frank Oduya: though I say that now, ask me again Friday, ha
-
-[Tue, Mar 11, 9:00 AM] Customer (new): Do you offer bookbinding classes? Saw something about it online
-[Tue, Mar 11, 11:40 AM] Frank Oduya: I've been wanting to start those, yeah! Thinking maybe a Saturday workshop
-[Tue, Mar 11, 11:41 AM] Frank Oduya: not sure on price yet, maybe $40? or should it be more since materials are involved, maybe $65
-[Tue, Mar 11, 11:42 AM] Frank Oduya: let me sit with it and figure out a real plan, I'll post something when I've got it sorted
-
-[Thu, Mar 13, 3:00 PM] Customer (Tom): Any word on the journal timeline?
-[Thu, Mar 13, 3:00 PM] Customer (Tom): the gift is for April 10, kind of need to know
-[Thu, Mar 13, 8:12 PM] Frank Oduya: sorry! yes it'll work, go ahead and send the deposit
-[Thu, Mar 13, 8:13 PM] Frank Oduya: actually hold off, let me confirm with Delia on the schedule first, I'll message you tomorrow for sure
+[Mon, Mar 3, 9:14 AM] Dana R: Hi! Do you do e-bike battery/motor conversions? Want to convert my old Trek.
+[Mon, Mar 3, 9:41 AM] Jesse - Two Wheels Good: yes! we do those now, pretty new service. probably around $600 for a basic hub motor kit install
+[Mon, Mar 3, 11:02 AM] Dana R: Great, and how long would that take?
+[Mon, Mar 3, 11:20 AM] Jesse - Two Wheels Good: honestly could do it same week, we're not too slammed right now
+[Mon, Mar 3, 4:55 PM] Jesse - Two Wheels Good: actually thinking about it more, the conversions are more like $900 once you factor in the battery mount, I quoted someone wrong earlier
+[Tue, Mar 4, 8:30 AM] Dana R: Oh okay - so $900? Just want to confirm before I bring it in
+[Tue, Mar 4, 1:15 PM] Jesse - Two Wheels Good: yeah let's say 900, that feels right
+[Wed, Mar 5, 10:00 AM] Marcus T: What are your hours today? Want to drop off a bike for a tune up
+[Wed, Mar 5, 10:03 AM] Jesse - Two Wheels Good: open till 6 today!
+[Wed, Mar 5, 2:40 PM] Jesse - Two Wheels Good: actually gonna close at 4, Reyes had to leave early, sorry
+[Wed, Mar 5, 2:41 PM] Marcus T: got it, can I still get a tune up done, whats the price
+[Wed, Mar 5, 2:50 PM] Jesse - Two Wheels Good: tune up is $85 flat
+[Wed, Mar 5, 5:12 PM] Jesse - Two Wheels Good: oh wait sorry meant to say if it needs new cables/housing that pushes it to more like $110, but basic is $65
+[Wed, Mar 5, 5:13 PM] Marcus T: lol ok which one is it
+[Wed, Mar 5, 5:20 PM] Jesse - Two Wheels Good: let me actually look at the bike first, bring it by tomorrow
+[Thu, Mar 6, 9:00 AM] Priya N: Hi, I emailed about a custom frame build back in January, any update on pricing?
+[Thu, Mar 6, 9:45 AM] Jesse - Two Wheels Good: hey! yeah custom builds start at 1800 depending on tubing
+[Thu, Mar 6, 12:30 PM] Priya N: Perfect, when could you start?
+[Thu, Mar 6, 1:10 PM] Jesse - Two Wheels Good: let me check my build schedule and get back to you
+[Mon, Mar 17, 3:00 PM] Priya N: Hey just following up on the custom frame timeline!
+[Mon, Mar 17, 3:00 PM] Priya N: haven't heard back in a bit
+[Fri, Mar 21, 8:15 AM] Danny K: What time do you guys open on Saturdays?
+[Fri, Mar 21, 8:40 AM] Jesse - Two Wheels Good: 10am, but honestly might do 9 this weekend if I'm in early working on a frame
+[Fri, Mar 21, 8:41 AM] Danny K: ok so should I come at 9 or 10
+[Fri, Mar 21, 9:15 AM] Jesse - Two Wheels Good: 10 is safer
+[Sat, Mar 22, 10:20 AM] Danny K: here now, dropping off a flat repair, how much and when ready
+[Sat, Mar 22, 10:35 AM] Jesse - Two Wheels Good: flats are $15, should be done today
+[Sat, Mar 22, 4:50 PM] Jesse - Two Wheels Good: actually gonna hold onto it till Tuesday, found a slow leak in the other tube too, that'll be a bit more, maybe $25 total
+[Sun, Mar 23, 7:00 PM] Dana R: hey just checking, still on for $900 for the conversion? bringing the trek in this week
+[Sun, Mar 23, 7:40 PM] Jesse - Two Wheels Good: yep! or actually — thinking $750 might be fairer since it's a lighter bike, let's finalize when you bring it in
