@@ -435,12 +435,11 @@ Rewrite the prompt to fix the problems found. STRICT rules:
 - Keep everything that clearly works; keep the existing tone and structure.
 - The result MUST still contain the literal placeholders {{analysis}} and
   {{format_instructions}} exactly once each.
-- HARD LENGTH BUDGET: the finished prompt must be UNDER 8500 characters
-  (current: {cur}). Work in two passes: FIRST condense the current prompt —
-  merge overlapping rules, cut the weakest or most over-specific ones —
-  THEN spend the space you freed on the most valuable new rules. If the
-  findings suggest more rules than fit, keep only the highest-impact ones;
-  an over-budget rewrite is discarded entirely, which helps nobody.
+- Length: there is no hard limit, but shorter prompts follow their rules
+  better. Work in two passes: FIRST condense the current prompt ({cur}
+  characters) — merge overlapping rules, cut the weakest or most
+  over-specific ones — THEN add the most valuable new rules. Prefer
+  fixing an existing rule over appending a new one.
 - Output ONLY the complete new prompt text. No commentary, no code fences.
 
 === CURRENT PROMPT ===
@@ -466,10 +465,6 @@ Rewrite the prompt to fix the problems found. STRICT rules:
                     "{format_instructions} exactly once each")
         if len(new) < 500:
             return "it is far too short — output the COMPLETE prompt, not commentary"
-        if len(new) > 9000:
-            return (f"it is {len(new)} characters, over the 9000 hard limit — "
-                    "condense: merge overlapping rules and cut the least valuable "
-                    "ones instead of only adding new text")
         if new == current.strip():
             return "it is identical to the current prompt"
         return None
