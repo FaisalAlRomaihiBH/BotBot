@@ -1,34 +1,36 @@
-[14/03, 09:12] Callum Reid: Morning! Yeah happy to quote you for a dining table, oak you said?
-[14/03, 09:15] Customer (Mara): Yes, 6-seater, oak if possible
-[14/03, 09:20] Callum Reid: Right so oak's been about £900 for that size but honestly I might need to bump it to £1000, timber's gone up
-[14/03, 09:21] Callum Reid: Actually no let's just say £900, I've got some oak in stock already from before the price hike
-[14/03, 09:22] Customer (Mara): Ok great, £900 it is?
-[14/03, 09:23] Callum Reid: ...yeah let's go with that. Unless I run out of the stock I've got, then it'd be more. But should be fine
-[14/03, 09:24] Customer (Mara): Right, and how long would it take?
-[14/03, 09:26] Callum Reid: 6-8 weeks normally
-[14/03, 09:27] Callum Reid: Actually thinking about it I've got two big jobs ahead of you so probably more like 10
-[14/03, 09:28] Callum Reid: But Jess starts back Wednesdays now so maybe that speeds things up, could be 8 again
-[14/03, 09:29] Customer (Mara): So... 8 or 10?
-[14/03, 09:31] Callum Reid: Let's say 8, I'll push to get it done
-[16/03, 11:03] Customer (Mara): Hi again, just to confirm - deposit is 50%?
-[16/03, 14:47] Callum Reid: Yep 50% upfront, rest on delivery
-[16/03, 14:48] Callum Reid: Actually for you maybe just do a smaller deposit, £200? You seem sound
-[16/03, 14:49] Callum Reid: No wait let's keep it consistent, 50% like everyone, sorry
-[02/04, 10:15] Customer (Greg): Hey mate, do you do commercial fit-outs? Need shelving for a cafe
-[02/04, 10:40] Callum Reid: Yeah could probably manage that
-[02/04, 10:41] Callum Reid: Actually hang on, my workshop's pretty small for a full fit-out, might not have the space to store the panels while I work
-[02/04, 10:42] Callum Reid: Let me think about it and get back to you
-[09/04, 18:02] Customer (Greg): Any update on the cafe shelving?
-[09/04, 18:55] Callum Reid: Sorry been mad busy, let me check my workshop space this week and I'll message you
-[22/04, 09:00] Customer (Greg): Hi Callum, following up again on the shelving job
-[22/04, 09:00] Callum Reid: 👍
-[03/05, 13:20] Customer (Priti): Hi, do you deliver? I'm about 20 miles out
-[03/05, 13:45] Callum Reid: Yeah free delivery, no charge
-[03/05, 13:46] Callum Reid: Oh wait actually anything past 15 miles is £40, forgot you're a bit further out
-[03/05, 13:47] Callum Reid: Although if I'm already going that way for another delivery I might not charge you, depends on the week
-[10/05, 16:10] Customer (Priti): Following up - is my table still on for early June?
-[10/05, 16:44] Callum Reid: Should be yeah
-[10/05, 16:45] Callum Reid: Actually might slip to mid-June, staining takes longer than I plan for every time
-[10/05, 16:46] Callum Reid: I'll let you know closer to the time
-[27/05, 08:30] Customer (Priti): Any update on timing?
-[27/05, 08:31] Callum Reid: let me check the workshop schedule and get back to you today
+[03/03, 9:14am] Sarah W: Hi! Do you do same-day puncture repairs?
+[03/03, 9:20am] Bez: Yeah course, bring it in, £12, done in an hour
+[03/03, 9:21am] Bez: Actually if it's just a tube swap I'll just do it free while you wait, don't worry about it
+[03/03, 11:02am] Sarah W: Oh amazing, what time works?
+[03/03, 11:45am] Bez: Anytime today mate we're open till 6
+[04/03, 2:15pm] James T: How much for a full service on a road bike
+[04/03, 2:40pm] Bez: £90 that includes gears brakes the lot
+[04/03, 6:03pm] Bez: Oh wait sorry that's the basic one, full overhaul is £120, forgot you said full
+[05/03, 10:11am] James T: Ok and how long would that take
+[05/03, 10:30am] Bez: 2-3 days easy
+[05/03, 4:55pm] Bez: Actually we're slammed this week probably more like a week and a half
+[06/03, 9:00am] Priya K: Hi, interested in a custom steel frame, what's the process/cost?
+[06/03, 9:40am] Bez: Deposit is £200 to start design, total depends on spec but budget £1400-1800 all in, takes about 10 weeks
+[06/03, 1:15pm] Bez: Actually I've been thinking I might not take new custom orders this year, want to clear the backlog first
+[06/03, 1:16pm] Priya K: Oh - so is that a no?
+[06/03, 5:20pm] Bez: No no I'll fit you in, deposit's £350 though for new builds now, prices went up
+[07/03, 10:00am] Priya K: Ok...so £350 deposit and 10 weeks?
+[07/03, 3:45pm] Bez: Yeah roughly, could be 14 weeks depends where you land on the list
+[08/03, 8:50am] Callum R: Hey do you do e-bike battery diagnostics?
+[08/03, 11:30am] Bez: Yeah bring it in
+[08/03, 11:31am] Bez: Actually let me check, I don't think I've got the right diagnostic tool for that model, let me check with Ola
+[08/03, 11:32am] Bez: will get back to you
+[12/03, 9:00am] Callum R: Hi, any update on the e-bike thing?
+[15/03, 4:10pm] Bez: still checking mate
+[19/03, 9:05am] Fiona M: What are your hours on Monday, want to drop a bike off
+[19/03, 9:12am] Bez: We're open Monday 9-6 same as usual
+[19/03, 9:13am] Bez: oh wait no we're closed Mondays, only Tue-Sat, my bad
+[19/03, 9:14am] Fiona M: haha ok, and is card payment fine
+[19/03, 9:20am] Bez: yep card cash bank transfer all good
+[19/03, 9:21am] Bez: except Mondays card machine's charging, but we're closed anyway so no bother
+[20/03, 1:00pm] James T: Just checking in, is my bike ready?
+[20/03, 5:45pm] Bez: let me check with Ola and get back to you tonight
+[24/03, 10:15am] James T: Hi Bez, any word?
+[27/03, 12:00pm] Priya K: Hi just following up on the frame build, is the deposit £200 or £350?
+[27/03, 12:40pm] Bez: £350 yeah that's current price
+[27/03, 12:41pm] Bez: actually you know I quoted you earlier at £200 I'll honour that since you asked first, don't worry about it
