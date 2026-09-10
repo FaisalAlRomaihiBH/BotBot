@@ -46,8 +46,13 @@ Study them and produce:
   "let me check", moved to a call, answered inconsistently, or the answer clearly
   depends on knowledge not in the materials). For each, describe the specific
   observed example — these become interview questions for the owner.
-- facts_learned: hard facts about the business visible in the materials (hours,
-  services, prices, channels, languages used...).
+- facts_learned: hard facts about the business DIRECTLY VISIBLE in the materials
+  (hours, services, prices, languages used...). Only what is stated in the
+  material itself — never an inference from the material's own form. A WhatsApp
+  export proves the owner exported a WhatsApp chat; it does NOT establish which
+  channels the business uses or wants, so never write a channel, a volume or a
+  team size that nobody actually stated. Everything here reaches the interviewer
+  flagged as unverified and gets checked with the owner, so a guess costs a turn.
 - notable_incidents: specific single events worth asking the owner about, each
   written as "<date/time from the material> — <what happened> (quote: "...")".
   Include long waits before a reply, complaints, apologies, lost or abandoned
@@ -105,16 +110,30 @@ Wrap your entire output in this format and provide no other text
                 names.append(path.name)
         return blocks, names
 
-    def analyze(self) -> tuple[Optional[ConversationAnalysis], list[str]]:
-        """Run the analysis pass over uploads/. Returns (analysis, filenames)."""
+    def analyze(self, attempts: int = 3) -> tuple[Optional[ConversationAnalysis], list[str]]:
+        """Run the analysis pass over uploads/. Returns (analysis, filenames).
+
+        (None, []) means there was nothing readable to analyze — the ONLY
+        legitimate way to come back empty. A model call that returns something
+        unparseable is retried instead, and raises if it never parses, because
+        interviewing blind over materials the owner did share is worse than
+        stopping."""
         blocks, names = self.load_blocks()
         if not blocks:
             return None, []
         content = ([{"type": "text",
                      "text": self.INSTRUCTIONS + self.parser.get_format_instructions()}]
                    + blocks)
-        reply = self.llm.invoke([HumanMessage(content=content)])
-        return self.parser.parse(_blocks_to_text(reply.content)), names
+        last_error = None
+        for _ in range(attempts):
+            reply = self.llm.invoke([HumanMessage(content=content)])
+            try:
+                return self.parser.parse(_blocks_to_text(reply.content)), names
+            except Exception as e:
+                last_error = e
+        raise RuntimeError(
+            f"materials analysis failed for {names} after {attempts} attempts"
+        ) from last_error
 
     @staticmethod
     def to_prompt_text(analysis: ConversationAnalysis) -> str:
@@ -253,13 +272,18 @@ class RequirementsBot:
             return "unchanged"
         analysis, names = self.analyzer.analyze()
         if analysis is None:
-            return "empty"
+            # Files exist, yet no analysis object came back. Reporting "empty"
+            # here is what let an interview run blind over materials the owner
+            # had shared, and ship a brief that looked complete. Fail loudly.
+            raise RuntimeError(
+                f"uploaded materials are present but produced no analysis: {names}")
         self.analysis = analysis
         self.analysis_text = MaterialsAnalyzer.to_prompt_text(analysis)
         self.analyzed_files = names
         return "analyzed"
 
-    def _postprocess(self, requirements: BusinessRequirements) -> None:
+    def _postprocess(self, requirements: BusinessRequirements,
+                     complete: bool = False) -> None:
         """Fix up the form in code, in place, for the things the model must not
         be trusted to get right on its own.
 
@@ -272,14 +296,27 @@ class RequirementsBot:
 
         if self.analysis:
             # Material-derived facts get their own home instead of being
-            # indistinguishable from what the owner said out loud.
-            requirements.facts_from_uploads = merge(
-                requirements.facts_from_uploads, self.analysis.facts_learned)
+            # indistinguishable from what the owner said out loud — and a
+            # provenance tag, because the analyzer does occasionally assert
+            # something the material never said (it once "learned" the
+            # business's channel from the export format). Tagged facts are
+            # leads to confirm, not established facts: the prompt forbids
+            # promoting one into a normal field before the owner verifies it.
+            known = {_untag_upload(i) for i in (requirements.facts_from_uploads or [])}
+            requirements.facts_from_uploads = (
+                list(requirements.facts_from_uploads or [])
+                + [f"{UPLOAD_TAG} {f}" for f in self.analysis.facts_learned
+                   if f not in known]) or None
             # A customer left hanging in the log is a fact about the business,
             # not something to wait for the owner to volunteer.
             requirements.customer_replies_owed = merge(
                 requirements.customer_replies_owed,
                 self.analysis.open_customer_requests)
+            # ...and "no replies owed" must be a statement, never a silence:
+            # materials analyzed + an empty list is nearly always a real
+            # customer dropped on the floor.
+            if complete and not requirements.customer_replies_owed:
+                requirements.customer_replies_owed = [NO_REPLIES_OWED]
 
         # Legacy mirror: consumers reading the old single list still see
         # everything, while the split fields carry the actionable/anecdotal cut.
@@ -287,14 +324,37 @@ class RequirementsBot:
             requirements.owner_sentiment_or_concerns,
             list(requirements.adoption_risks or [])
             + list(requirements.background_color or []))
+        # Shipping this null hides whether the owner was asked at all. On the
+        # final turn, say which it was — and if nothing was captured, that is
+        # a gap the delivery team must close before the build.
+        if complete and not requirements.owner_sentiment_or_concerns:
+            requirements.owner_sentiment_or_concerns = [NO_SENTIMENT]
+            requirements.unresolved_business_facts = merge(
+                requirements.unresolved_business_facts, [SENTIMENT_GAP])
+
+        # A surcharge whose turnaround was never defined cannot be quoted or
+        # honoured, so it is an owner follow-up, not a priced service.
+        for offer in requirements.services_and_pricing or []:
+            if isinstance(offer, str) or offer.lead_time:
+                continue
+            trigger = offer.fee_trigger_condition or ""
+            if trigger or any(w in offer.name.lower() for w in _RUSH_WORDS):
+                requirements.unresolved_business_facts = merge(
+                    requirements.unresolved_business_facts,
+                    [f"lead time/turnaround for '{offer.name}'"
+                     f"{f' ({trigger})' if trigger else ''} — a surcharge was "
+                     f"recorded without the turnaround that triggers it"])
 
         # open_items is an INDEX, not a bucket — rebuilt from the routed lists
         # so nothing is invisible just because the model picked the wrong one.
+        # Sentinels are deliberate statements of absence, not work: they stay
+        # in their own field and out of the delivery team's to-do list.
         routed = [("owner fact", requirements.unresolved_business_facts),
                   ("bot decision", requirements.pending_design_decisions),
                   ("customer reply owed", requirements.customer_replies_owed)]
         seen = {i for _label, items in routed for i in (items or [])}
-        index = [f"[{label}] {i}" for label, items in routed for i in (items or [])]
+        index = [f"[{label}] {i}" for label, items in routed
+                 for i in (items or []) if i not in _SENTINELS]
         # Strip our own labels off whatever is already there, so rebuilding an
         # index we built before re-files entries instead of nesting the tags.
         unfiled = [_unlabel(i) for i in (requirements.open_items or [])]
@@ -327,6 +387,14 @@ class RequirementsBot:
         """One model turn, appended to history. Retries because the model
         occasionally returns an empty/unparseable reply (e.g. a thinking-only
         response); one bad turn must not kill the interview."""
+        # Hard gate: never ask a question over materials we failed to read. The
+        # analysis reaches the model only through analysis_text, so an analysis
+        # that is missing here means the interviewer is working blind.
+        if self.analyzer.material_paths() and (
+                self.analysis is None or self.analysis_text == self.NO_MATERIALS):
+            raise RuntimeError(
+                "refusing to interview: uploaded materials have not been analyzed "
+                "into the interviewer's context")
         last_error = None
         for _ in range(3):
             reply = self.llm.invoke(self._build_messages(question))
@@ -350,7 +418,7 @@ class RequirementsBot:
             r = turn.requirements
             if turn.interview_complete and not (r.problem_to_solve and r.channels):
                 turn.interview_complete = False
-            self._postprocess(r)
+            self._postprocess(r, complete=turn.interview_complete)
             self.chat_history.append(("human", record_as or question))
             self.chat_history.append(("ai", output))
             return turn
@@ -358,6 +426,34 @@ class RequirementsBot:
 
 
 _OPEN_ITEM_LABELS = ("owner fact", "bot decision", "customer reply owed", "unfiled")
+
+# Provenance tag on every fact the materials analysis produced. It is a lead
+# until the owner confirms it out loud, never an established fact.
+UPLOAD_TAG = "[source: uploaded_materials, verified: false]"
+_UPLOAD_TAG_PREFIX = "[source: uploaded_materials"
+
+# Explicit statements of absence, so a null can never be read as "we asked and
+# the answer was none".
+NO_REPLIES_OWED = ("none — the analyzed materials contained no customer message "
+                   "left without an answer")
+NO_SENTIMENT = ("none captured — the owner voiced no concerns, worries or "
+                "reservations on record during this interview")
+SENTIMENT_GAP = ("the owner's own concerns/anxieties about the bot were never "
+                 "captured — ask before the build starts")
+_SENTINELS = frozenset({NO_REPLIES_OWED, NO_SENTIMENT})
+
+# Words that mark a price as conditional, so it is meaningless without the
+# turnaround it buys.
+_RUSH_WORDS = ("rush", "urgent", "express", "expedite", "surcharge", "same-day",
+               "last-minute", "last minute")
+
+
+def _untag_upload(item: str) -> str:
+    """The bare fact behind a provenance tag, so re-seeding the analysis does
+    not re-add a fact the model has since re-tagged as verified."""
+    if item.startswith(_UPLOAD_TAG_PREFIX) and "]" in item:
+        return item.split("]", 1)[1].strip()
+    return item
 
 
 def _unlabel(item: str) -> str:

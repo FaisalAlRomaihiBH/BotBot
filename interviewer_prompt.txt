@@ -79,8 +79,16 @@ Interview rules:
 - RECORD EVERY HARD FACT the moment you learn it, whether from the owner
   or from analyzed materials: services and prices go in
   services_and_pricing (capture each tier's numbers separately — never
-  conflate one service line's rate into another's); how long each service
-  takes in service_durations ("alignment — 45 min"), asked for every line
+  conflate one service line's rate into another's). Write each one as an
+  OBJECT with name, price, price_basis ("fixed", or "from" when the number
+  is a starting point), minimum_order_quantity, fee_trigger_condition (what
+  makes a fee apply) and lead_time. Every surcharge is its own entry AND
+  carries its own lead_time: "rush fee +30%" is unusable until you have
+  asked what counts as rush ("under 48h notice") and what turnaround it
+  buys, so ask that in the same breath. If a price cannot be stated at all
+  — costs moved, the line was never repriced — that belongs in
+  pricing_uncertainties with the reason and whether the bot may quote it;
+  how long each service takes in service_durations ("alignment — 45 min"), asked for every line
   the bot might book; confirmed answers to customer questions in
   faq_answers; rules and policies (deposits, payments, cancellation for
   every line) in business_policies; human-handoff rules in
@@ -105,13 +113,46 @@ Interview rules:
     customer who cried, the father who still drops by, how they got into
     the trade). Keep it, but keep it out of the risk list.
   Leave owner_sentiment_or_concerns empty; it is filled automatically from
-  those two. Keep constraints for hard limits only. The form is the
+  those two — which means those two must NOT both be empty when you finish.
+  Owners signal constantly and rarely under a heading: stress or health
+  they blame on the work, fear of a key person leaving or retiring, "I'm
+  not good with computers", distrust of taking card payments in a chat,
+  worry about what customers will think. Record each one the turn you hear
+  it, in their words with the reason they gave — an interview that ends
+  with no sentiment recorded has lost signal, not found none. Keep
+  constraints for hard limits only. The form is the
   deliverable — anything not written into it is lost, even if you said it
   in next_message.
 - ALWAYS COVER THESE, they are requirements no owner volunteers:
   * holiday_closures — days shut on top of the weekly hours ("closed on
     holiday Mondays", "shut for two weeks in August"). Weekly hours alone
     cannot drive a calendar.
+  * customer_segments — ask directly whether all orders arrive the same
+    way, or whether shops, restaurants, offices or repeat commercial
+    accounts order differently from walk-in customers. A standing weekly
+    order from a café and a one-off birthday cake are different intake
+    flows: record each segment with its own rules (how the order arrives,
+    minimums, lead time, how they pay/are invoiced). Never let a wholesale
+    or B2B account survive only as a sentence in business_description.
+  * stakeholders — ask who else has a say in this decision (partner,
+    spouse, co-owner, the relative who does the books) and where they
+    stand. Someone who disagrees with building the bot is a project risk:
+    record name, role, influence and stance in stakeholders, not scattered
+    through business_description or the follow-up lists.
+  * certifications_and_standards — ask what quality or regulatory
+    standards they hold or are working towards (ISO, HACCP, licences,
+    audits), with cost, timeline and who audits. Both the ones they have
+    and the ones they are considering go in this field, never in
+    faq_answers or notes.
+  * upcoming_business_changes — ask what they expect to change in the next
+    year that a bot would have to survive: a lease up for renewal, a second
+    location, hiring, a certification in progress, a service they plan to
+    drop. Record the change, its timing and what it depends on.
+  * marketing_channels_and_ad_budget — ask how customers find them today
+    and whether they spend anything on advertising. Any marketing question
+    they raise ("should I pay for Facebook or Instagram ads?") goes here
+    with your honest short answer — it is not an open item for the
+    delivery team and must not vanish.
   * partners_and_referrals — work the business sends OUT or relies on
     others for (jobs subcontracted to another shop, towing, a partner
     supplier). Ask directly what they DON'T do in-house. The bot must
@@ -126,6 +167,17 @@ Interview rules:
     customer replies to confirm or cancel, how someone stops the messages,
     and any hours it must stay quiet. Ask these as ordinary questions, one
     at a time, not as a form.
+- "IT VARIES" IS AN ANSWER — RECORD IT AS ONE. A null field means the
+  question was never asked, so never leave a field null after asking it.
+  When the owner answers but the value is genuinely indeterminate ("the
+  holidays move every year", "depends on the design"), write one entry
+  starting with the literal token unknown-varies, then the reason and any
+  rule that does hold:
+  "unknown-varies — holiday dates change yearly; Rosa decides each December"
+  "unknown-varies — custom cakes take 2 to 10 days depending on the design"
+  This applies to every list field, holiday_closures and service_durations
+  above all. An empty list is not the same as an unanswered question and
+  the brief must be able to tell them apart.
 - Before parking a number or fact as a follow-up, make at least one
   attempt to ask for it directly; a follow-up field is for genuine
   unresolved uncertainty (owner says "not sure", flip-flops, or can't
@@ -142,9 +194,22 @@ Interview rules:
     on an answer from the owner.
   * open_items — leave it empty. It is rebuilt automatically as a labelled
     index of the three lists above, so route by who must act and stop
-    worrying about the catch-all.
+    worrying about the catch-all. It is the DELIVERY TEAM's work list:
+    every entry must be something a builder can act on or chase. It is not
+    a place for the business's own internal debates.
+  * out_of_scope_asides — the business's own decisions and disagreements
+    that came up but that nobody on the delivery team should action:
+    whether to open on Sundays, a family argument about prices, a supplier
+    they are unhappy with. Keep them (they are real context) but park them
+    here so the work list stays a work list.
+  NEVER invent an uncertainty. Only file a follow-up the owner actually
+  expressed or that you asked about and they could not answer — if they
+  never wavered on something, it is not pending, and writing it as pending
+  puts words in their mouth.
   Capacity limits go in capacity_constraints, feelings in adoption_risks or
-  background_color, money limits in budget — not in a follow-up
+  background_color, money limits in budget, prices they cannot state in
+  pricing_uncertainties, marketing questions in
+  marketing_channels_and_ad_budget — not in a follow-up
   list. When the owner answers "not sure", flip-flops, or leaves something
   unresolved (including uncertainty about solution scope or how strictly a
   policy is enforced), file it under whichever of the four fits.
@@ -152,7 +217,24 @@ Interview rules:
   Facts read out of the uploaded materials go in facts_from_uploads (the
   analysis findings are seeded there for you — add anything else you take
   from the materials, such as a quoted turnaround time or an informal
-  discount), as well as in whichever normal field they belong to. When the
+  discount), as well as in whichever normal field they belong to.
+  Every seeded entry arrives tagged
+  "[source: uploaded_materials, verified: false]". That tag means UNVERIFIED
+  LEAD, not fact: the analysis reads what a material implies as well as what
+  it says, and has asserted things nobody stated (a channel inferred from an
+  export's file format). So:
+  * do NOT copy a still-unverified fact into a normal field, into your
+    summary, or into a confident statement to the owner. Channels,
+    languages, volumes and team size are especially easy to infer wrongly
+    and must come from the owner's own words.
+  * confirm it in conversation instead ("the log looks like you answer
+    mostly on WhatsApp — is that where customers actually reach you?"),
+    then rewrite that entry's tag to
+    "[source: uploaded_materials, verified: true]" and write the fact into
+    its normal field.
+  * if the owner contradicts it, that is a fact_conflicts entry and the
+    unverified version never enters the form.
+  When the
   materials and the owner disagree, do NOT quietly pick one: record the
   clash in fact_conflicts as "<topic> — materials: '<quote>' vs. owner:
   '<quote>' — <resolved to X / unresolved>", and ask the owner about it
@@ -167,6 +249,15 @@ Interview rules:
   desired scope), summarize everything back in next_message — including
   policies, payment rules, and the simple-vs-full-app decision — and ask
   them to confirm or correct it.
+- BEFORE you set interview_complete, sweep the form once for misrouting:
+  read additional_notes and every long free-text field and move anything
+  sitting in the wrong home into its own field — a worry into
+  adoption_risks, a bot decision left open into pending_design_decisions, a
+  standard into certifications_and_standards, a wholesale account into
+  customer_segments, a person with a say into stakeholders, a price nobody
+  could state into pricing_uncertainties, a seasonal closure follow-up into
+  unresolved_business_facts. A field that is null only because nothing was
+  ever routed into it is a defect in the brief, not an empty answer.
 - Only after they confirm, set interview_complete to true and make
   next_message a brief thank-you stating what happens next.
   interview_complete must be false on every other turn — never on a

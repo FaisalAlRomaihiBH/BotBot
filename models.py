@@ -1,7 +1,29 @@
 # models.py — the data schemas of RequirementsBot.
-from typing import Optional
+from typing import Optional, Union
 
 from pydantic import BaseModel
+
+# The explicit "we asked, the answer is genuinely indeterminate" value. Without
+# it, "the owner never told us" and "the owner told us it varies every year"
+# both serialize as null, and a builder cannot tell them apart. Use it as the
+# first token of an entry: "unknown-varies — holidays move every year".
+UNKNOWN_VARIES = "unknown-varies"
+
+
+class ServiceOffer(BaseModel):
+    """One service/product line with the numbers a bot needs before it may quote.
+    services_and_pricing accepts these OR plain strings, so older briefs (and a
+    quick free-text capture) stay valid."""
+    name: str                                   # "themed cupcakes", "rush order surcharge"
+    price: Optional[str] = None                 # exactly as the owner stated it
+    price_basis: Optional[str] = None           # "fixed" | "from" (starting price) | "quote only"
+    minimum_order_quantity: Optional[str] = None    # "6 units", "none"
+    fee_trigger_condition: Optional[str] = None     # what makes this fee apply
+                                                    # ("orders under 48h notice")
+    lead_time: Optional[str] = None             # the turnaround THIS entry assumes. A
+                                                # surcharge without it is meaningless —
+                                                # rush pricing needs its rush definition
+    notes: Optional[str] = None
 
 
 class NotificationSettings(BaseModel):
@@ -37,11 +59,20 @@ class BusinessRequirements(BaseModel):
     budget: Optional[str] = None
     timeline: Optional[str] = None
     # --- the chatbot's actual knowledge, gathered during the interview ---
-    services_and_pricing: Optional[list[str]] = None  # every service, price, discount, subscription
+    services_and_pricing: Optional[list[Union[ServiceOffer, str]]] = None
+                                                      # every service, price, discount, surcharge,
+                                                      # subscription. Prefer a ServiceOffer object per line
+                                                      # so a minimum order, a fee's trigger, "from" vs. fixed
+                                                      # pricing and the lead time it assumes are separable;
+                                                      # plain strings still validate for back-compat
     service_durations: Optional[list[str]] = None     # how long each service takes ("alignment: 45 min"),
-                                                      # needed to place bookings on a calendar
+                                                      # needed to place bookings on a calendar. Use
+                                                      # "unknown-varies — <reason>" when the owner answered
+                                                      # but the duration genuinely varies; null means UNASKED
     holiday_closures: Optional[list[str]] = None      # dates/rules the business is shut outside its normal
-                                                      # weekly hours ("closed on holiday Mondays", "Aug 1-15")
+                                                      # weekly hours ("closed on holiday Mondays", "Aug 1-15").
+                                                      # "unknown-varies — <reason>" when the owner answered
+                                                      # "it changes every year"; null means UNASKED
     notification_settings: Optional[NotificationSettings] = None  # reminder/notification behaviour
     partners_and_referrals: Optional[list[str]] = None  # work sent OUT to others and partners relied upon
                                                       # ("transmissions go to the Alameda shop", "towing
@@ -59,6 +90,36 @@ class BusinessRequirements(BaseModel):
     capacity_constraints: Optional[list[str]] = None  # the owner's operational rules of thumb and limits,
                                                       # in their own numbers ("2-3 events a weekend with
                                                       # my sister helping", "max 8 covers past 9pm")
+    customer_segments: Optional[list[str]] = None     # the distinct kinds of customer/order the bot must tell
+                                                      # apart, each with its OWN intake rules, one per entry:
+                                                      # "<retail walk-in | event/custom order | wholesale or
+                                                      # standing commercial account> — <who> — <how the order
+                                                      # arrives, minimums, lead time, invoicing/payment>".
+                                                      # A restaurant with a weekly standing order does not
+                                                      # book like a walk-in and must not share its flow
+    pricing_uncertainties: Optional[list[str]] = None  # prices the owner CANNOT state yet and why — rising
+                                                      # input costs, unrepriced lines, margins they suspect
+                                                      # are wrong: "<what> — <why> — <may the bot quote it?>".
+                                                      # This decides whether the bot quotes at all, so it is
+                                                      # not the same thing as a missing number in
+                                                      # unresolved_business_facts
+    certifications_and_standards: Optional[list[str]] = None  # quality/regulatory standards, one per entry:
+                                                      # "<standard> — held since <when> / under consideration
+                                                      # — <cost, timeline, who audits, why>". Held and
+                                                      # aspirational both belong here, never in faq_answers
+    upcoming_business_changes: Optional[list[str]] = None  # known-but-unsettled changes to the business that
+                                                      # the build must survive: lease renewal, a second
+                                                      # location, new staff, a certification in progress —
+                                                      # "<change> — <timing> — <what it depends on>"
+    marketing_channels_and_ad_budget: Optional[list[str]] = None  # how customers are acquired today
+                                                      # (word of mouth, Instagram, a sign), what they spend or
+                                                      # would spend on ads, and any marketing question they
+                                                      # raised ("should I pay for Facebook ads?")
+    stakeholders: Optional[list[str]] = None          # everyone with a say in this decision besides the
+                                                      # contact, one per entry: "<name> — <role/relationship>
+                                                      # — <influence on the decision> — <stance>". A spouse
+                                                      # or partner who disagrees is a project risk, not
+                                                      # business background
     adoption_risks: Optional[list[str]] = None        # feelings that a BUILDER must act on: discomfort with
                                                       # automation, digital illiteracy, fear of losing the
                                                       # human touch — each with the reason the owner gave
@@ -89,7 +150,14 @@ class BusinessRequirements(BaseModel):
                                                             # surfaced from the materials
     open_items: Optional[list[str]] = None            # NOT a bucket to choose: RequirementsBot rebuilds this
                                                       # every turn as a labelled index of all three lists
-                                                      # above, so nothing hides behind a wrong routing call
+                                                      # above. Strictly things the DELIVERY TEAM must action
+                                                      # or chase — never an internal debate the business has
+                                                      # with itself, and never an uncertainty nobody voiced
+    out_of_scope_asides: Optional[list[str]] = None   # real things the owner said that the delivery team must
+                                                      # NOT action: internal family disagreements, business
+                                                      # decisions of their own (whether to open Sundays),
+                                                      # musings unrelated to the bot. Kept so nothing is lost,
+                                                      # parked so open_items stays a work list
     additional_notes: Optional[list[str]] = None      # important facts that fit no other field — never lose a fact
 
 

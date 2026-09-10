@@ -29,7 +29,15 @@ if __name__ == "__main__":
         if user_msg.lower() in ("quit", "exit"):
             break
 
-        messages, turn = bot.send(user_msg)
+        try:
+            messages, turn = bot.send(user_msg)
+        except RuntimeError as e:
+            # The materials gate tripped: the bot refuses to interview blind
+            # over files it could not read. Stop instead of shipping a brief
+            # that looks complete; whatever was gathered is still saved below.
+            print(f"\n[Stopped — {e}]")
+            print("[Fix or remove the files in uploads/ and run again.]")
+            break
         for msg in messages:
             print("\nBot:", msg)
 
