@@ -79,8 +79,14 @@ def write_pdf(path, batch, improved_desc, old_prompt, new_prompt):
 
 def improve_pass(history) -> str | None:
     """Improve from all not-yet-fixed history entries; write a PDF. Returns PDF path."""
-    done = json.loads(POINTER_FILE.read_text())["done"] if POINTER_FILE.exists() else 0
-    batch = history[done:]
+    # migrate the legacy index-based pointer to per-entry flags (the index was
+    # meaningless once concurrent routines started merging their histories)
+    if POINTER_FILE.exists():
+        done = json.loads(POINTER_FILE.read_text()).get("done", 0)
+        for h in history[:done]:
+            h.setdefault("improve_done", True)
+        POINTER_FILE.unlink()
+    batch = [h for h in history if not h.get("improve_done")]
     if not batch:
         print(">>> improve pass: nothing new registered, skipping.")
         return None
@@ -97,13 +103,19 @@ def improve_pass(history) -> str | None:
     REPORTS_DIR.mkdir(parents=True, exist_ok=True)
     pdf = REPORTS_DIR / f"report_{datetime.now().strftime('%Y%m%d_%H%M')}.pdf"
     write_pdf(pdf, batch, improved, old_prompt, new_prompt)
-    POINTER_FILE.write_text(json.dumps({"done": len(history)}))
+    for h in batch:
+        h["improve_done"] = True
+    evolve.HISTORY_FILE.write_text(
+        json.dumps(history, indent=2, ensure_ascii=False), encoding="utf-8")
     evolve.git("add", "-A")
     evolve.git("commit", "-m",
                f"evolve hourly improve: {len(batch)} interviews"
                + (" [prompt improved]" if improved else " [no change]")
                + "\n\nCo-Authored-By: Claude Fable 5 <noreply@anthropic.com>")
-    evolve.git("push", "origin", "main")
+    evolve.sync_push(history)
+    if improved and evolve.git("diff", "origin/main..HEAD", "--",
+                               str(evolve.PROMPT_FILE.name)):
+        print("!!! WARNING: prompt improvement did not land on origin/main")
     print(f">>> report written: {pdf}")
     return str(pdf)
 
@@ -113,9 +125,6 @@ if __name__ == "__main__":
     stop = datetime.now().replace(hour=int(stop_at[:2]), minute=int(stop_at[3:5]),
                                   second=0, microsecond=0)
     print(f"Running cycles until {stop}. Improve pass every {IMPROVE_INTERVAL // 60} min.")
-    if not POINTER_FILE.exists():
-        POINTER_FILE.write_text(json.dumps({"done": len(evolve.load_history())}))
-
     history = evolve.load_history()
     last_improve = time.time()
     failures = 0

@@ -16,6 +16,7 @@ import shutil
 import subprocess
 import sys
 import time
+import traceback
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
@@ -69,13 +70,26 @@ Wrap your entire output in this format and provide no other text
 {format_instructions}"""
 
 
+def invoke_parsed(model, text, parser, tries=3):
+    """invoke + parse, re-asking the model on malformed output instead of
+    crashing the whole cycle (OutputParserException is the top crash cause)."""
+    last = None
+    for attempt in range(1, tries + 1):
+        reply = model.invoke(text)
+        try:
+            return parser.parse(_blocks(reply.content))
+        except Exception as e:
+            last = e
+            print(f"    parse failed (attempt {attempt}/{tries}): {type(e).__name__}")
+    raise last
+
+
 def generate_persona(used: list[str]) -> Persona:
     text = PERSONA_PROMPT.format(
         used="\n".join(f"- {u}" for u in used[-6:]) or "- (none yet)",
         format_instructions=persona_parser.get_format_instructions(),
     )
-    reply = llm.invoke(text)
-    return persona_parser.parse(_blocks(reply.content))
+    return invoke_parsed(llm, text, persona_parser)
 
 
 # ---------------- 2. INTERVIEW ----------------
@@ -213,12 +227,11 @@ Wrap your entire output in this format and provide no other text
 
 def evaluate(persona: Persona, result: dict) -> Evaluation:
     convo = "\n".join(f"{who}: {msg}" for who, msg in result["transcript"])
-    reply = strong_llm.invoke(EVAL_PROMPT.format(
+    return invoke_parsed(strong_llm, EVAL_PROMPT.format(
         facts=persona.background_facts, transcript=convo,
         brief=json.dumps(result["brief"], indent=2, ensure_ascii=False),
         completed=result["completed"], turns=result["turns"],
-        format_instructions=eval_parser.get_format_instructions()))
-    return eval_parser.parse(_blocks(reply.content))
+        format_instructions=eval_parser.get_format_instructions()), eval_parser)
 
 
 def fmt_finding(f) -> str:
@@ -300,11 +313,95 @@ def load_history() -> list:
     return []
 
 
+def merge_histories(ours: list, theirs: list) -> list:
+    """Union two diverged history.json lists by stamp; ours wins field-by-field
+    on the same stamp, but an improve_done flag from either side sticks.
+    Cycles are renumbered chronologically so numbering stays unique."""
+    by_stamp = {}
+    for e in list(theirs) + list(ours):
+        prev = by_stamp.get(e["stamp"])
+        if prev is not None:
+            e = {**prev, **e,
+                 "improve_done": bool(prev.get("improve_done") or e.get("improve_done"))}
+        by_stamp[e["stamp"]] = e
+    merged = sorted(by_stamp.values(), key=lambda e: e["stamp"])
+    for i, e in enumerate(merged, 1):
+        e["cycle"] = i
+    return merged
+
+
+def _resolve_conflict(path: str) -> None:
+    # During a rebase, stage 2 is origin/main (a sibling's push) and stage 3 is
+    # our replayed commit.
+    if path == "evolve_runs/history.json":
+        def stage(n):
+            try:
+                return json.loads(git("show", f":{n}:{path}"))
+            except (json.JSONDecodeError, ValueError):
+                return []
+        merged = merge_histories(ours=stage(3), theirs=stage(2))
+        (ROOT / path).write_text(
+            json.dumps(merged, indent=2, ensure_ascii=False), encoding="utf-8")
+    elif path == "evolve_runs/improve_pointer.json":
+        done = []
+        for n in (2, 3):
+            try:
+                done.append(json.loads(git("show", f":{n}:{path}"))["done"])
+            except (json.JSONDecodeError, ValueError, KeyError):
+                pass
+        (ROOT / path).write_text(json.dumps({"done": max(done, default=0)}))
+    else:
+        # keep our replayed change (e.g. the freshly improved prompt);
+        # sibling-only changes never conflict in the first place
+        git("checkout", "--theirs", "--", path)
+    git("add", "--", path)
+
+
+def sync_push(history: Optional[list] = None, max_tries=6) -> bool:
+    """Push to origin/main, reconciling concurrent sibling pushes by rebasing
+    and merging the shared JSON state instead of dropping either side.
+    Refreshes `history` in place from the reconciled file."""
+    ok = False
+    for _ in range(max_tries):
+        out = git("push", "origin", "main")
+        if not any(m in out for m in ("[rejected]", "[remote rejected]", "failed to push")):
+            ok = True
+            break
+        print("    push rejected (sibling routine pushed first) — rebasing...")
+        git("fetch", "origin", "main")
+        git("rebase", "origin/main")
+        for _ in range(50):  # one iteration per conflicted replayed commit
+            conflicted = [p for p in
+                          git("diff", "--name-only", "--diff-filter=U").splitlines() if p]
+            if not conflicted:
+                break
+            for p in conflicted:
+                _resolve_conflict(p)
+            git("-c", "core.editor=true", "rebase", "--continue")
+        if "rebase" in git("status").lower() and "rebase in progress" in git("status"):
+            git("rebase", "--abort")  # give up on this attempt, retry from scratch
+    if not ok:
+        print("!!! sync_push: could not push after retries — work is committed locally only.")
+    if history is not None:
+        history[:] = load_history()
+    return ok
+
+
 def run_cycle(cycle_no: int, history: list, improve: bool = True) -> dict:
     stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     run_dir = RUNS_DIR / f"cycle_{stamp}_{cycle_no}"
     run_dir.mkdir(parents=True, exist_ok=True)
+    try:
+        return _run_cycle_inner(cycle_no, stamp, run_dir, history, improve)
+    except Exception:
+        # leave a diagnosable trace next to the persona instead of a silent
+        # orphan directory; the caller commits it
+        (run_dir / "error.log").write_text(traceback.format_exc(), encoding="utf-8")
+        raise
 
+
+def _run_cycle_inner(cycle_no: int, stamp: str, run_dir: Path,
+                     history: list, improve: bool) -> dict:
     used = [h["persona"] for h in history]
     print(f"\n=== CYCLE {cycle_no}: generating persona...")
     persona = generate_persona(used)
@@ -353,7 +450,7 @@ def run_cycle(cycle_no: int, history: list, improve: bool = True) -> dict:
 
     git("add", "-A")
     git("commit", "-m",
-        f"evolve cycle {cycle_no}: {persona.industry} score {score}/10"
+        f"evolve cycle {stamp}: {persona.industry} score {score}/10"
         + (" [prompt improved]" if improved else "")
         + "\n\nCo-Authored-By: Claude Fable 5 <noreply@anthropic.com>")
     print(f"    committed. cycle done.")
@@ -385,4 +482,4 @@ if __name__ == "__main__":
               + ("  [improved]" if h["improved"] else ""))
 
     print("\npushing results to GitHub...")
-    print(git("push", "origin", "main") or "pushed")
+    print("pushed" if sync_push(history) else "PUSH FAILED")
