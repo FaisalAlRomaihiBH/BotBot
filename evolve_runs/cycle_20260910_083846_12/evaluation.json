@@ -1,0 +1,61 @@
+{
+  "fact_capture": 8,
+  "no_repeats": 7,
+  "evidence_use": 9,
+  "naturalness": 7,
+  "completeness": 7,
+  "efficiency": 7,
+  "findings": [
+    {
+      "problem": "Budget was asked once, deflected by the owner, and never pushed on. The brief's budget field is effectively empty ('something reasonable'), giving the build team no number, no ceiling and no anchor. Birdie could have offered typical price bands to get a reaction.",
+      "excerpt": "Nomsa Dlamini: Ai, budget-wise ngempela angikaz'qondi kahle amanani ala ma-bot, that's more your side yakho kunokuthi eyami 😂 But if you ask me what ngingakwazi ukukhipha ngenyanga, I'm thinking something reasonable, hhayi into ezongidla imali enkulu kunento engiyenzayo nge-landscaping"
+    },
+    {
+      "problem": "Quote validity (quotes for big jobs are valid 30 days) was never elicited, despite an extended discussion of quoting, deposits and site-visit-to-quote flow. This is a customer-facing policy the bot will be asked about ('is my quote still valid?') and it is absent from the brief.",
+      "excerpt": "Nomsa Dlamini: **Full garden makeovers/lawn installation** - lezi ezinkulu, R15,000 kuya ku-R45,000+, but ngempela kudinga i-site visit ngoba angikwazi ukukhipha inani ku-phone nje without ukubona indawo."
+    },
+    {
+      "problem": "Business history/scale (started 2014 as a roadside plant stall, grown into nursery plot + 3-person crew) was never asked. The brief has no founding date or trajectory, which is standard context for tone, credibility copy and growth expectations.",
+      "excerpt": "Nomsa Dlamini: Sawubona! Ngu-Nomsa, Nomsa Dlamini from Sthandwa Sam Nursery & Landscaping, sikhona la ePMB, Pietermaritzburg."
+    },
+    {
+      "problem": "Birdie asked for the location/premises even though Nomsa had already given the location in her very first message, forcing her to repeat 'ePMB, Pietermaritzburg' again.",
+      "excerpt": "Birdie: Kulungile, ngiyabona ukuthi kusheshe kudingekile ngenxa ye-summer season ne-possible October job. Manje ake sithinte i-location - ninendawo yoku-shop/premises abantu abangayivisita, or is it WhatsApp-only/delivery business?"
+    },
+    {
+      "problem": "The FAQ shows customers ask specifically about Howick, Hilton, Richmond, but Birdie never established which of these fall inside the R150 15km zone. The bot therefore cannot answer the single most common delivery question without escalating every time — undermining the stated success criterion of fewer interruptions.",
+      "excerpt": "Nomsa Dlamini: **Delivery areas** - abantu bavame ukubuza \"ningeza yini e-Howick\" noma e-Hilton, e-Richmond, njll - so it's not just \"do you deliver\" but specifically kuphi. Our base is R150 flat within 15km"
+    },
+    {
+      "problem": "Leading question: Birdie proposed the answer (simple bot, not full booking/payment) and asked for agreement rather than eliciting the owner's own preference. The 'decision' recorded in the brief is largely the interviewer's, not the client's.",
+      "excerpt": "Birdie: Manje ake sicace nge-scope - ufuna into elula nje (i-bot ephendula imibuzo, ithathe details, ithumele ku-wena) noma ufuna i-full booking/payment app lapho abantu bengakwazi ukubuka i-calendar bakhokhe online ngqo? Ngicabanga into elula ingcono kuwe okwamanje ngoba ayibizi kakhulu futhi ihambisana ne-way enisebenza ngayo - uyavuma?"
+    },
+    {
+      "problem": "Two near-identical catch-all 'anything else?' questions back-to-back at the end, padding the interview length.",
+      "excerpt": "Birdie: ingabe kukhona okunye enikwenzayo noma enikhokhiswa khona, noma kuncane noma kuvamile nje?\nBirdie: ingabe kukhona okunye okusenkanjani ngekhanda lakho mayelana ne-pricing noma i-business ngokubanzi esingakakhulumi ngakho?"
+    },
+    {
+      "problem": "Language authenticity slip: Birdie closes an isiZulu conversation with the Xhosa word 'Enkosi', which reads as machine-generated to a KZN isiZulu speaker and slightly undercuts the rapport built through the interview.",
+      "excerpt": "Birdie: Enkosi futhi ngokuzimisela nokuthula isikhathi ukuchaza yonke into ngokucacile - lokhu kuzosiza kakhulu! Sizoxhumana maduze. 👏"
+    },
+    {
+      "problem": "Brief contains heavy duplication: the 2-business-day confirmation rule, the out-of-zone delivery rule, the October market check and the R900 review each appear verbatim in two or three of business_policies / escalation_rules / open_items / faq_answers, bloating the deliverable and risking contradictory edits later.",
+      "excerpt": "Birdie: **I-Escalation:** Nomsa uthatha zonke izinqumo/disputes; site visits kufanele ziqinisekiswe within 2 business days ngokungenisa i-reminder; out-of-zone delivery ne-large job plant availability kuya ku-Nomsa ngqo; general rule - uma i-follow-up ingakapheli within 2 days, ibot iyakukhumbuza Nomsa."
+    },
+    {
+      "problem": "Never asked when the bot should hand over vs. hold a customer outside working hours (7am-4pm, closed Mondays) — only the Monday case was covered. No after-hours behaviour, no response-time expectation for evenings/Sundays, despite hours being captured.",
+      "excerpt": "Nomsa Dlamini: Sivulekile Tuesday to Sunday, kusukela ku-7am kuya ku-4pm. Closed ngoMsombuluko, that's our restocking day - Sipho and I drive down e-Durban to the wholesale flower market ngalolo suku"
+    }
+  ],
+  "top_improvement": "When a client deflects on budget ('that's your side'), the interviewer must follow up once with concrete anchors (e.g. 'most bots this size land between R X and R Y per month — does that sound workable or too high?') so the brief captures an actual affordability band instead of the word 'reasonable'.",
+  "schema_suggestions": [
+    "Add a dedicated `bot_persona` field (name, tone, emoji use, language-response rules). Currently 'Sam', friendly tone and the isiZulu/English response rule are buried inside `business_policies`, which is meant for customer-facing business rules.",
+    "Add a `scope_decisions` / `out_of_scope` field. The explicit choice of 'simple Q&A + lead capture, not booking/payment app, may revisit later' is crammed into `business_policies`.",
+    "Add an `internal_automation_rules` field for staff-facing behaviours (2-day follow-up reminder ping to Nomsa, phone-number-first lead capture). These are not business policies or escalation rules but internal workflow triggers, and they currently appear duplicated across three arrays.",
+    "Add a `service_area` / `delivery_zones` structured field (base zone radius, named towns in/out of zone, surcharge rules) — delivery geography is currently smeared across services_and_pricing, faq_answers and business_policies with no list of covered suburbs.",
+    "Add a per-item `confidence`/`under_review` flag on services_and_pricing entries so prices the owner is unsure about (R900 maintenance, out-of-zone delivery) are machine-readable rather than expressed in prose caveats repeated in open_items.",
+    "Add a `current_tools_and_records` field (notebook + WhatsApp, no spreadsheet/CRM, no website) — this operational reality is currently dumped in `additional_notes` and duplicated there and in open_items.",
+    "Add a `business_profile` field (founded year, size/growth stage) — the interviewer has no slot prompting for company history, so the 2014 roadside-stall origin was never asked about.",
+    "Add a `quote_terms` field (validity period, what triggers a re-quote) — the schema has deposit and refund coverage but no home for quote lifetime, which is likely why it was never asked."
+  ]
+}

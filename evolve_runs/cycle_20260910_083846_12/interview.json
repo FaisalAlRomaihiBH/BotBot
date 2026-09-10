@@ -1,0 +1,339 @@
+{
+  "transcript": [
+    [
+      "Birdie",
+      "Hi! I help businesses figure out exactly what they need from a chatbot. Before we start — what's your name?"
+    ],
+    [
+      "Nomsa Dlamini",
+      "Sawubona! Ngu-Nomsa, Nomsa Dlamini from Sthandwa Sam Nursery & Landscaping, sikhona la ePMB, Pietermaritzburg. Ngi-happy kakhulu ukukhuluma nawe today, we really need help ngoku with organizing our WhatsApp messages, kuyaxaka sometimes 😂 Anyway - how can we start?"
+    ],
+    [
+      "Birdie",
+      "Sawubona Nomsa! Ngiyajabula ukusebenza nawe. Kuqala, ake sithi umbono wakho wempumelelo - in a few months, when this bot is working well, what would that look like for you? Njani ozobona ukuthi kusebenza?"
+    ],
+    [
+      "Nomsa Dlamini",
+      "Ai, that's a good question ngempela. Okay so, for me success ngizoyibona ngokuthi... uma i-bot ingakwazi ukuphendula the basic stuff without me having to jump in every five minutes 😂 Like, someone askha \"how much for agapanthus\" or \"do you deliver e-Howick,\" ibot ijust iphendule, akudingeki ngiphume ekhaya ngithathe iphone.\n\nAnd then the biggest one - uma kukhona umuntu ofuna i-quote for a big job, like garden makeover noma i-landscaping, ibot must ithathe details zabo kahle - igama, indawo, into abayifunayo - bese ingithumelele mina so I can follow up nabo ngokushesha. Kaningi sengike ngalahlekelwa ngumsebenzi ngoba ngiphuthelwa yi-message phakathi kwenoise ye-WhatsApp yethu, uyabona?\n\nSo basically - less back-and-forth for the simple stuff, and no more dropped leads for the big jobs. Uma singakwazi lokho, ngizothi yimpumelelo leyo 👏"
+    ],
+    [
+      "Birdie",
+      "Ngiyabona, that makes total sense Nomsa - ukulahlekelwa umsebenzi kubuhlungu impela. Okay, ngicela ukubuza - who are your typical customers? Ingabe abantu abafanayo abathenga izitshalo nabafuna i-landscaping jobs, or are they different types of people with different needs?"
+    ],
+    [
+      "Nomsa Dlamini",
+      "Hhayi, kuxubene ngempela - it's a mix. Abanye babantu bami are just the regular nursery customers, you know, the ones who come in ngoMgqibelo asa buy some agapanthus noma i-spekboom, veggie seedlings, that kind of thing - in and out, quick sale, they know exactly abakufunayo.\n\nThen kukhona another group, iyona engiyithanda kakhulu 😂, abo abafuna the bigger stuff - full garden makeovers, lawn installation, maintenance contracts. Labo often bangu-first time contact via WhatsApp, bathumela isithombe sesigadi sabo bathi \"Nomsa can you help.\" Those ones need more back-and-forth, details, site visit sometimes, ngicela indawo yabo ngoba kuncike nakuma-water restrictions in summer.\n\nSo ja - simple purchase customers vs. big-project customers, different energy completely. The bot needs ukubona lo mehluko, uyabona, so it doesn't treat someone who just wants seedlings the same as someone who wants a whole garden redone 👏"
+    ],
+    [
+      "Birdie",
+      "Kuhle lokho, kucacile manje umehluko phakathi kwabo. Manje ake sikhulume nge-budget ne-timeline - ingabe unayo i-budget range ocabanga ukuyisebenzisa kule bot, and are you hoping to have this running soon, or is there no rush?"
+    ],
+    [
+      "Nomsa Dlamini",
+      "Ai, budget-wise ngempela angikaz'qondi kahle amanani ala ma-bot, that's more your side yakho kunokuthi eyami 😂 But if you ask me what ngingakwazi ukukhipha ngenyanga, I'm thinking something reasonable, hhayi into ezongidla imali enkulu kunento engiyenzayo nge-landscaping - ngoba asisebenzi nge-volumes kanjalo, uyabona, we're not a huge company.\n\nNgesikhathi - ai, ngifuna kusheshe impela 😅 Especially manje, sisondele ku-summer season lapho abantu bathanda ukwenza izigadi zabo, plus ngisaphetha ne-possible big job ngo-October (i-wedding venue landscaping, angikakuqinisekisi but it could be huge). So the sooner sikwazi ukuhambisa lo bot the better, ngicabanga ukuthi within a month or two would be ideal, hhayi ukuthi kuphuthume kabi but... you get what I mean, sorry, in English - not urgent-urgent, but soon-soon 😂"
+    ],
+    [
+      "Birdie",
+      "Kulungile, ngiyabona ukuthi kusheshe kudingekile ngenxa ye-summer season ne-possible October job. Manje ake sithinte i-location - ninendawo yoku-shop/premises abantu abangayivisita, or is it WhatsApp-only/delivery business?"
+    ],
+    [
+      "Nomsa Dlamini",
+      "Yebo we have a physical spot, it's not WhatsApp-only nje 😂 We're based right here ePMB, Pietermaritzburg, KZN - it's a proper nursery plot, abantu bangeza baze bakhethe izitshalo ngokwabo, especially ngoMgqibelo kuyagcwala. Sivulekile Tuesday to Sunday, kusukela ku-7am kuya ku-4pm. Closed ngoMsombuluko, that's our restocking day - Sipho and I drive down e-Durban to the wholesale flower market ngalolo suku, so if someone messages ngoMsombuluko asking for something specific, ibot kufanele ibatshele ukuthi we'll only respond properly from Tuesday. That would help a lot actually 👏"
+    ],
+    [
+      "Birdie",
+      "Ngiyabona, kulungile - lokho kuzosiza kakhulu. Ngizwile ukuthi kukhona Sipho okusizayo - who else is on the team ne, even part-time or weekends? And ngingabuza, yini indima ka-Sipho?"
+    ],
+    [
+      "Nomsa Dlamini",
+      "Ja so it's a small team but we cover the bases 😂 It's me, Nomsa - I handle sales, quotes, all the WhatsApp chatting basically. Then uSipho, my nephew, does the deliveries and heavy digging, ama-hard labour stuff, uyahamba nge-bakkie yakhe... although ai, that bakkie yakhe ivamise ukukhala, ijika ijame endleleni 😅 so sometimes deliveries zilibale ngenxa yaloko, ibot mayibe patient ngalokho uma abantu bebuza ukuthi \"kubanjani i-delivery yami.\"\n\nThen kukhona uBheki, part-time gardener wethu, yena udla lubi ku-planting ne-maintenance visits, uyagoduka enye into e-nice ngalapha ekhaya. Kodwa u-Bheki akaqinisekile ngoMsombuluko 😂 asazi kahle ukuthi kungani, but Mondays and Bheki don't always match up, so we try not to promise maintenance visits ngalolo suku.\n\nAnd then for the bigger jobs, sibiza ama-casual labourers, ababili usually, just for that specific project.\n\nSo team = me (sales), Sipho (delivery + digging), Bheki (planting + maintenance), plus casuals when needed 👏"
+    ],
+    [
+      "Birdie",
+      "Ngiyabona, kunengqondo. Manje, kubona bonke laba, ubani okuthatha izinqumo uma kukhona umuntu ongajabuli noma kukhona i-dispute - ngokwesibonelo uma umuntu ekhala ngedeliver noma umsebenzi? Futhi, ubani okugcina amarekhodi ama-orders/bookings - ku-notebook, spreadsheet, WhatsApp nje?"
+    ],
+    [
+      "Nomsa Dlamini",
+      "Ai, that one ngiyi-final decision-maker mina 😂 Uma kukhona umuntu ekhala, noma yikuphi - late delivery, umsebenzi ongahambanga kahle - ku-me lokho, bayangithinta directly ku-WhatsApp noma ba-fone, and I sort it out, sometimes ngicela uSipho or Bheki ukuthi bachaze what happened kodwa the final call ngeyami.\n\nNgempela, ama-records ethu right now ayi-messy kancane 😅 Kunengxenye ku-WhatsApp chats nje, then kukhona i-notebook engiyibhala ngayo ama-bookings ne-dates zama-site visits, especially ama-bigger jobs. Asinayo i-proper spreadsheet noma system, that's actually part of why sengike ngalahlekelwa umsebenzi, ngoba into ibisemhlophe ku-notebook or ku-WhatsApp phakathi kwezinye izinto ezingaphezulu kwe-500 messages 😂 So uma i-bot ingasisiza ukuqoqa lokho kahle - details zabantu, nokuthi bafunani - that would honestly change everything for us."
+    ],
+    [
+      "Birdie",
+      "Yazi lokho kuzosiza kakhulu Nomsa. Manje ake sithinte ku-into eyona - yini eniyithengisayo/eniyenzayo? Ngicela ungichaze wonke ama-services and products - kusukela ezitshalweni kuya ku-landscaping jobs, konke okuthengisiwe noma okwenziwayo."
+    ],
+    [
+      "Nomsa Dlamini",
+      "Ai kulungile, ake ngikuchazele konke sisi 😂 Okay so:\n\n**Ezitshalweni (plants)** - sinama-indigenous plants ne-shrubs, izinto ezinjenge-aloe, agapanthus, plumbago, spekboom, konke lokho sikutholakala, amanani ahamba from about R45 kuya ku-R180 ngokuya nge-size/species. Then also sinama-potted veggie seedlings, ama-punnet abiza R15-R25.\n\n**Garden design consultation** - uma umuntu efuna mina noma uBheki sihambe siyobona i-site, kuba i-R650 flat fee, but that gets waived uma bebooka i-landscaping work engaphezu kuka-R8000.\n\n**Small landscaping jobs** - njenge-flower beds, borders, i-irrigation touch-ups nje, that's typically ku-range ye-R3500 to R9000 kuya ngokuthi kubukhulu kangakanani.\n\n**Full garden makeovers/lawn installation** - lezi ezinkulu, R15,000 kuya ku-R45,000+, but ngempela kudinga i-site visit ngoba angikwazi ukukhipha inani ku-phone nje without ukubona indawo.\n\n**Delivery** - R150 flat within 15km, outside kuyabiza kancane more, uSipho oshayela i-bakkie (uma ingakhali 😂).\n\n**Maintenance contracts** - monthly mowing/weeding, R900 ngenyanga for a small suburban garden, kuyaxhumana uma indawo inkulu, we negotiate.\n\nSo basically - from a single R15 seedling right up to a R40k garden makeover, sikwenza konke 👏"
+    ],
+    [
+      "Birdie",
+      "Kuhle impela, siqoqe kahle amanani. Manje ake sithinte isikhathi - for each of these, kudinga isikhathi esingaki? Ngokwesibonelo, i-delivery ithatha izinsuku ezingaki, i-small landscaping job ithatha isikhathi esingaki ukuqedwa, ne-full garden makeover?"
+    ],
+    [
+      "Nomsa Dlamini",
+      "Ai, isikhathi ye-timing, kulinganiselwa kancane ngoba kuncike ku-various things, but let me try ngichaze roughly:\n\n**Delivery** - uma i-bakkie ikhona ivikelekile 😂, normally next day, sometimes same day uma sikuthola kusasa. Kodwa uma i-bakkie ikhala (ivamise!), kungathatha 2-3 days, ibot mayithembise \"1-2 days depending on availability\" hhayi \"same day\" ukuze singaphuthi promises.\n\n**Small landscaping jobs** (flower beds, borders, irrigation touch-ups) - usually 1-3 days sokwenza actual work, but kudinga sibeke i-slot, so from booking kuya ku-completion kungaba i-week noma two depending on how busy sikhona.\n\n**Garden design consultation/site visit** - usually within a week yokubooka, ayithathi long, i-30min to an hour on site.\n\n**Full garden makeovers/lawn installation** - yaz, lezi ezinkulu, zingathatha 1-3 weeks actual construction time depending on size, but before that kudinga i-quote (after site visit) then 50% deposit, then we schedule. Ngesikhathi se-summer kuyagcwala kakhulu, so umuntu angase alinde 2-3 weeks before sikwazi ukuqala ngempela.\n\n**Maintenance contracts** - that's ongoing nje, monthly, no \"completion\" - Bheki uya once or twice a month depending on the garden.\n\nSo ibot kufanele ithembise ranges hhayi exact dates, ngoba kuncike kakhulu ku-bakkie yaSipho ne-how busy sikhona ngaso sonke isikhathi 😂 Especially ngo-October nje, angikaqiniseki kahle noma i-wholesale market izoba nama-mature plants enough for that wedding venue job, so leyo kudinga mina ngiqinisekise before sithembisa umuntu date."
+    ],
+    [
+      "Birdie",
+      "Sizoqhubeka manje ku-payment - yiziphi indlela zokukhokha enizamukelayo (cash, card, EFT, noma i-mobile payment)? Futhi ngiyabona nathe kukhona i-50% deposit for full makeovers - ingabe amanye ama-services nawo adinga deposit, noma i-full makeover kuphela?"
+    ],
+    [
+      "Nomsa Dlamini",
+      "Ah yebo, ngicela ngichaze - payment methods, si-accepta cash, i-EFT (that one abantu bayithanda kakhulu especially amakhasimende amakhulu), and i-card sina-card machine ka-nursery uma bathenga izitshalo. Ayikho i-mobile payment special like SnapScan noma yini, just those three ezi-basic 😂\n\nNgempela the deposit isn't full makeovers kuphela - it's ANY landscaping job over R5000, so-ke i-50% deposit iyadingeka before we start, noma kube i-small job noma i-full makeover, uma i-total iphezulu kuka-R5000. Kodwa uma kuyi-nursery purchase nje - abantu bathenga izitshalo bahambe nazo - akudingeki deposit, bakhokha ngaso leso sikhathi konke. So deposit is landscaping-specific, hhayi ku-plant sales 👏"
+    ],
+    [
+      "Birdie",
+      "Ngiyabonga Nomsa. Manje ngicela ukubuza nge-warranty/guarantee - uma kukhona umuntu okhala ngokuthi izitshalo zife noma umsebenzi we-landscaping awuhambe kahle, ninayo i-policy yokubuyisela imali noma yokulungisa kabusha nje?"
+    ],
+    [
+      "Nomsa Dlamini",
+      "Ah yebo, kulungile - so for plants, our policy is: no refunds once izitshalo ziphumile enkathini, once they leave the nursery - UNLESS kukhona okubonakalayo ukuthi bekugulile from the start, like kuvele ukuthi i-plant beyifikile isidiseased already, ayikho right. In that case sizoyibuyisela noma sikunikeze enye. But if umuntu uthenge i-plant, wayithatha ekhaya, base bengayinakekelanga kahle base ifile - hhayi, asikwazi ukubuyisa imali, ngoba ayikho indlela yokuqinisekisa ukuthi kwenzenjani ekhaya kwabo, uyabona 😅\n\nKu-landscaping work, ayikho i-formal written guarantee document nje (asikaze sikwenze lokho), but in practice uma kukhona okungahambanga kahle ngenxa yethu - like i-irrigation touch-up ayisebenzi, noma kukhona okwenziwe kabi - sizobuya sikulungise without kukhokhisa umuntu again, ngoba it's our workmanship, kufanele sikulungise. Ngiyaziqhenya ngalokho actually, asifuni amakhasimende angajabuli 👏\n\nSo basically: plants - no refund unless diseased on arrival; landscaping - we come back and fix it if it's our fault, no extra charge, kodwa akukho formal \"guarantee period\" nje esikubhalile."
+    ],
+    [
+      "Birdie",
+      "Kuhle, ngiyabonga ngokucacisa. Manje - uma umuntu ekhensela i-booking noma i-site visit last minute, noma angavela nje (no-show), ninayo indlela enithi kufanele yenzeke, ngokwesibonelo ku-deposit - iyabuyiselwa noma cha?"
+    ],
+    [
+      "Nomsa Dlamini",
+      "Ai, yazi lokho... ngiyacabanga into engikaze ngiyithathele phansi ngokusheshe 😅 Asinayo i-formal policy ebhaliwe ye-cancellation, sisebenza nje ka-case-by-case. Uma umuntu esitshela kusenesikhathi ukuthi bacancel-a i-site visit, akukho phutha, siyabuyisela noma siyahlela kabusha nje without hassle.\n\nKodwa uma umuntu ese-deposited already for a landscaping job, base be-cancel last minute noma bangavele nje ekhaya - ai, angikaze ngiqinisekise into e-fixed, ngenza nje ngokuthi indaba injani, sometimes ngi-refund-a part, sometimes hhayi, kuncike nokuthi sesisebenzile kangakanani ngaleyo point (njenge ukubeka ama-labourers aside, or materials esesizithengile). So honestly, that one asikakuqondi kahle as a business, kufanele ngisiqale lokho engikwenzayo 😂 Maybe ibot ingasho nje ukuthi \"deposits are generally non-refundable if work has already started or materials bought, but speak to Nomsa directly for your specific case\" - kungcono kunokuthi sithembise into engingayigcini."
+    ],
+    [
+      "Birdie",
+      "Kulungile, kuzwakala kahle - sizogcina lokho njengento oyicabangela kabanzi. Manje, uma abantu bakubuza imibuzo, yiyiphi eyona evame kabanzi ngaphandle kwaleyo esikhulume ngayo - ngokwesibonelo, ngabe bavame ukubuza nge-water restrictions, indawo abangeza kuyo, noma okunye okuvamile?"
+    ],
+    [
+      "Nomsa Dlamini",
+      "Ai yebo, kukhona ezinye ezivamile ngempela 😂 Ake ngicabange...\n\n**Water restrictions** - yebo lena ivama kakhulu especially ngo-summer, abantu babuza \"ningakwazi yini ukufaka i-irrigation\" noma \"does your maintenance include watering,\" and ai, kudinga ngicacise ukuthi kuncike ku-restrictions zangaleso sikhathi, asikwazi ukuthembisa into e-fixed ngoba ama-rules ayashintsha ngokuya ne-municipality.\n\n**Delivery areas** - abantu bavame ukubuza \"ningeza yini e-Howick\" noma e-Hilton, e-Richmond, njll - so it's not just \"do you deliver\" but specifically kuphi. Our base is R150 flat within 15km, so kuhle uma ibot ingabuza indawo yabo kuqala ukuze size right ngokuthi kuzobiza malini extra.\n\n**Which plants suit which spot** - \"yiziphi izitshalo ezizokhula kahle endaweni engenalanga\" noma \"ngicela ikhaya elingadingi manzi amaningi\" - abantu badinga i-advice, hhayi nje amanani. That one ibot ingase ingakwazi ukuyiphendula kahle, kufanele ithi \"let me connect you with Nomsa for plant advice specific to your garden.\"\n\n**Ukuthi sisebenza noma singasebenzi ngoMsombuluko** - as we said, abanye abazi ukuthi sivaliwe, so lokho kuyaphindaphindwa kaningi.\n\nAnd then last one - abantu bavame ukubuza \"ningenza pet-friendly gardens\" noma \"ningasebenzisa indigenous only\" ngoba abanye bafuna water-wise gardens ngenxa ye-restrictions. So sustainability/indigenous focus ivama ukubuzwa nayo 👏"
+    ],
+    [
+      "Birdie",
+      "Ngiyabona ngokwe-pet-friendly ne-indigenous gardens - uma umuntu ebuza lokho, yini impendulo yakho ngempela? Ingabe niyakwenza lokho njenge-specialty, noma kuncike ku-project?"
+    ],
+    [
+      "Nomsa Dlamini",
+      "Ah, that's a good one - so honestly, indigenous IS kind of our specialty already, hhayi nje into esiyenzayo occasionally 😂 Like, most of our stock ngempela is indigenous - spekboom, agapanthus, aloe, plumbago - so uma umuntu efuna i-water-wise, indigenous-focused garden, that's basically our bread and butter, sikujwayele, asidingi ukucabanga kabili.\n\nPet-friendly ke, ai, that one asikakuyenzi as a proper \"specialty\" nje ebhaliwe, kuncike kakhulu ku-project. Like, sizoqaphela ukuthi asifaki izitshalo eziyi-toxic uma umuntu esitshela ukuthi unezinja noma amakati ekhaya, but asinayo i-formal \"pet-friendly package\" nje esikwaziyo ukusho ku-bot ngokuphelele. So ibot ingathi \"yebo we can work with pet-friendly requirements, please mention your pets when booking so Nomsa/Bheki can plan the right plants\" - kungcono kunokuthi sithembise into esingakayihlelanga kahle 😅\n\nSo short answer: indigenous - yes, that's basically who we are. Pet-friendly - we'll accommodate it, kodwa ku-case-by-case basis, not a formal thing yet."
+    ],
+    [
+      "Birdie",
+      "Kuhle kabi lokho ngempela, ku-clear manje. Ngicela ukubuza - le bot izosebenza ku-WhatsApp kuphela, or ingabe nifuna ne-Facebook/Instagram noma i-website nazo? Futhi, uma unayo ama-real conversations/screenshots zama-customer emiyalezweni yakho ye-WhatsApp, ungangifaka ku-folder ethiwe 'uploads' eseceleni kwe-program, ukuze ngibone imibuzo yangempela abantu abayibuzayo - kuzongisiza ukubuza imibuzo engcono. Uma ungenayo indlela, ungangithumela nje ama-example messages ku-lapha."
+    ],
+    [
+      "Nomsa Dlamini",
+      "Ai, mostly it's WhatsApp lapho konke kwenzeka, that's our main thing ngempela 😂 Sinayo i-Facebook page, Sthandwa Sam Nursery, kodwa ai, ayibuswa kahle, ivamise ukuhlala amasonto ngaphandle kokuthi ngithumele okuthile - so honestly angikaz'qondi kahle noma sifuna i-bot ihambe layo ne-Facebook, that's maybe a \"later\" thing. Asinayo i-website at all, that's a gap I know 😅 So for now, ake sigxile ku-WhatsApp kuphela, ngoba yilapho amakhasimende wonke akhona nyway.\n\nMayelana ne-screenshots - okay ngizithumele, ngizozifaka ku-uploads folder njengoba ushilo, they're in there now 👏 (Ziyi-mix ye-typical questions, ama-price enquiries, delivery grumbles nge-bakkie kaSipho, njll 😂)"
+    ],
+    [
+      "Birdie",
+      "Ngiyabonga Nomsa, ngizibonile ama-files. Ngicela isikhashana ukuzifunda kahle ama-screenshots - ngizobuya manje-manje. 🙏"
+    ],
+    [
+      "Birdie",
+      "Okay, ngiwafundile ama-messages akho, ayasiza kakhulu! Ngibonile ukuthi kahle kahle niyaphendula ngokushesha ku-stock/pricing (njenge-spekboom) ne-store hours, kuhamba kahle lokho. Kodwa kukhona into engiyibonile - kukhona uGrant owabuza nge-site visit date ye-400sqm makeover, wathenjiswa ukuthi 'ngizohlola noSipho' (ngoba i-bakkie beisemechanic), kodwa akubange kusaphinde kulandelwe, waze wabuza 'Any update?' engaphendulwa. Ngabe kukhona indlela ecacile yokuhlela ama-site visits ngokwejwayelekile, or kuncike ku-availability kaSipho ne-bakkie ngaso leso sikhathi?"
+    ],
+    [
+      "Nomsa Dlamini",
+      "Ai, uGrant... yeah I remember that one, ngiyaxolisa ngempela ngaye 😅 that's exactly the kind of thing engikhuluma ngayo ku-dropped leads, uyabona - the bakkie yayisemechanic, so I told Sipho \"asazi ukuthi nini sizokwazi ukuhamba,\" bese le message yaGrant yajika yashona phansi ku-chat noise, angisaphindanga ngamlandela.\n\nHonestly, asinayo indlela e-cacile ye-scheduling ama-site visits, it's very ad-hoc kancane 😂 Usually kuncike ku: (1) ingabe i-bakkie ikhona/iyasebenza, (2) ingabe uSipho or Bheki bakhona ngalolo suku, ne (3) ukuthi ngingakwazi yini mina ukuhamba ngokwami uma kubalula (some site visits ngihamba ngami nge-car yami, hhayi ngempela kudingeka i-bakkie for that part, kuncike ku-project). But there's no calendar or booking system nje esikwaziyo ukuthi \"Tuesday 10am is taken.\" Ku-notebook, and ku-my head mostly 😅\n\nSo ja, that's a gap definitely - the bot kufanele ithi something like \"Nomsa will confirm your site visit date within X days\" and then there MUST be a follow-up reminder ku-me, ngoba clearly ngiyakhohlwa uma kuxutshene nezinye izinto. Lokho kuzongisiza kakhulu impela, ngoba uGrant akakwazi ukuba yena wedwa oshiywe kanjalo 😔"
+    ],
+    [
+      "Birdie",
+      "Ngiyezwa, kuzwakala ukuthi kudingeka i-safety net engaphezulu ukuze kungabuye kwenzeke lokho okwenzeka noGrant. Ake sithi ibot ithi 'Nomsa will confirm your site visit date within 2 business days' bese kuba ne-internal reminder kuwe - ingabe la 2 days ayakulungela, noma ufuna elinye inani?"
+    ],
+    [
+      "Nomsa Dlamini",
+      "Ai ja, 2 days kuzwakala kulungile ngempela, that's do-able even uma i-bakkie ikhona noma ingekho 😂 Ngoba most of the time ngiyakwazi ukusho at least \"yebo sizokwazi ngoLwesi-hlanu\" or \"cha kudingeka sihlele kabusha\" within lokho 2 business days, akudingekile kube same-day promise ngoba ngiyazi ngokwami ukuthi angiwakwazi lawo amanani 😅\n\nKuphela into engingayifaka - uma kuwukuthi 2 days ziphelile kodwa i-bakkie isaphuma emechanic noma kukhona i-emergency, ibot mayingabi strict kabi, maybe isho nje \"we'll confirm within 2 business days (sometimes a little longer if there's a scheduling hiccup, but we won't leave you hanging like poor Grant 😂)\" - just so abantu bengagcini bebuza \"why 3 days dlula, anginampendulo\" uma kukhona okuphambene nathi ngaleyo specific week. But ja, 2 days as the standard target - that works for me 👍"
+    ],
+    [
+      "Birdie",
+      "Ngiyabonga, lokho kuzokwenza kahle. Ngibonile ku-messages ukuthi u-Priya wabuza nge-delivery e-Howick, kodwa ayikho i-formula ecacile yokubala i-cost ngaphandle kwe-15km zone, base kwathiwa kuncike ku-petrol prices - ngicela ubuze, ingabe kukhona i-flat rate oyifunayo ngokwesibonelo per km, noma kufanele ibot ithi nje 'outside 15km, please give your location so Nomsa can calculate the delivery cost'?"
+    ],
+    [
+      "Nomsa Dlamini",
+      "Ai, honestly... asinayo i-proper per-km formula ebhaliwe, that's another one engikaze ngiyithathele phansi ngokusheshe 😅 Ngenza nje ngokuthi \"okay ku-Howick, kumele kube kufuphi nje R250-R300\" ngokwe-gut feel, kuncike ne-petrol price ngaleso sonto, hhayi into e-fixed kuka-formula. Kuyahluka nangokuthi Sipho uzoyithatha yedwa leyo trip noma uzoyihlanganisa nezinye ama-deliveries ngaleyo ndlela, ngoba lokho kuyashintsha amanani too.\n\nSo ngicabanga kungcono ibot ithi nje \"outside the 15km zone, please share your location so Nomsa can work out the delivery cost for you\" - hhayi ukuthi sithembise number specific engingeke ngikwazi ukuyigcina uma petrol iphinde yenyuke next week 😂 Maybe ke ngizohlala ngi-jot down amanani engiwasebenzisile before, so ngizokwazi ukwakha i-rough guide leyo eyeqiniso kunokuthi ngiqhubeke ngi-guess nje kuze kube phakade."
+    ],
+    [
+      "Birdie",
+      "Kuyezwakala, kulungile - ibot izosho nje ukuthi bathumele indawo yabo bese wena uyakwazi ukubala. Kukhona okunye engikubonile ku-messages - u-David wabuza nge-landscaping ye-wedding venue ngo-October, kwathenjiswa kaningi ukuthi 'sizohlola with suppliers' e-Durban market kodwa akubange kusaphendulwa nakanye emasontweni. Ngabe kunjani ngempela ukubheka i-availability yezitshalo ku-Durban market - ingabe kudinga usuke uye khona ngempela, or bangakwazi ukushayela ucingo?"
+    ],
+    [
+      "Nomsa Dlamini",
+      "Ai, uDavid... yebo lo omunye engimlibele naye, ngiyaxolisa impela 😅 Kule case, kuncike - abanye ba-suppliers e-Durban market ungabashayela ucingo nje ubabuze \"ninama-mature plants abangaki bakhona for October,\" but ngempela ama-quantities amakhulu kanje ne-quality specific (like for a wedding venue, kudingeka izitshalo ezibukeka kahle, not just anything), kungcono ngiye ngokwami ngiyobona ngamehlo, hhayi ukuthi ngithembele ku-phone call nje.\n\nNgoba nakhu - lo msebenzi mkhulu kakhulu (i-wedding venue makeover), so angifuni ukuthembisa uDavid ngento engingayi-confirm-i ngempela without ukuhamba mina noma Sipho siyokhangela stock ngokwethu ku-market, especially ngoba lokho ku-October kusekude kancane, izinto zingashintsha ku-supply between manje na-lapho.\n\nSo honestly, that one still open ku-mind yami - angikaqiniseki noma singamthembisa u-David i-date efanele until ngiye e-market ngokoqobo ngizobheka. Ibot mayithi nje kuye something like \"Nomsa is confirming plant availability for October bookings, she'll update you by [date]\" - hhayi ukuthi ime, kodwa hhayi nokuthi imthembise into engingayigcini uma stock ingekho. Kufanele ngenze lelo trip masinyane impela, ngaphambi kokuthi lo msebenzi ushonephansi njengokaGrant 😅"
+    ],
+    [
+      "Birdie",
+      "Ngiyabona, kuyacaca ukuthi lokhu kudinga uhambo lwakho ku-market ngqo. Ngizokubeka njenge-decision osayifanele ukuyithatha, hhayi into ecacile okwamanje. Manje, ake sibuyele emuva encane - ngamanani nje wonke la ma-follow-up angaphenduliwe (njengo Grant, Priya, noDavid) - ingabe ufuna ibot ibe ne-general rule yokuthi 'if Nomsa hasn't followed up within 2 days on a big-job or delivery question, send an automatic reminder to Nomsa' - noma yikuphi okunye ongakufuna njenge-safety net enkulu?"
+    ],
+    [
+      "Nomsa Dlamini",
+      "Yebo, ngempela lokho - that's exactly ekusiza kwami engikudingayo, a proper safety net ngoba mina ngedwa ngiyakhohlwa when things get busy 😅 So ja, general rule: uma ngingaphendulanga within 2 days ku-anything ebalulekile - big-job quotes, delivery-outside-15km questions, site visit confirmations - ibot ithumele nje reminder ku-me automatically, ingasho nje \"hey Nomsa, uGrant/Priya/David basalindile, follow up nabo.\"\n\nFor the small stuff nje - \"how much for agapanthus,\" \"niyavula nini\" - akudingeki reminder, ibot iyakwazi ukuzimela yona, hhayi yonke into idinga mina ngempela 😂\n\nBut anything lapho umuntu ekade wathenjiswa \"ngizobuyela kuwe\" nge-specific date noma details (like ama-site visits, ne-October job kaDavid) - yebo, that MUST ping me uma kudlula 2 days, ngoba yilezo ezingishiya nginenkinga uma zilahleka. Lelo idea ye-automatic reminder, iyangithokozisa ngempela, ngoba ngedwa angikwazi ukugcina yonke into ekhanda lami, especially ngo-summer uma sonke sibhiziwe 👏"
+    ],
+    [
+      "Birdie",
+      "Impilo enhle leyo, sengiyibhalile njenge-rule. Manje ake sithinte i-volume - roughly, ingaki ama-messages/ama-enquiries enizithola ngesonto nje ku-WhatsApp, ngokulinganisela?"
+    ],
+    [
+      "Nomsa Dlamini",
+      "Ai, ku-rough estimate nje... ngicabanga singathola something like 40-60 messages ngesonto, kuncike ku-season 😅 Ngesikhathi se-summer noma kusondele ku-Christmas, kuyakhuphuka kakhulu, kungaze kufike ku-80+ ngoba abantu bonke bafuna ukulungisa izigadi zabo ngaleso sikhathi. Ngo-winter kuyehla kancane, mhlawumbe 20-30 nje ngesonto.\n\nKodwa ke, hhayi zonke ezo \"enquiries\" ezisha - kukhona okuphindaphindwayo, njenge abantu ababuyela emuva bebuza \"any update?\" noma bethumela isithombe se-plant bebuza \"yini le\" 😂 So real \"new\" conversations mhlawumbe half of that, enye ingama-follow-ups noma small chit-chat. But ja, roughly 40-60 as a normal week, ikhuphuka ngo-summer/pre-Christmas rush."
+    ],
+    [
+      "Birdie",
+      "Ngiyabonga Nomsa. Manje, ake sithinte i-tone ye-bot - ufuna ibot izwakale kanjani, ngokwesibonelo friendly and casual njengoba ukhuluma nje, or something more formal? Futhi ufuna ibe ne-name ethile, or 'Sthandwa Sam' assistant nje ilungile?"
+    ],
+    [
+      "Nomsa Dlamini",
+      "Ai, definitely friendly and casual, hhayi i-formal formal, ngoba nathi asisiye i-corporate company enjalo 😂 Ngifuna umuntu ezwe sengathi ukhuluma nathi ngempela, hhayi ne-robot ekhuluma nge-\"Dear Valued Customer\" nje, ai no. Kufanele kube ne-warmth, maybe ne-emoji lapha nalapha, akesho into efana \"Sawubona! 😊\" hhayi \"Good day, how may I assist.\"\n\nMayelana ne-code-switching - ai, angazi noma ibot ingakwazi ukwenza lokho njengami 😅 kodwa at least uma umuntu ebhale ku-isiZulu, ibot iphendule ka-isiZulu, uma ebhala ka-English, iphendule ka-English, ungayenzi force i-mix uma ingayazi kahle, ngoba loko kungajika kubi uma isiZulu asiphelele. So mostly English with a sprinkle of easy isiZulu greetings maybe, njenge \"Sawubona\" or \"Ngiyabonga\" - abantu bayakuthanda lokho, kubenza kuzwakale local, hhayi generic.\n\nKu-igama - ai I like the idea ye-name ethile, hhayi nje \"Sthandwa Sam assistant\" ebolegi kanjalo 😂 Mhlawumbe something warm, like \"Thandeka\" noma \"Sam\" nje short for Sthandwa Sam - abantu bangathi \"Sam will help you with that\" - kuzwakala friendly, kancane personal, hhayi robotic. Ngicabanga i-Sam ilula futhi iyahambisana ne-brand name yethu, so maybe sigxile kuleyo unless unayo enye idea engcono 👏"
+    ],
+    [
+      "Birdie",
+      "'Sam' kuzwakala kuhle impela, kuhambisana kahle ne-brand - sizoyisebenzisa leyo. Manje ake sicace nge-scope - ufuna into elula nje (i-bot ephendula imibuzo, ithathe details, ithumele ku-wena) noma ufuna i-full booking/payment app lapho abantu bengakwazi ukubuka i-calendar bakhokhe online ngqo? Ngicabanga into elula ingcono kuwe okwamanje ngoba ayibizi kakhulu futhi ihambisana ne-way enisebenza ngayo - uyavuma?"
+    ],
+    [
+      "Nomsa Dlamini",
+      "Yebo, ngivumelana nawe ngempela 😂 Into elula nje - ibot iphendule imibuzo, ithathe details, ithumele ku-mina - yiyona efanele okwamanje. Asikho ready ku-full booking/payment app nje, ngoba nathi asisebenzi ka-calendar system, ku-notebook nje ne-ekhanda lami, so uma ibot ingaba ne-full calendar abantu bengakhokha online, ngizoxaka mina uqobo ngoba angikakayenzi lokho part yami ihambe kahle 😅\n\nPlus, njengoba sishilo, amanani amaningi (delivery outside 15km, ama-quote amakhulu) adinga mina ngiwabale ngokwami, so ayikwazi nje ibot ithathe payment automatically for those without mina ngiqinisekise inani kuqala. Kungenzeka one day, uma sikhulile kancane, sifune something more automated, but for now - elula, ithatha details, ithumele ku-mina - kulungile impela, hhayi ukuthi kuyabiza too much, futhi kuhambisana ne-size yethu njengomsebenzi 👏\n\nKuphela into engicela - uma ibot ithatha details (igama, indawo, into abayifunayo), ngicela ibuze nge-phone number yabo kuqala especially uma ku-WhatsApp isekho, ngoba abanye abantu bathumela message base bashintsha number, kuye kubenzime uma ngifuna ku-follow-up nabo. Small thing kodwa iyasiza kakhulu 😊"
+    ],
+    [
+      "Birdie",
+      "Kulungile, ngizokubhala lokho - phone number iqale konke. Ngicela ukubuza okokugcina - ngaphandle kwazo zonke izinto esesikhulume ngazo (izitshalo, i-landscaping, i-maintenance, i-delivery, ama-consultations) - ingabe kukhona okunye enikwenzayo noma enikhokhiswa khona, noma kuncane noma kuvamile nje?"
+    ],
+    [
+      "Nomsa Dlamini",
+      "Ai, ngicabanga sengikushilo konke esikwenzayo ngempela 😂 Angikwazi ukucabanga into engikushiye ngaphandle - izitshalo, ama-seedlings, i-consultation, ama-landscaping jobs amancane namakhulu, i-delivery, ne-maintenance contracts, that's basically the whole business yethu, from a R15 punnet kuya ku-R40k makeover.\n\nKukhona nje into encane engingayibiza \"service\" ngempela - ama-casual labourers, laba ababili esibaqasha ku-big jobs, but that's not something umuntu angathenga ngokwahlukene, ku-part ye-full landscaping quote nje, hhayi into ekhokhelwa separately.\n\nSo ja, angicabangi kukhona okushiyekile - konke okuvela ku-nursery kuya ku-full garden makeover, sikukhava 👏"
+    ],
+    [
+      "Birdie",
+      "Kuhle, ngiyabonga ngokucacisa konke Nomsa. Ngaphambi kokuthi ngiqoqe konke ndawonye ku-summary - ingabe kukhona okunye okusenkanjani ngekhanda lakho mayelana ne-pricing noma i-business ngokubanzi esingakakhulumi ngakho?"
+    ],
+    [
+      "Nomsa Dlamini",
+      "Ai yebo, kukhona okunye engikhohlwe ngempela ukukusho 😅 Ku-maintenance contracts - i-R900/month, angisaqiniseki kahle noma leyo mali isakwazi ukumbomba i-petrol costs ka-Bheki uma esebenzisa i-car noma i-bakkie ukuya endaweni, ngoba i-petrol price isinyuke kaningi kule minyaka. Bengihlala ngithi \"kusasa ngizoyihlaziya leyo maths\" but ai, angikayenzi 😂 So maybe R900 isanda kuba too low manje, angazi kahle. Ibot mayithi nje R900 as the standard for now, but I need ukuyihlola leyo number ngokushesha, hhayi into engingayithembisa 100% ukuthi izohlala ifana ku-price for the next year noma kanjani.\n\nNgaphandle kwaleyo - angikaz'qondi enye into engikhohlwe. Konke okunye ngicabanga sikwenzile kahle namuhla, sikhulumile ngakho konke okubalulekile 👏"
+    ],
+    [
+      "Birdie",
+      "Ngiyabonga Nomsa, sengiqoqe konke. Ake ngikufundele konke esikuqoqile, sizoqinisekisa ndawonye:\n\n**Ibhizinisi:** Sthandwa Sam Nursery & Landscaping, ePMB, KZN - i-nursery plot abantu abangeza kuyo. Ivulekile Tuesday-Sunday 7am-4pm, ivaliwe ngoMsombuluko (restocking trip e-Durban).\n\n**Ithimba:** Nomsa (sales/quotes/final decisions), Sipho (deliveries/digging, i-bakkie ivamise ukukhala), Bheki (planting/maintenance, akaqinisekile ngoMsombuluko), ne-casual labourers ababili ku-big jobs.\n\n**Amasevisi nezindleko:**\n- Izitshalo: R45-R180 ngokuya nge-size\n- Ama-seedlings: R15-R25 ngepunnet\n- I-consultation/site visit: R650, i-waived uma i-job ingaphezu kuka-R8000, ihlelwa within week, 30min-1hr\n- Ama-small landscaping jobs: R3500-R9000, 1-3 days ukwenza, 1-2 weeks kusukela ekubhukeni\n- Ama-full makeovers: R15,000-R45,000+, kudinga site visit, 50% deposit, 1-3 weeks construction (2-3 weeks wait ngo-summer)\n- Delivery: R150 within 15km, outside kuncike ku-location (Nomsa uzobala)\n- Maintenance: R900/month (under review ngenxa ye-petrol costs)\n\n**Amaphoyisi:** No refund kuma-plants ngaphandle kokuthi bekugulile from arrival; landscaping - sibuya silungise umsebenzi wethu without kukhokhisa, akukho written guarantee; deposits azibuyiswa kahle uma umsebenzi/materials sekuqalile (this is still under review by Nomsa); cash/EFT/card, akukho mobile payment.\n\n**I-Escalation:** Nomsa uthatha zonke izinqumo/disputes; site visits kufanele ziqinisekiswe within 2 business days ngokungenisa i-reminder; out-of-zone delivery ne-large job plant availability kuya ku-Nomsa ngqo; general rule - uma i-follow-up ingakapheli within 2 days, ibot iyakukhumbuza Nomsa.\n\n**Ibhothi:** WhatsApp kuphela okwamanje, izwakale friendly/casual, iphendule ngolimi lomuntu (isiZulu noma English) ngama-isiZulu greetings, igama elithi 'Sam'. Kuzoba yi-simple bot (answers + lead capture + isikhumbuzo) hhayi i-full booking/payment app. Iqale ngokubuza i-phone number.\n\n**I-Volume:** 40-60/week normally, kuya ku-80+ ngo-summer, 20-30 ngo-winter.\n\n**Okusalindwa (open items):** i-October wedding job (Nomsa uzohamba e-market ukuqinisekisa), i-deposit refund policy ku-cancellations (Nomsa usazama ukuyihlela), ingabe i-Facebook izongena kamuva, ne-maintenance contract price ephindwa kabusha.\n\nKuyini - konke kulungile, noma kukhona ongathanda ukulungisa?"
+    ],
+    [
+      "Nomsa Dlamini",
+      "Ai, ushaye khona ngqo Birdie, konke kulungile impela, akukho engikuqaphelayo okuphambene 😊 Usiqoqe kahle kwazo zonke izinto - imali, isikhathi, ithimba, konke. Ngiyabonga ngokubekezela nami nge-code-switching yami yonke le nkathi 😂\n\nNgempela ngiyajabula ukubona konke kubhalwe phansi kanje, ngoba manje ku-cacile, hhayi ku-notebook nje ne-ekhanda lami. Ake sesiqale ngalezi zinto ezisele open (i-October job, i-deposit policy, ne-maintenance pricing) njengoba sithe, angizoku-updater uma sengihambe e-market nasengihlaziye amanani.\n\nNgicela ukubuza nje - manje esesivumelene ngakho konke, yini elandelayo, ingabe kukhona okunye engidinga ukukwenza kimi (like ukunikeza olunye ulwazi) ngaphambi kokuthi sesiqale ukwakha i-bot ka-Sam? 👏"
+    ],
+    [
+      "Birdie",
+      "Ngiyabonga kakhulu ngesikhathi sakho namuhla, Nomsa — kube ukuxoxa okumnandi impela! 😊 Akukho okunye okudingekayo kuwe okwamanje - sengiqoqe konke okudingekayo. Ithimba lizothatha lolu lwazi manje ukuze liqale ukuhlela i-bot ka-Sam. Uma sekudingeka okunye ulwazi noma ukucacisa ngokuqhubeka, bazokuthinta. Enkosi futhi ngokuzimisela nokuthula isikhathi ukuchaza yonke into ngokucacile - lokhu kuzosiza kakhulu! Sizoxhumana maduze. 👏"
+    ]
+  ],
+  "brief": {
+    "contact_name": "Nomsa Dlamini",
+    "business_name": "Sthandwa Sam Nursery & Landscaping",
+    "industry": "Nursery & Landscaping",
+    "business_description": "Located in Pietermaritzburg (ePMB), KZN - a proper nursery plot/premises customers visit in person, especially busy on Saturdays. Team: Nomsa (owner - handles sales, quotes, WhatsApp chats), Sipho (nephew - deliveries and heavy digging/hard labour, uses his own bakkie which often breaks down/needs repairs causing delivery delays), Bheki (part-time gardener - planting and maintenance visits, but not reliably available on Mondays for unclear reasons), plus casual labourers (usually two) hired for bigger landscaping jobs (included within full job pricing, not sold separately).",
+    "problem_to_solve": "Struggling to organize/manage WhatsApp messages from customers - gets confusing ('kuyaxaka'). Big leads (e.g. landscaping quotes) sometimes get lost/missed in the noise of WhatsApp messages, causing lost jobs (e.g. Grant's 400sqm makeover site visit request got buried after bakkie was in the mechanic, never followed up; David's wedding venue plant availability question also never got a final answer despite repeated promises).",
+    "target_audience": "Two distinct groups: 1) Regular nursery/walk-in customers (often Saturdays) who buy specific items like agapanthus, spekboom, veggie seedlings - quick, know what they want. 2) Bigger-project customers (often first-time WhatsApp contact, send a photo of their garden) wanting garden makeovers, lawn installation, maintenance contracts - need more back-and-forth, details, sometimes a site visit; location matters due to water restrictions in summer.",
+    "channels": [
+      "WhatsApp"
+    ],
+    "integrations": null,
+    "conversation_volume": "Roughly 40-60 WhatsApp messages/enquiries per week normally; can rise to 80+ per week during summer/pre-Christmas rush, and drop to 20-30/week in winter. Estimated about half are genuinely new enquiries, the rest are follow-ups ('any update?') or quick photo ID questions.",
+    "languages": [
+      "isiZulu",
+      "English"
+    ],
+    "success_criteria": "Bot can answer basic questions (like plant prices, delivery areas) without Nomsa needing to jump in constantly. For big jobs (garden makeovers/landscaping quotes), bot should capture customer details (name, location, what they want) and send to Nomsa so she can follow up quickly - no more dropped leads.",
+    "budget": "Not sure of exact figures for chatbot pricing; wants something 'reasonable' - not a large ongoing cost relative to their landscaping revenue since they don't operate at high volume.",
+    "timeline": "Wants it soon - 'not urgent-urgent, but soon-soon' - ideally within a month or two, driven by upcoming summer season and a possible big October job.",
+    "services_and_pricing": [
+      "Plants (indigenous plants & shrubs - aloe, agapanthus, plumbago, spekboom, etc.): R45-R180 depending on size/species. Available on premises, no lead time (walk-in stock). No deposit - paid in full at time of purchase.",
+      "Potted veggie seedlings: R15-R25 per punnet. Available on premises, no lead time. No deposit - paid in full at time of purchase.",
+      "Garden design consultation (site visit by Nomsa or Bheki): R650 flat fee - waived if customer books landscaping work over R8000. Usually scheduled within a week of booking; visit itself takes 30min-1hr.",
+      "Small landscaping jobs (flower beds, borders, irrigation touch-ups): R3500-R9000 depending on job size. Actual work takes 1-3 days; from booking to completion can take 1-2 weeks depending on how busy they are. 50% deposit required if total is over R5000.",
+      "Full garden makeovers / lawn installation: R15,000-R45,000+ - exact price requires a site visit. Process: site visit -> quote -> 50% deposit -> schedule (deposit always applies since these are always over R5000). Actual construction takes 1-3 weeks depending on size; during busy summer season, may be a 2-3 week wait before work can even start. For large/specialty jobs like the October wedding venue, mature plant availability must be confirmed in-person at the Durban wholesale market (phone calls to suppliers aren't reliable enough for quantity/quality-specific needs), which Nomsa hasn't done yet.",
+      "Delivery: R150 flat within 15km. Outside 15km, no fixed formula - varies with fluctuating petrol prices and whether Sipho combines it with other deliveries (e.g. Howick trips have cost roughly R250-R300 by gut feel, not a fixed rate). Bot should say 'outside the 15km zone, please share your location so Nomsa can work out the delivery cost for you' rather than quoting a number.",
+      "Maintenance contracts (monthly mowing/weeding): R900/month for small suburban garden; larger gardens negotiated. Ongoing service - Bheki visits once or twice a month depending on the garden, no 'completion' date. Nomsa is unsure if R900 still covers rising petrol costs for Bheki's travel and needs to review/recalculate this price soon - bot should quote R900 as the current standard but this is not guaranteed to stay fixed long-term."
+    ],
+    "faq_answers": [
+      "Q: Can you install irrigation / does maintenance include watering, given water restrictions? A: Depends on current municipal water restrictions at the time - bot should say it depends on current rules and cannot promise a fixed answer, since restrictions change with the municipality.",
+      "Q: Do you deliver to [specific area like Howick/Hilton/Richmond]? A: Bot should ask for customer's specific location first; within 15km it's R150 flat, outside 15km there's no fixed rate - bot should say 'please share your location so Nomsa can work out the delivery cost for you'.",
+      "Q: Which plants suit my spot (e.g. shade, low-water)? A: This needs personalized plant advice - bot should say 'let me connect you with Nomsa for plant advice specific to your garden' rather than answering itself.",
+      "Q: Are you open on Mondays? A: No - closed Mondays for restocking (Durban wholesale trip); bot should tell Monday messages that the team responds properly from Tuesday.",
+      "Q: Do you do indigenous/water-wise gardens? A: Yes, this is essentially their specialty - most stock is already indigenous (spekboom, agapanthus, aloe, plumbago), so indigenous/water-wise garden requests are their bread and butter.",
+      "Q: Do you do pet-friendly gardens? A: Handled case-by-case, not a formal package - bot should say 'we can work with pet-friendly requirements, please mention your pets when booking so Nomsa/Bheki can plan the right plants.'",
+      "Q: How long until Nomsa confirms a site visit date for a landscaping quote? A: Target is within 2 business days; bot should say 'we'll confirm within 2 business days (sometimes a little longer if there's a scheduling hiccup, but we won't leave you hanging)'.",
+      "Q: For large jobs needing bulk/specialty plants (e.g. wedding venue in October), can you confirm availability now? A: Nomsa needs to personally visit the Durban wholesale market to confirm quantity/quality before committing - phone calls to suppliers aren't reliable enough for this. Bot should say 'Nomsa is confirming plant availability for [month] bookings, she'll update you by [date]' rather than promising a firm date - exact update date still to be set by Nomsa."
+    ],
+    "business_policies": [
+      "Open Tuesday to Sunday, 7am-4pm. Closed Mondays for restocking (Nomsa and Sipho drive to Durban wholesale flower market). Bot should tell customers messaging on Monday that the team will respond properly from Tuesday.",
+      "Delivery timing can be unreliable because Sipho's bakkie often breaks down - bot should quote '1-2 days depending on availability' rather than promising same-day or exact dates.",
+      "Maintenance visits are not reliably promised on Mondays because Bheki (part-time gardener) isn't always available that day for unclear reasons.",
+      "Full garden makeover process: site visit, then quote, then 50% deposit required, then work is scheduled.",
+      "During summer peak season, full makeover jobs may have a 2-3 week wait before construction can even start - bot should communicate this as a range, not a fixed date.",
+      "Payment methods accepted: cash, EFT (popular with bigger clients), and card (card machine available at the nursery for plant purchases). No mobile payment options (no SnapScan etc.).",
+      "Deposit policy: 50% deposit required for ANY landscaping job (small or full makeover) where total exceeds R5000. Plant/seedling purchases never require a deposit - paid in full at time of sale.",
+      "Plant refund policy: No refunds once plants leave the nursery, UNLESS the plant was visibly diseased/unhealthy from the start (proven at time of purchase) - in that case they refund or replace. No refunds if a plant dies later due to at-home care, since there's no way to verify what happened.",
+      "Landscaping work guarantee: No formal written guarantee document exists, but in practice, if something goes wrong due to their workmanship (e.g. irrigation touch-up not working), they return and fix it at no extra charge.",
+      "Site visit/consultation cancellations: no formal policy - if cancelled with advance notice, no problem, refunded or rescheduled without hassle.",
+      "Water restrictions affect irrigation/watering services and change with municipal rules - bot should not promise a fixed answer, only that it depends on current restrictions.",
+      "Indigenous/water-wise garden focus is essentially their specialty (most stock is already indigenous). Pet-friendly gardens are accommodated case-by-case, not a formal offering.",
+      "Site visit scheduling: standard target is to confirm within 2 business days, tracked with an internal reminder for Nomsa so requests (like Grant's) don't get dropped again. If there's a scheduling hiccup (e.g. bakkie in the mechanic), it may take a little longer, but bot should reassure customer they won't be left hanging.",
+      "Out-of-zone delivery pricing has no fixed formula - depends on fluctuating petrol prices and whether the trip is combined with other deliveries. Nomsa currently estimates by gut feel (e.g. ~R250-R300 to Howick) rather than a set rate. Bot should not quote a number, just ask for location and say Nomsa will work out the cost.",
+      "Large/bulk plant availability for big jobs (e.g. wedding venues) must be confirmed by Nomsa or Sipho visiting the Durban market in person, not just phone calls to suppliers, due to quantity/quality requirements. This hasn't been done yet for the October wedding venue job.",
+      "Automatic internal reminder rule: if Nomsa hasn't followed up within 2 days on anything involving a promised callback with specific details (big-job quotes, site visit confirmations, out-of-zone delivery cost questions), bot should automatically ping her ('hey Nomsa, [customer] is still waiting, follow up with them'). Simple/routine questions (stock prices, opening hours) don't need this since the bot handles them itself.",
+      "Bot tone/persona: friendly and casual, warm, uses emojis occasionally, avoids formal corporate language (e.g. no 'Dear Valued Customer'). Should respond in the language the customer writes in (isiZulu or English) rather than forcing a code-switch mix, but can use simple/common isiZulu greetings like 'Sawubona' or 'Ngiyabonga' for local warmth. Bot name: 'Sam' (short for Sthandwa Sam).",
+      "Scope: a simple bot (answers questions, captures lead/customer details, sends to Nomsa) rather than a full booking/payment app - chosen because they don't run a calendar system and most prices (out-of-zone delivery, big quotes) need Nomsa's manual confirmation before payment anyway. May revisit a more automated system in future if the business grows.",
+      "When capturing customer details for enquiries/leads, bot should always ask for the customer's phone number first (even on WhatsApp), since customers sometimes message from a different number than usual and this makes follow-up harder otherwise.",
+      "Maintenance contract pricing (R900/month) may be under-priced given rising petrol costs - Nomsa hasn't recalculated it yet. Bot should quote R900 as current standard, but Nomsa flagged this price is under review and not guaranteed to stay the same long-term."
+    ],
+    "escalation_rules": [
+      "Nomsa is the final decision-maker for all complaints/disputes (late delivery, work not done well) - customers contact her directly via WhatsApp or phone call; she may ask Sipho or Bheki to explain what happened but she makes the final call.",
+      "Plant/garden advice specific to a customer's site/conditions (e.g. shade, low-water plants) should be escalated to Nomsa directly rather than answered by the bot.",
+      "Site visit requests for landscaping quotes should be escalated to Nomsa to confirm a date within 2 business days, with an internal reminder so it doesn't get dropped (per Grant's case).",
+      "Out-of-zone delivery cost requests should be escalated to Nomsa with the customer's location, since there's no fixed formula.",
+      "Large job bulk plant availability inquiries (e.g. October wedding venue) should be escalated to Nomsa, who needs to personally check the Durban market before confirming - bot should not promise a firm date.",
+      "General safety-net rule: any promised follow-up with specific details not resolved within 2 days triggers an automatic reminder to Nomsa."
+    ],
+    "open_items": [
+      "Possible big wedding-venue landscaping job in October - not yet confirmed, and depends on whether the wholesale market will have enough mature plants. Nomsa plans to visit the Durban market in person to check, but hasn't set a specific date for when she'll update David/the bot on this. Bot should not commit to a date for this job, only that Nomsa will update by a to-be-determined date.",
+      "Deposit refund policy for last-minute cancellations/no-shows on landscaping jobs is genuinely undecided as a business policy - Nomsa currently handles it case-by-case (depending on labour/materials already committed) and admits she hasn't formalized this. She's leaning toward telling the bot to say: 'deposits are generally non-refundable if work has already started or materials bought, but speak to Nomsa directly for your specific case' rather than promising something she can't guarantee. This is a business decision she still owes herself, not a settled fact.",
+      "Whether to eventually extend the bot to Facebook (page 'Sthandwa Sam Nursery' exists but is poorly managed/inactive for weeks at a time) - Nomsa considers this a possible 'later' thing, not part of current scope. No website exists.",
+      "Maintenance contract price (R900/month) may need to be revised upward due to rising petrol costs - Nomsa intends to review this but hasn't yet; bot to use R900 for now."
+    ],
+    "additional_notes": [
+      "Current record-keeping is messy: mix of WhatsApp chats and a paper notebook for bookings/site visit dates (especially bigger jobs). No spreadsheet or proper system. This has contributed to lost jobs when info got buried in 500+ WhatsApp messages. Nomsa wants the bot to help collect customer details and needs cleanly so nothing gets lost.",
+      "Business has a Facebook page ('Sthandwa Sam Nursery') but it's rarely updated/managed. No website."
+    ]
+  },
+  "analysis": {
+    "inquiry_categories": [
+      "Stock & pricing checks for specific plants (e.g., spekboom) - ~25% - customers asking what's in stock and cost per size",
+      "Large landscaping/garden makeover quote requests - ~20% - customers requesting quotes for big jobs (yards, wedding venues)",
+      "Store hours / operating days - ~10% - simple questions about when the business is open",
+      "Delivery cost & logistics - ~15% - customers asking about delivery availability and price, especially outside standard radius",
+      "Garden maintenance contract inquiries - ~15% - recurring service requests (mowing, weeding) with scheduling needs",
+      "Follow-up / status-check messages - ~15% - customers chasing previously promised information (quotes, availability, pricing)"
+    ],
+    "resolved_patterns": [
+      "Plant stock & pricing: Customer asks if spekboom is in stock -> Staff immediately confirms availability and gives tiered pricing (small R60, big ~R150) without hesitation.",
+      "Operating hours: Customer asks Sunday hours -> Staff gives clear answer (7am-4pm every day except Monday, which is closed).",
+      "Maintenance contract base pricing: Customer asks about a small townhouse garden contract -> Staff quotes flat R900/month covering mowing and weeding, and names the assigned staff member (Bheki).",
+      "Consultation fee structure for large jobs: Customer asks for a full garden makeover quote -> Staff explains a site visit is required, consultation fee is R650, but waived if the total job exceeds R8000.",
+      "Repeat stock/price confirmation: Returning customer asks if spekboom price is still R60 -> Staff confirms same price and stock availability, no hesitation."
+    ],
+    "knowledge_gaps": [
+      "Site visit scheduling for large quotes: Grant asked for a site visit date for a 400sqm makeover; staff said 'let me check with Sipho' (bakkie was at the mechanic), then failed to follow up for days, and the conversation ends with an unanswered 'Any update?' — unclear what the actual scheduling process/timeline should be.",
+      "Delivery pricing outside the 15km zone: Priya asked about delivery cost to Howick (outside standard radius); staff said cost depends on fluctuating petrol prices and needs to be calculated, then never returned with a number even after a follow-up — no clear formula exists in the materials for out-of-zone delivery pricing.",
+      "Maintenance visit day flexibility: Mrs. Naidoo requested Monday service, but staff said the assigned worker (Bheki) doesn't usually work that day and would 'ask' about switching — the resolution (whether schedule changes are possible, and how they're decided) is never shown.",
+      "Large job material/timeline availability: David asked about landscaping for an October wedding venue; staff repeatedly promised to check plant availability with 'suppliers' from the Durban market but never delivered an answer despite multiple follow-ups over weeks — process for confirming supplier availability and lead times is unclear.",
+      "General escalation/follow-through process: Multiple threads (Grant, Priya, David) show promises to 'get back to you' that are never fulfilled in the materials — no visible internal process for tracking or closing these follow-ups, suggesting a possible operational gap rather than just a knowledge gap."
+    ],
+    "facts_learned": [
+      "Business name is 'Sthandwa Sam' — appears to be a plant nursery / landscaping business.",
+      "Primary customer communication channel is WhatsApp.",
+      "Staff communicate in a mix of Zulu and English (code-switching), suggesting bilingual customer base.",
+      "Key staff members: Nomsa (handles customer messages/sales), Sipho (does site visits and deliveries, uses a bakkie/truck), Bheki (handles garden maintenance visits).",
+      "Small spekboom pots cost R60; big pots are approximately R150, varying by size.",
+      "Standard delivery fee is R150, reduced for customers located closer to the business; delivery radius appears to be around 15km before pricing changes.",
+      "Store hours are 7am to 4pm daily, except Monday when the business is closed.",
+      "Consultation fee for large garden makeover jobs is R650, but waived if total job cost exceeds R8000.",
+      "Garden maintenance contracts for small townhouse gardens cost R900/month, covering mowing and weeding.",
+      "Large landscaping jobs are quoted in a range of R15,000 to R45,000 depending on scope.",
+      "Business sources mature plants from the Durban market for large landscaping jobs.",
+      "Business handles both small retail plant sales and large-scale landscaping/maintenance contracts."
+    ]
+  },
+  "completed": true,
+  "turns": 54
+}

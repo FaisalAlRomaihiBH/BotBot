@@ -1,35 +1,30 @@
-[Mon, Feb 3, 2025, 9:42am] Customer (Marisol): Hi! Do you hem jeans? How much and how long does it take?
-[Mon, Feb 3, 2025, 9:58am] Rosa: Hola mi amor si claro, jeans con dobladillo original o normal? el original es $18 porque hay que abrir la costura y el normal es $12, toma unos 5 días hábiles mas o menos depende de la fila que tengamos
-[Mon, Feb 3, 2025, 10:01am] Customer (Marisol): Sorry I don't speak much Spanish, can you repeat in English?
-[Mon, Feb 3, 2025, 10:15am] Rosa: ay perdon jaja yes so if you want the original hem stitch preserved that's $18, regular hem is $12, and normal wait like 5 business days pero si necesitas rápido hay rush fee
-[Mon, Feb 3, 2025, 10:16am] Customer (Marisol): Perfect that's clear now thank you!
-
-[Tue, Feb 4, 2025, 2:20pm] Customer (Ken): Hey do you guys take card? Want to bring in a suit jacket
-[Tue, Feb 4, 2025, 3:05pm] Rosa: uy no we don't have that ahora mismo, la maquinita se dañó hace tiempo, cash o Zelle nada mas, pero Don Beto is the one que hace las chaquetas y el viene solo en las mañanas
-[Tue, Feb 4, 2025, 3:06pm] Customer (Ken): Got it, cash it is. What time in the morning is he there?
-[Tue, Feb 4, 2025, 3:40pm] Rosa: el llega temprano, como a veces 9, a veces mas tarde, depende del bus que coja jaja, mejor ven antes del mediodía para asegurar
-
-[Thu, Feb 6, 2025, 11:10am] Customer (Ana - bride): Hi Rosa! My wedding is November 22. When should I bring my dress in?
-[Thu, Feb 6, 2025, 11:30am] Rosa: ay que emoción!! trae el vestido cuando quieras pero yo diría 3 semanas antes esta bien, aunque si tiene mucho trabajo como bustle mejor un mes
-[Thu, Feb 6, 2025, 11:31am] Customer (Ana - bride): Ok so end of October should be fine?
-[Thu, Feb 6, 2025, 11:50am] Rosa: si si esta bien, aunque déjame ver el calendario de noviembre porque tengo otras novias esos días, dame un chance que reviso y te digo
-[Thu, Feb 6, 2025, 5:15pm] Customer (Ana - bride): Any update on the calendar?
-[Fri, Feb 7, 2025, 8:02am] Rosa: si mi amor perdon ayer fue un caos, don beto no vino, déjame revisar hoy con calma te aviso
-
-[Mon, Feb 10, 2025, 1:00pm] Customer (Ana - bride): Hi just checking in again about November availability
-[Mon, Feb 10, 2025, 6:45pm] Rosa: hola perdon el fin de semana estuvo bien busy, still checking pero I think esta bien no te preocupes
-
-[Wed, Feb 12, 2025, 4:30pm] Customer (Gustavo): Buenas, cuanto cuesta ajustar la cintura de un pantalon de vestir?
-[Wed, Feb 12, 2025, 4:52pm] Rosa: hola! eso depende si es coger o soltar, coger $15 soltar puede ser $20-25 if hay que agregar tela, but usually pantalones de vestir son mas fácil so probably $15
-[Wed, Feb 12, 2025, 4:53pm] Customer (Gustavo): Perfecto gracias
-
-[Fri, Feb 14, 2025, 10:00am] Customer (Marisol): Hi again! Do you also do quinceañera dresses? My daughter needs one altered for June
-[Fri, Feb 14, 2025, 10:40am] Rosa: si claro hacemos quinces, esos son mas trabajo casi siempre, precio como entre $100 y $250 dependiendo, trae el vestido y te digo mejor viendolo
-[Fri, Feb 14, 2025, 10:41am] Customer (Marisol): Ok would need a deposit?
-[Fri, Feb 14, 2025, 11:15am] Rosa: si usually pedimos mitad de deposito pero eso lo vemos cuando vengas no te preocupes ahorita
-
-[Sat, Feb 15, 2025, 9:30am] Customer (Ken): Hey just wanted to confirm the jacket price before I come in
-[Sat, Feb 15, 2025, 3:00pm] Rosa: ay Ken perdon ando bien enredada hoy, don beto te dice el precio exacto cuando vea la chaqueta pero es entre $35 y $60
-
-[Mon, Feb 17, 2025, 9:00am] Customer (Ana - bride): Rosa I really need to know if November 22 works, my mom is asking
-[Mon, Feb 17, 2025, 9:47am] Rosa: ay Ana lo siento de verdad, esta semana con el calendario loco, dejame confirmar con Yesenia esta semana y te aviso apenas sepa algo seguro te lo prometo
+[14/07, 08:12] Thandi (customer): Morning! Do you have spekboom in stock right now?
+[14/07, 08:20] Nomsa - Sthandwa Sam: Sawubona sisi 🌿 yebo we have plenty, small ones ne big ones, R60 for the small pots kodwa the big ones R150 ish, it depends kancane on size ungazi
+[14/07, 08:21] Thandi (customer): Great, can I get 5 small ones?
+[14/07, 08:25] Nomsa - Sthandwa Sam: Yebo sure, that's like R300 nje, uzofika la or do you want Sipho to bring, delivery kuqhamuka R150 kodwa uma useduze it's less
+[14/07, 08:30] Thandi (customer): I'll come collect, thanks!
+[15/07, 10:03] Grant (customer): Hi, looking for a quote on a full garden makeover, front and back, about 400sqm total
+[15/07, 10:40] Nomsa - Sthandwa Sam: Hi Grant, ok that's a big job hhayi kancane, we'll need site visit first ukuze siqhamise kahle, consultation is R650 but if job goes over R8000 asikhokhi lokho
+[15/07, 10:41] Grant (customer): Understood, when can someone come out?
+[15/07, 10:52] Nomsa - Sthandwa Sam: Let me check with Sipho ngoba the bakkie is at the mechanic kancane, ngizokutshela ngomso
+[17/07, 09:15] Grant (customer): Hi, just following up on the site visit date?
+[17/07, 09:16] Nomsa - Sthandwa Sam: 😅 ai sorry Grant angikakhulumi noSipho namuhla, ngizoxhumana naye maduze
+[19/07, 16:40] Grant (customer): Any update?
+[03/08, 07:50] Priya (customer): Hi! What are your hours on Sunday?
+[03/08, 07:52] Nomsa - Sthandwa Sam: Sunday sivula ngo 7 kuya ku 4, same as everyday except Monday, ngoMsombuluko sivalile
+[03/08, 07:53] Priya (customer): Perfect, and do you do delivery to Howick?
+[03/08, 08:01] Nomsa - Sthandwa Sam: Yebo but that's out of the 15km, so it's more, kodwa angazi kahle manje ngoba ipetrol price ikhuphukile, let me work it out and come back kuwe
+[06/08, 12:30] Priya (customer): Any word on that delivery price?
+[10/08, 14:02] Mrs. Naidoo (customer): Hi Nomsa, can you do a maintenance contract for a small townhouse garden?
+[10/08, 14:10] Nomsa - Sthandwa Sam: Yebo definitely, small garden ilula, it's R900 a month, mostly mowing nokususa amakhula, Bheki uzokwenza monthly visit
+[10/08, 14:11] Mrs. Naidoo (customer): Great, can he come on Mondays? That's my only free day
+[10/08, 14:15] Nomsa - Sthandwa Sam: Ai ngoMsombuluko akalungi kahle u Bheki, usually u-off that side, kodwa asikhulume maybe siyamshintsha
+[10/08, 14:16] Mrs. Naidoo (customer): Ok let me know
+[22/08, 09:00] David (customer): Hi, interested in landscaping for a wedding venue, big job, need it done by October
+[22/08, 09:22] Nomsa - Sthandwa Sam: Ooh that sounds nice! October ah... angazi kahle if sizothola enough mature plants ngaleso sikhathi from the Durban market, ngizohlola and let you know, but generally big jobs like this are R15,000 kuya ku R45,000 kuya ngokuthi u-need what
+[22/08, 09:23] David (customer): Ok, when will you know about the timeline?
+[22/08, 09:30] Nomsa - Sthandwa Sam: Ngizoxhumana nabo ekuqaleni kwe-week ozayo, ngizok'tshela ngeplants availability
+[02/09, 11:00] David (customer): Hi Nomsa, following up, any news on October availability?
+[02/09, 11:45] Nomsa - Sthandwa Sam: Hhayibo sorry David, ngisakhumbula kahle, angikaxhumani nabo ma-suppliers, ngizok'buyela maduze ngiyathembisa
+[05/09, 09:00] Thandi (customer): Hi, are the small spekboom pots still R60? Want to order more
+[05/09, 09:10] Nomsa - Sthandwa Sam: Yebo kusekhona, R60 small ones, sikhona nje, come through anytime before 4
