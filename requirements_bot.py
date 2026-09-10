@@ -55,6 +55,11 @@ Study them and produce:
   as they appear in the material; if a message has no timestamp, say
   "(no timestamp)" rather than inventing one. These get raised verbatim in the
   live interview, so they must be quotable.
+- open_customer_requests: every customer whose concrete request is still
+  unanswered at the end of the material — one entry each, as
+  "<who/when> — <what they asked> (quote: "...")". List them even when the
+  same thread also appears under notable_incidents: these become a to-do list
+  of replies the owner owes, so a missed one is a real customer lost.
 
 Wrap your entire output in this format and provide no other text
 """
@@ -64,14 +69,20 @@ Wrap your entire output in this format and provide no other text
         self.uploads_dir = uploads_dir
         self.parser = PydanticOutputParser(pydantic_object=ConversationAnalysis)
 
+    def material_paths(self) -> list[Path]:
+        """The readable files in uploads/, in a stable order. Cheap — no file
+        contents are read, so a caller can poll it every turn to spot changes."""
+        if not self.uploads_dir.exists():
+            return []
+        return [p for p in sorted(self.uploads_dir.iterdir())
+                if p.suffix.lower() in self.TEXT_EXTS | self.IMAGE_EXTS]
+
     def load_blocks(self) -> tuple[list, list[str]]:
         """Read everything in uploads/ into Claude content blocks (text + images).
 
         Returns (blocks, loaded_filenames)."""
         blocks, names = [], []
-        if not self.uploads_dir.exists():
-            return blocks, names
-        for path in sorted(self.uploads_dir.iterdir()):
+        for path in self.material_paths():
             ext = path.suffix.lower()
             if ext in self.TEXT_EXTS:
                 blocks.append({
@@ -114,6 +125,8 @@ Wrap your entire output in this format and provide no other text
             f"Inquiry categories observed:\n{bullet(analysis.inquiry_categories)}\n"
             f"Resolved patterns (already learnable, do not ask):\n{bullet(analysis.resolved_patterns)}\n"
             f"KNOWLEDGE GAPS (ask about these, one at a time, citing the example):\n{bullet(analysis.knowledge_gaps)}\n"
+            f"CUSTOMERS STILL OWED A REPLY (already recorded in "
+            f"customer_replies_owed — confirm them with the owner):\n{bullet(analysis.open_customer_requests)}\n"
             f"NOTABLE INCIDENTS (raise these live, quoting the date/detail, and ask "
             f"whether they are typical):\n{bullet(analysis.notable_incidents)}\n"
             f"Facts learned (fill the form with these, do not ask):\n{bullet(analysis.facts_learned)}"
@@ -139,6 +152,10 @@ class RequirementsBot:
         "(System note: the uploads folder is empty — no readable files. "
         "Gently tell the owner nothing was found and how to add files, "
         "then continue the interview.)")
+    ANALYSIS_UNCHANGED_NOTE = (
+        "(System note: those files were already analyzed and their findings "
+        "are in your instructions — nothing new was added. Say so briefly and "
+        "continue with the next knowledge gap or notable incident.)")
 
     def __init__(self, model: str = "claude-sonnet-5",
                  uploads_dir: Path = ROOT / "uploads"):
@@ -156,6 +173,9 @@ class RequirementsBot:
         self.chat_history: list[tuple[str, str]] = [("ai", self.GREETING)]
         self.analysis: Optional[ConversationAnalysis] = None
         self.analysis_text: str = self.NO_MATERIALS
+        # Which files the current analysis covers. Drives the auto-scan: the
+        # folder decides what gets ingested, never the owner's say-so.
+        self.analyzed_files: list[str] = []
         self.complete: bool = False
         # Token accounting across the whole interview (cache_read tokens are
         # billed at 10% of the fresh-input price).
@@ -168,18 +188,18 @@ class RequirementsBot:
         Returns (messages_to_show, final_turn). Two messages come back when
         the bot paused to analyze the owner's uploaded materials."""
         messages = []
+        # Ingest whatever is in uploads/ BEFORE asking anything. Owners say "I
+        # have nothing" while a full message log sits in the folder; that used
+        # to drop the entire log. The folder is the trigger, not the owner.
+        self._scan_materials()
         turn = self._ask(message)
         messages.append(turn.next_message)
 
-        # The bot decided the owner's files are ready: analyze, then react.
+        # The bot decided the owner's files are ready: re-scan, then react.
         if turn.run_file_analysis:
-            analysis, _names = self.analyzer.analyze()
-            if analysis is None:
-                note = self.ANALYSIS_EMPTY_NOTE
-            else:
-                self.analysis = analysis
-                self.analysis_text = MaterialsAnalyzer.to_prompt_text(analysis)
-                note = self.ANALYSIS_DONE_NOTE
+            note = {"analyzed": self.ANALYSIS_DONE_NOTE,
+                    "unchanged": self.ANALYSIS_UNCHANGED_NOTE,
+                    "empty": self.ANALYSIS_EMPTY_NOTE}[self._scan_materials()]
             turn = self._ask(note, record_as="(files were analyzed)")
             messages.append(turn.next_message)
 
@@ -200,6 +220,7 @@ class RequirementsBot:
             "chat_history": [list(pair) for pair in self.chat_history],
             "analysis": self.analysis.model_dump() if self.analysis else None,
             "analysis_text": self.analysis_text,
+            "analyzed_files": self.analyzed_files,
             "complete": self.complete,
             "usage": self.usage,
         }
@@ -211,11 +232,74 @@ class RequirementsBot:
         if state["analysis"]:
             bot.analysis = ConversationAnalysis(**state["analysis"])
         bot.analysis_text = state["analysis_text"]
+        bot.analyzed_files = state.get("analyzed_files", [])  # older sessions lack it
         bot.complete = state["complete"]
         bot.usage = state.get("usage", bot.usage)  # older sessions lack it
         return bot
 
     # ---------------- internals ----------------
+    def _scan_materials(self) -> str:
+        """Analyze uploads/ if its contents changed since the last analysis.
+
+        Returns "analyzed", "unchanged" or "empty". Only the file NAMES are
+        listed on the common path — nothing is read and no model call is made
+        unless the file set actually differs, so running this before every
+        turn is free."""
+        names = [p.name for p in self.analyzer.material_paths()]
+        if not names:
+            return "empty"
+        if names == self.analyzed_files and self.analysis is not None:
+            return "unchanged"
+        analysis, names = self.analyzer.analyze()
+        if analysis is None:
+            return "empty"
+        self.analysis = analysis
+        self.analysis_text = MaterialsAnalyzer.to_prompt_text(analysis)
+        self.analyzed_files = names
+        return "analyzed"
+
+    def _postprocess(self, requirements: BusinessRequirements) -> None:
+        """Fix up the form in code, in place, for the things the model must not
+        be trusted to get right on its own.
+
+        Safe to run every turn: the history keeps the model's RAW output, so
+        these additions never feed back into the next turn and compound."""
+        def merge(existing: Optional[list[str]], extra: list[str]) -> Optional[list[str]]:
+            out = list(existing or [])
+            out += [i for i in extra if i not in out]
+            return out or None
+
+        if self.analysis:
+            # Material-derived facts get their own home instead of being
+            # indistinguishable from what the owner said out loud.
+            requirements.facts_from_uploads = merge(
+                requirements.facts_from_uploads, self.analysis.facts_learned)
+            # A customer left hanging in the log is a fact about the business,
+            # not something to wait for the owner to volunteer.
+            requirements.customer_replies_owed = merge(
+                requirements.customer_replies_owed,
+                self.analysis.open_customer_requests)
+
+        # Legacy mirror: consumers reading the old single list still see
+        # everything, while the split fields carry the actionable/anecdotal cut.
+        requirements.owner_sentiment_or_concerns = merge(
+            requirements.owner_sentiment_or_concerns,
+            list(requirements.adoption_risks or [])
+            + list(requirements.background_color or []))
+
+        # open_items is an INDEX, not a bucket — rebuilt from the routed lists
+        # so nothing is invisible just because the model picked the wrong one.
+        routed = [("owner fact", requirements.unresolved_business_facts),
+                  ("bot decision", requirements.pending_design_decisions),
+                  ("customer reply owed", requirements.customer_replies_owed)]
+        seen = {i for _label, items in routed for i in (items or [])}
+        index = [f"[{label}] {i}" for label, items in routed for i in (items or [])]
+        # Strip our own labels off whatever is already there, so rebuilding an
+        # index we built before re-files entries instead of nesting the tags.
+        unfiled = [_unlabel(i) for i in (requirements.open_items or [])]
+        index += [f"[unfiled] {i}" for i in dict.fromkeys(unfiled) if i not in seen]
+        requirements.open_items = index or None
+
     def _build_messages(self, question: str) -> list:
         """Build the turn's messages with Anthropic prompt-cache breakpoints:
         one on the system prompt and one on the last history message, so each
@@ -265,10 +349,22 @@ class RequirementsBot:
             r = turn.requirements
             if turn.interview_complete and not (r.problem_to_solve and r.channels):
                 turn.interview_complete = False
+            self._postprocess(r)
             self.chat_history.append(("human", record_as or question))
             self.chat_history.append(("ai", output))
             return turn
         raise last_error
+
+
+_OPEN_ITEM_LABELS = ("owner fact", "bot decision", "customer reply owed", "unfiled")
+
+
+def _unlabel(item: str) -> str:
+    """Remove an open_items index label, so the index can be rebuilt safely."""
+    for label in _OPEN_ITEM_LABELS:
+        if item.startswith(f"[{label}] "):
+            return item[len(label) + 3:]
+    return item
 
 
 def _blocks_to_text(content) -> str:

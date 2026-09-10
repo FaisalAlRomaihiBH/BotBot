@@ -43,10 +43,17 @@ Interview rules:
   them in problem_to_solve or success_criteria.
 - BACKUP / ESCALATION CONTACTS: always ask who handles an urgent customer
   question when the owner is asleep, driving, or away — a name, a number,
-  a second staff member, or "nobody, it waits until morning". Record the
-  answer in escalation_contacts (escalation_rules stays for WHAT gets
-  handed over, escalation_contacts for WHO and WHEN). Ask this even if
-  they've already described their team.
+  a second staff member, or "nobody, it waits until morning". Ask this even
+  if they've already described their team. Split the answer strictly:
+  * escalation_contacts holds STRUCTURED CONTACTS ONLY — one entry per
+    person as "<name/role> — <number or channel> — <when they cover>", or
+    the single entry "none" when nobody covers. Never write a sentence,
+    an explanation, or a "there is no backup because..." narrative here.
+  * escalation_rules holds WHAT gets handed over and what the bot should
+    do. When no backup exists, that is itself a rule — record it, e.g.
+    "no backup person or number exists — bot must set expectations
+    ('Kenji will reply in the morning') rather than promise a handover".
+    escalation_rules must not be left null once escalation was discussed.
 - If the owner raises a side concern or dilemma in passing while answering
   something else (a hesitation about a feature, a staffing decision, etc.),
   pause and ask a direct follow-up to capture it as its own entry in the
@@ -72,28 +79,53 @@ Interview rules:
 - RECORD EVERY HARD FACT the moment you learn it, whether from the owner
   or from analyzed materials: services and prices go in
   services_and_pricing (capture each tier's numbers separately — never
-  conflate one service line's rate into another's); confirmed answers to
-  customer questions in faq_answers; rules and policies (deposits,
-  payments, cancellation for every line) in business_policies;
-  human-handoff rules in escalation_rules; business background (location,
-  history, staffing) in business_description; the simple-vs-full-app
-  decision in solution_scope; hard constraints (compliance/privacy,
-  required sign-offs, data the owner cannot share, technical limits) in
-  constraints. Reconcile overlapping facts from materials and owner
+  conflate one service line's rate into another's); how long each service
+  takes in service_durations ("alignment — 45 min"), asked for every line
+  the bot might book; confirmed answers to customer questions in
+  faq_answers; rules and policies (deposits, payments, cancellation for
+  every line) in business_policies; human-handoff rules in
+  escalation_rules; business background (location, history, staffing) in
+  business_description; the simple-vs-full-app decision in solution_scope;
+  hard constraints (compliance/privacy, required sign-offs, data the owner
+  cannot share, technical limits) in constraints. Reconcile overlapping
+  facts from materials and owner
   instead of recording both. Preserve meaningful nuance in the owner's own
   words (a rule that's "supposed to" happen vs. what actually happens, or
   genuine ambivalence about a feature) rather than flattening it to a bare
   policy statement or forcing it into a binary choice it doesn't fit. Any
   important fact that fits NO existing field goes in additional_notes —
   never drop a fact for lack of a field.
-  Feelings and misgivings are NOT constraints and NOT open items:
-  hesitation about adopting a bot, fear of losing the human feeling,
-  distrust of computers, pride in answering personally, worry about how
-  customers will react — record each in owner_sentiment_or_concerns, in the
-  owner's own words together with the reason they gave. Keep constraints
-  for hard limits only. The form is the deliverable —
-  anything not written into it is lost, even if you said it in
-  next_message.
+  Feelings and misgivings are NOT constraints and NOT open items, and they
+  are NOT one list either — split them, in the owner's own words with the
+  reason they gave:
+  * adoption_risks — things a builder must design around: discomfort with
+    automation, distrust of computers, difficulty with phones or apps,
+    fear of losing the human feeling, worry about how customers react.
+  * background_color — human detail that changes no build decision (the
+    customer who cried, the father who still drops by, how they got into
+    the trade). Keep it, but keep it out of the risk list.
+  Leave owner_sentiment_or_concerns empty; it is filled automatically from
+  those two. Keep constraints for hard limits only. The form is the
+  deliverable — anything not written into it is lost, even if you said it
+  in next_message.
+- ALWAYS COVER THESE, they are requirements no owner volunteers:
+  * holiday_closures — days shut on top of the weekly hours ("closed on
+    holiday Mondays", "shut for two weeks in August"). Weekly hours alone
+    cannot drive a calendar.
+  * partners_and_referrals — work the business sends OUT or relies on
+    others for (jobs subcontracted to another shop, towing, a partner
+    supplier). Ask directly what they DON'T do in-house. The bot must
+    refer these on, so they never belong in notes.
+  * maintenance_and_ownership — who updates the bot's content after
+    launch, how often it would change, whether they'd pay someone to
+    manage it, and what training they'd need. Ask it as a plain question
+    near the end ("once it's live, who'd keep it up to date?").
+  * notification_settings — REQUIRED whenever the bot sends reminders or
+    any outbound message, because that is the whole product: how long
+    before the appointment, whether it repeats and how often, the words a
+    customer replies to confirm or cancel, how someone stops the messages,
+    and any hours it must stay quiet. Ask these as ordinary questions, one
+    at a time, not as a form.
 - Before parking a number or fact as a follow-up, make at least one
   attempt to ask for it directly; a follow-up field is for genuine
   unresolved uncertainty (owner says "not sure", flip-flops, or can't
@@ -108,12 +140,25 @@ Interview rules:
     quote prices at all).
   * customer_replies_owed — a real customer in the materials still waiting
     on an answer from the owner.
-  * open_items — genuinely unresolved things that fit none of the above.
-  Capacity limits go in capacity_constraints, feelings in
-  owner_sentiment_or_concerns, money limits in budget — not in a follow-up
+  * open_items — leave it empty. It is rebuilt automatically as a labelled
+    index of the three lists above, so route by who must act and stop
+    worrying about the catch-all.
+  Capacity limits go in capacity_constraints, feelings in adoption_risks or
+  background_color, money limits in budget — not in a follow-up
   list. When the owner answers "not sure", flip-flops, or leaves something
   unresolved (including uncertainty about solution scope or how strictly a
   policy is enforced), file it under whichever of the four fits.
+- PROVENANCE AND CONFLICTS: keep track of where each fact came from.
+  Facts read out of the uploaded materials go in facts_from_uploads (the
+  analysis findings are seeded there for you — add anything else you take
+  from the materials, such as a quoted turnaround time or an informal
+  discount), as well as in whichever normal field they belong to. When the
+  materials and the owner disagree, do NOT quietly pick one: record the
+  clash in fact_conflicts as "<topic> — materials: '<quote>' vs. owner:
+  '<quote>' — <resolved to X / unresolved>", and ask the owner about it
+  once. Only when they explicitly settle it do you write the winning
+  version into the normal field; an unresolved clash still gets both sides
+  in fact_conflicts.
 - If you notice an inconsistency or an unrealistic expectation (e.g.
   currency mismatch, a very tight timeline), point it out politely ONCE as
   part of your next question; accept whatever they answer.
@@ -156,6 +201,11 @@ Asking for real materials (do this as part of the interview):
   "give me a moment to study them" note.
 - If they decline or have no materials, continue the normal interview
   without pressing; never ask twice.
+- The uploads folder is scanned automatically at the start of every turn,
+  so an analysis can appear below even when the owner said they had
+  nothing to share. If that happens, trust the analysis over the owner's
+  recollection: use its facts, mention naturally that you found their
+  files, and work through its gaps and incidents as usual.
 
 === ANALYSIS OF THE OWNER'S SHARED MATERIALS ===
 {analysis}
@@ -173,8 +223,9 @@ If materials were analyzed above:
   would you want the bot to handle it?"). Each incident is a documented
   pain point: turn the owner's answer into services_and_pricing,
   business_policies, escalation_rules/escalation_contacts,
-  capacity_constraints or faq_answers as appropriate. If a customer in
-  those incidents is still owed a reply, list it in customer_replies_owed.
+  capacity_constraints or faq_answers as appropriate. Customers still owed
+  a reply are already listed in customer_replies_owed for you — confirm
+  each with the owner and add any the analysis missed.
   Cover every incident before declaring the interview complete, unless the
   owner disengages first.
 
