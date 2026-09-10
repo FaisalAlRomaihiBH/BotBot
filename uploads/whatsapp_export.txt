@@ -1,29 +1,46 @@
-[Mon 9:12 AM] Sarah Kellerman: Hi! I'm interested in a 6-seat dining table in oak. What would that run me?
-[Mon 9:40 AM] Tomasz Wiśniewski: For 6-seat oak, standard finish, that's $1,450. Solid price, no surprises.
-[Mon 9:41 AM] Sarah Kellerman: Great, and how long for delivery?
-[Mon 11:15 AM] Tomasz Wiśniewski: Right now about 6 weeks from deposit to delivery.
-[Mon 11:16 AM] Sarah Kellerman: Perfect, how much deposit do you need?
-[Mon 11:20 AM] Tomasz Wiśniewski: 50% to start, that's standard, always has been.
-[Tue 8:03 AM] Sarah Kellerman: Sounds good, sending payment today!
-[Tue 2:47 PM] Tomasz Wiśniewski: Actually hold on, I looked at my board, that table with the finish you want is closer to $1,900. The $1,450 was for the plain sealed one, not the oiled walnut-stain look.
-[Tue 2:50 PM] Sarah Kellerman: Oh — I didn't ask for walnut stain though, I just wanted natural oak.
-[Tue 2:55 PM] Tomasz Wiśniewski: Right, natural is $1,450 like I said. Don't worry about it.
-[Tue 5:30 PM] Kasia (shop): Hi Sarah, this is Kasia, Tomasz's assistant — just to confirm your table order, I'll check the calendar and get back to you on exact dates!
-[Thu 10:02 AM] Sarah Kellerman: Hi, just following up on the delivery date?
-[Fri 4:15 PM] Sarah Kellerman: Hello?
-[Mon 9:00 AM] Sarah Kellerman: Kasia? Tomasz? Still there? Would love a timeline.
-[Wed 6:50 AM] James Okoro: Hi, do you guys still do delivery? Need a table brought to Oak Park, about 15 miles.
-[Wed 7:02 AM] Tomasz Wiśniewski: No, we stopped doing delivery, pickup only now.
-[Wed 7:03 AM] James Okoro: Ah that's a shame, ok I'll figure something out.
-[Wed 8:45 PM] Tomasz Wiśniewski: Actually for 15 miles I can do it, $100 flat. We do still deliver depending on distance.
-[Wed 8:46 PM] James Okoro: Oh perfect, so which is it — pickup only or delivery available?
-[Wed 8:50 PM] Tomasz Wiśniewski: Delivery available, always has been. Just not for everyone.
-[Thu 9:30 AM] James Okoro: Got it I think. Can I get a quote for built-in cabinets, 10 linear feet, walnut?
-[Thu 11:00 AM] Tomasz Wiśniewski: For walnut built-ins, 10ft, that's about $2,800 total.
-[Thu 11:32 AM] Tomasz Wiśniewski: Wait, I mean $300 per foot, so that's $3,000. My bad, math.
-[Fri 3:00 PM] James Okoro: Ok, and lead time on that?
-[Fri 3:04 PM] Tomasz Wiśniewski: I'll have to check the schedule properly and text you back tonight.
-[Sat 6:00 PM] James Okoro: Hey, any update on lead time?
-[the following Wed 1:00 PM] James Okoro: Still hoping to hear back on this when you get a chance.
-[Fri 8:15 AM] Sarah Kellerman: Tomasz I really need an answer, is my table still coming in 6 weeks or not??
-[Fri 8:50 AM] Tomasz Wiśniewski: Yes of course, 6 weeks, like I told you from the start. No changes.
+[03/11, 10:12am] Funmi Customer: Good morning, how much for a 2-piece suit if I bring my own fabric?
+[03/11, 10:20am] Emeka Okafor: Good morning! For that one na ₦45,000 flat, no more no less.
+[03/11, 10:21am] Funmi Customer: Great, and how long will it take?
+[03/11, 10:25am] Emeka Okafor: 5 days only, we are fast here.
+[03/11, 3:40pm] Funmi Customer: Perfect, I'll come by tomorrow with fabric then.
+[03/13, 11:02am] Emeka Okafor: Ah sorry madam I forgot to tell you, suit price is actually ₦65,000 now, fabric prices don change small.
+[03/13, 11:05am] Funmi Customer: Wait you said ₦45,000 two days ago?
+[03/13, 11:06am] Emeka Okafor: No no, I didn't say that, ₦65,000 is what I always charge for suit.
+[03/13, 11:10am] Funmi Customer: Ok... and the 5 days?
+[03/13, 11:15am] Emeka Okafor: It will be ready in two weeks, we don't rush quality work here.
+[03/13, 11:16am] Funmi Customer: Alright, I'll think about it.
+
+[04/02, 9:15am] Tunde B.: Hi, do you do agbada sets? What's the price range?
+[04/02, 9:30am] Emeka Okafor: Yes we do! Standard agbada is ₦50,000.
+[04/02, 9:31am] Tunde B.: Ok how about deposit, is it 50%?
+[04/02, 9:33am] Emeka Okafor: Yes 50% deposit before we cut fabric, balance on collection. That one is fixed.
+[04/02, 9:34am] Tunde B.: Great, sending ₦25,000 now.
+[04/02, 9:40am] Emeka Okafor: Received, thank you sir. We will start work.
+
+[04/10, 1:00pm] Tunde B.: Hi how is my agbada coming along?
+[04/10, 4:22pm] Emeka Okafor: Chidi is checking, let me get back to you
+[04/14, ]: (no reply)
+[04/17, 10:00am] Tunde B.: Hello? Any update?
+[04/17, ]: (no reply)
+
+[05/05, 2:00pm] Greenview Academy Admin: Good afternoon, following up — can you handle 220 uniform sets by August?
+[05/05, 2:30pm] Emeka Okafor: Yes of course, no wahala, we have capacity, we do this every year.
+[05/06, 9:00am] Greenview Academy Admin: Great, please send a quote per unit.
+[05/06, 9:45am] Emeka Okafor: Let me sit with Chidi and calculate properly, I'll send by tomorrow.
+[05/09, ]: (no reply)
+[05/12, 8:00am] Greenview Academy Admin: Emeka, still waiting on that quote please.
+[05/12, 6:10pm] Emeka Okafor: Ah sorry, honestly with only 3 of us in the shop 220 pieces is too much, we cannot manage this year.
+[05/12, 6:11pm] Greenview Academy Admin: You said yes a week ago!
+[05/12, 6:15pm] Emeka Okafor: I don't think I said yes like that, I only said we would look into it.
+
+[05/20, 11:11am] Bisi K.: What time do you close on Saturdays?
+[05/20, 11:20am] Emeka Okafor: 7pm every Saturday, sometimes Sunday too if I'm around.
+[05/27, 3:00pm] Bisi K.: I came by Sunday at 2pm, shop was locked?
+[05/27, 4:15pm] Emeka Okafor: Ah that particular Sunday I traveled, normally we open o.
+
+[06/01, 9:00am] Ngozi T.: Do you have a card machine? Prefer not to carry cash.
+[06/01, 9:10am] Emeka Okafor: No card machine currently, POS spoil since last year. Bank transfer is fine, or cash.
+[06/01, 9:11am] Ngozi T.: Any plan to fix it?
+[06/01, 9:14am] Emeka Okafor: Yes next month we will sort it out.
+[06/01, 9:15am] Ngozi T.: Ok, I'll transfer then. Alteration on a jacket, how much?
+[06/01, 9:20am] Emeka Okafor: Simple alteration like that, ₦5,000, ready in 3 days.
