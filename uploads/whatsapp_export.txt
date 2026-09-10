@@ -1,29 +1,36 @@
-[Mon, Sept 2, 9:14 AM] Kunle Adeyemi: Good morning sir, I want to order a 2-piece suit for a wedding in October. How much and how long?
-[Mon, Sept 2, 9:40 AM] Nnamdi Okoro: Good morning my brother! For you, ₦85,000, two weeks max. We go finish am on time no wahala.
-[Mon, Sept 2, 9:41 AM] Kunle Adeyemi: Great, that works. Do I need to pay deposit?
-[Mon, Sept 2, 9:52 AM] Nnamdi Okoro: No deposit, just come and let's take your measurement, you go pay when you collect.
-[Tue, Sept 3, 11:03 AM] Kunle Adeyemi: Okay I'm coming Thursday. Also do you have navy blue Italian wool in stock?
-[Tue, Sept 3, 11:20 AM] Nnamdi Okoro: We have plenty! Very fine material. Come and see.
-[Thu, Sept 5, 4:15 PM] Kunle Adeyemi: I'm at the shop, Chidi says you're not around?
-[Thu, Sept 5, 4:30 PM] Nnamdi Okoro: Ah sorry I traveled to Balogun for material. Chidi will take your measurement, no problem.
-[Thu, Sept 5, 6:02 PM] Kunle Adeyemi: Measurement done. He said actually you need 50% deposit before starting?
-[Thu, Sept 5, 6:10 PM] Nnamdi Okoro: Yes yes, that's correct, 50% deposit, I forgot to tell you. Market don change small, prices don shift too, it's now ₦95,000 not 85.
-[Thu, Sept 5, 6:11 PM] Kunle Adeyemi: Wait, you said ₦85,000 on Monday.
-[Thu, Sept 5, 6:14 PM] Nnamdi Okoro: I don't think I said 85 o, maybe you misread. But don't worry I go still do you 90, because you're my customer.
-[Fri, Sept 6, 10:00 AM] Kunle Adeyemi: Fine, 90k. Sending deposit now. When will it be ready?
-[Fri, Sept 6, 10:44 AM] Nnamdi Okoro: Give us 10 days, we go rush am.
-[Fri, Sept 6, 10:45 AM] Kunle Adeyemi: You said 2 weeks before, now 10 days is faster, that's fine by me. Please confirm the wool is available.
-[Fri, Sept 6, 3:20 PM] Nnamdi Okoro: Let me check with Chidi on the wool stock, I'll get back to you.
-[Mon, Sept 9, 1:00 PM] Kunle Adeyemi: Any update on the material?
-[Mon, Sept 9, 1:00 PM] Kunle Adeyemi: Hello?
-[Wed, Sept 11, 8:45 AM] Ijeoma Bello: Hi, I'm getting married in December, need suits for my groom and 8 groomsmen. Can you handle that?
-[Wed, Sept 11, 9:10 AM] Nnamdi Okoro: Good morning ma, yes no problem, we can do 9 suits, December is fine.
-[Wed, Sept 11, 9:12 AM] Ijeoma Bello: Great, what's the total cost and can we start measurements next week?
-[Wed, Sept 11, 9:30 AM] Nnamdi Okoro: Depends on the design, but let's say around ₦70,000 per head, so total will be around ₦630,000.
-[Wed, Sept 11, 5:45 PM] Nnamdi Okoro: Actually ma, thinking about it well well, December is very tight for us, we already have plenty orders for wedding season. Let me not lie to you, 9 suits might strain us.
-[Wed, Sept 11, 5:47 PM] Ijeoma Bello: So can you do it or not?
-[Wed, Sept 11, 6:03 PM] Nnamdi Okoro: We can manage, just let's start early, no wahala. I go arrange with Chidi and Blessing.
-[Thu, Sept 12, 2:15 PM] Ijeoma Bello: Okay, sending our group's measurements schedule. Also please confirm price per suit again, ₦70k or has that changed too? 😅
-[Thu, Sept 12, 2:50 PM] Nnamdi Okoro: Haha no wahala, ₦70k still stands... though sha if una want the premium lining then na ₦80k.
-[Fri, Sept 13, 9:00 AM] Kunle Adeyemi: Still waiting to hear about my wool material and the suit status?
-[Fri, Sept 13, 9:00 AM] Kunle Adeyemi: It's been almost a week since you said you'll check.
+[08/12, 10:14 am] Ravi Cycles: Hi yes tell me
+[08/12, 10:15 am] Customer - Ananya: Hi, how much for a basic tune up on a hybrid bike?
+[08/12, 10:16 am] Ravi Cycles: 600 rupees only madam, chain and brakes we will check
+[08/12, 10:16 am] Ravi Cycles: gears also included
+[08/12, 11:40 am] Customer - Ananya: Great, can I drop it tomorrow?
+[08/12, 11:42 am] Ravi Cycles: yes yes tomorrow fine, ready by evening
+[09/12, 6:45 pm] Customer - Ananya: Hi just checking, is it ready?
+[09/12, 6:50 pm] Ravi Cycles: give me 2-3 days madam, brakes need new pads
+[09/12, 6:50 pm] Customer - Ananya: oh okay, and the price stays 600?
+[09/12, 6:52 pm] Ravi Cycles: no no with pads it will be 950, I told you tune up is 800-900 range
+[09/12, 6:53 pm] Customer - Ananya: you said 600 yesterday
+[09/12, 6:53 pm] Ravi Cycles: haha yes that is without parts madam, all good
+[11/12, 2:30 pm] Customer - Farhan: Hey do you guys build custom bikes? Want a single speed built up
+[11/12, 2:45 pm] Ravi Cycles: yes sir we love custom builds, starting 25k depending on parts
+[13/12, 4:00 pm] Customer - Farhan: cool, sent you the frame specs on email, can we start this week?
+[13/12, 4:20 pm] Ravi Cycles: actually sir we are not really taking custom projects right now, too much repair work pending
+[13/12, 4:21 pm] Customer - Farhan: wait, two days ago you said you loved custom builds
+[13/12, 4:22 pm] Ravi Cycles: yes we do! just timing is tight, maybe after new year
+[15/12, 9:00 am] Customer - Priya M: Hi, do you service e-bike batteries? What's the cost
+[15/12, 9:10 am] Ravi Cycles: yes we do, 500 rupees standard check
+[15/12, 9:11 am] Customer - Priya M: perfect, when can I bring it
+[15/12, 9:12 am] Ravi Cycles: let me check with my mechanic and confirm
+[16/12, 5:00 pm] Customer - Priya M: any update?
+[18/12, 8:00 pm] Customer - Priya M: hello?
+[20/12, 1:15 pm] Customer - Vikram: What's your warranty on repairs?
+[20/12, 1:20 pm] Ravi Cycles: 30 days warranty sir no problem
+[22/12, 3:00 pm] Customer - Vikram: got it thanks, one more thing my wheel needs truing, can that be done today?
+[22/12, 3:05 pm] Ravi Cycles: today is tricky, Suresh does wheel truing and he comes weekends only
+[22/12, 3:06 pm] Customer - Vikram: okay so Saturday?
+[22/12, 3:10 pm] Ravi Cycles: yes Saturday should be fine, will confirm
+[24/12, 11:00 am] Customer - Ananya: hi, is the 30 day warranty from when I picked up the bike?
+[24/12, 11:30 am] Ravi Cycles: warranty is 15 days madam, after that parts wear is normal
+[24/12, 11:31 am] Customer - Ananya: you told someone else 30 days
+[24/12, 11:33 am] Ravi Cycles: haha depends on the repair madam, brakes 15 days, tune up 30 days
+[26/12, 6:00 pm] Customer - Farhan: hey any update on the custom build? new year is close
+[26/12, 6:45 pm] Ravi Cycles: yes sir let's do it! send specs again I think I lost the email
