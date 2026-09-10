@@ -1,34 +1,36 @@
-[Mon, Mar 3, 10:12am] Sarah (customer): Hi! I want a custom neon sign for my bakery, about 4 feet wide. What would that run?
-[Mon, Mar 3, 10:20am] Marcus: Hey! Great timing, we love bakery signs. Ballpark $150 a linear foot for LED so probably around $600 total
-[Mon, Mar 3, 10:21am] Marcus: Could do a nice script font, glows warm white, real popular right now
-[Mon, Mar 3, 2:45pm] Marcus: Actually thinking about it more our pricing is really $200/ft now, materials went up. So more like $800
-[Mon, Mar 3, 2:46pm] Sarah: Oh — which is it, $150 or $200?
-[Mon, Mar 3, 2:50pm] Marcus: $200 is standard but honestly for a first sign I can do $175, let's say $700 and call it even
-[Mon, Mar 3, 2:51pm] Sarah: Ok! And how long would it take?
-[Mon, Mar 3, 3:02pm] Marcus: 3-4 weeks typically, we can rush it to 10 days if needed
-[Tue, Mar 4, 9:15am] Sarah: We'd love the rush option if possible! Extra cost?
-[Tue, Mar 4, 9:40am] Marcus: No extra cost don't worry about it we'll make it happen
-[Wed, Mar 5, 11:00am] Jenna: Hi Sarah, just following up — rush orders do carry a 30% fee, that would bring it to around $910. Sorry for the confusion!
-[Wed, Mar 5, 11:05am] Sarah: Marcus said no extra cost yesterday...
-[Wed, Mar 5, 11:30am] Jenna: Let me check with him and get back to you
-[Fri, Mar 21, 4:12pm] Sarah: Hi, following up again, still haven't heard back about the rush fee
-[Sat, Apr 2, 2020] Priya (different customer): Hi! Do you guys still do real glass neon or only LED now?
-[Sat, Apr 2, 2:15pm] Marcus: We're actually LED only now, phasing out glass, way more durable
-[Sat, Apr 2, 2:40pm] Marcus: Although Elias could probably still do a glass piece if you really wanted, that's kind of our specialty honestly
-[Sat, Apr 2, 2:41pm] Priya: lol ok so which is it
-[Sat, Apr 2, 2:50pm] Marcus: Both! Depends what you're going for, glass has more soul but LED is what most people want these days
-[Sun, Apr 3, 10:00am] Priya: Got it. What's the deposit to start?
-[Sun, Apr 3, 10:20am] Marcus: 50% to lock in your spot, non-refundable once we start designing
-[Thu, Apr 7, 1:00pm] Priya: Ok I'll send that over today
-[Thu, Apr 7, 6:45pm] Marcus: Actually you know what since you're a repeat vibe (haha) let's do 30% deposit, fully refundable if you change your mind before we cut anything
-[Mon, Apr 11, 9:30am] Tom (venue owner): Hi, interested in renting a neon sign for a wedding, outdoor ceremony. Can it handle rain/humidity?
-[Mon, Apr 11, 9:50am] Marcus: Yeah should be totally fine, we've done outdoor events before
-[Mon, Apr 11, 10:15am] Marcus: Actually hold on, let me check with Elias, we had one have some condensation issues last summer
-[Mon, Apr 11, 10:16am] Tom: Ok, let me know!
-[Mon, Apr 25, 3:00pm] Tom: Hey following up on this, event is in 3 weeks
-[Mon, Apr 25, 3:40pm] Marcus: Right! Sorry been slammed. Yeah it'll be fine we'll seal the edges extra
-[Tue, Apr 26, 8:10am] Tom: Great, so rental price for a 3ft sign?
-[Tue, Apr 26, 8:30am] Marcus: $75 plus refundable deposit
-[Tue, Apr 26, 11:00am] Marcus: Oh wait for outdoor it's actually $120, extra weatherproofing labor
-[Tue, Apr 26, 11:01am] Tom: You said $75 twenty minutes ago
-[Tue, Apr 26, 11:10am] Marcus: That's for indoor, outdoor's always been $120, my bad for not clarifying
+[14/03, 09:12] Bex - Spoke & Bone: Morning! Yes we can def do a tune-up this week, £45, no bother
+[14/03, 09:14] Bex - Spoke & Bone: actually hang on — if it's the hybrid with disc brakes it's more like £50, let me not promise 45
+[14/03, 09:15] Customer - Liam: haha ok, so is it 45 or 50?
+[14/03, 09:20] Bex - Spoke & Bone: 50 to be safe! Sorry, I keep doing that
+[14/03, 09:21] Customer - Liam: no worries, when can I drop it off
+[14/03, 09:25] Bex - Spoke & Bone: Thursday morning is good
+[14/03, 09:26] Bex - Spoke & Bone: oh wait no Thursday Dov's off and Jamie's got college, better make it Friday
+[14/03, 09:27] Customer - Liam: Friday it is, what time
+[14/03, 09:30] Bex - Spoke & Bone: 9am when we open!
+[15/03, 11:02] Customer - Priya M: Hi, wondering about a custom wheel build for a touring bike, how much roughly
+[15/03, 11:10] Bex - Spoke & Bone: For touring I'd say £220 all in, decent hubs
+[15/03, 11:12] Bex - Spoke & Bone: actually if you want the Ceres hubs it's more like £260, they're pricier than I remembered
+[15/03, 11:13] Customer - Priya M: ok! and how long would that take
+[15/03, 11:20] Bex - Spoke & Bone: 2-3 weeks typically
+[15/03, 11:21] Bex - Spoke & Bone: though honestly if we're not slammed it could be more like 10 days, I keep meaning to just pick one and tell people that
+[15/03, 11:22] Customer - Priya M: haha ok, so which is it for me specifically
+[15/03, 11:35] Bex - Spoke & Bone: let me check what's ahead of you in the queue and get back to you
+[19/03, 16:40] Customer - Priya M: hey, any update on the wheel build timing?
+[22/03, 08:05] Customer - Priya M: hi Bex, still hoping to hear re: timeline before I commit
+[02/04, 13:15] Customer - Grace T: Hi, do you guys still do same-day puncture repairs? Got a flat and need to get to work
+[02/04, 13:20] Bex - Spoke & Bone: yes! bring it in, £15, in and out
+[02/04, 13:22] Bex - Spoke & Bone: actually we might be stopping same-day stuff soon, it's been messing with the schedule, but today's fine, come now
+[02/04, 13:23] Customer - Grace T: ok great, on my way
+[04/04, 10:00] Customer - Marcus O: Interested in a custom steel frame, what's the starting price and deposit
+[04/04, 10:15] Bex - Spoke & Bone: Starting around £1200, deposit is 30% to lock in a build slot
+[04/04, 10:18] Bex - Spoke & Bone: actually you know what, thinking about steel prices lately I should probably start people at £1350 now, and maybe deposit should be 50% given how Ceres has been messing us on parts
+[04/04, 10:20] Customer - Marcus O: so which one do I pay upfront
+[04/04, 10:25] Bex - Spoke & Bone: let's say £1300 start, 40% deposit, does that work? sorry, I go back and forth on this too much
+[04/04, 10:26] Customer - Marcus O: that's fine, can you confirm in writing so we've got one number
+[04/04, 10:40] Bex - Spoke & Bone: will do! just need to double check something with my supplier first, back to you tomorrow
+[10/04, 09:00] Customer - Marcus O: hi, following up — did you confirm the number?
+[15/04, 14:02] Customer - Liam: hey, are you open Mondays? want to swing by for a quick brake check
+[15/04, 14:10] Bex - Spoke & Bone: Mondays are appointment only for custom clients really
+[15/04, 14:12] Bex - Spoke & Bone: although honestly Jamie's usually around Monday mornings so probably fine, come by 10ish
+[15/04, 14:13] Customer - Liam: so are you open or not lol
+[15/04, 14:20] Bex - Spoke & Bone: come by 10, if Jamie's not there just message me!
