@@ -1,30 +1,29 @@
-[03/11, 9:14am] Chidi Customer: Good morning sir, how much for a two-piece suit in navy wool?
-[03/11, 9:20am] Tunde Bakare: Good morning! For that one we're looking at ₦65,000 with the fabric included
-[03/11, 9:22am] Tunde Bakare: Actually let me reconsider, wool prices moved last week, more like ₦72,000
-[03/11, 9:23am] Tunde Bakare: Or you know what, let's just say ₦68,000 final, I don't want to stress you
-[03/11, 9:30am] Chidi Customer: Okay so ₦68,000, noted. And how long will it take?
-[03/11, 9:33am] Tunde Bakare: Two weeks max
-[03/11, 9:34am] Tunde Bakare: Actually for you since it's just one, maybe I can rush it in one week
-[03/11, 9:35am] Tunde Bakare: Let's say 10 days to be safe, my guys are also handling wedding orders this month
-[03/11, 9:40am] Chidi Customer: Alright, 10 days it is. Do I need to pay deposit?
-[03/11, 9:42am] Tunde Bakare: Yes 50% upfront please
-[03/11, 9:43am] Tunde Bakare: Actually for a first suit let's do 30% so you're comfortable, I'll trust you for the rest
-[03/12, 11:02am] Ngozi Customer: Hi, do you do school uniforms in bulk?
-[03/12, 11:15am] Tunde Bakare: We haven't done school uniforms before but let me check with Emeka if we can take it on, I'll get back to you
-[03/13, 4:00pm] Ngozi Customer: Any update?
-[03/14, 8:45pm] Ngozi Customer: Hello?
-[03/17, 2:10pm] Femi Customer: Good afternoon, I need hemming on 3 trousers, how much and how fast?
-[03/17, 2:20pm] Tunde Bakare: ₦2,500 each so ₦7,500 total, ready by Friday
-[03/17, 2:35pm] Tunde Bakare: Wait actually Friday might be tight with the wedding orders coming in, let's say Monday
-[03/17, 2:36pm] Tunde Bakare: Or Saturday morning if I push Kingsley to do it early
-[03/17, 2:40pm] Femi Customer: So Saturday or Monday? Which one
-[03/17, 2:44pm] Tunde Bakare: Let's lock Saturday, I'll message you if anything changes
-[03/19, 5:00pm] Chidi Customer: Hi Tunde, is my suit still on track for the 10 days we agreed?
-[03/19, 5:40pm] Tunde Bakare: Should be fine, maybe one or two extra days sha because of a fabric delay from Balogun
-[03/19, 5:41pm] Tunde Bakare: Actually let me confirm with Emeka and message you tonight
-[03/22, 10:00am] Chidi Customer: Tunde? It's past the 10 days now
-[03/25, 1:15pm] Amaka Customer: Hi, I'm getting married in June, can you do 15 matching agbadas for the groomsmen?
-[03/25, 1:30pm] Tunde Bakare: Yes we can do that, for bulk like this I'll say ₦18,000 per head
-[03/25, 1:33pm] Tunde Bakare: Thinking about it, since it's 15 pieces and premium fabric for a wedding, let's make it ₦22,000 per head, that's more realistic
-[03/25, 1:40pm] Amaka Customer: Okay which price should I budget for, the 18 or the 22?
-[03/25, 1:50pm] Tunde Bakare: Go with 20,000 average, we'll settle exact figure closer to the time
+[Mon Mar 3, 9:12am] Elena Marsh: Hi Gareth! Wondering about a custom dining table, seats 6, in oak. What would that run?
+[Mon Mar 3, 9:40am] Gareth Voss: Oak's good right now, I'd say $1200 all in
+[Mon Mar 3, 9:41am] Gareth Voss: Actually with the leg style you probably want, more like $1400
+[Mon Mar 3, 11:02am] Gareth Voss: sorry been thinking - let's just say $1200 flat, I'll eat the difference
+[Mon Mar 3, 11:03am] Elena Marsh: Haha ok! And timeline?
+[Mon Mar 3, 11:15am] Gareth Voss: 2 weeks easy
+[Mon Mar 3, 2:30pm] Gareth Voss: actually thinking about it, more realistically 4-5 weeks, I've got two other jobs ahead of you
+[Mon Mar 3, 2:31pm] Gareth Voss: sorry, don't want to overpromise
+[Tue Mar 4, 8:05am] Elena Marsh: No worries! Do you need a deposit?
+[Tue Mar 4, 8:20am] Gareth Voss: yep 50% to start
+[Tue Mar 4, 8:45am] Gareth Voss: actually you know what you seem organized, let's do 30% and settle rest on delivery
+[Wed Mar 5, 10:00am] Priya Nair: Hi, do you repair dining chairs? Have 4 that need regluing
+[Wed Mar 5, 10:30am] Gareth Voss: yeah we do that, $60 a chair usually
+[Wed Mar 5, 4:15pm] Gareth Voss: actually I've been meaning to stop taking these small repair jobs, they're not really worth my time anymore
+[Wed Mar 5, 4:16pm] Gareth Voss: let me think on it and get back to you
+[Fri Mar 7, 9:00am] Priya Nair: Any update on the chairs?
+[Fri Mar 7, 9:00am] Priya Nair: totally fine if not, just checking
+[Mon Mar 17, 3:00pm] Priya Nair: Hi Gareth, following up again on the chairs whenever you get a chance
+[Thu Mar 6, 1:12pm] Sam Okafor: Looking for built-in shelving for a home office, roughly 10ft wall. Ballpark cost?
+[Thu Mar 6, 1:50pm] Gareth Voss: for that size probably $2200-2500
+[Thu Mar 6, 6:40pm] Gareth Voss: hmm actually depends heavily on whether you want doors on the lower units, could push to $3000
+[Fri Mar 7, 9:30am] Sam Okafor: Ok, let's say doors on lower units — so $3000?
+[Fri Mar 7, 11:00am] Gareth Voss: yeah let's go with that number
+[Fri Mar 7, 3:15pm] Gareth Voss: actually rethinking the door hardware, might add $150-200, will confirm once I measure
+[Sat Mar 8, 10:00am] Sam Okafor: Any chance to swing by and measure this week?
+[Sat Mar 8, 10:45am] Gareth Voss: let me check my schedule and get back to you
+[Tue Mar 11, 8:00am] Elena Marsh: Hi! Just confirming table is still on for the 4-5 week window?
+[Tue Mar 11, 9:20am] Gareth Voss: actually good news, moving faster than expected, could be done in 3 weeks now
+[Tue Mar 11, 9:21am] Gareth Voss: though don't quote me on that, timber delivery's been unpredictable lately
