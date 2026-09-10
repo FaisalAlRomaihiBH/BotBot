@@ -1,0 +1,266 @@
+{
+  "transcript": [
+    [
+      "Birdie",
+      "Hi! I help businesses figure out exactly what they need from a chatbot. Before we start — what's your name?"
+    ],
+    [
+      "Priya Chandrasekaran",
+      "Priya Chandrasekaran here! Founder & Chief Vision Officer of Artisan Move Relocation Co. — we're all about curating end-to-end relocation experiences, not just \"moving boxes,\" if that makes sense! Excited to explore this synergy with you. 😊"
+    ],
+    [
+      "Birdie",
+      "Lovely to meet you, Priya! I love the 'curated relocation experience' framing. To get us started — what's the main problem you're hoping a chatbot will solve for Artisan Move? For example, is it answering repetitive questions, capturing leads, booking jobs, something else?"
+    ],
+    [
+      "Priya Chandrasekaran",
+      "Great question! So really what we're looking to do is deploy a front-line engagement layer — like a digital concierge, if you will — that can triage and pre-qualify our inbound relocation inquiries before they hit my desk. Right now I'm personally fielding every single \"how much does it cost\" ping, and it's a bottleneck to scaling our white-glove ethos.\n\nBut if I'm being real with you — and I want to be real with you — the *actual* itch I'm trying to scratch is turnaround time expectations. I have a bit of a... generous tendency... to tell people \"oh we can totally make that date work!\" and then I'm scrambling Marcus and the Rays to make it happen. So honestly? A chatbot that can help me right-size the timeline conversation upfront, so I'm not over-promising, would be huge.\n\nDoes that land, or do you want me to unpack that further?"
+    ],
+    [
+      "Birdie",
+      "That lands perfectly, Priya — thanks for being real about it. That's exactly the kind of thing we want the bot to help manage. Let's start with the basics: where do customers currently reach you — phone, WhatsApp, Instagram, your website, email, something else?"
+    ],
+    [
+      "Priya Chandrasekaran",
+      "Ooh, great question — honestly it's a bit of an omnichannel love-fest right now, ha! People find us through the website contact form, a good chunk of Instagram DMs 'cause I post our transformations there, some phone calls that go straight to Ashley or me, and then random texts from past clients who just... have my cell, lol. No real centralized intake funnel yet — which, real talk, is part of why things fall through the cracks. So if this bot could kind of be the unifying front door across those touchpoints? That'd be a total game-changer for us."
+    ],
+    [
+      "Birdie",
+      "Got it — website form, Instagram DMs, phone, and texts, quite the mix! Now let's talk services: what are all the different relocation services you offer (like local moves, long-distance, packing, storage, etc.)?"
+    ],
+    [
+      "Priya Chandrasekaran",
+      "Yes! So our core service architecture — I like to think of it as a \"solutions ladder\" — starts with local residential moves, which is really our bread and butter, and scales up to long-distance shipments, then full office/commercial relocation engagements for our B2B clientele, and at the top we have our White-Glove Concierge Package, which is the full sensory experience — packing, unpacking, furniture placement, even donation haul-away for stuff people don't want to bring along.\n\nWe do NOT do pianos, safes over 400 lbs, or firearms — just a hard boundary for us operationally, insurance nightmare otherwise.\n\nSo what does that actually mean in practice? Local moves run $900–$1,800 depending on home size, long-distance is priced per shipment weight (roughly $2.10/lb as a starting investment, though I'll be honest — the fuel surcharge piece is a bit of a moving target depending on our carrier partner), office relocations are custom-quoted with a $3,000 minimum, and the Concierge Package is a flat +$450 add-on. Want me to keep going into insurance/deposit stuff, or circle back to that later?"
+    ],
+    [
+      "Birdie",
+      "This is great detail, thank you! Before we get to insurance/deposits, I want to nail down one thing tied to your big worry: for each of those — local moves, long-distance, office relocations, and the Concierge add-on — what's the realistic turnaround or lead time you can promise (like, how far out do you need to schedule, or how long a job takes)?"
+    ],
+    [
+      "Priya Chandrasekaran",
+      "Okay, real talk time — this is literally the crux of it, so I appreciate you pressing here.\n\nSo the honest architecture looks like this: in our off-season (basically September through April), we can typically right-size a booking within 3-5 business days — pretty agile, love that for us. But once we hit May through August, our peak relocation season, lead times stretch to 3-4 weeks out because we're a lean crew — just Marcus, Dwayne, Little Ray, and Big Ray on the ground.\n\nJob duration itself is more straightforward — local moves are usually a one-day touchpoint, long-distance obviously depends on shipment weight and distance so that's more of a \"let's circle back once we have specifics,\" and office relocations really vary based on scope, which is why those are custom-quoted anyway.\n\nThe Concierge Package doesn't really change the timeline, it's more of a value-add layered onto whichever move type you're already doing.\n\nOh — and I'll flag one internal wrinkle for you, just so the bot doesn't over-promise on my behalf 😅 — one of our two trucks is due for transmission work this quarter and I genuinely don't know yet if it'll be back in service before peak season hits. So maybe the bot should have some conservative guardrails baked in for late spring bookings? Does that help shape it?"
+    ],
+    [
+      "Birdie",
+      "That's super helpful context, Priya — noted on the truck situation too, we'll flag that as a reason to keep late-spring promises conservative for now. Switching gears a bit: what are the top questions customers actually ask you most often — besides pricing and timing, is there anything else that comes up a lot (like 'do you handle international moves' or 'are you insured')?"
+    ],
+    [
+      "Priya Chandrasekaran",
+      "Oh totally, yes — beyond the \"how much\" and \"how soon\" duo, the recurring greatest hits are definitely insurance-related. People want to know \"are you insured\" and I do this whole song and dance about our coverage architecture — so basic released-value protection is included free, that's 60 cents per pound per item, but if someone wants the full-value protection tier, that's an added investment, roughly 1% of the declared value. It's a real \"good, better, best\" conversation.\n\nSecond most common: \"what's your deposit/cancellation situation\" — so that's a 30% deposit to lock in the booking, fully refundable if they cancel more than 72 hours out, but there's a $150 cancellation fee inside that window. People appreciate transparency there, it builds trust equity.\n\nThird bucket is really operational curiosity — \"do you move pianos/safes,\" \"are you licensed,\" \"what areas do you service\" (we're Austin-based, mostly stay regional unless it's a long-distance shipment), stuff like that.\n\nWant me to go deeper on any one of those threads, or should we keep moving through the discovery flow? 😊"
+    ],
+    [
+      "Birdie",
+      "That insurance and deposit breakdown is gold, thank you. Quick one on money mechanics: how do customers actually pay you — cash, card, bank transfer — and is that deposit collection process pretty reliable, or does it sometimes get messy?"
+    ],
+    [
+      "Priya Chandrasekaran",
+      "Ooh, payment ops — okay, honest disclosure moment: that's more Ashley's lane than mine, so I don't want to give you a fabricated \"system\" when the reality is probably more... organic. I know we take cards and do bank transfers for the deposit piece, and I think some old-school local clients still Venmo or even write a check, lol. Whether it's \"reliable\" — I'll be real, I think there's occasionally a lag where someone verbally commits but the deposit doesn't actually land for a few days, which is its own little friction point in our funnel.\n\nI don't want to speak definitively on the exact mechanics though since that's not my day-to-day — should I take that offline and circle back with Ashley for the precise breakdown, or is directionally \"cards + transfers, mostly smooth\" enough for what you need right now?"
+    ],
+    [
+      "Birdie",
+      "Totally fair — 'cards + transfers, mostly smooth, with occasional deposit lag' is plenty for now, no need to chase Ashley down on my account. Let's talk handoff: when the bot can't answer something or a lead needs a human touch, who should it hand off to, and how (phone number, text, DM)? And is there a fallback for after-hours?"
+    ],
+    [
+      "Priya Chandrasekaran",
+      "Ooh yes, the human handoff layer — critical piece of the architecture, glad you're thinking about it! So honestly, 90% of the time that's just... me. Priya. I'm the sales/quote engine for this whole operation, lol. Ashley can field general office stuff and scheduling logistics, but anything quote-related or \"can you make my date work\" still routes to me personally.\n\nSo I'd say: bot escalates to me via text or a flagged lead that pings my phone — whatever's cleanest on the backend. For after-hours, real talk, we don't really have a formal fallback right now — we're open Mon-Sat 8-6, closed Sundays, and outside that it's kind of a \"I'll see it when I see it\" situation. Which, I know, isn't ideal — so maybe that's a gap the bot can actually own? Like capturing the lead overnight and setting expectations that I'll circle back first thing next business day, instead of leaving folks on read?\n\nDoes that give you enough to work with, or you want me to get more granular on the escalation triggers?"
+    ],
+    [
+      "Birdie",
+      "That's plenty to work with, thank you — and yes, having the bot own that overnight 'we'll follow up next business day' message is a great gap to close. Now, a quick volume check: roughly how many inquiries would you say come in across all your channels in a typical week?"
+    ],
+    [
+      "Priya Chandrasekaran",
+      "Ooh, volume metrics, love it — okay so if I'm zooming out on the full omnichannel funnel... honestly it ebbs and flows with the seasonality piece we talked about. But ballparking it, off-season we're probably looking at like 15-20 inquiries a week across all the touchpoints combined, and once we hit peak season that can spike up to 30-ish, maybe more when I'm on an Instagram posting streak and the DMs start flooding in, lol.\n\nNot all of those convert obviously — some are just tire-kickers asking \"do you move pianos\" so they can be sad when I say no 😅 — but that's the raw top-of-funnel number. Does that help calibrate what the bot needs to handle capacity-wise?"
+    ],
+    [
+      "Birdie",
+      "That helps a lot, thanks. One more thing that'll really sharpen my questions: if you're able to, could you drop a few real chat exports or screenshots of past customer conversations (Instagram DMs, texts, whatever) into the 'uploads' folder next to this program? Seeing real inquiries helps me ask sharper questions. If that's not easy, no worries — you could also just paste in a couple of example messages here instead."
+    ],
+    [
+      "Priya Chandrasekaran",
+      "Oh, I love that you're going deep on the source material — very \"voice of the customer\" of you! Okay, I went ahead and dropped a few into the uploads folder for you, so those should be sitting there ready to go. 📁✨\n\nBut just so you're not staring at empty screenshots, lol, let me give you the flavor in real-time too — a pretty classic one is like:\n\n\"Hi! Moving from a 2BR apt to a house across town first week of June, how much and can you do it??\" — and then I'm doing the whole \"let's right-size that timeline\" dance because June is peak season and my trucks are already stretched thin.\n\nOr an Instagram DM classic: \"do u guys move a piano 🎹\" — sad trombone, gotta break their heart on that one.\n\nAnd then the texts from past clients are usually just \"hey are you free next Sat?? 😅\" with zero context, lol, very high-trust, low-detail energy.\n\nLet me know if that gives you enough texture, or if you want me to circle back with more!"
+    ],
+    [
+      "Birdie",
+      "Perfect, got it — give me a moment to study what you've uploaded before we keep going."
+    ],
+    [
+      "Birdie",
+      "Okay, I went through what you uploaded — really useful! Two things jumped out: I can see Saturday hours are 8am-6pm and Sundays are closed, and the piano exclusion shows up exactly like you said. One thing I want to dig into, though: I saw a customer named Jordan T. ask about a specific date (May 10) for a 2BR move, and over about three weeks, the replies were only ever a 'tentative yes, high confidence' — never a firm yes or no. What's the actual process for locking in a firm date — like, at what point can you commit for real, and what's holding that up (truck/crew schedule, waiting on something else)?"
+    ],
+    [
+      "Priya Chandrasekaran",
+      "Ooh, great catch on the Jordan T. thread — that's honestly like, exhibit A of my whole \"over-promising\" pain point, ha, painfully on brand.\n\nOkay so real talk on the actual mechanics: a date only becomes FIRM-firm once two things line up — one, the 30% deposit actually lands (not just verbally committed, actually lands), and two, I've physically confirmed crew + truck availability against the calendar. The problem is I tend to give that \"tentative yes, high confidence\" vibe way too early, before I've cross-checked with Marcus/the Rays' schedule or — especially relevant right now — whether that second truck is even gonna be transmission-drama-free by then.\n\nSo what's *actually* holding it up is kind of a three-part bottleneck: deposit collection lag (per our earlier chat), crew scheduling confirmation, and truck reliability uncertainty heading into peak season. None of those are hard blockers, they're just... things I skip past because I want to say yes.\n\nSo honestly? This might be a perfect guardrail for the bot to enforce — like, don't let me (or the bot) say \"confirmed\" until deposit + crew/truck check are BOTH done. Right now that's a manual gut-check on my end, not a system. Does that help clarify the gap?"
+    ],
+    [
+      "Birdie",
+      "That's really clarifying, Priya — that two-part gate (deposit landed + crew/truck confirmed) is exactly the kind of rule the bot can hold the line on, even when you're tempted to say yes early. Now, a scoping question: do you want this to be a full booking-and-payment app (where people can actually reserve a date and pay a deposit through the bot), or something simpler — like it answers questions, gives ballpark quotes, and collects leads/info for you or Ashley to follow up on manually?"
+    ],
+    [
+      "Priya Chandrasekaran",
+      "Ooh, the classic \"build vs. bridge\" question — love it. Okay, gut instinct, real talk: I don't think we're ready to hand over full payment rails to a bot just yet — that feels like a bigger infrastructure lift, and honestly with the deposit-lag friction we already have, I don't want to layer more complexity before we've right-sized the fundamentals.\n\nSo for V1, I'd say let's keep it in \"smart concierge\" mode, not \"transaction engine\" mode — meaning: it answers the FAQ stuff (pricing ranges, insurance, timelines with those guardrails you flagged), gives ballpark quotes based on move type/size, and then captures the lead — name, move date, home size, channel, urgency — and routes it to me or Ashley to actually close the loop and collect the deposit like a human being.\n\nBasically I want it to pre-qualify and triage, not close the deal. Down the line, sure, maybe we synergize toward an actual booking-and-pay flow once our ops are less... duct-tape-and-vibes. But for now? Lead capture + info engine is the right-sized MVP. Does that scoping make sense on your end?"
+    ],
+    [
+      "Birdie",
+      "That makes total sense — lead-capture-and-info-engine as the V1, booking/payment as a maybe-later. Good call given the deposit-lag friction you mentioned. Let's nail down the bot's personality: what tone do you want it to have (e.g. warm and casual, polished and professional, playful like your Instagram voice), and do you have a name in mind for it — or should it just speak as 'Artisan Move'?"
+    ],
+    [
+      "Priya Chandrasekaran",
+      "Ooh, brand voice — okay this is my favorite part, ha. I'd say we want it to sit at the intersection of \"polished boutique\" and \"warm human,\" you know? Like not stiff corporate-bot energy, but also not full meme-lord Instagram-caption energy either — somewhere in between \"your very put-together friend who happens to run a moving company\" and \"premium concierge front desk.\"\n\nAs for a name... ooh. What if we called it something like \"Ash\" — like a cute nod to Ashley, our actual coordinator, so it feels like an extension of her rather than some robotic stranger? Or honestly, I'm also open to just having it speak as \"Artisan Move\" directly, keeps the brand front and center. I'm genuinely torn — what's your gut read, does giving it a persona-name like \"Ash\" add warmth, or does that risk confusing people into thinking they're talking to the real Ashley? 😅"
+    ],
+    [
+      "Birdie",
+      "Ha, I hear the dilemma! I'll just flag one real risk so you can decide with eyes open: naming it 'Ash' could cause a little confusion if a customer thinks they're getting the actual Ashley and expects her memory/context. Given that, do you want to go with 'Ash' as the persona name, or have it just speak as 'Artisan Move'?"
+    ],
+    [
+      "Priya Chandrasekaran",
+      "Ooh, you make a fair point — I don't want anyone feeling like they got \"catfished\" by a bot pretending to be Ashley, that's a trust-equity risk I'm not willing to take. 😅\n\nSo let's just have it speak as \"Artisan Move\" — keeps the brand voice front and center without any identity confusion. We can always circle back and layer in a cute persona name down the road once things are less duct-tape-and-vibes. For now, clean and brand-forward is the right-sized call.\n\nWhat's next on the discovery flow?"
+    ],
+    [
+      "Birdie",
+      "Great, 'Artisan Move' it is. Quick one: does the bot need to handle any language besides English, or is English-only fine for your customer base?"
+    ],
+    [
+      "Priya Chandrasekaran",
+      "English-only is totally fine for our footprint — we're Austin-based and haven't had a real signal that we need to right-size for multilingual support yet. If we ever expand our service radius or the demographic mix shifts, sure, maybe we circle back and synergize a Spanish-language layer or something, but for V1? Keep it lean, English-only. No need to over-engineer for a need we don't have data on yet! 😊"
+    ],
+    [
+      "Birdie",
+      "Perfect, English-only for now, no over-engineering needed. Last few things: do you currently use any calendar, CRM, or booking system to track jobs and availability — or is it more manual/spreadsheet right now? Just want to know what the bot would need to work alongside."
+    ],
+    [
+      "Priya Chandrasekaran",
+      "Oh, honest answer? It's very much a \"duct-tape-and-vibes\" operational stack right now, lol — no unified CRM ecosystem to speak of. Ashley keeps a shared Google Calendar for crew/truck scheduling, I've got a spreadsheet that's more \"living document\" than \"system of record\" for tracking leads and deposits, and honestly a solid chunk of institutional knowledge just lives in my head and my texts, which — I know, I know, not scalable.\n\nSo realistically the bot would need to just capture and hand off info cleanly — like, land the lead details somewhere Ashley and I can actually see and act on (email digest, shared sheet, whatever's lowest-lift), rather than assuming it can plug into some sophisticated booking infrastructure, because that infrastructure... doesn't really exist yet. 😅\n\nIs that the kind of texture you needed, or do you want me to get more granular on the spreadsheet situation?"
+    ],
+    [
+      "Birdie",
+      "That's plenty of texture, thank you — email digest or a shared sheet as the handoff makes total sense given where things stand. Last open question before I wrap up: anything else on your mind about pricing or the business that we haven't covered yet — any other worries or things you want the bot to help fix?"
+    ],
+    [
+      "Priya Chandrasekaran",
+      "Ooh, good closing prompt — let me do a quick \"gaps in the ecosystem\" scan real quick. 🤔\n\nHonestly, the big one is just... me. Like, the bot needs to be the guardrail against MYSELF, if that makes sense? My whole pain point is I want to make everyone happy in the moment, so if there's any way to bake in some soft \"scripted hesitation\" — like the bot defaults to \"let me confirm and circle back\" instead of \"yes we can do that!\" — that would literally save me from my own worst instinct.\n\nSecond smaller thing: the long-distance pricing piece still makes me nervous 'cause of that fuel surcharge variable I mentioned — I don't want the bot quoting something ultra-precise and then me having to walk it back and look flaky. So maybe long-distance always gets framed as a \"starting investment, final number pending carrier surcharge\" kind of language, never a hard number.\n\nAnd honestly? That transmission truck situation is still looming over me a bit heading into peak season — but I think we already baked conservative guardrails in for that, so I think we're good there.\n\nOther than that... I think you've got the full architecture! This has been a genuinely clarifying convo, ngl. What's next — do you circle back with a proposal, or what's the flow from here? 😊"
+    ],
+    [
+      "Birdie",
+      "This has been genuinely great, Priya — I think I've got the full picture. Here's the summary before I close things out:\n\n**Business**: Artisan Move Relocation Co., Austin-based, regional service area (long-distance goes further). Team: Priya (founder, handles all quotes/dates personally), Ashley (office/scheduling/payments, keeps the crew/truck Google Calendar), ground crew Marcus, Dwayne, Little Ray, Big Ray.\n\n**Channels**: Website form, Instagram DMs, WhatsApp, phone, personal texts — no unified intake today.\n\n**Services & pricing**:\n- Local residential moves: $900–$1,800 by home size, usually a one-day job.\n- Long-distance: ~$2.10/lb starting price + variable fuel surcharge — always to be framed as a 'starting investment, final number pending carrier surcharge,' never a hard number.\n- Office/commercial: custom-quoted, $3,000 minimum.\n- White-Glove Concierge add-on: flat +$450, layered onto any move type, doesn't change timeline.\n\n**Booking lead times**: Off-season (Sept–Apr) 3–5 business days; peak season (May–Aug) 3–4 weeks — partly because of lean crew and a truck currently in for transmission work with uncertain return before peak season.\n\n**Firm date policy**: A date is only truly firm once (1) the 30% deposit has actually landed AND (2) crew/truck availability is confirmed — bot should never give a firm yes before both are true, always defaulting to 'let me confirm and circle back.'\n\n**FAQs confirmed**: insured (free Released Value Protection at 60¢/lb, optional Full-Value Protection ~1% of declared value); pianos/safes over 400lbs/firearms not handled; hours Mon–Sat 8am–6pm, closed Sunday; deposit 30% (refundable outside 72 hrs, $150 fee inside); Austin-based/regional service area.\n\n**Payments**: cards and bank transfers mainly, some Venmo/checks from local clients; occasional lag between verbal commitment and deposit landing.\n\n**Escalation**: quote/date questions go to Priya via text/flagged lead; general logistics to Ashley; no after-hours coverage today — bot should capture overnight leads and promise next-business-day follow-up.\n\n**Volume**: ~15–20/week off-season, ~30+/week peak season.\n\n**Scope**: V1 is a lead-capture/FAQ 'smart concierge,' not a full booking-and-payment app — answers questions, gives ballpark quotes, captures lead details, and hands off to Priya/Ashley (likely via email digest or shared sheet, since there's no CRM).\n\n**Tone & persona**: Polished-boutique-meets-warm-human tone; bot speaks as 'Artisan Move' (no separate persona name).\n\n**Language**: English only.\n\nOpen items still flagged as unresolved: exact licensing details, and precise payment mechanics (best confirmed with Ashley).\n\nDoes all of this look right, or is there anything you'd like to correct before I close this out?"
+    ],
+    [
+      "Priya Chandrasekaran",
+      "Ooh, this is basically a beautifully bound \"vision doc,\" love it — 95% chef's kiss. Just one tiny correction in the channel mix: I never said WhatsApp, that's not actually one of our touchpoints — it's website form, Instagram DMs, phone, and personal texts. No WhatsApp in our omnichannel love-fest, lol.\n\nEverything else — pricing architecture, the deposit/firm-date gate, tone, scope, all of it — is spot on, you really synergized the whole conversation into something crisp. 🙌\n\nSo what's the actual next step from here — are we talking build timeline, or do you need anything else from my end first?"
+    ],
+    [
+      "Birdie",
+      "Perfect, fixed — channels are website form, Instagram DMs, phone, and personal texts, no WhatsApp. Thanks so much for all the detail and honesty today, Priya, it really made this a productive session. I'll pass everything along to the build team, and they'll be in touch about next steps from here. Talk soon!"
+    ]
+  ],
+  "brief": {
+    "contact_name": "Priya Chandrasekaran",
+    "business_name": "Artisan Move Relocation Co.",
+    "industry": "Relocation / moving services",
+    "business_description": "Positions itself as curating end-to-end relocation experiences rather than just moving boxes. Team includes Priya (founder, handles all quotes/sales personally), Ashley (handles general office/scheduling logistics, payment ops, keeps a shared Google Calendar for crew/truck scheduling, and is looped in for scheduling), and ground crew Marcus, Dwayne, Little Ray, and Big Ray. Based in Austin, mostly serves the regional area unless it's a long-distance shipment. Hours: Mon–Sat 8am–6pm, closed Sundays ('reserved for internal team recalibration and rest' per Priya's team messaging). No centralized intake funnel currently — inquiries come via website contact form, Instagram DMs, phone calls, and personal texts.",
+    "problem_to_solve": "Wants a front-line 'digital concierge' to triage and pre-qualify inbound relocation inquiries (especially pricing questions) before they reach Priya, easing a bottleneck. Also wants help right-sizing timeline/turnaround expectations upfront so Priya stops over-promising delivery dates and overloading the team scrambling to meet them. Wants the bot to unify scattered intake channels into one front door. Priya explicitly wants the bot to act as a guardrail against her own tendency to over-promise, defaulting to 'let me confirm and circle back' rather than an immediate yes.",
+    "target_audience": null,
+    "channels": [
+      "Website contact form",
+      "Instagram DMs",
+      "Phone calls",
+      "Text messages (personal cell)"
+    ],
+    "integrations": [
+      "Shared Google Calendar (Ashley uses this for crew/truck scheduling) — no formal CRM; leads/deposits currently tracked in a spreadsheet described as a 'living document, not a system of record'"
+    ],
+    "conversation_volume": "Off-season: ~15–20 inquiries/week across all channels combined. Peak season: ~30+ inquiries/week, sometimes spiking higher after active Instagram posting streaks. Not all convert — some are 'tire-kicker' questions (e.g. asking about excluded items).",
+    "languages": [
+      "English"
+    ],
+    "success_criteria": "Bot should reduce Priya's tendency to over-promise dates/timelines by defaulting to cautious, 'let me confirm and circle back' language rather than immediate yeses.",
+    "budget": null,
+    "timeline": null,
+    "services_and_pricing": [
+      "Local residential moves: $900–$1,800 depending on home size (Priya's figure); materials also show a '2BR apartment' package quoted as $1,000–1,500 under a 'Core Mobility package' name — worth confirming if that's the same tier or a different naming convention. Job duration: usually one day. Booking lead time: off-season (Sept–April) 3–5 business days out; peak season (May–Aug) 3–4 weeks out.",
+      "Long-distance shipments: ~$2.10/lb starting price, plus a fuel surcharge that varies by carrier partner (Priya says this is 'a moving target'). Priya wants this ALWAYS framed as a 'starting investment, final number pending carrier surcharge' — never presented as a hard/precise number. Job duration depends on weight/distance — Priya says to circle back for specifics. Same seasonal booking lead times apply (3–5 business days off-season, 3–4 weeks peak season).",
+      "Office/commercial relocation: custom-quoted, $3,000 minimum (matches the '$3,000 baseline investment' seen for an 8-desk office move in materials). Job duration varies by scope (hence custom quoting). Same seasonal booking lead times apply.",
+      "White-Glove Concierge Package (packing, unpacking, furniture placement, donation haul-away): flat +$450 add-on layered onto any move type — does not change the base timeline."
+    ],
+    "faq_answers": [
+      "Are you insured? Yes — basic Released Value Protection is included free (60 cents per pound per item). Full-Value Protection is an optional upgrade, roughly 1% of declared value.",
+      "What's your deposit/cancellation policy? 30% deposit required to lock in a booking; fully refundable if cancelled more than 72 hours before the move; $150 cancellation fee applies inside the 72-hour window.",
+      "Do you move pianos/safes? No — pianos, safes over 400 lbs, and firearms are excluded due to insurance risk (confirmed in real chat history too).",
+      "Are you licensed? (mentioned as a common question — specific licensing details not yet confirmed)",
+      "What areas do you service? Austin-based, mostly regional, except for long-distance shipments which go further out.",
+      "What are your hours? Mon–Sat 8am–6pm (Saturday confirmed specifically as 8am-6pm in chat history); closed Sundays."
+    ],
+    "business_policies": [
+      "Hard operational exclusions: do not move pianos, safes over 400 lbs, or firearms — due to insurance risk.",
+      "Insurance: Released Value Protection included free (60 cents/lb per item); Full-Value Protection optional upgrade at ~1% of declared value.",
+      "Deposit: 30% required to book ('good-faith investment'). Cancellation: full refund if more than 72 hours before move; $150 fee if cancelled within 72 hours.",
+      "Payment methods: cards and bank transfers for deposits; some local clients still use Venmo or checks. Priya flags occasional lag between verbal commitment and deposit actually landing as a friction point. Ashley owns payment ops day-to-day, so exact mechanics not fully confirmed by Priya.",
+      "Business hours: Monday–Saturday 8am–6pm, closed Sundays. No formal after-hours process currently exists ('I'll see it when I see it').",
+      "Firm date confirmation policy: a booking date only becomes truly firm once (1) the 30% deposit has actually landed (not just verbally promised) AND (2) crew + truck availability has been physically cross-checked against the calendar. Priya acknowledges she currently gives a 'tentative yes, high confidence' too early, before this check happens — she wants the bot to enforce this two-part gate rather than pre-confirm dates.",
+      "General bot behavior policy: default to cautious 'let me confirm and circle back' language rather than immediate commitments, as a guardrail against Priya's own tendency to over-promise."
+    ],
+    "escalation_rules": [
+      "Quote-related and scheduling/date requests route to Priya personally via text or a flagged lead notification to her phone — she is the sales/quote engine for the business.",
+      "General office/scheduling logistics can be handled by Ashley.",
+      "After-hours/weekend fallback: no formal system currently exists; Priya wants the bot to capture the lead overnight/off-hours and set expectations that she'll follow up the next business day."
+    ],
+    "open_items": [
+      "One of two trucks may be out for transmission repair and might not be back before peak season — Priya wants the bot to apply conservative guardrails on late-spring booking promises until this is resolved (Priya considers this already addressed via the seasonal/date-confirmation guardrails).",
+      "Licensing details mentioned as a common customer question but not yet confirmed by Priya.",
+      "Exact payment mechanics/reliability best confirmed with Ashley, who owns that process day-to-day."
+    ],
+    "additional_notes": [
+      "Priya self-identifies a tendency to over-promise turnaround dates to customers, which creates scrambling for Marcus and the Rays to deliver.",
+      "Ground crew capacity is lean: only Marcus, Dwayne, Little Ray, and Big Ray on the ground, which drives peak-season lead time stretch.",
+      "Example inquiry (website/DM): '2BR apt to house across town, first week of June, how much and can you do it??' — illustrates peak-season timeline tension.",
+      "Example inquiry (Instagram DM): 'do u guys move a piano 🎹' — classic excluded-item question.",
+      "Example inquiry (text from past client): 'hey are you free next Sat?? 😅' — low-context, high-trust repeat client style.",
+      "Jordan T. case study: customer asked repeatedly over ~3 weeks about a specific date; only ever got 'tentative yes, high confidence,' never a firm answer — directly illustrates the deposit + crew/truck confirmation gate Priya now wants enforced.",
+      "Scope decision: V1 build is a 'smart concierge' / lead-capture and info engine — NOT a full booking-and-payment app. Bot should answer FAQs, give ballpark quotes, capture lead details (name, move date, home size, channel, urgency), and route to Priya/Ashley to close the deal and collect deposit manually. Full booking-and-pay flow is a possible future phase, not V1.",
+      "Desired tone: 'polished boutique meets warm human' — like a put-together friend who runs a moving company, or a premium concierge front desk. Not stiff corporate, not full meme-energy.",
+      "Persona decision: bot will speak as 'Artisan Move' directly, no separate persona name, to avoid confusion with the real Ashley.",
+      "No unified CRM/booking system exists; institutional knowledge lives partly in Priya's head/texts. Bot should hand off captured lead info via lowest-lift method (e.g. email digest or shared sheet) rather than assume integration with sophisticated infrastructure."
+    ]
+  },
+  "analysis": {
+    "inquiry_categories": [
+      "Move quotes/pricing requests (~30%) - customers asking cost for residential or commercial moves",
+      "Availability/date booking checks (~20%) - customers asking if a specific date is free",
+      "Specialty item handling questions (~10%) - e.g., can you move a piano",
+      "Commercial/office move inquiries (~15%) - office relocations, desk counts, downtime concerns",
+      "Hours of operation questions (~10%) - what days/times the business operates",
+      "Deposit/payment policy questions (~10%) - how much upfront, refund terms",
+      "Follow-up/status-chasing messages (~15%, often overlapping with above) - customers re-pinging for quotes or confirmations that were promised but not delivered"
+    ],
+    "resolved_patterns": [
+      "Piano moving: customer asked 'do you guys move pianos?' — staff answer: 'We generally don't onboard piano-category items... too much specialized handling risk' confirmed as a clear 'no' on pianos.",
+      "Saturday hours: customer asked Saturday hours — staff answer: '8am-6pm Saturdays'.",
+      "Sunday hours: customer asked about Sundays — staff answer: closed ('reserved for internal team recalibration and rest').",
+      "Commercial/office move baseline pricing: customer asked about an 8-desk office move — staff answer: starts at a '$3,000 baseline investment,' scope built out from there.",
+      "Deposit policy: customer asked deposit for a local move — staff answer: '30% good-faith investment upfront... fully refundable if plans shift outside the 72-hour window.'",
+      "2-bedroom apartment move rough pricing: staff gave a range ('Core Mobility package... $1,000-1,500') even though exact date/availability was not resolved."
+    ],
+    "knowledge_gaps": [
+      "Specific date availability confirmation: Jordan T. asked repeatedly (over ~3 weeks) whether May 10 was available for a 2BR move; staff never gave a firm yes/no, only 'tentative yes with high confidence' — the actual process/timeline for confirming truck/crew availability is not shown and needs clarification from the owner.",
+      "Formal quote turnaround for commercial moves: Devon R. requested a formal quote for an 8-desk office move; staff acknowledged delay ('been deep in Q2 strategy mode') but no quote or delivery timeline was ever shown in the materials — unclear what the actual SLA or process for generating formal quotes is.",
+      "Truck/crew maintenance impact on scheduling: staff mentioned 'one of our trucks is undergoing some maintenance optimization' affecting Jordan's booking, but there's no visibility into how fleet/crew availability is actually tracked or communicated to customers — needs clarification on how to handle real-time capacity questions.",
+      "Exact pricing methodology beyond quoted ranges: the $1,000-1,500 (2BR) and $3,000 (office) figures are given as starting points 'depending on inventory density' or scope, but no visible breakdown of how final pricing is calculated — chatbot would need real pricing logic from the owner."
+    ],
+    "facts_learned": [
+      "Business name appears to be 'Artisan Move' (per WhatsApp display name).",
+      "Staff members visible in conversations: Priya (primary customer contact) and Ashley (mentioned as someone Priya loops in for scheduling).",
+      "Communication channel used is WhatsApp.",
+      "Language used is English, with heavy use of corporate/marketing jargon by staff.",
+      "Saturday business hours: 8am-6pm.",
+      "Closed on Sundays.",
+      "Pianos are not currently serviced/moved by the company.",
+      "Local move deposit: 30% upfront, refundable if canceled outside a 72-hour window.",
+      "Residential 2-bedroom moves are quoted under a 'Core Mobility package' starting around $1,000-1,500.",
+      "Commercial/office moves have a baseline starting price around $3,000 before scope is finalized.",
+      "May is described as 'peak season,' implying seasonal demand/capacity constraints.",
+      "The business appears to experience delays in confirming bookings and sending formal quotes (multiple multi-day to multi-week gaps observed in real conversations)."
+    ]
+  },
+  "completed": true,
+  "turns": 38
+}

@@ -751,7 +751,8 @@
       "Add a `qualification_questions` / `pre_quote_data_to_collect` field so owner-specific quoting logic (car type, condition, frequency) becomes a captured bot flow requirement.",
       "Add a `future_roadmap` field (planned expansions, loyalty program) so speculative-but-relevant plans aren't mixed with actionable open items.",
       "Give the interviewer a capability/knowledge module for answering basic feasibility questions (updatable knowledge base, integrations, real-time notifications) so it stops deflecting every technical question to 'the build team'."
-    ]
+    ],
+    "improve_done": false
   },
   {
     "cycle": 15,
@@ -806,6 +807,71 @@
       "Add explicit `bot_scope` and `tone_and_persona` fields — both are currently crammed into free-text additional_notes despite being core build requirements.",
       "Add a `lead_time_and_availability` field (per-service lead times, response hours, seasonality) — this information is currently scattered across services_and_pricing, business_policies, and additional_notes.",
       "Give the interviewer a capability to record the owner's *root pain point* separately from the presenting complaint (`problem_to_solve` only captured 'phone won't stop ringing'; the costly problem — running out of food from bad quantity estimates — has no home in the schema)."
+    ]
+  },
+  {
+    "cycle": 16,
+    "stamp": "20260910_142504",
+    "persona": "Boutique residential & office moving/relocation services / Chronic corporate-jargon inflator — Priya cannot give a straight answer without wrapping it in buzzwords, mission-statement language, and vague 'value-add' framing. Ask her the price of a move and she'll talk about 'bespoke logistics ecosystems' and 'white-glove touchpoints' before maybe, eventually, mentioning a number — and even then it's couched as a 'starting investment.' She uses phrases like 'let's circle back,' 'take this offline,' 'synergize the timeline,' and 'right-size the solution,' genuinely believing this makes her sound premium. She's enthusiastic and clearly proud of her business, but customers often have to ask 'so what does that actually mean' two or three times before getting anything concrete like a date or dollar figure.",
+    "score": 7.33,
+    "completed": true,
+    "improved": false,
+    "top_improvement": "Before producing the summary, require Birdie to run an explicit coverage sweep against every brief field and every self-noted discrepancy/open item — asking directly about the ones still empty (target_audience, budget, timeline, measurable success criteria, service radius, licensing) and resolving upload-vs-owner contradictions live — and forbid it from asserting any fact in the summary or brief that the owner did not state or that isn't quoted from evidence (the invented 'WhatsApp' channel and the unsourced 'internal team recalibration' quote).",
+    "findings": [
+      {
+        "problem": "Birdie invented a channel (WhatsApp) that the owner never mentioned and put it into the summary; only caught because the owner corrected it. A fabricated fact of this kind could easily have landed in the final brief unchallenged.",
+        "excerpt": "Birdie: **Channels**: Website form, Instagram DMs, WhatsApp, phone, personal texts — no unified intake today."
+      },
+      {
+        "problem": "The brief's business_description contains a quoted claim ('reserved for internal team recalibration and rest' per Priya's team messaging) that appears nowhere in the interview and was never confirmed with the owner — unsourced embellishment presented as fact.",
+        "excerpt": "Priya Chandrasekaran: For after-hours, real talk, we don't really have a formal fallback right now — we're open Mon-Sat 8-6, closed Sundays, and outside that it's kind of a \"I'll see it when I see it\" situation."
+      },
+      {
+        "problem": "Birdie spotted a real pricing discrepancy in the uploaded materials (a 'Core Mobility package' at $1,000–1,500 vs. the stated $900–1,800 local range) but never raised it in the conversation — it was silently filed in the brief as 'worth confirming' instead of being resolved on the spot while the owner was available.",
+        "excerpt": "Birdie: Okay, I went through what you uploaded — really useful! Two things jumped out: I can see Saturday hours are 8am-6pm and Sundays are closed, and the piano exclusion shows up exactly like you said."
+      },
+      {
+        "problem": "target_audience is null in the brief — Birdie never asked who the customers are (residential vs. B2B mix, apartment vs. house, price sensitivity), despite the owner explicitly mentioning a 'B2B clientele' tier that begged a follow-up.",
+        "excerpt": "Priya Chandrasekaran: ...then full office/commercial relocation engagements for our B2B clientele, and at the top we have our White-Glove Concierge Package"
+      },
+      {
+        "problem": "budget and timeline are both null in the brief; Birdie closed the interview and handed off to a 'build team' without ever asking about either, so the brief cannot be scoped commercially.",
+        "excerpt": "Birdie: I'll pass everything along to the build team, and they'll be in touch about next steps from here. Talk soon!"
+      },
+      {
+        "problem": "Birdie recorded 'Are you licensed?' as a top FAQ but never asked the owner for the actual answer, leaving an FAQ entry with no content and a permanent open item that a single question would have closed.",
+        "excerpt": "Priya Chandrasekaran: Third bucket is really operational curiosity — \"do you move pianos/safes,\" \"are you licensed,\" \"what areas do you service\" (we're Austin-based, mostly stay regional unless it's a long-distance shipment), stuff like that."
+      },
+      {
+        "problem": "Service area was left as the vague phrase 'mostly regional' — Birdie never pinned down a mileage radius, city list, or which states long-distance moves cover, which a quoting/qualifying bot absolutely needs.",
+        "excerpt": "Priya Chandrasekaran: (we're Austin-based, mostly stay regional unless it's a long-distance shipment), stuff like that."
+      },
+      {
+        "problem": "The escalation mechanism was accepted while still undecided ('text or a flagged lead… whatever's cleanest on the backend'); Birdie said it was 'plenty to work with' rather than picking one, so the brief hedges on the single most operationally important handoff detail.",
+        "excerpt": "Priya Chandrasekaran: So I'd say: bot escalates to me via text or a flagged lead that pings my phone — whatever's cleanest on the backend."
+      },
+      {
+        "problem": "Basic firmographics on the fact sheet (6-person company, founded 2019, two 26ft box trucks) were never elicited — Birdie let the owner's buzzword-heavy intro pass without asking company size/age, and never asked truck capacity even while discussing truck constraints.",
+        "excerpt": "Priya Chandrasekaran: Priya Chandrasekaran here! Founder & Chief Vision Officer of Artisan Move Relocation Co. — we're all about curating end-to-end relocation experiences, not just \"moving boxes,\" if that makes sense!"
+      },
+      {
+        "problem": "Interview ran to 38 turns, above the normal band, partly due to low-value single-issue turns and heavy praise-mirroring that could have been bundled (e.g. the language question stood alone and could have been combined with tone/persona or integrations).",
+        "excerpt": "Birdie: Great, 'Artisan Move' it is. Quick one: does the bot need to handle any language besides English, or is English-only fine for your customer base?"
+      },
+      {
+        "problem": "Sycophantic filler openers on nearly every turn ('That insurance and deposit breakdown is gold', 'This is great detail, thank you!') make the interviewer read as flattering rather than professionally neutral, and inflate turn length.",
+        "excerpt": "Birdie: That insurance and deposit breakdown is gold, thank you. Quick one on money mechanics: how do customers actually pay you — cash, card, bank transfer — and is that deposit collection process pretty reliable, or does it sometimes get messy?"
+      }
+    ],
+    "schema_suggestions": [
+      "additional_notes is a dumping ground for distinct, high-value categories. Add dedicated fields: bot_scope (V1 capabilities vs. explicitly deferred phases, e.g. no payment rails), tone_and_persona (voice description + persona name decision and rationale), and lead_capture_fields (name, move date, home size, channel, urgency).",
+      "Add a handoff_delivery field for HOW captured leads reach the team (email digest, shared sheet, SMS to owner) — currently buried in additional_notes and duplicated vaguely in escalation_rules.",
+      "Add an evidence_findings field where each item cites its source document and marks it as document-derived vs. owner-stated, so unverified claims (e.g. 'Core Mobility package $1,000–1,500', the Sunday-closure quote) can't be silently merged into owner-confirmed facts.",
+      "Add a discrepancies_to_confirm field distinct from open_items, for contradictions between evidence and owner statements that still need reconciliation — right now this is smuggled into a services_and_pricing string.",
+      "Add structured business_profile fields (year_founded, headcount, locations, physical assets/capacity such as trucks) — company size, founding year, and truck specs had no home and were simply lost.",
+      "Add a seasonality_and_capacity field: seasonal lead times, peak/off-peak volume, and crew/equipment constraints are currently scattered across conversation_volume, services_and_pricing strings, open_items, and additional_notes.",
+      "Add a service_area field (radius/cities/states, and long-distance coverage) — geography is currently only a clause inside business_description and an FAQ string.",
+      "Give the interviewer a capability to verify that uploaded files actually exist and report their inventory back to the owner; the owner's claim of having uploaded files was accepted at face value, so the brief cannot distinguish real document evidence from asserted evidence."
     ]
   }
 ]
