@@ -115,6 +115,20 @@ Conversation so far:
 Your reply:"""
 
 
+def _ask_retry(question, chat_history, analysis_text, tries=3):
+    """intake.ask with retries: one malformed-JSON turn from the interviewer
+    model shouldn't kill a whole 30-turn interview."""
+    last = None
+    for attempt in range(1, tries + 1):
+        try:
+            return intake.ask(question, chat_history, analysis_text)
+        except Exception as e:
+            last = e
+            print(f"    interviewer turn failed to parse "
+                  f"(attempt {attempt}/{tries}): {type(e).__name__}")
+    raise last
+
+
 def run_interview(persona: Persona) -> dict:
     """Persona vs BotBot. Returns transcript, brief, and completion info."""
     # place the persona's fake export as the only file in uploads/
@@ -142,7 +156,7 @@ def run_interview(persona: Persona) -> dict:
         owner_msg = _blocks(reply.content).strip()
         transcript.append((persona.owner_name, owner_msg))
 
-        turn, raw = intake.ask(owner_msg, chat_history, analysis_text)
+        turn, raw = _ask_retry(owner_msg, chat_history, analysis_text)
         chat_history += [("human", owner_msg), ("ai", raw)]
         transcript.append(("Birdie", turn.next_message))
         final_turn = turn
@@ -151,7 +165,7 @@ def run_interview(persona: Persona) -> dict:
             analysis_obj, _names = intake.analyze_uploads()
             if analysis_obj is not None:
                 analysis_text = intake.analysis_to_prompt_text(analysis_obj)
-            turn, raw = intake.ask(
+            turn, raw = _ask_retry(
                 "(System note: the analysis of the shared materials is now in your "
                 "instructions. React to it: mention 1-2 useful things you learned, "
                 "then ask about the first knowledge gap.)",
@@ -266,8 +280,11 @@ Rewrite the prompt to fix the problems found. STRICT rules:
 - Keep everything that clearly works; keep the existing tone and structure.
 - The result MUST still contain the literal placeholders {{analysis}} and
   {{format_instructions}} exactly once each.
-- Aim to stay near the current size ({cur} characters) unless a genuinely new
-  problem demands space — quality of rules over quantity.
+- HARD LIMIT: the result must be UNDER {cap} characters (current prompt is
+  {cur}). If fixing everything would exceed that, keep only the
+  highest-value rules and cut or merge the rest — an over-limit prompt is
+  rejected outright, and an overlong prompt degrades the interviewer's
+  output format, which is worse than any missing rule.
 - Output ONLY the complete new prompt text. No commentary, no code fences.
 
 === CURRENT PROMPT ===
@@ -281,12 +298,17 @@ Rewrite the prompt to fix the problems found. STRICT rules:
 """
 
 
+MAX_PROMPT_CHARS = 8000   # past ~2x this the interviewer's JSON output degrades
+                          # until every turn fails to parse (seen at 19k chars)
+
+
 def improve_prompt(findings: str, top: str) -> Optional[str]:
     """Rewrite the prompt from this cycle's findings.
     Returns a description of the change, or None if rejected by guardrails."""
     current = PROMPT_FILE.read_text(encoding="utf-8")
     reply = strong_llm.invoke(IMPROVE_PROMPT.format(
-        cur=len(current), prompt=current, findings=findings, top=top))
+        cur=len(current), cap=MAX_PROMPT_CHARS,
+        prompt=current, findings=findings, top=top))
     new = _blocks(reply.content).strip()
     if new.startswith("```"):
         new = new.strip("`").lstrip("text").strip()
@@ -295,6 +317,10 @@ def improve_prompt(findings: str, top: str) -> Optional[str]:
         return None  # would break the template
     if len(new) < 500:
         return None  # gutted, or the model replied with commentary instead of a prompt
+    if len(new) > MAX_PROMPT_CHARS:
+        print(f"    improve rejected: {len(new)} chars exceeds the "
+              f"{MAX_PROMPT_CHARS}-char cap")
+        return None  # bloated prompts break the interviewer's output format
     if new == current.strip():
         return None
     PROMPT_FILE.write_text(new + "\n", encoding="utf-8")

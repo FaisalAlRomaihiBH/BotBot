@@ -207,3 +207,11 @@ def test_crashed_cycle_writes_error_log(sandbox, monkeypatch):
         evolve.run_cycle(1, [], improve=False)
     run_dir = next(d for d in sandbox["runs"].iterdir() if d.name.startswith("cycle_"))
     assert "RuntimeError: boom" in (run_dir / "error.log").read_text()
+
+
+def test_improve_rejects_oversized_prompt(sandbox):
+    sandbox["llm"].improve_reply = ("bloat " * 2000
+                                    + "{analysis} {format_instructions}")
+    before = sandbox["prompt"].read_text(encoding="utf-8")
+    assert evolve.improve_prompt("- f", "- t") is None
+    assert sandbox["prompt"].read_text(encoding="utf-8") == before
