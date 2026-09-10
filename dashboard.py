@@ -108,6 +108,8 @@ def collect() -> dict:
         iv["log"] = (iv["log"] + [line[line.index("]") + 1:].strip()])[-150:]
         if "] turn " in line:
             iv["turn"] = int(line.split("] turn ")[1].split(":")[0].split("/")[0])
+            if " | $" in line:  # live running cost, e.g. "| $0.42 so far"
+                iv["cost"] = "$" + line.split(" | $")[1].split(" [")[0]
             if "[OWNER LEFT]" in line:
                 iv["status"] = "owner left"
         if "] tokens: " in line:

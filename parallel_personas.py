@@ -280,8 +280,10 @@ class ParallelPersonaRunner:
             messages, turn = bot.send(owner_msg)
             for msg in messages:
                 transcript.append(("Bot", msg))
+            running = (usd(bot.model, bot.usage)
+                       + usd(self.persona_model, persona_usage))
             log(f"{tag} turn {turn_no}: owner {len(owner_msg.split())}w"
-                f" -> bot {len(messages[-1].split())}w"
+                f" -> bot {len(messages[-1].split())}w | ${running:.2f} so far"
                 + (" [analyzed files]" if len(messages) > 1 else "")
                 + (" [COMPLETE]" if bot.complete else "")
                 + (" [OWNER LEFT]" if owner_left else ""))
