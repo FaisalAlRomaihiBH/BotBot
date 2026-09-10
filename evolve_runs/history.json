@@ -308,5 +308,64 @@
       "Split open_items into `decisions_needed_from_owner` (e.g. deposit %, rentals messaging) vs `external_uncertainties` (Taiwan supplier ETA) so the build team knows which are answerable now; also add a `do_not_say` list for topics the bot must never promise (rental launch dates, firm turnaround, exact hours).",
       "Add a per-price `confidence/source` attribute so conflicting historical quotes (S$45 vs S$60, S$1,800 vs S$2,000, 30% vs 50%) are recorded as canonical-vs-legacy rather than narrated inside a single string."
     ]
+  },
+  {
+    "cycle": 8,
+    "stamp": "20260910_073544",
+    "persona": "Driving school & LTO license/permit processing assistance / Code-switches constantly and unpredictably between Tagalog and English mid-sentence, sometimes mid-word \u2014 often answering the substance of a question in Tagalog while the English part of her reply is just filler ('yeah so basically...'), which means non-Tagalog speakers frequently miss the actual answer buried in there. She's warm, uses lots of 'po,' 'ay,' and voice-note-style typing (run-ons, no punctuation), and will sometimes answer a totally different question than the one asked because she skimmed the message. She's not trying to be difficult \u2014 this is just how she talks to everyone, customers and family alike.",
+    "score": 6.67,
+    "completed": true,
+    "improved": false,
+    "top_improvement": "Require Birdie to explicitly ask for and confirm the official business name (and full location) at the start \u2014 and forbid inferring/inventing any identity field from the owner's nickname; every brief field must trace to a stated answer or be marked unknown.",
+    "findings": [
+      {
+        "problem": "Birdie never asked for the business's actual name. The brief invents \"Ate Bing's Driving School\" as business_name, whereas the real name is RoadReady Driving Academy \u2014 a fabricated core field the developer will build on.",
+        "excerpt": "Isabela \"Ate Bing\" Santos: Ay hi po! Isabela po ako, pero Ate Bing nalang tawag sakin ng mga tao, yun na po yung driving school ko sa Fairview area, since 2015 na po kami nagstart so ay ang tagal na pala hehe anyway yes po ready na ako mga tanong niyo, go lang po \ud83d\ude0a\nBirdie: Ang galing, Ate Bing! Tagal na pala kayo sa Fairview, since 2015 pa \u2014 solid! Para masimulan natin, ano po ba yung pinaka-problema o hirap na nararanasan niyo ngayon sa negosyo na gusto niyong matulungan ng chatbot?"
+      },
+      {
+        "problem": "Budget answer was misinterpreted: the \"two dealers' quotes\" the owner mentioned are car-dealer quotes for a possible automatic-transmission vehicle, NOT chatbot vendor quotes. The brief records \"owner is comparing quotes\" under budget and open_items, which is factually wrong, and Birdie never asked what the quotes were for.",
+        "excerpt": "Isabela \"Ate Bing\" Santos: Ay tungkol po sa budget hindi ko pa po masyado alam eh kasi hindi ko pa po na-compare properly yung quotes ko dun sa dalawang dealer na nagbigay sakin ng presyo, sandali po pa-check ko muna yun bago ko po masabi sayo eh \ud83d\ude05"
+      },
+      {
+        "problem": "The obvious clue about a pending fleet-expansion decision (adding an automatic-transmission car, two dealer quotes uncompared) was never probed, so this business context \u2014 highly relevant to future course offerings the bot must quote \u2014 is entirely absent from the brief.",
+        "excerpt": "Isabela \"Ate Bing\" Santos: Ay tungkol po sa budget hindi ko pa po masyado alam eh kasi hindi ko pa po na-compare properly yung quotes ko dun sa dalawang dealer na nagbigay sakin ng presyo, sandali po pa-check ko muna yun bago ko po masabi sayo eh \ud83d\ude05"
+      },
+      {
+        "problem": "Birdie never asked whether prices are stable or under review, so the owner's undecided new-year price increase (due to rising gas costs) was never surfaced \u2014 a serious risk for a bot whose main job is quoting prices.",
+        "excerpt": "Isabela \"Ate Bing\" Santos: Ay opo sige po, so meron po kami yung Basic 4-wheel course po yun yung 8 sessions tapos 1hr per session yun po ay 4,500 pesos po, tapos meron din po Refresher course po para sa mga marunong na medyo nakalimutan lang, 4 sessions po yun 2,500 po, tapos meron din po kami Motorcycle course po 6 sessions 3,000 po yun po,"
+      },
+      {
+        "problem": "Birdie hallucinated a fact in the summary (\"kayo mismo ang nagtuturo\") that the owner never said, and never asked about instructors at all \u2014 the two instructors were only recovered because the owner volunteered a correction.",
+        "excerpt": "Birdie: \ud83c\udfeb **Ate Bing's Driving School** \u2014 Fairview area, since 2015. Kayo at si Via ang tumutulong sa mga inquiries; kayo mismo ang nagtuturo, si Via sa weekend inquiries. Open Mon-Sat 6am-6pm, closed Sundays/holidays. 3 Vios pero 2 lang karaniwang gumagalaw."
+      },
+      {
+        "problem": "Screenshots were promised but never delivered, and Birdie wrapped up the interview without ever checking back on them; the brief only says they will be uploaded 'shortly', so no real chat evidence was actually obtained.",
+        "excerpt": "Birdie: Sige po, take your time hanapin niyo lang po yung mga screenshots, sabihin niyo lang po pag ready na. Habang hinahanap niyo, tanong ko lang muna po \u2014 yung mga lessons po, saan talaga po kayo nagmi-meet up sa mga estudyante?"
+      },
+      {
+        "problem": "Fleet transmission type (all 3 Vios are manual) was never asked, though 'manual or automatic?' is a top FAQ for driving schools; the brief lists only '3 Vios cars'.",
+        "excerpt": "Isabela \"Ate Bing\" Santos: Ay ang problema po talaga namin ngayon is yung sasakyan kasi po three Vios lang kami tapos isa nasa shop ngayon kaka-aircon niya kaya two lang po umiikot,"
+      },
+      {
+        "problem": "Location was never pinned down beyond 'Fairview area'; the brief omits Quezon City and the rented ground-floor office detail, so the bot cannot answer 'saan po office niyo?' precisely.",
+        "excerpt": "Isabela \"Ate Bing\" Santos: ay minsan din po sa office namin mismo malapit sa SM Fairview nagsisimula tapos dun na po umaandar yung lesson niya po hehe \ud83d\ude0a"
+      },
+      {
+        "problem": "Abrupt topic jump from budget to calendar integration in one long compound question visibly confused the owner, costing a turn.",
+        "excerpt": "Isabela \"Ate Bing\" Santos: Ay ay sorry po ha na-confuse ako sandali, yung dealer po ba tinatanong niyo o yung calendar \ud83d\ude05 ay calendar pala tama ako mag-basa ulit,"
+      },
+      {
+        "problem": "The brief's open_items redundantly splits the single inconsistently-enforced deposit policy into two near-identical entries, padding the developer handoff.",
+        "excerpt": "Isabela \"Ate Bing\" Santos: ay tapos po yun yung parte na medyo nahihirapan kami kasi po yung policy namin na non-refundable yung deposit kapag cancel within 24 hours bago yung session, minsan hindi po palagi naipatutupad ng mga tauhan ko kasi po nakakaawa sila sa estudyante eh kaya po minsan nawawalan po kami po talaga \ud83d\ude05"
+      }
+    ],
+    "schema_suggestions": [
+      "Add a 'capacity_and_resources' field (vehicles/fleet, transmission type, staff shifts, per-day slot capacity) \u2014 currently the fleet and instructor schedule are crammed into business_description and additional_notes.",
+      "Add a structured 'staff_roster' field (name, role, availability, what they can/can't answer) so facts like 'Via doesn't know current pricing, weekends only' have a proper home instead of additional_notes.",
+      "Add a 'locations_service_areas' field for pickup/meetup points; they are currently duplicated across business_description and faq_answers.",
+      "Add a 'pending_owner_business_decisions' field, separate from chatbot open_items, for things like fleet expansion quotes and possible price increases \u2014 currently there is no home, so a dealer-quote remark got mis-filed as chatbot budget.",
+      "Add an 'evidence_attachments' field with a delivery status flag, plus the capability to re-prompt for and confirm receipt of promised uploads before completing the interview.",
+      "Add separate 'legal_business_name' vs 'known_as/nickname' fields with an explicit 'unverified' flag to prevent fabricated business names."
+    ]
   }
 ]
