@@ -4,12 +4,11 @@
 #   1. PERSONA:   an LLM invents a business owner (industry, personality, facts)
 #                 and writes a fake WhatsApp export into uploads/ for them.
 #   2. INTERVIEW: the persona talks to BotBot (intake.ask) until completion.
-#   3. EVALUATE:  an LLM judge scores the transcript + brief against a fixed rubric.
-#   4. IMPROVE:   an LLM rewrites interviewer_prompt.txt based on the findings.
+#   3. EVALUATE:  an LLM judge reviews the transcript + brief and lists problems.
+#   4. IMPROVE:   an LLM rewrites interviewer_prompt.txt to fix those problems.
 #                 GUARDRAILS: only the prompt file is ever touched; the new prompt
 #                 must keep its template placeholders and stay under a size cap.
-#   5. RATCHET:   every cycle is a git commit. If a cycle's score drops sharply
-#                 below the previous one, the last prompt change is reverted.
+#   Every cycle ends in a git commit, then the next cycle starts with a fresh persona.
 #
 # Usage:  python evolve.py [number_of_cycles]     (default 1)
 import json
@@ -30,13 +29,8 @@ ROOT = Path(__file__).parent
 RUNS_DIR = ROOT / "evolve_runs"
 HISTORY_FILE = RUNS_DIR / "history.json"
 PROMPT_FILE = ROOT / "interviewer_prompt.txt"
-BENCHMARK_FILE = RUNS_DIR / "benchmark_persona.json"  # FIXED persona for fair regression tests
 MAX_TURNS = 30            # hard stop so a cycle can never run away
 MAX_PROMPT_CHARS = 9000   # cap prompt bloat: improver must stay concise
-SCORE_DROP_LIMIT = 1.5    # benchmark-score drop that triggers revert of an improvement
-IMPROVE_EVERY = 3         # improve the prompt once per N cycles, from ACCUMULATED findings:
-                          # recurring problems across different personas earn a rule,
-                          # one persona's quirks do not — fights overfitting AND bloat
 
 llm = intake.llm
 _blocks = intake._blocks_to_text
@@ -226,16 +220,13 @@ def avg_score(ev: Evaluation) -> float:
 
 # ---------------- 4. IMPROVE (guardrailed) ----------------
 IMPROVE_PROMPT = """You maintain the system prompt of "Birdie", an AI interviewer.
-Below is its CURRENT prompt, then QA findings accumulated from SEVERAL test
-interviews with DIFFERENT business owners and personalities.
+Below is its CURRENT prompt, then QA findings from the latest test interview.
 
-Rewrite the prompt. STRICT rules:
-- Address only PATTERNS: problems that appear in MULTIPLE interviews, or that
-  would obviously recur for most businesses. A quirk seen with only ONE owner
-  does NOT deserve its own rule — generalize it or ignore it.
-- Prefer GENERAL principles over specific cases: one rule saying "cover every
-  distinct service line's pricing separately" beats three rules naming tiffin,
-  party trays and catering.
+Rewrite the prompt to fix the problems found. STRICT rules:
+- Prefer GENERAL principles over specific cases: fix the underlying habit, not
+  the one business's quirk. One rule saying "cover every distinct service
+  line's pricing separately" beats three rules naming tiffin, party trays and
+  catering.
 - You are encouraged to MERGE overlapping rules and DELETE rules that are
   redundant, over-specific to one past customer, or already implied by a more
   general rule. A shorter, sharper prompt is a better outcome than a longer one.
@@ -243,27 +234,27 @@ Rewrite the prompt. STRICT rules:
 - The result MUST still contain the literal placeholders {{analysis}} and
   {{format_instructions}} exactly once each.
 - HARD LIMIT: stay under {cap} characters (current: {cur}). Aim to stay at or
-  BELOW the current size unless a genuinely new pattern demands space.
+  BELOW the current size unless a genuinely new problem demands space.
 - Output ONLY the complete new prompt text. No commentary, no code fences.
 
 === CURRENT PROMPT ===
 {prompt}
 
-=== ACCUMULATED QA FINDINGS (grouped by interview) ===
+=== QA FINDINGS ===
 {findings}
 
-=== EACH INTERVIEW'S TOP SUGGESTED IMPROVEMENT ===
+=== TOP SUGGESTED IMPROVEMENT ===
 {top}
 """
 
 
-def improve_prompt(batch_findings: str, batch_tops: str) -> Optional[str]:
-    """Rewrite the prompt from a BATCH of findings across several personas.
+def improve_prompt(findings: str, top: str) -> Optional[str]:
+    """Rewrite the prompt from this cycle's findings.
     Returns a description of the change, or None if rejected by guardrails."""
     current = PROMPT_FILE.read_text(encoding="utf-8")
     reply = llm.invoke(IMPROVE_PROMPT.format(
         cap=MAX_PROMPT_CHARS, cur=len(current), prompt=current,
-        findings=batch_findings, top=batch_tops))
+        findings=findings, top=top))
     new = _blocks(reply.content).strip()
     if new.startswith("```"):
         new = new.strip("`").lstrip("text").strip()
@@ -290,7 +281,7 @@ def load_history() -> list:
     return []
 
 
-def run_cycle(cycle_no: int, history: list) -> dict:
+def run_cycle(cycle_no: int, history: list, improve: bool = True) -> dict:
     stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     run_dir = RUNS_DIR / f"cycle_{stamp}"
     run_dir.mkdir(parents=True)
@@ -320,66 +311,22 @@ def run_cycle(cycle_no: int, history: list) -> dict:
         for s in ev.schema_suggestions:
             print(f"      * {s[:150]}")
 
-    # ---- BATCH improvement: only once per IMPROVE_EVERY cycles ----
-    # Findings pile up across DIFFERENT personas; the improver then sees them all
-    # and is told to fix only RECURRING patterns, not one customer's quirks.
+    # ---- IMPROVE: fix this cycle's problems, then move on to a new persona ----
+    # (skipped in register-only mode: a separate hourly pass applies the fixes)
     improved = None
-    reverted = False
-    commit_before = git("rev-parse", "HEAD")
-    # cycles (incl. this one) since the last improvement attempt
-    since_improve = 0
-    for h in reversed(history):
-        if h.get("improved") or h.get("reverted"):
-            break
-        since_improve += 1
-    batch_ready = (since_improve + 1) >= IMPROVE_EVERY
-
-    if batch_ready:
-        recent = history[-since_improve:] if since_improve else []
-        groups, tops = [], []
-        for h in recent:
-            groups.append(f"[{h['persona']}]\n" + "\n".join(f"- {f}" for f in h.get("findings", [])))
-            tops.append(f"- {h['top_improvement']}")
-        groups.append(f"[{persona.industry} / {persona.personality}]\n"
-                      + "\n".join(f"- {f}" for f in ev.findings))
-        tops.append(f"- {ev.top_improvement}")
-        print(f"    improving prompt from batch of {len(groups)} interviews...")
-        improved = improve_prompt("\n\n".join(groups), "\n".join(tops))
+    if improve:
+        print("    improving prompt from this interview's findings...")
+        improved = improve_prompt("\n".join(f"- {f}" for f in ev.findings),
+                                  ev.top_improvement)
         print(f"    {improved or 'improvement rejected by guardrails / no change'}")
-    else:
-        print(f"    findings stored; improving after {IMPROVE_EVERY - since_improve - 1} more cycle(s).")
-
-    # ---- BENCHMARK regression test: runs after EVERY improvement ----
-    # Same fixed persona each time = fair before/after comparison.
-    benchmark_score = None
-    if not BENCHMARK_FILE.exists():
-        BENCHMARK_FILE.write_text(persona.model_dump_json(indent=2), encoding="utf-8")
-        benchmark_score = score  # this cycle's persona becomes the yardstick
-        print(f"    benchmark persona seeded: {persona.owner_name} (baseline {score}/10)")
-    elif improved:
-        print("    benchmark regression test...")
-        bench = Persona.model_validate_json(BENCHMARK_FILE.read_text(encoding="utf-8"))
-        b_result = run_interview(bench)
-        b_ev = evaluate(bench, b_result)
-        benchmark_score = avg_score(b_ev)
-        prev_bench = next((h["benchmark_score"] for h in reversed(history)
-                           if h.get("benchmark_score") is not None), None)
-        print(f"    benchmark: {benchmark_score}/10 (previous: {prev_bench})")
-        if prev_bench is not None and benchmark_score < prev_bench - SCORE_DROP_LIMIT:
-            print("    BENCHMARK REGRESSION — reverting this improvement.")
-            git("checkout", commit_before, "--", "interviewer_prompt.txt")
-            improved = None
-            reverted = True
 
     entry = {
         "cycle": cycle_no, "stamp": stamp,
         "persona": f"{persona.industry} / {persona.personality}",
         "score": score, "completed": result["completed"],
-        "improved": bool(improved), "reverted": reverted,
-        "commit_before": commit_before,
-        "benchmark_score": benchmark_score,
+        "improved": bool(improved),
         "top_improvement": ev.top_improvement,
-        "findings": ev.findings,          # kept so batch improvement can read them later
+        "findings": ev.findings,
         "schema_suggestions": ev.schema_suggestions,
     }
     history.append(entry)
@@ -389,7 +336,6 @@ def run_cycle(cycle_no: int, history: list) -> dict:
     git("commit", "-m",
         f"evolve cycle {cycle_no}: {persona.industry} score {score}/10"
         + (" [prompt improved]" if improved else "")
-        + (" [REVERTED previous]" if reverted else "")
         + "\n\nCo-Authored-By: Claude Fable 5 <noreply@anthropic.com>")
     print(f"    committed. cycle done.")
     return entry
@@ -416,10 +362,8 @@ if __name__ == "__main__":
 
     print("\n=== history ===")
     for h in history:
-        b = f"  bench={h['benchmark_score']}" if h.get("benchmark_score") is not None else ""
-        print(f"  cycle {h['cycle']}: {h['score']}/10{b}  {h['persona'][:60]}"
-              + ("  [improved]" if h["improved"] else "")
-              + ("  [reverted]" if h.get("reverted") else ""))
+        print(f"  cycle {h['cycle']}: {h['score']}/10  {h['persona'][:60]}"
+              + ("  [improved]" if h["improved"] else ""))
 
     print("\npushing results to GitHub...")
     print(git("push", "origin", "main") or "pushed")

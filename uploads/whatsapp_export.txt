@@ -1,32 +1,37 @@
-[Mon, Feb 3, 9:12 AM] Ritu S: Hi Priya! Wanted to sign up for the monthly tiffin, veg only. What's the cost?
-[Mon, Feb 3, 9:20 AM] Priya Nair: Hii! It's around $300 a month, maybe a bit more if you want extra roti or dessert added
-[Mon, Feb 3, 9:21 AM] Ritu S: Okay roughly how much more?
-[Mon, Feb 3, 9:25 AM] Priya Nair: hmm hard to say exactly, maybe $20-30 extra? depends what all you want
-[Mon, Feb 3, 9:26 AM] Ritu S: got it, I'll start with the basic one then
-[Tue, Feb 4, 6:45 PM] Arjun K: Hi do you cater for birthday parties? We're expecting maybe 40 people
-[Tue, Feb 4, 7:02 PM] Priya Nair: Yes we can do that! For 40 people it would be somewhere in that range of $600-700 probably
-[Tue, Feb 4, 7:03 PM] Arjun K: Can you give me a firmer number so I can plan budget
-[Tue, Feb 4, 7:10 PM] Priya Nair: I'll need to sit and think about the menu properly, let me get back to you
-[Fri, Feb 7, 11:30 AM] Arjun K: Hey just following up on the birthday catering quote
-[Fri, Feb 7, 8:15 PM] Priya Nair: yes yes sorry, been so busy this week! let me check tonight and message you
-[Wed, Feb 12, 3:00 PM] Arjun K: hi Priya, still need to finalize this, event is in 2 weeks
-[Thu, Feb 13, 6:00 PM] Neha P: Hi, do you deliver to Union City? How much extra is that?
-[Thu, Feb 13, 6:20 PM] Priya Nair: yes we deliver there, it's a bit further so maybe $8-10 extra, not 100% sure exact amount honestly
-[Thu, Feb 13, 6:21 PM] Neha P: no worries, that's fine!
-[Mon, Feb 17, 10:05 AM] Priya Nair: Hi Arjun! So sorry for delay, for 40 people I think we can do $650, that should cover 3 curries, rice, roti, dessert
-[Mon, Feb 17, 10:10 AM] Arjun K: Perfect, locking that in. Can I pay half now half later?
-[Mon, Feb 17, 10:15 AM] Priya Nair: sure that's fine, whatever works
-[Sat, Feb 22, 1:00 PM] Sonal T: Hi! Interested in weekly tiffin just for lunch, not dinner. Is that cheaper?
-[Sat, Feb 22, 1:45 PM] Priya Nair: yes a little cheaper, I think around $150-180 a month? let me think about it properly and confirm
-[Sat, Feb 22, 1:46 PM] Sonal T: ok sounds good, let me know when you're sure
-[Wed, Feb 26, 8:00 AM] Priya Nair: Hi Sonal, sorry been thinking, I'll say $170 a month for lunch only, that work?
-[Wed, Feb 26, 8:10 AM] Sonal T: yes that works, starting when?
-[Wed, Feb 26, 8:15 AM] Priya Nair: whenever you like! maybe start Monday
-[Thu, Mar 6, 4:30 PM] Deepa M: Hi do you have space for one more office lunch client? We're a team of 12
-[Thu, Mar 6, 5:00 PM] Priya Nair: I think so! Anjali helps me on weekends but weekday deliveries getting a lot lately, let me check my schedule and see if I can fit
-[Thu, Mar 6, 5:01 PM] Priya Nair: will message you in a day or two
-[Tue, Mar 11, 2:15 PM] Deepa M: hi following up, were you able to check?
-[Fri, Mar 14, 9:00 PM] Rakesh V: Hey, do you do vegan options for events? Pricing same as regular?
-[Fri, Mar 14, 9:30 PM] Priya Nair: yes vegan is possible! pricing is close to regular I think, maybe slightly more depending on ingredients, hard to say exact number right now
-[Fri, Mar 14, 9:31 PM] Rakesh V: roughly how much more though, like $5 a head or $20?
-[Fri, Mar 14, 9:40 PM] Priya Nair: probably closer to the smaller end but let me actually calculate before I promise anything
+[14/03, 9:12am] Sandra Whitlock: Hi, is this Fenn & Son locksmiths? Need a quote for a lock change on my front door
+[14/03, 2:47pm] Derek Fenn: who's this
+[14/03, 2:48pm] Sandra Whitlock: Sandra, I got your number off a flyer. Need a euro cylinder lock changed
+[14/03, 2:51pm] Derek Fenn: Best to ring the shop love. Number's on the flyer
+[14/03, 2:52pm] Sandra Whitlock: I'd rather just message if that's ok, easier for me to check later. Roughly how much?
+[14/03, 6:30pm] Derek Fenn: Depends on the lock. From 45 fitted
+[15/03, 8:05am] Sandra Whitlock: Great, can you come tomorrow around 10?
+[15/03, 11:40am] Derek Fenn: Should manage it. Callum will ring you to confirm
+[16/03, 9:15am] Sandra Whitlock: Hi, nobody's called yet, are we still on for today?
+[16/03, 9:16am] Sandra Whitlock: ?
+[16/03, 4:02pm] Derek Fenn: Sorry got tied up on a job. Tomorrow better?
+[16/03, 4:10pm] Sandra Whitlock: Ok, tomorrow morning?
+[17/03, 8:45am] Derek Fenn: On my way
+[02/04, 6:58pm] Mo Iqbal: Locked out, front door, can you come now
+[02/04, 7:01pm] Derek Fenn: where
+[02/04, 7:02pm] Mo Iqbal: 14 Bramley Court, off the ring road
+[02/04, 7:03pm] Derek Fenn: 20 mins. Cash on you? £65 callout plus labour
+[02/04, 7:04pm] Mo Iqbal: Yeah that's fine
+[02/04, 7:41pm] Mo Iqbal: You still coming? Been 40 mins
+[02/04, 8:15pm] Derek Fenn: On way now, sorry, traffic
+[19/04, 1:20pm] Priya N: Hi do you repair kettles? Mine's not heating up
+[19/04, 5:00pm] Derek Fenn: Bring it in. £15 to look at it
+[19/04, 5:02pm] Priya N: And if it needs a part?
+[19/04, 5:45pm] Derek Fenn: Depends what's wrong with it doesn't it
+[19/04, 5:46pm] Priya N: Fair enough, roughly what's the most it'd cost?
+[19/04, 6:10pm] Derek Fenn: Can't say till I see it. Bring it Mon
+[03/05, 10:02am] Callum (Fenn & Son): hi this is Callum, Derek's asked me to text you back about the safe opening quote, he's just finishing a job
+[03/05, 10:03am] Callum (Fenn & Son): he says he'll call you later today
+[03/05, 4:30pm] Gareth Locke: Any update? Been waiting since Tuesday
+[06/05, 11:20am] Gareth Locke: Hello?
+[09/05, 9:00am] Gareth Locke: I've gone with another company, thanks anyway
+[22/05, 3:14pm] Nina Chaudhry: Hi! Do you do online payments or is it cash only?
+[22/05, 3:50pm] Derek Fenn: Cash preferred. Card machine plays up sometimes
+[22/05, 3:51pm] Nina Chaudhry: No worries, can I book a call-out for Thursday evening?
+[22/05, 6:00pm] Derek Fenn: Ring the shop tomorrow, easier to sort a time on the phone
+[22/05, 6:02pm] Nina Chaudhry: Ok, what time do you open?
+[22/05, 8:30pm] Derek Fenn: 8:30
