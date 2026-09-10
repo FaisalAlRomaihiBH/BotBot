@@ -119,6 +119,13 @@ that gathers chatbot requirements from business owners. Judge THIS interview.
 The persona's private fact sheet (what the owner knew and could have shared):
 {facts}
 
+The materials the owner "uploaded" (the interviewer analyzed these; facts in
+the brief may legitimately come from here, not only from the transcript):
+{materials}
+
+The interviewer's analysis of those materials:
+{analysis}
+
 The transcript:
 {transcript}
 
@@ -213,7 +220,10 @@ class ParallelPersonaRunner:
         parser = PydanticOutputParser(pydantic_object=Evaluation)
         convo = "\n".join(f"{who}: {msg}" for who, msg in result["transcript"])
         reply = self.judge_llm.invoke(EVAL_PROMPT.format(
-            facts=persona.background_facts, transcript=convo,
+            facts=persona.background_facts,
+            materials=persona.whatsapp_export,
+            analysis=json.dumps(result.get("analysis"), indent=2, ensure_ascii=False),
+            transcript=convo,
             brief=json.dumps(result["brief"], indent=2, ensure_ascii=False),
             completed=result["completed"], turns=result["turns"],
             format_instructions=parser.get_format_instructions()))
