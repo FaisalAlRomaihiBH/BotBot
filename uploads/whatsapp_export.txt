@@ -1,29 +1,45 @@
-[Mon, Apr 1, 9:12 AM] Jordan T.: Hi! Looking to get a quote for a 2-bedroom apartment move across town
-[Mon, Apr 1, 9:47 AM] Priya - Artisan Move: Hi Jordan! Thank you for reaching out — we'd love to co-create a relocation experience that's tailored to your unique footprint. Can you share a bit about your move-readiness timeline?
-[Mon, Apr 1, 9:49 AM] Jordan T.: Uh, I just need to know roughly how much and if you're free May 10th
-[Mon, Apr 1, 10:15 AM] Priya - Artisan Move: Totally hear you! For a 2BR, we typically right-size clients into our Core Mobility package, which starts in the $1,000-1,500 investment range depending on inventory density. May is peak season so let's circle back on exact availability once I loop in Ashley!
-[Mon, Apr 1, 10:16 AM] Jordan T.: So is May 10 available or not?
-[Mon, Apr 1, 10:41 AM] Priya - Artisan Move: Great question — I want to give you a response that truly reflects our capacity bandwidth. Let me take that offline and get back to you 🙌
-[Tue, Apr 2, 3:00 PM] Jordan T.: Any update?
-[Thu, Apr 4, 11:20 AM] Priya - Artisan Move: Still synergizing the crew calendar on our end, appreciate your patience as we finalize!
-[Mon, Apr 8, 2:03 PM] Devon R.: Hey, do you guys move pianos?
-[Mon, Apr 8, 2:30 PM] Priya - Artisan Move: We generally don't onboard piano-category items into our service model — too much specialized handling risk for our current operational scope!
-[Mon, Apr 8, 2:31 PM] Devon R.: Ok so that's a no?
-[Mon, Apr 8, 2:33 PM] Priya - Artisan Move: Correct, that's a no on pianos at this time 😊
-[Wed, Apr 10, 6:45 PM] Devon R.: Cool, and what about a small office move, like 8 desks?
-[Wed, Apr 10, 7:12 PM] Priya - Artisan Move: Love that! Our commercial vertical is all about minimizing downtime disruption for your team — we'd start that conversation at a $3,000 baseline investment and build out the scope from there together.
-[Wed, Apr 10, 7:13 PM] Devon R.: Got it, that's helpful actually thanks
-[Fri, Apr 12, 8:05 AM] Marisol P.: What are your hours on Saturday?
-[Fri, Apr 12, 8:22 AM] Priya - Artisan Move: We keep our doors open for client engagement 8am-6pm Saturdays!
-[Fri, Apr 12, 8:23 AM] Marisol P.: Perfect, and Sundays?
-[Fri, Apr 12, 8:24 AM] Priya - Artisan Move: Sundays are reserved for internal team recalibration and rest 🙏
-[Fri, Apr 12, 8:24 AM] Marisol P.: So closed, got it
-[Sat, Apr 20, 1:00 PM] Jordan T.: It's been almost 3 weeks, can someone just tell me if you can do May 10
-[Sat, Apr 20, 4:45 PM] Priya - Artisan Move: Jordan! Appreciate you holding space for us on this. Quick gut-check — one of our trucks is undergoing some maintenance optimization, so I want to make sure whatever I commit to is a promise we can truly deliver on, not just words!
-[Sat, Apr 20, 4:46 PM] Jordan T.: So is that a yes or a no
-[Sat, Apr 20, 4:52 PM] Priya - Artisan Move: I'm going to say tentative yes with high confidence, let's lock that value proposition in early next week once I sync with the team!
-[Mon, Apr 22, 10:00 AM] Devon R.: Following up — did you get me a formal quote for the 8-desk office move?
-[Wed, Apr 24, 5:15 PM] Priya - Artisan Move: Apologies for the lag, been deep in Q2 strategy mode! Sending that quote your way very soon, appreciate your grace here 🙏
-[Thu, May 2, 11:00 AM] New Customer - Wei L.: What's the deposit to book a local move?
-[Thu, May 2, 11:20 AM] Priya - Artisan Move: We ask for a 30% good-faith investment upfront to secure your slot in our fulfillment pipeline — fully refundable if plans shift outside the 72-hour window!
-[Thu, May 2, 11:21 AM] New Customer - Wei L.: Great, that's clear, thank you!
+[08/03, 9:14am] Ngozi Customer: Good morning, do you do full car wraps? How much for a Camry?
+[08/03, 9:20am] Tunde TB Shine: Good morning oga! Yes we do am, na our specialty. How much you dey budget for the job?
+[08/03, 9:22am] Ngozi Customer: I don't know, that's why I'm asking you 😅
+[08/03, 9:31am] Tunde TB Shine: Ok no wahala. Full wrap for Camry normally go from 550k, but depending on color and finish (matte, gloss, chrome) e fit change small. You wan matte or gloss?
+[08/03, 9:40am] Ngozi Customer: Matte black
+[08/03, 9:52am] Tunde TB Shine: Ah nice choice! For matte black quality vinyl I fit do 500k for you sharp sharp since na cash. E include full body, no mirrors extra.
+[08/03, 10:03am] Ngozi Customer: Earlier you said 550k?
+[08/03, 10:10am] Tunde TB Shine: That's if pay in installment oga, cash price different now 😄 500k final for you.
+
+[10/03, 2:15pm] Femi K: Hi, can I get a quote for ceramic coating on a Lexus RX 350?
+[10/03, 2:40pm] Tunde TB Shine: Yes sir. Ceramic on RX350 normally 220k-250k depending on how paint dey. You wan bring am for us check first?
+[10/03, 2:42pm] Femi K: Can't you just give me a fixed price?
+[10/03, 2:50pm] Tunde TB Shine: I fit do 200k for you if you ready commit today, deposit 100k. Wetin you dey think?
+[10/03, 3:01pm] Femi K: Let me think about it and get back to you
+[10/03, 3:02pm] Tunde TB Shine: No wahala boss, price still dey valid this week only o!
+
+[12/03, 11:05am] Aisha B: Hello, what are your operating hours on Sundays?
+[12/03, 11:47am] Tunde TB Shine: We no dey officially open Sunday but if the job serious we fit arrange, small extra go apply for weekend. Wetin you need?
+[12/03, 11:50am] Aisha B: Just a basic wash and vacuum for my Corolla
+[12/03, 12:10pm] Tunde TB Shine: Ah basic wash Sunday na 15k because of weekend rate
+[12/03, 12:11pm] Aisha B: Your rate card online says 8-12k for basic wash
+[12/03, 12:20pm] Tunde TB Shine: That one na weekday price na, but ok since na you, 10k make we do am 10am Sunday
+[12/03, 12:21pm] Aisha B: Deal, see you then
+
+[15/03, 4:00pm] Ngozi Customer: Hi, following up — when can you fit me in for the matte black wrap?
+[15/03, 4:35pm] Tunde TB Shine: Let me check with my guy at the garage and confirm date for you
+[16/03, —] 
+[18/03, 9:12am] Ngozi Customer: Any update?
+[18/03, 9:15am] Tunde TB Shine: Yes yes still checking, vinyl supplier dey change delivery date, I go update you
+[21/03, 5:47pm] Ngozi Customer: Hello? It's been almost a week
+
+[17/03, 1:20pm] Chuka O: Do you guys do chrome delete on bikes/motorcycles?
+[17/03, 1:50pm] Tunde TB Shine: We never try am on bike before but I sure we fit manage am, how much you go pay for the job? Make we work something out
+[17/03, 1:52pm] Chuka O: I was hoping you'd tell me the price lol
+[17/03, 2:10pm] Tunde TB Shine: Haha ok let me find out from my guy Chidi wetin he go charge, I go text you
+
+[20/03, 10:00am] Femi K: I've decided to go ahead with the ceramic coating, 200k as discussed
+[20/03, 10:30am] Tunde TB Shine: Ah oga price don change small o, product wey we dey use don cost more for market. Na 220k now, but make I still try do 210 for you since you don wait
+[20/03, 10:32am] Femi K: This is getting ridiculous, you quoted 200k ten days ago
+[20/03, 10:40am] Tunde TB Shine: I understand your point sir, make we settle for 205k, that na my last last
+[20/03, 10:45am] Femi K: Fine. 205k. When can I bring the car?
+[20/03, 11:02am] Tunde TB Shine: Bring am Friday morning, we go start by 9am
+
+[22/03, 3:30pm] Chuka O: Any word on the motorcycle chrome delete price?
+[22/03, 3:31pm] Tunde TB Shine: 👍
