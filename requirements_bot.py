@@ -144,8 +144,9 @@ class RequirementsBot:
                  uploads_dir: Path = ROOT / "uploads"):
         # Explicit max_tokens: the interviewer re-emits the FULL form as JSON
         # every turn, so replies grow throughout the interview and must never
-        # be truncated.
-        self.llm = ChatAnthropic(model=model, max_tokens=8000)
+        # be truncated. 8000 proved too small once a talkative owner filled
+        # the richer form (truncated JSON -> parse failure on every retry).
+        self.llm = ChatAnthropic(model=model, max_tokens=16000)
         self.uploads_dir = uploads_dir
         self.analyzer = MaterialsAnalyzer(self.llm, uploads_dir)
         self.parser = PydanticOutputParser(pydantic_object=InterviewTurn)
