@@ -1,38 +1,37 @@
-[12/03/2024, 09:14] Sandra Miles: Hi, my fridge isn't cooling properly, can you help?
-[12/03/2024, 09:20] Dariusz Kowalczyk: yes
-[12/03/2024, 09:21] Sandra Miles: Great, how much roughly?
-[12/03/2024, 09:25] Dariusz Kowalczyk: depends
-[12/03/2024, 09:26] Sandra Miles: On what?
-[12/03/2024, 09:40] Dariusz Kowalczyk: part
-[12/03/2024, 09:41] Sandra Miles: Ok, can you give me a range?
-[12/03/2024, 09:52] Dariusz Kowalczyk: 50-90
-[12/03/2024, 09:53] Sandra Miles: When could you come?
-[12/03/2024, 09:58] Dariusz Kowalczyk: thursday
-[12/03/2024, 09:59] Sandra Miles: Morning or afternoon?
-[12/03/2024, 10:15] Dariusz Kowalczyk: morning
-[12/03/2024, 10:16] Sandra Miles: What time exactly?
-[12/03/2024, 10:20] Dariusz Kowalczyk: morning
-[13/03/2024, 14:02] James Petrov: Hi Dariusz, do you fix dishwashers too? Bosch brand
-[13/03/2024, 15:47] Dariusz Kowalczyk: yes
-[13/03/2024, 15:48] James Petrov: How long for parts if needed?
-[13/03/2024, 16:03] Dariusz Kowalczyk: 2-4 days usually
-[13/03/2024, 16:04] James Petrov: And if it's an older model?
-[13/03/2024, 16:10] Dariusz Kowalczyk: let me check
-[15/03/2024, 11:00] James Petrov: Hi, any update on the older Bosch part availability?
-[17/03/2024, 08:30] James Petrov: Hello?
-[19/03/2024, 19:22] Dariusz Kowalczyk: washing machine also broken?
-[19/03/2024, 19:30] James Petrov: No I asked about my dishwasher part
-[19/03/2024, 19:45] Dariusz Kowalczyk: ok
-[02/04/2024, 10:12] Priya Anand: Hi, do you cover Dunstable? That's about 12 miles from Luton
-[02/04/2024, 10:30] Dariusz Kowalczyk: yes
-[02/04/2024, 10:31] Priya Anand: Great, and is there a call-out charge?
-[02/04/2024, 10:40] Dariusz Kowalczyk: 25
-[02/04/2024, 10:41] Priya Anand: Is that waived if you do the repair?
-[02/04/2024, 10:55] Dariusz Kowalczyk: yes
-[02/04/2024, 10:56] Priya Anand: Perfect, and what's the warranty on labour after?
-[02/04/2024, 11:10] Dariusz Kowalczyk: 3 months
-[10/04/2024, 09:00] Priya Anand: Hi, just checking in, my washing machine broke again after the repair last month, thought it was 6 months warranty?
-[10/04/2024, 09:45] Dariusz Kowalczyk: hmm
-[10/04/2024, 09:46] Priya Anand: So is it 3 or 6 months?
-[10/04/2024, 14:20] Dariusz Kowalczyk: I check book
-[14/04/2024, 08:10] Priya Anand: Hi, any update?
+[Mon, Apr 7, 9:14am] Karen T: Hi! Do you have space for a full groom for my golden retriever this Thursday?
+[Mon, Apr 7, 11:02am] Sandy: oh my gosh Thursday, funny you ask, Theresa's actually off this week, her sister's getting married in Barrie, huge to-do apparently, anyway lol did I tell you Biscuit slipped on the ice last week? he's fine but I had to carry him up the porch steps, 34lbs of dead weight lol
+[Mon, Apr 7, 11:03am] Sandy: anyway yes I think Thursday works, what time were you thinking
+[Mon, Apr 7, 11:15am] Karen T: Maybe 10am? And how much for a golden?
+[Mon, Apr 7, 11:41am] Sandy: 10 should be fine, how big is he, goldens are usually the 20-40 range so 85 but honestly depends on the coat, some of these goldens have SO much undercoat, we might wanna do the deshed too which is another 20, worth it honestly the fur just does not stop otherwise, my sister has one and I swear her whole house is just fur tumbleweeds lol
+[Mon, Apr 7, 11:42am] Karen T: Haha ok let's just do the regular groom for now, 10am Thursday, thank you!
+[Mon, Apr 7, 11:58am] Sandy: perfect see you then!! oh wait actually is it this Thursday or next, hang on let me check the book
+[Tue, Apr 8, 3:20pm] Sandy: ok found the book lol it was under a bag of dog food, you're good for Thursday the 10th at 10am :)
+
+[Tue, Apr 8, 9:05am] Marco P: Hi do you do boarding for cats? Going away next weekend
+[Tue, Apr 8, 10:47am] Sandy: omg cats, so funny you ask, I've been going back and forth on whether to even do cat GROOMING let alone boarding, Theresa thinks I should, I keep saying maybe next year lol, honestly cats scare me a little, we had one hiss and scratch clean through Josh's hoodie last summer
+[Tue, Apr 8, 10:48am] Sandy: but boarding hmm, I don't think I have a proper setup, it's mostly a dog space here, let me think on it
+[Tue, Apr 8, 10:48am] Marco P: No worries, just let me know if you figure it out?
+[Tue, Apr 8, 4:12pm] Sandy: will do!!
+
+[Wed, Apr 9, 8:30am] Karen T: Quick q, is it still ok if I drop off a bit early Thursday, maybe 9:45? Need to get to work by 10:15
+[Wed, Apr 9, 2:47pm] Sandy: oh totally fine, actually you know what Thursday reminds me, Biscuit has his vet checkup that morning too, funny how it all lines up, anyway we'll be here!
+
+[Thu, Apr 10, 9:52am] Karen T: Here now with Buddy!
+[Thu, Apr 10, 9:53am] Sandy: omw from the house, be there in 2!
+
+[Fri, Apr 11, 1:15pm] Deb R: Hi, wondering about pricing for a Great Dane, full groom + nails
+[Fri, Apr 11, 3:40pm] Sandy: oh boy Great Danes, we did one last year, gorgeous dog, sweet as anything but the size of a small horse honestly, took forever just to get her in the tub, I think we charged around 110 that time but it might've been 100, or was that the mastiff, I get those two mixed up lol, let me look and get back to you
+[Fri, Apr 11, 3:41pm] Deb R: No worries, whenever works
+[Mon, Apr 14, 5:30pm] Deb R: Hi just following up on the Great Dane pricing when you get a chance :)
+
+[Sat, Apr 12, 10:02am] Priya S: Hi! What are your hours on long weekends, is Easter Monday open?
+[Sat, Apr 12, 4:55pm] Sandy: oh good question, honestly I never remember to update that darn sign, hang on let me check with Theresa she keeps track of that stuff better than me
+
+[Sun, Apr 13, 7:40pm] Josh (staff, group chat): hey Sandy the punch cards are almost out of stock, only 2 left in the drawer
+[Mon, Apr 14, 8:10am] Sandy: oh no really, ok I'll order more, remind me tomorrow though I gotta take Biscuit to the vet first thing
+
+[Tue, Apr 15, 11:20am] Karen T: Buddy looked amazing, thank you!! Same time in 6 weeks?
+[Tue, Apr 15, 11:52am] Sandy: aw he was such a good boy, honestly one of the easiest goldens we've had, some of them squirm the whole time, anyway yes 6 weeks sounds good, I'll pencil it in, oh actually you know what maybe do 5 weeks instead, goldens really pack on the undercoat fast, up to you though!
+
+[Wed, Apr 16, 9:00am] Marco P: Hey, any update on the cat boarding thing?
+[Wed, Apr 16, 9:44am] Sandy: oh! sorry, it's been a week, Biscuit's been having a rough time with his hips honestly, vet's got him on new meds, anyway I haven't fully decided, leaning towards no for now but ask me again in like a month lol

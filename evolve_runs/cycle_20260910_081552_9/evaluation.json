@@ -1,0 +1,61 @@
+{
+  "fact_capture": 6,
+  "no_repeats": 7,
+  "evidence_use": 7,
+  "naturalness": 7,
+  "completeness": 5,
+  "efficiency": 4,
+  "findings": [
+    {
+      "problem": "The 50% deposit policy for grooming appointments over $80 (exists on paper, rarely collected) was never elicited and is completely absent from the brief. Birdie touched payment only to dismiss payment processing and never asked whether any deposit/prepayment is required — a core booking-flow rule the bot would need.",
+      "excerpt": "Birdie: Perfect, that's settled then — simple bot, no payment processing. When the bot takes down a booking request, who should it send that to — should it always go to you, or to Theresa on the days she's in (Wed-Fri)? And what's the best number for that?\nSandy Kowalczyk: Oh good question, hon. I'd say just send it to both of us if you can swing that, or if not, send it to me but CC Theresa on her days, Wednesday Thursday Friday, 'cause honestly she'll see it before I do most days, I might be out with Biscuit or elbow deep in some dog's ear."
+    },
+    {
+      "problem": "Birdie fabricated a channel (WhatsApp) in the readback that Sandy never mentioned. Only caught because the owner happened to notice; an unverified invention in a requirements brief is a serious integrity failure.",
+      "excerpt": "Birdie: **Channels:** phone, text, walk-ins, Facebook Messenger, WhatsApp. English only."
+    },
+    {
+      "problem": "Birdie also invented a staff responsibility — that Theresa 'tracks holiday info' — when the fact sheet and transcript say nobody tracks holidays at all. A second fabrication in the same summary.",
+      "excerpt": "Birdie: **Business:** Furball Farmhouse Grooming and Daycare, run out of a converted barn behind your house. Team: you (grooming, phone, bookings), Theresa (grooming Wed-Fri, checks Facebook, tracks holiday info), Josh (weekend daycare supervision, helps with tech). Gary handles budget decisions."
+    },
+    {
+      "problem": "Sandy explicitly flagged she was unsure of her own phone number's last digits, but Birdie confirmed it back as fact and the brief records 705-555-0192 as verified escalation contact with no 'needs confirming' flag.",
+      "excerpt": "Sandy Kowalczyk: My cell's the best bet, it's 705-555-0192 — oh wait, no, hang on, is that right, I always mix up the last two numbers, Gary's the one who remembers stuff like that. Yeah, 705-555-0192, that's me."
+    },
+    {
+      "problem": "Sandy's daily ~2pm absence to walk Biscuit (a key reason messages go unanswered, and a predictable daily coverage gap) was volunteered twice but never captured in the brief's problem_to_solve or notes; only 'poor cell reception' made it in.",
+      "excerpt": "Sandy Kowalczyk: Speaking of walks, that reminds me, I gotta duck out here around 2 for Biscuit, he's my old fella, hip troubles, needs his slow little walk around then or he gets awful stiff, poor guy."
+    },
+    {
+      "problem": "Basic business context was never asked: years in operation (6 years) and the rural small-town location/service area. Brief's business_description has no location or tenure, and target_audience is null.",
+      "excerpt": "Birdie: Hi Sandy! Great to meet you — Furball Farmhouse sounds like such a sweet setup. I'm here to get a clear picture of your business so we can build you a chatbot that actually helps. Let's start simple: what all do you offer at Furball Farmhouse — grooming, daycare, anything else?"
+    },
+    {
+      "problem": "No success criteria were ever discussed (what 'working' looks like — e.g. fewer missed messages, no lost bookings), leaving success_criteria null despite Sandy naming two clear goals that could easily have been turned into measures.",
+      "excerpt": "Birdie: Love the homey vibe, and 'Furbot' is pretty cute, ha — Gary's not wrong! Before I pull together everything for you to double check, is there anything else on your mind about pricing or the business that we haven't covered yet?"
+    },
+    {
+      "problem": "Very low information density per turn: service duration, price, and size-variation were split across separate single-fact questions, inflating the interview to 52 entries (vs ~20-30 normal) with a highly talkative respondent.",
+      "excerpt": "Birdie: Ha, poor Theresa! Okay — roughly how long does that quick bath and nail trim take?\nSandy Kowalczyk: Oh gosh, um, quick one usually, twenty minutes maybe, half hour if they're squirmy about the nails, some dogs just hate that clipper sound, I don't blame 'em honestly, my knee surgery last year they had this little buzzy tool for something and I about jumped outta the chair."
+    },
+    {
+      "problem": "Partial re-ask: Sandy already stated in her second turn that they don't do cats and have been 'thinking about it' for a year; Birdie re-opened the same topic much later (usefully framed via the uploads, but the year-long indecision was already on record and could have been pinned down at the time).",
+      "excerpt": "Sandy Kowalczyk: Cats — no, we don't do cats, I keep saying I'm gonna start but I just... haven't. Been saying that for over a year now if I'm honest with you. Anyway! That's us in a nutshell I think. Did I miss anything, hon?"
+    },
+    {
+      "problem": "Brief overstates a policy Sandy hedged on: she said add-ons are normally with a groom and 'I guess we could do it if someone really wanted', which the brief hardened into a standing standalone option the bot could offer.",
+      "excerpt": "Sandy Kowalczyk: Oh those, yeah, flea and tick is $15, and de-shedding's $20, and they're add-ons, hon, so they go along with a grooming visit, folks don't usually just come in for only that, though I guess we could do it if someone really wanted, we're not gonna turn away money, ha."
+    }
+  ],
+  "top_improvement": "Forbid the summary/brief from containing anything not literally stated by the owner: instruct Birdie to build the readback strictly from quoted owner statements, mark any item it is inferring as '(my assumption — correct me)', and mark owner-hedged items (like the phone number she doubted) as unverified. The WhatsApp and 'Theresa tracks holidays' inventions show that without this constraint the brief silently gains false requirements.",
+  "schema_suggestions": [
+    "Add a `payment_and_deposits` field (accepted methods, deposit/prepayment rules, thresholds, enforcement reality) — payment facts are currently buried inside free-text business_policies and the deposit rule was never even probed because no field prompts for it.",
+    "Add a structured `hours` field (per-day open/close, closed days, holiday handling) instead of stuffing operating hours into a business_policies string.",
+    "Add a `staff_roles` field (name, role, days/hours available, best contact) — staff availability is currently crammed into business_description prose, and Sandy's daily ~2pm unavailability had nowhere to live.",
+    "Add a `capacity_constraints` field (boarding max, daycare max, soft vs hard limits) — these were dumped into open_items even though they are settled operational facts, not open questions.",
+    "Add a `bot_persona` field (name candidates, tone, voice) — the bot name/tone landed in open_items and additional_notes rather than a proper design field.",
+    "Add a `facts_needing_verification` list with source/confidence flags, so owner-hedged values (phone number, giant-breed price range) are structurally distinguished from confirmed ones.",
+    "Add an `evidence_reviewed` field capturing uploaded artifacts and what each one substantiated; the Marco/cat-boarding finding is currently a stray line in additional_notes with no link to the decision it drove.",
+    "Add `business_profile` sub-fields for location/service area and years in operation — nothing in the schema prompts for them, so both were skipped entirely."
+  ]
+}

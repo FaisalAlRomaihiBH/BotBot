@@ -1,62 +1,6 @@
 [
   {
     "cycle": 1,
-    "stamp": "20260910_075729",
-    "persona": "Mobile pet grooming services / Gary rambles constantly and goes off on tangents — he'll start answering a simple question and end up telling you about his footy team, his knee replacement, or a dog he groomed in 2019 named Baxter. He does eventually circle back to answer, but you have to wade through a lot of unrelated chat. He's friendly and well-meaning, just easily distracted.",
-    "score": 7.67,
-    "completed": true,
-    "improved": true,
-    "reverted": false,
-    "commit_before": "075a29b2c78cd02a81bd3d32d3c57a0bde8bff62",
-    "top_improvement": "Add a dedicated question (or checklist pass) explicitly covering booking/payment mechanics — e.g., 'Do you take deposits or require any payment before confirming a booking, and how is that currently handled?' — and a scoping question like 'Are you picturing a full booking/payment app, or something simpler like automated replies and calendar sync?' before wrapping up, since these are foundational to what the chatbot must actually do and were both silently skipped despite being known Gary uncertainties.",
-    "improve_done": true
-  },
-  {
-    "cycle": 2,
-    "stamp": "20260910_080956",
-    "persona": "Home-based catering and daily tiffin service / Chronically vague about numbers — Priya almost never gives a firm price, headcount, or time. She answers with ranges, 'depends,' 'roughly,' or 'let me think about it' and often contradicts her own earlier estimate. She's warm and eager to help, but customers have to push hard to pin down anything concrete, and even then she'll hedge at the last second.",
-    "score": 6.17,
-    "completed": true,
-    "improved": true,
-    "reverted": false,
-    "commit_before": "78389dd18f6ee148bf909907d6ff64e55ecb6f65",
-    "top_improvement": "Systematically walk through EVERY service tier mentioned in the business (tiffin, party trays, full event catering, delivery) with an explicit price-range question for each, instead of asking broadly about 'tiffin pricing and delivery areas' and letting bigger-ticket items (event catering) fall through entirely.",
-    "schema_suggestions": [
-      "Add a dedicated 'business_background' or 'business_context' field (location, licensing/permit status, years in operation, how the business has grown) — currently business_description is null with no mechanism forcing Birdie to ask basic background questions.",
-      "Add an explicit 'hours_of_operation' field to the schema — there is currently no slot for this at all, which is why it was never asked despite being fundamental to a customer-facing bot.",
-      "Add a 'staff_or_team' field to capture who does what (owner-operated vs. helpers, schedules) — currently this information has nowhere to live and gets dropped even when mentioned in passing (Anjali).",
-      "Add a 'services_and_pricing' completeness check/field that requires listing ALL service tiers with a range or 'unknown/varies' flag per tier, rather than a free-text list that can silently omit an entire tier (event catering was fully dropped).",
-      "Add a 'known_pain_points' or 'owner_concerns' field distinct from 'open_items' — currently pain points like undercharging, subscriber count uncertainty, and hiring anxiety have no home and were simply never elicited, likely because there's no schema slot prompting the interviewer to ask 'what's frustrating you about the business side of things.'",
-      "The 'additional_notes' and 'open_items' fields are being used as a catch-all for scope decisions and policy gaps (e.g., deposit policy, calendar tool) — consider a structured 'unresolved_decisions' field so these aren't mixed in with generic notes and follow-up reminders."
-    ],
-    "improve_done": true
-  },
-  {
-    "cycle": 3,
-    "stamp": "20260910_084631",
-    "persona": "Locksmith services and small appliance repair / Deeply suspicious of technology and anything 'in writing.' Derek answers WhatsApp messages reluctantly, often replying hours or days late, and constantly questions why people don't just phone or come in person. He refuses to confirm prices or bookings over text ('could be anyone reading this'), asks who's asking and why, distrusts links/photos sent to him, and frequently tells customers to call the shop landline instead. When he does answer, he's blunt and short, sometimes typing in fragments, and occasionally goes silent mid-conversation if he decides the topic should be discussed 'properly' on the phone.",
-    "score": 7.33,
-    "completed": true,
-    "improved": false,
-    "top_improvement": "When systematically walking through each service's pricing (locks, keys, safes, appliances), explicitly include the business's core/headline service (here, emergency lockouts) in that same walkthrough rather than treating it only as an escalation-routing topic — the interviewer conflated 'route emergencies to the phone' with 'we don't need the price,' losing a critical FAQ answer.",
-    "findings": [
-      "MAJOR OMISSION: Emergency lockout pricing (£65 call-out + £35 labour, cash preferred, card machine 'usually works') was never asked about. Birdie walked through lock changes, key cutting, safe opening, and appliance repair pricing in detail but skipped the flagship emergency service's price entirely — even though Derek's own escalation policy for lockouts was discussed at length ('Straight to the landline, every time'). The bot will have no price to quote for its single most time-critical service.",
-      "Cash-preferred / card-machine-unreliable detail was never surfaced, despite being directly relevant since Birdie explicitly ruled out online payments — this would have been a natural follow-up ('so how do people usually pay you?') that was missed.",
-      "Derek's stated uncertainty about raising the call-out fee to £75, and his confusion about VAT registration thresholds, were never surfaced. No open-ended question like 'anything else on your mind about pricing or the business?' was asked before closing, so these business-relevant, chatbot-relevant (pricing display) uncertainties were completely lost.",
-      "Age (61) and town/location context from the fact sheet were never asked about; minor, but could matter for tone/personalization and were freely available if asked.",
-      "Good save: Birdie initially mislabeled the business 'family-run' in the readback, and Derek corrected it ('don't go calling it family-run — it's just me'); the correction was accepted and the record fixed. This is a positive, not a finding against the brief's accuracy.",
-      "Interviewer respected Derek's refusal to share screenshots and to explain the 'Son' backstory without pushing — good adaptive behavior, appropriately not over-probed on sensitive/irrelevant ground.",
-      "Enquiry volume was left vague ('a handful most days, more Mondays') and flagged as an open item rather than pinned down further (e.g., 'would a rough weekly total work, even a guess?') — acceptable but a bit thin for a 'volume' field that could scale the whole chatbot spec."
-    ],
-    "schema_suggestions": [
-      "Add a structured field for 'payment_methods_accepted' (cash/card/preferences) — this recurringly gets missed or would otherwise be dumped into business_policies/additional_notes, but is a distinct, reusable fact type for many small businesses.",
-      "Add a field like 'pending_business_decisions' or 'owner_uncertainties' to capture things the owner is actively unsure about (e.g., 'should I raise my fee', 'how does VAT affect me') — currently there is no home for this fact type at all, so it's simply never asked about or is at risk of being silently dropped rather than filed anywhere.",
-      "The 'additional_notes' field is being used as a catch-all for behaviorally important facts (e.g., 'customers can text any time but Derek doesn't respond quickly') that actually describe response-time expectations relevant to bot messaging — consider a dedicated 'response_time_expectations' or 'availability_caveats' field distinct from business_policies and hours."
-    ],
-    "improve_done": true
-  },
-  {
-    "cycle": 4,
     "stamp": "20260910_070729",
     "persona": "Custom furniture making and woodworking workshop / Chronically indecisive and self-contradicting — Marek will confidently state a price, timeline, or policy, then reverse himself minutes later ('actually, no, let's say...') without acknowledging the contradiction. He changes his mind about wood types, delivery dates, deposit amounts, and even whether he can take a job at all, sometimes within the same message thread. He's not being difficult on purpose — he's genuinely still deciding out loud — but customers often end a conversation more confused than when they started, and need written confirmation pinned down carefully because he'll happily 'update' it again later.",
     "score": 5.83,
@@ -126,7 +70,7 @@
     "improve_done": true
   },
   {
-    "cycle": 5,
+    "cycle": 2,
     "stamp": "20260910_071643",
     "persona": "Custom tailoring & clothing alterations / Fatuma constantly code-switches between English and Swahili (with bits of Sheng slang thrown in), often mid-sentence, and doesn't translate for customers who don't follow. She'll answer a question partly in English then finish the thought in Swahili, or use Swahili filler words/exclamations that leave non-Swahili speakers guessing. She's warm, fast-typing, and assumes everyone understands — occasionally she'll catch herself and half-translate, but often just moves on. This makes pinning down exact details tricky for customers who need her to slow down and clarify in one language.",
     "score": 5.83,
@@ -186,7 +130,7 @@
     "improve_done": true
   },
   {
-    "cycle": 6,
+    "cycle": 3,
     "stamp": "20260910_071728",
     "persona": "Custom furniture building and upholstery restoration / Chronically indecisive and flip-flops constantly — Mari will confidently state a price, timeline, or opinion, then reverse herself minutes later without acknowledging the contradiction. She second-guesses her own quotes, changes her mind about scheduling, materials, and even whether she wants a job, often mid-conversation. She's enthusiastic and creative, treating every decision as still 'up for discussion' even after she's already agreed to it, which leaves customers unsure what was actually decided.",
     "score": 6.33,
@@ -255,7 +199,7 @@
     "improve_done": true
   },
   {
-    "cycle": 7,
+    "cycle": 4,
     "stamp": "20260910_072743",
     "persona": "Custom bicycle building, e-bike conversions, and bike repair / Chronically indecisive and self-contradicting — Mei-Ling will confidently state a price, policy, or timeline, then reverse herself minutes later without acknowledging the change. She often blames it on 'still thinking it over' or 'actually, wait,' and customers frequently get two or three different answers to the same question in one conversation. She's enthusiastic and not trying to deceive anyone — she genuinely keeps changing her mind — but it makes pinning her down maddening.",
     "score": 6.33,
@@ -317,7 +261,7 @@
     "improve_done": true
   },
   {
-    "cycle": 8,
+    "cycle": 5,
     "stamp": "20260910_073544",
     "persona": "Driving school & LTO license/permit processing assistance / Code-switches constantly and unpredictably between Tagalog and English mid-sentence, sometimes mid-word — often answering the substance of a question in Tagalog while the English part of her reply is just filler ('yeah so basically...'), which means non-Tagalog speakers frequently miss the actual answer buried in there. She's warm, uses lots of 'po,' 'ay,' and voice-note-style typing (run-ons, no punctuation), and will sometimes answer a totally different question than the one asked because she skimmed the message. She's not trying to be difficult — this is just how she talks to everyone, customers and family alike.",
     "score": 6.67,
@@ -377,7 +321,19 @@
     "improve_done": true
   },
   {
-    "cycle": 9,
+    "cycle": 6,
+    "stamp": "20260910_075729",
+    "persona": "Mobile pet grooming services / Gary rambles constantly and goes off on tangents — he'll start answering a simple question and end up telling you about his footy team, his knee replacement, or a dog he groomed in 2019 named Baxter. He does eventually circle back to answer, but you have to wade through a lot of unrelated chat. He's friendly and well-meaning, just easily distracted.",
+    "score": 7.67,
+    "completed": true,
+    "improved": true,
+    "reverted": false,
+    "commit_before": "075a29b2c78cd02a81bd3d32d3c57a0bde8bff62",
+    "top_improvement": "Add a dedicated question (or checklist pass) explicitly covering booking/payment mechanics — e.g., 'Do you take deposits or require any payment before confirming a booking, and how is that currently handled?' — and a scoping question like 'Are you picturing a full booking/payment app, or something simpler like automated replies and calendar sync?' before wrapping up, since these are foundational to what the chatbot must actually do and were both silently skipped despite being known Gary uncertainties.",
+    "improve_done": true
+  },
+  {
+    "cycle": 7,
     "stamp": "20260910_080654",
     "persona": "Mobile BBQ food truck and event catering / Rambles off-topic constantly — Mike can't answer a simple question without detouring into a story about his truck's transmission, his dog Brisket, last season's football game, or a wedding he catered in 2019. The actual answer is usually buried somewhere in the middle of the message, sometimes contradicted by something he says three sentences later. He's warm, enthusiastic, and means well, but customers often have to re-ask the same question two or three times to get a straight number or date. He types in long run-on paragraphs with minimal punctuation and loves voice-to-text, which makes things messier.",
     "score": 6.83,
@@ -435,6 +391,111 @@
       "Add a `staffing_and_roles` field — Mike/Deb/Tyrell/day-hire roles are relevant for escalation routing but are only narrated inside business_description.",
       "Add a confidence/verification flag on estimate-type fields (e.g. conversation_volume) so unverified guesses are machine-visible and can be re-checked with the person who actually knows (Deb).",
       "Interviewer lacks a mechanism to flag questions that must be answered by a second stakeholder (Deb owns the inbox, books and calendar); add a `follow_up_with` field so those items are routed rather than left as vague guesses."
+    ],
+    "improve_done": true
+  },
+  {
+    "cycle": 8,
+    "stamp": "20260910_080956",
+    "persona": "Home-based catering and daily tiffin service / Chronically vague about numbers — Priya almost never gives a firm price, headcount, or time. She answers with ranges, 'depends,' 'roughly,' or 'let me think about it' and often contradicts her own earlier estimate. She's warm and eager to help, but customers have to push hard to pin down anything concrete, and even then she'll hedge at the last second.",
+    "score": 6.17,
+    "completed": true,
+    "improved": true,
+    "reverted": false,
+    "commit_before": "78389dd18f6ee148bf909907d6ff64e55ecb6f65",
+    "top_improvement": "Systematically walk through EVERY service tier mentioned in the business (tiffin, party trays, full event catering, delivery) with an explicit price-range question for each, instead of asking broadly about 'tiffin pricing and delivery areas' and letting bigger-ticket items (event catering) fall through entirely.",
+    "schema_suggestions": [
+      "Add a dedicated 'business_background' or 'business_context' field (location, licensing/permit status, years in operation, how the business has grown) — currently business_description is null with no mechanism forcing Birdie to ask basic background questions.",
+      "Add an explicit 'hours_of_operation' field to the schema — there is currently no slot for this at all, which is why it was never asked despite being fundamental to a customer-facing bot.",
+      "Add a 'staff_or_team' field to capture who does what (owner-operated vs. helpers, schedules) — currently this information has nowhere to live and gets dropped even when mentioned in passing (Anjali).",
+      "Add a 'services_and_pricing' completeness check/field that requires listing ALL service tiers with a range or 'unknown/varies' flag per tier, rather than a free-text list that can silently omit an entire tier (event catering was fully dropped).",
+      "Add a 'known_pain_points' or 'owner_concerns' field distinct from 'open_items' — currently pain points like undercharging, subscriber count uncertainty, and hiring anxiety have no home and were simply never elicited, likely because there's no schema slot prompting the interviewer to ask 'what's frustrating you about the business side of things.'",
+      "The 'additional_notes' and 'open_items' fields are being used as a catch-all for scope decisions and policy gaps (e.g., deposit policy, calendar tool) — consider a structured 'unresolved_decisions' field so these aren't mixed in with generic notes and follow-up reminders."
+    ],
+    "improve_done": true
+  },
+  {
+    "cycle": 9,
+    "stamp": "20260910_081552",
+    "persona": "Pet grooming and dog daycare / Chronic rambler and off-topic tangent-teller — Sandy can't answer even a simple yes/no question without spiraling into a story about her dog Biscuit, the weather, her knee surgery, a neighbor's drama, or something Theresa said at the shop. The actual answer is usually buried somewhere in the middle of a wall of text, sometimes it never comes at all because she gets distracted mid-message, and customers frequently have to re-ask the same question two or three times to pin her down. She's warm and well-meaning, just incapable of staying on one topic for more than a sentence.",
+    "score": 6.0,
+    "completed": true,
+    "improved": false,
+    "top_improvement": "Forbid the summary/brief from containing anything not literally stated by the owner: instruct Birdie to build the readback strictly from quoted owner statements, mark any item it is inferring as '(my assumption — correct me)', and mark owner-hedged items (like the phone number she doubted) as unverified. The WhatsApp and 'Theresa tracks holidays' inventions show that without this constraint the brief silently gains false requirements.",
+    "findings": [
+      {
+        "problem": "The 50% deposit policy for grooming appointments over $80 (exists on paper, rarely collected) was never elicited and is completely absent from the brief. Birdie touched payment only to dismiss payment processing and never asked whether any deposit/prepayment is required — a core booking-flow rule the bot would need.",
+        "excerpt": "Birdie: Perfect, that's settled then — simple bot, no payment processing. When the bot takes down a booking request, who should it send that to — should it always go to you, or to Theresa on the days she's in (Wed-Fri)? And what's the best number for that?\nSandy Kowalczyk: Oh good question, hon. I'd say just send it to both of us if you can swing that, or if not, send it to me but CC Theresa on her days, Wednesday Thursday Friday, 'cause honestly she'll see it before I do most days, I might be out with Biscuit or elbow deep in some dog's ear."
+      },
+      {
+        "problem": "Birdie fabricated a channel (WhatsApp) in the readback that Sandy never mentioned. Only caught because the owner happened to notice; an unverified invention in a requirements brief is a serious integrity failure.",
+        "excerpt": "Birdie: **Channels:** phone, text, walk-ins, Facebook Messenger, WhatsApp. English only."
+      },
+      {
+        "problem": "Birdie also invented a staff responsibility — that Theresa 'tracks holiday info' — when the fact sheet and transcript say nobody tracks holidays at all. A second fabrication in the same summary.",
+        "excerpt": "Birdie: **Business:** Furball Farmhouse Grooming and Daycare, run out of a converted barn behind your house. Team: you (grooming, phone, bookings), Theresa (grooming Wed-Fri, checks Facebook, tracks holiday info), Josh (weekend daycare supervision, helps with tech). Gary handles budget decisions."
+      },
+      {
+        "problem": "Sandy explicitly flagged she was unsure of her own phone number's last digits, but Birdie confirmed it back as fact and the brief records 705-555-0192 as verified escalation contact with no 'needs confirming' flag.",
+        "excerpt": "Sandy Kowalczyk: My cell's the best bet, it's 705-555-0192 — oh wait, no, hang on, is that right, I always mix up the last two numbers, Gary's the one who remembers stuff like that. Yeah, 705-555-0192, that's me."
+      },
+      {
+        "problem": "Sandy's daily ~2pm absence to walk Biscuit (a key reason messages go unanswered, and a predictable daily coverage gap) was volunteered twice but never captured in the brief's problem_to_solve or notes; only 'poor cell reception' made it in.",
+        "excerpt": "Sandy Kowalczyk: Speaking of walks, that reminds me, I gotta duck out here around 2 for Biscuit, he's my old fella, hip troubles, needs his slow little walk around then or he gets awful stiff, poor guy."
+      },
+      {
+        "problem": "Basic business context was never asked: years in operation (6 years) and the rural small-town location/service area. Brief's business_description has no location or tenure, and target_audience is null.",
+        "excerpt": "Birdie: Hi Sandy! Great to meet you — Furball Farmhouse sounds like such a sweet setup. I'm here to get a clear picture of your business so we can build you a chatbot that actually helps. Let's start simple: what all do you offer at Furball Farmhouse — grooming, daycare, anything else?"
+      },
+      {
+        "problem": "No success criteria were ever discussed (what 'working' looks like — e.g. fewer missed messages, no lost bookings), leaving success_criteria null despite Sandy naming two clear goals that could easily have been turned into measures.",
+        "excerpt": "Birdie: Love the homey vibe, and 'Furbot' is pretty cute, ha — Gary's not wrong! Before I pull together everything for you to double check, is there anything else on your mind about pricing or the business that we haven't covered yet?"
+      },
+      {
+        "problem": "Very low information density per turn: service duration, price, and size-variation were split across separate single-fact questions, inflating the interview to 52 entries (vs ~20-30 normal) with a highly talkative respondent.",
+        "excerpt": "Birdie: Ha, poor Theresa! Okay — roughly how long does that quick bath and nail trim take?\nSandy Kowalczyk: Oh gosh, um, quick one usually, twenty minutes maybe, half hour if they're squirmy about the nails, some dogs just hate that clipper sound, I don't blame 'em honestly, my knee surgery last year they had this little buzzy tool for something and I about jumped outta the chair."
+      },
+      {
+        "problem": "Partial re-ask: Sandy already stated in her second turn that they don't do cats and have been 'thinking about it' for a year; Birdie re-opened the same topic much later (usefully framed via the uploads, but the year-long indecision was already on record and could have been pinned down at the time).",
+        "excerpt": "Sandy Kowalczyk: Cats — no, we don't do cats, I keep saying I'm gonna start but I just... haven't. Been saying that for over a year now if I'm honest with you. Anyway! That's us in a nutshell I think. Did I miss anything, hon?"
+      },
+      {
+        "problem": "Brief overstates a policy Sandy hedged on: she said add-ons are normally with a groom and 'I guess we could do it if someone really wanted', which the brief hardened into a standing standalone option the bot could offer.",
+        "excerpt": "Sandy Kowalczyk: Oh those, yeah, flea and tick is $15, and de-shedding's $20, and they're add-ons, hon, so they go along with a grooming visit, folks don't usually just come in for only that, though I guess we could do it if someone really wanted, we're not gonna turn away money, ha."
+      }
+    ],
+    "schema_suggestions": [
+      "Add a `payment_and_deposits` field (accepted methods, deposit/prepayment rules, thresholds, enforcement reality) — payment facts are currently buried inside free-text business_policies and the deposit rule was never even probed because no field prompts for it.",
+      "Add a structured `hours` field (per-day open/close, closed days, holiday handling) instead of stuffing operating hours into a business_policies string.",
+      "Add a `staff_roles` field (name, role, days/hours available, best contact) — staff availability is currently crammed into business_description prose, and Sandy's daily ~2pm unavailability had nowhere to live.",
+      "Add a `capacity_constraints` field (boarding max, daycare max, soft vs hard limits) — these were dumped into open_items even though they are settled operational facts, not open questions.",
+      "Add a `bot_persona` field (name candidates, tone, voice) — the bot name/tone landed in open_items and additional_notes rather than a proper design field.",
+      "Add a `facts_needing_verification` list with source/confidence flags, so owner-hedged values (phone number, giant-breed price range) are structurally distinguished from confirmed ones.",
+      "Add an `evidence_reviewed` field capturing uploaded artifacts and what each one substantiated; the Marco/cat-boarding finding is currently a stray line in additional_notes with no link to the decision it drove.",
+      "Add `business_profile` sub-fields for location/service area and years in operation — nothing in the schema prompts for them, so both were skipped entirely."
+    ]
+  },
+  {
+    "cycle": 10,
+    "stamp": "20260910_084631",
+    "persona": "Locksmith services and small appliance repair / Deeply suspicious of technology and anything 'in writing.' Derek answers WhatsApp messages reluctantly, often replying hours or days late, and constantly questions why people don't just phone or come in person. He refuses to confirm prices or bookings over text ('could be anyone reading this'), asks who's asking and why, distrusts links/photos sent to him, and frequently tells customers to call the shop landline instead. When he does answer, he's blunt and short, sometimes typing in fragments, and occasionally goes silent mid-conversation if he decides the topic should be discussed 'properly' on the phone.",
+    "score": 7.33,
+    "completed": true,
+    "improved": false,
+    "top_improvement": "When systematically walking through each service's pricing (locks, keys, safes, appliances), explicitly include the business's core/headline service (here, emergency lockouts) in that same walkthrough rather than treating it only as an escalation-routing topic — the interviewer conflated 'route emergencies to the phone' with 'we don't need the price,' losing a critical FAQ answer.",
+    "findings": [
+      "MAJOR OMISSION: Emergency lockout pricing (£65 call-out + £35 labour, cash preferred, card machine 'usually works') was never asked about. Birdie walked through lock changes, key cutting, safe opening, and appliance repair pricing in detail but skipped the flagship emergency service's price entirely — even though Derek's own escalation policy for lockouts was discussed at length ('Straight to the landline, every time'). The bot will have no price to quote for its single most time-critical service.",
+      "Cash-preferred / card-machine-unreliable detail was never surfaced, despite being directly relevant since Birdie explicitly ruled out online payments — this would have been a natural follow-up ('so how do people usually pay you?') that was missed.",
+      "Derek's stated uncertainty about raising the call-out fee to £75, and his confusion about VAT registration thresholds, were never surfaced. No open-ended question like 'anything else on your mind about pricing or the business?' was asked before closing, so these business-relevant, chatbot-relevant (pricing display) uncertainties were completely lost.",
+      "Age (61) and town/location context from the fact sheet were never asked about; minor, but could matter for tone/personalization and were freely available if asked.",
+      "Good save: Birdie initially mislabeled the business 'family-run' in the readback, and Derek corrected it ('don't go calling it family-run — it's just me'); the correction was accepted and the record fixed. This is a positive, not a finding against the brief's accuracy.",
+      "Interviewer respected Derek's refusal to share screenshots and to explain the 'Son' backstory without pushing — good adaptive behavior, appropriately not over-probed on sensitive/irrelevant ground.",
+      "Enquiry volume was left vague ('a handful most days, more Mondays') and flagged as an open item rather than pinned down further (e.g., 'would a rough weekly total work, even a guess?') — acceptable but a bit thin for a 'volume' field that could scale the whole chatbot spec."
+    ],
+    "schema_suggestions": [
+      "Add a structured field for 'payment_methods_accepted' (cash/card/preferences) — this recurringly gets missed or would otherwise be dumped into business_policies/additional_notes, but is a distinct, reusable fact type for many small businesses.",
+      "Add a field like 'pending_business_decisions' or 'owner_uncertainties' to capture things the owner is actively unsure about (e.g., 'should I raise my fee', 'how does VAT affect me') — currently there is no home for this fact type at all, so it's simply never asked about or is at risk of being silently dropped rather than filed anywhere.",
+      "The 'additional_notes' field is being used as a catch-all for behaviorally important facts (e.g., 'customers can text any time but Derek doesn't respond quickly') that actually describe response-time expectations relevant to bot messaging — consider a dedicated 'response_time_expectations' or 'availability_caveats' field distinct from business_policies and hours."
     ],
     "improve_done": true
   }
