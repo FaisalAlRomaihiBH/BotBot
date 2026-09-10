@@ -1,61 +1,39 @@
-[Mon 09:14] Hannah: Hi! Do you do puncture repairs walk-in or do I need to book?
-[Mon 09:20] Costas: Walk in mate, no booking needed for that
-[Mon 09:21] Costas: actually Tuesdays are mental, better book
-[Mon 09:22] Costas: nah you know what just come whenever, we'll sort it
-[Mon 09:23] Hannah: 😅 okay, cool, I'll pop by tomorrow then
-[Mon 09:24] Costas: perfect see you then
+[Mon, Mar 3, 9:14 AM] Customer (Renee): Hi! I have my grandmother's cookbook falling apart, spine's totally gone. What would it cost to fix?
+[Mon, Mar 3, 9:41 AM] Frank Oduya: Hey Renee! For a simple recase, probably around $60
+[Mon, Mar 3, 9:42 AM] Frank Oduya: actually wait, if the spine is fully gone that's more like a full restoration, so more like $150
+[Mon, Mar 3, 9:44 AM] Frank Oduya: hmm, honestly let me just see photos before I say a number, I don't want to lowball you
+[Mon, Mar 3, 9:50 AM] Customer (Renee): Sure, sending some now
+[Mon, Mar 3, 11:20 AM] Frank Oduya: ok looked at these, I think $120 is fair
+[Mon, Mar 3, 11:21 AM] Frank Oduya: though honestly it could creep to $150 once I get in there, hard to say till I open it up
+[Mon, Mar 3, 11:22 AM] Customer (Renee): Ok, and how long would it take?
+[Mon, Mar 3, 11:30 AM] Frank Oduya: 2-3 weeks typically
+[Mon, Mar 3, 11:31 AM] Frank Oduya: actually I've got a backlog right now so maybe say 4
+[Mon, Mar 3, 11:33 AM] Frank Oduya: you know what, let's just say 3 and I'll surprise you if it's sooner
 
-[Tue 11:02] Hannah: Just arrived, shop looks closed?
-[Tue 11:15] Costas: ah sorry got called to pick up tubing, back in an hour
+[Wed, Mar 5, 2:10 PM] Customer (Tom): Do you make custom leather journals? Looking for a gift, need it by April 10
+[Wed, Mar 5, 3:45 PM] Frank Oduya: Yes! Usually $150 for a standard 6x8 one with basic tooling
+[Wed, Mar 5, 3:47 PM] Frank Oduya: actually for something nice as a gift you'd probably want the upgraded leather, so more like $190
+[Wed, Mar 5, 3:48 PM] Frank Oduya: April 10th should be fine, that's plenty of lead time
+[Wed, Mar 5, 6:02 PM] Frank Oduya: wait, is that a Thursday? let me check my calendar, I might have a wedding invite job due around then too
+[Wed, Mar 5, 6:03 PM] Frank Oduya: I'll let you know tomorrow if that date works, don't want to promise and then be stuck
+[Fri, Mar 7, 10:15 AM] Customer (Tom): Hey just checking in on that date?
+[Fri, Mar 7, 10:16 AM] Customer (Tom): still there?
 
-[Wed 14:30] Marcus: How much for a full tune up on a road bike
-[Wed 14:45] Costas: £45 usually
-[Wed 14:52] Costas: wait no that was last year's price, it's £55 now with parts going up
-[Wed 15:10] Costas: actually if it's just gears and brakes no full clean, I could do £40
-[Wed 15:11] Marcus: haha ok which is it
-[Wed 15:20] Costas: let's say £45 and we see when it's on the stand
+[Sat, Mar 8, 1:00 PM] Customer (Angela): What are your hours? Want to drop off a book to repair
+[Sat, Mar 8, 1:20 PM] Frank Oduya: Tues-Sat 10-5! Come by anytime in there
+[Sat, Mar 8, 1:21 PM] Frank Oduya: well, Saturdays can be hit or miss since Delia's not always in, better make it a weekday to be safe
 
-[Wed 16:00] Marcus: Sounds good, when can you fit it in
-[Wed 16:10] Costas: Friday no bother
-[Wed 16:40] Costas: actually Friday's rammed, Jayden's not in til Saturday, let's do Monday
-[Wed 16:41] Marcus: Monday works
-[Wed 16:55] Costas: yeah Monday. or Tuesday if Monday's mad. I'll message you
+[Mon, Mar 10, 4:30 PM] Customer (Renee): Any update on my cookbook?
+[Mon, Mar 10, 5:15 PM] Frank Oduya: Just started on it actually, going well so far
+[Mon, Mar 10, 5:16 PM] Frank Oduya: should be done end of next week
+[Mon, Mar 10, 5:17 PM] Frank Oduya: though I say that now, ask me again Friday, ha
 
-[Thu 10:00] Priya: Hi, interested in a custom steel frame build, what's the starting price and timeline?
-[Thu 10:22] Costas: starts around £1200 for a basic build, lead time is about 6 weeks
-[Thu 10:30] Costas: actually thinking about it more realistically with the tubing supplier delays it's more like 10-12 weeks
-[Thu 10:31] Costas: and price wise I'd say £1400 to be safe, steel's gone up
-[Thu 10:35] Priya: ok, could you confirm which one when you have a min? happy to wait
-[Thu 10:36] Costas: for sure will confirm
+[Tue, Mar 11, 9:00 AM] Customer (new): Do you offer bookbinding classes? Saw something about it online
+[Tue, Mar 11, 11:40 AM] Frank Oduya: I've been wanting to start those, yeah! Thinking maybe a Saturday workshop
+[Tue, Mar 11, 11:41 AM] Frank Oduya: not sure on price yet, maybe $40? or should it be more since materials are involved, maybe $65
+[Tue, Mar 11, 11:42 AM] Frank Oduya: let me sit with it and figure out a real plan, I'll post something when I've got it sorted
 
-[Sat 09:40] Priya: hey just checking in on the frame quote from Thursday
-[no reply]
-
-[Sun 12:15] James: Do you still do e-bike battery diagnostics?
-[Sun 12:40] Costas: yep bring it in
-[Sun 13:02] Costas: actually you know I've been having second thoughts on that machine, might not be reliable enough, safer if you send it to the manufacturer
-[Sun 13:03] James: right, so no then?
-[Sun 13:20] Costas: I'll have a proper look and let you know, don't want to say no and then it turns out fine
-
-[Mon 09:30] Marcus: hey any update on Monday for the tune up?
-[Mon 09:50] Costas: actually let's push to Tuesday, sorry got a custom frame emergency
-
-[Tue 15:00] Marcus: Here now, is the £45 still the price?
-[Tue 15:12] Costas: yeah should be fine
-[Tue 15:40] Costas: oh actually your chain's shot too so with that it'll be closer to £60
-[Tue 15:41] Marcus: ok that's fine
-
-[Wed 10:00] Hannah: What are your actual opening hours, website says 9:30-6
-[Wed 10:15] Costas: yeah that's right Tue-Sat
-[Wed 10:16] Costas: though honestly I sometimes open at 10 if I've been up late on a frame
-[Wed 10:17] Costas: best to text before coming down tbh
-
-[Thu 11:00] James: any update on the e-bike thing?
-[no reply]
-
-[Fri 13:00] Priya: hi Costas, just following up again on my frame build - would love to get a deposit down if you can confirm price/timeline
-[Fri 13:45] Costas: yes sorry been mental, let's say £1300 and 8 weeks, that feels about right
-[Fri 13:46] Priya: brilliant, I'll take that! how do I pay deposit
-[Fri 13:50] Costas: bank transfer easiest, I'll send details, though actually card machine's playing up so bank transfer definitely
-[Fri 13:51] Priya: perfect, sending now
-[Fri 14:10] Costas: got it! we're on, I'll confirm start date once I hear from my tubing guy
+[Thu, Mar 13, 3:00 PM] Customer (Tom): Any word on the journal timeline?
+[Thu, Mar 13, 3:00 PM] Customer (Tom): the gift is for April 10, kind of need to know
+[Thu, Mar 13, 8:12 PM] Frank Oduya: sorry! yes it'll work, go ahead and send the deposit
+[Thu, Mar 13, 8:13 PM] Frank Oduya: actually hold off, let me confirm with Delia on the schedule first, I'll message you tomorrow for sure
