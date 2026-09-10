@@ -1,0 +1,199 @@
+{
+  "transcript": [
+    [
+      "Birdie",
+      "Hi! I help businesses figure out exactly what they need from a chatbot. Before we start — what's your name?"
+    ],
+    [
+      "Michael \"Big Mike\" Dawson",
+      "Hey there! Names Big Mike, well its Michael Dawson but everybody just calls me Big Mike on account of the truck and also just cause i mean look at me haha. I run Big Mikes Smoke Pit out here in Lubbock, me and my wife Deb been doin this for going on 9 years now started out of a little tent at the farmers market if you can believe that, now we got the truck and we do the catering too. Funny story actually the truck almost didnt make it to the market this morning transmission been actin up again gotta take it to my guy Ronnie he fixed it twice already but thats a whole other conversation. Anyway yeah Im Mike, whats your name, or well you already said Birdie thats a cute name, my dogs name is Brisket by the way he rides in the truck with us sometimes when hes not causin trouble. So what were we doin here, you helpin businesses with somethin?"
+    ],
+    [
+      "Birdie",
+      "Hey Big Mike, great to meet you — and yes, I'm Birdie, I'm here to help you figure out exactly what you'd want a chatbot to do for Big Mike's Smoke Pit. Love the story about starting at the farmers market with Deb! Let's dig in — first off, what all do you offer? Like walk me through everything — truck menu, catering, all of it."
+    ],
+    [
+      "Michael \"Big Mike\" Dawson",
+      "Alright so lemme walk you through it, we got the truck menu first which is pretty straightforward, pulled pork plate is 14 bucks, brisket plate is 18, ribs we do a half rack for 16 or full rack for 28 if you bringing the whole family or just real hungry haha. Sides are 4 bucks each or you can do 2 for 7 which is the better deal honestly, we got mac and cheese, collard greens, cornbread, and coleslaw, Debs collard greens recipe actually come from her grandmother rest her soul, woman could cook I tell you. Oh and the truck we only run Thursday through Sunday, we post where we at on the Facebook cause we move around to different spots around town, some days we by the mall some days out by the highway depends on whats goin on that week.\n\nNow the catering side thats a whole different animal, we do private events, weddings, birthdays, corporate stuff, whatever, you gotta book at least 2 weeks out normally though Ive done rush jobs in as little as 4 days before, one time did a whole anniversary party on like 4 days notice near gave myself a heart attack but we pulled it off. Pricing for catering is 12 dollars a person for groups of 25 and up, that includes 2 meats and 2 sides, and if you got a real big group like over 75 folks the price actually drops to 10 a person. We ask for 30 percent deposit when you book and the rest is due day of, cash or Venmo works fine.\n\nOh man that reminds me of this wedding we did back in 2019, hold on lemme tell you about this real quick, groom wanted brisket for like 200 people and I about didnt have enough smoker room, my rig only holds about 150 plates worth of meat at a time thats my old converted trailer I built myself out back, its a bottleneck for the real big events but anyway we figured it out, had to run two batches back to back. Where was I, oh yeah so thats the menu and catering basics, we good so far?"
+    ],
+    [
+      "Birdie",
+      "That's a great rundown, Mike — y'all built something real special. Quick question: for the truck, since y'all move around Thursday to Sunday, does the bot just need to point people to your Facebook for the day's location, or is there another way folks find you?"
+    ],
+    [
+      "Michael \"Big Mike\" Dawson",
+      "Yeah just point em to the Facebook honestly thats where Deb posts it every mornin she real good about that keepin the followers updated, she does all the Instagram stuff too but the real time location thats a Facebook thing for us we never did figure out a good way to do it anywhere else, tried a website once but it kept goin down and I aint got time to mess with that, we thought about just texapin people but shoot that got complicated fast. So yeah Facebook is the spot, oh and sometimes if Brisket the dog is with us we post his picture too people love that dog more than they love my brisket sometimes ha, but yeah bot can just tell folks check the Facebook page for wherever we parked that day."
+    ],
+    [
+      "Birdie",
+      "Good to know, that keeps it simple. Now, on catering — you said normally you need 2 weeks notice but you've squeezed in rush jobs with just 4 days before. If someone messages the bot wanting catering on short notice, what should it say — tell them 2 weeks is standard but to check with you directly, or something else?"
+    ],
+    [
+      "Michael \"Big Mike\" Dawson",
+      "Yeah that's exactly right, tell em 2 weeks is what we ask for normally that gives us time to plan the smoker schedule and order enough meat from my supplier, but if somebody comes at us with somethin shorter dont just turn em away outright have the bot say hey reach out to Mike directly and we'll see what we can do, cause like I said I done it in 4 days before that anniversary party like I mentioned, but honestly that near killed me Deb was not happy about that one she said never again but you know me I probably will again haha. Just gotta be honest with folks though like if its a real big group say over 100 people and they only got a few days thats a whole different story cause my smoker only holds 150 plates and brisket alone takes like 14 to 16 hours to do right, cant rush that no matter how bad I want to, so bot should probably say somethin like short notice possible for smaller groups but check with Mike first before promisin anything, dont want the bot just sayin yes to everybody and then me scramblin like a chicken with its head cut off at 2am tryin to get brisket done in time, had a couple close calls like that already and I dont wanna push my luck again."
+    ],
+    [
+      "Birdie",
+      "Got it, that's a smart way to handle it so you don't get stuck scrambling. When the bot tells someone to 'reach out to Mike directly' for a rush job or big order, what's the actual contact — your phone number, a text line, something else?"
+    ],
+    [
+      "Michael \"Big Mike\" Dawson",
+      "Oh shoot thats a good question, honestly best way is probably just messagin us through the Facebook page thats where Deb checks stuff all the time she practically got that phone glued to her hand haha, I mean I got a cell phone too but I aint always great about checkin texts I got sauce on my fingers half the time and don't wanna mess up the screen, dropped my phone in a pan of drippings once true story Deb still brings that up. So yeah probably safest bet is Facebook message and Deb'll loop me in, or if its somebody we already know like a regular they might just have my number already and call me direct, but for the bot I think just tell folks to message the Facebook page thats gonna get to us fastest, we don't really got like a special text line or nothin fancy like that, we thought about gettin one of them business numbers one time but that got complicated too, everthing always gets complicated when you try to add more stuff, kinda like my transmission ha, anyway yeah Facebook message is probably the play."
+    ],
+    [
+      "Birdie",
+      "That works. So where do you picture this chatbot actually living — like on your Facebook page itself answering messages, on a website, or somewhere else?"
+    ],
+    [
+      "Michael \"Big Mike\" Dawson",
+      "Hmm thats a good question, honestly I aint real techy so wherever you think it'd work best I'm probably gonna trust you on that one. We tried a website one time like I said but it kept crashin or goin down or whatever you call it, this fella Deb's cousin set it up for us for cheap and it just never worked right, cost us more headache than it was worth. Facebook is really where all our people already are though so if the bot could just live right there on the page answerin questions that seems like it'd make the most sense to me, folks already messagin us there anyway about location and cateringin and whatnot. But if you sayin it oughta be on a website too I mean I guess we could try that again long as it dont go down on us like last time, Deb would have somethin to say about that for sure she still brings up the website thing same as she brings up my phone fallin in the drippings ha. So yeah short answer Facebook probably, but I'm open to whatever you think, you're the expert here not me, I just know how to smoke a good brisket not build no computer stuff."
+    ],
+    [
+      "Birdie",
+      "Given the website gave you nothing but headaches before, and your customers already message you on Facebook, I'd say stick with Facebook Messenger for the bot — no extra site to maintain, no new place for folks to look. Sound good? Also, roughly how many messages or orders would you guess come in through Facebook in a typical week?"
+    ],
+    [
+      "Michael \"Big Mike\" Dawson",
+      "Yeah Facebook sounds good to me, whatever keeps it simple works for me, less headache the better, my brain's already got enough goin on between the smoker and the transmission and Brisket the dog chewin up Debs good shoes again yesterday little stinker.\n\nAs far as how many messages come in a week, man I aint real sure exact number, I know Deb be starin at that phone a lot specially Thursday through Sunday when we out on the truck, people askin where we parked, folks askin bout catering for they mamas birthday or whatever, I wanna say maybe 20 30 messages a week but honestly that might be low or high I really aint never sat down and counted it, Deb might know better than me she the one glued to it, I'm usually elbow deep in a brisket not lookin at no phone. So yeah ballpark guess maybe 20 to 30 but dont hold me to that number for real."
+    ],
+    [
+      "Birdie",
+      "That's plenty to go on, thanks Mike. For the truck orders themselves — when someone buys a plate at the truck, how do they pay: cash, card, or both?"
+    ],
+    [
+      "Michael \"Big Mike\" Dawson",
+      "Oh yeah for the truck itself we take both, cash and card, got one of them little square readers thing plugs into my phone so we can swipe or tap or whatever they call it now, Tyrell be handlin that mostly on the weekends when hes helpin serve, he better with the technology than me for sure. Now catering thats different like I said thats cash or Venmo for the rest of the balance day of, but at the truck window yeah we take cards no problem, don't wanna turn nobody away just cause they aint got cash on em, learned that lesson early on had a fella real disappointed one time cause we was cash only back at the farmers market days, Deb said never again after that. So yeah short answer both, cash or card at the truck."
+    ],
+    [
+      "Birdie",
+      "Good to know — glad you don't turn folks away over cash anymore. Now, do you ever get cancellations or no-shows on catering bookings, and if so, is there a policy on the deposit — do they lose it, or is it refundable?"
+    ],
+    [
+      "Michael \"Big Mike\" Dawson",
+      "Oh yeah cancellations happen, not all the time but enough, people's plans change weddings get called off birthdays get rescheduled whatever life happens. So the policy is if you cancel inside 7 days of the event that deposit the 30 percent you dont get that back thats just how we gotta do it cause by that point Ive already ordered the meat and blocked off my smoker time for you and turned away other folks who mighta wanted that date. Now I will say and Deb gets on me about this all the time, if its like a regular customer somebody weve done business with a bunch or somebody with a real good reason I have gone ahead and given the deposit back anyway or at least part of it, I'm just soft like that I guess, but Deb says I gotta stop doin that cause it aint fair to everybody else and it messes up her books, she says pick a policy and stick to it Mike, and shes right honestly I just got a hard time tellin people no specially if they got a sad story, so yeah officially the policy is deposit aint refundable inside 7 days but unofficially depends on the day and depends on Deb catchin me before I do somethin about it ha."
+    ],
+    [
+      "Birdie",
+      "I hear you, Mike — and for what it's worth, I'd lean toward the bot just stating the official policy (no refund within 7 days) since that keeps Deb's books clean and any soft-hearted exceptions can still happen through you directly, off the bot. Does that sound like the right way to handle it? Now, separate question — has anyone ever not shown up to pick up a catering order, or stiffed you after the food was made?"
+    ],
+    [
+      "Michael \"Big Mike\" Dawson",
+      "Yeah that sounds right havin the bot just stick to the official policy that'll keep Deb happy and outta my hair about it, she'll probably still find somethin to fuss about but thats just how me and her work I reckon, married 22 years you learn to pick your battles ha.\n\nAs far as folks not showin up or stiffin us after the foods made, knock on wood that aint happened too bad, we always get that deposit up front so even if somebody flakes we at least covered on the meat cost mostly, had one time a corporate thing where the fella who booked it kinda disappeared and didnt answer his phone day of, we still delivered it to the address he gave us and thankfully somebody there paid us the rest in cash so it worked out, but that was a nervous couple hours let me tell you, Deb was ready to strangle somebody that day. So no real bad stiffin situations but yeah it makes you nervous when it happens, thats part of why we do the deposit thing to begin with, protects us a lil bit at least."
+    ],
+    [
+      "Birdie",
+      "Glad that's settled, and good you've got the deposit to cover you. Let's talk about the bot itself — do you want it to just answer questions and hand off the hard stuff to y'all (menu, hours, location, catering basics), or would you want it to actually take bookings and payments too?"
+    ],
+    [
+      "Michael \"Big Mike\" Dawson",
+      "Man thats a good question, honestly I think Id feel better if the bot just answered the easy stuff and handed the real bookins off to me and Deb, like tell folks the menu, the hours, point em to Facebook for location, explain how catering pricing works and all that, but when it comes to actually lockin in a date or takin the deposit money I think I want a real person doin that, mainly cause of my smoker only holdin 150 plates, gotta make sure I aint double bookin myself into a corner where I got two big events same weekend and not enough room in the rig, that happened almost happened one time and it about gave me a stroke thinkin about it. Plus Deb likes to eyeball the calendar herself before anything real gets locked in, she got a system, dont ask me to explain it I just know not to mess with it. So yeah bot can answer questions all day long thats fine, but for actual bookins and money changin hands I think that still needs to come through us, at least for now, maybe down the road if this thing works good we talk about lettin it do more, but Im already nervous enough addin a computer into the mix much less lettin it take peoples money too ha."
+    ],
+    [
+      "Birdie",
+      "That makes total sense, keeping the booking and money side with you and Deb for now. Should the bot have a particular personality or tone — like friendly and folksy to match the brand — and did you want to give it a name, or just call it something simple like 'Big Mike's Smoke Pit Assistant'?"
+    ],
+    [
+      "Michael \"Big Mike\" Dawson",
+      "Oh man a name, I like that, gives it some personality yknow, I was thinkin somethin like Lil Smokey or maybe Pit Boss or somethin catchy like that, Deb might have a better idea though she good with the cute names stuff she named the dog Brisket after all which honestly is a genius name if I say so myself, folks laugh every time I introduce him. But yeah personality wise definitely keep it friendly and folksy like us, dont want it soundin all stiff and corporate like some big chain restaurant bot, want it soundin like it could sit down and have a plate with you yknow, but dont let it ramble too much haha, Deb says thats my job already, she says I could turn a one word answer into a twenty minute story and she aint wrong, my buddy Ronnie the transmission guy says the same thing about me. So yeah friendly folksy tone for sure, maybe somethin like Smoke Pit Assistant or if we get cute Lil Smokey, I'll run it by Deb see what she thinks she'll probably roll her eyes and pick somethin better than what I come up with anyway ha."
+    ],
+    [
+      "Birdie",
+      "Ha, I love it — 'Lil Smokey' has a ring to it, and friendly-folksy-but-not-rambly makes sense for the tone. Quick one: does the bot need to handle any language besides English, or is it just English-speaking customers?"
+    ],
+    [
+      "Michael \"Big Mike\" Dawson",
+      "Nah man just English, we get all types comin through Lubbock but aint never really had nobody need somethin different, well one time we had a real nice family from Mexico order catering for a quinceañera and the grandma didnt speak much English but she had her granddaughter translatin for her so it worked out fine, but as far as the bot needin to actually speak somethin else I dont think so, just keep it English I reckon, if that ever becomes a real need we'll cross that bridge but for now naw just regular English is fine by me."
+    ],
+    [
+      "Birdie",
+      "Good deal, English it is. Before we wrap up — anything else you offer besides the truck menu and catering, even small or occasional stuff, like merch or gift cards or anything like that?"
+    ],
+    [
+      "Michael \"Big Mike\" Dawson",
+      "Nah man we don't do no merch or gift cards or nothin like that, though Deb did mention one time she wanted to make some tshirts with Brisket the dogs face on it cause people always askin about him, thats been a \"someday\" thing for like two years now same as the second smoker ha, we just never got around to it, too busy runnin the truck and doin the catering and keepin Ronnie in business fixin my transmission. So no its really just the truck menu and the catering thats it, nothin fancy on the side, maybe one day we'll get around to the tshirt thing but dont hold your breath, I said that about the smoker too and look where that got us, still just the one rig."
+    ],
+    [
+      "Birdie",
+      "Good to know, no merch to worry about for now. Last thing before I read everything back to you — anything else on your mind about pricing or the business that we haven't touched on yet?"
+    ],
+    [
+      "Michael \"Big Mike\" Dawson",
+      "Man let me think, I mean pricing wise I think we covered all of it, plates, sides, catering packages, all that. But since you brought it up there is somethin been rattlin round in my head, that second smoker thing I mentioned, been sayin Im gonna do it for over a year now, itd solve that 150 plate bottleneck for the real big weddings, but every time I get some money saved up for it like 8 grand or so, wouldnt you know it the truck needs somethin, brakes or the transmission again thanks to Ronnie job security ha, so that money just gets swallowed up and the smoker dream keeps gettin pushed back, Deb rolls her eyes about it same as the tshirt thing.\n\nOther thing is I aint even sure I still wanna do the weekday catering stuff much longer, like doin a Tuesday event kinda messes up my prep time for the truck on Thursday, I go back and forth on it, some weeks I love the extra money other weeks Im draggin butt tryin to do both, aint made my mind up on that yet so dont quote me sayin we stoppin weekday catering or nothin, just somethin Im chewin on. But other than that naw I think you got the whole picture, go ahead and read it back to me lets see if you got it right."
+    ],
+    [
+      "Birdie",
+      "Alright Mike, let me read back everything I've got so you can check it over:\n\n**Business**: Big Mike's Smoke Pit, Lubbock TX — food truck + catering, run by you and Deb, going on 9 years. Tyrell helps serve weekends. Deb handles Facebook/Instagram, messages, and the books/calendar.\n\n**Truck menu & prices**:\n- Pulled pork plate: $14\n- Brisket plate: $18\n- Ribs half rack: $16 / full rack: $28\n- Sides (mac and cheese, collard greens, cornbread, coleslaw): $4 each or 2 for $7\n- Truck runs Thursday–Sunday, location changes and gets posted on Facebook each morning by Deb\n- Payment at truck: cash or card (Square-type reader)\n\n**Catering**:\n- $12/person for groups of 25+ (includes 2 meats, 2 sides), drops to $10/person for groups over 75\n- Standard lead time: 2 weeks notice; rush jobs possible in as little as 4 days for smaller groups, but large groups (100+) on short notice should never be promised by the bot — must check with Mike first (smoker holds ~150 plates, brisket takes 14-16 hrs)\n- Deposit: 30% at booking, balance due day of event, paid cash or Venmo\n- Cancellation policy (official, what the bot states): deposit is non-refundable if cancelled within 7 days of the event\n- Booking and payment stays with Mike/Deb — bot does NOT take bookings or handle money\n\n**Channel & bot setup**:\n- Facebook Messenger only (matches past bad experience with a website)\n- English only\n- Friendly, folksy tone — not stiff or corporate\n- Name — leaning 'Lil Smokey' or 'Pit Boss', pending Deb's input\n- Volume: roughly 20-30 messages/week, busier Thurs-Sun\n\n**Escalation**: anything needing Mike's attention (rush jobs, big orders, disputes) — bot tells customer to message the Facebook page, which Deb monitors closely. No separate phone/text line.\n\n**Open items still undecided**: the bot's final name (pending Deb), and whether you'll keep doing weekday catering long-term (you're still going back and forth on that).\n\n**Notes for context** (not bot-facing): the smoker's 150-plate limit is a real constraint on big events; a second smoker (~$8k) would help but money keeps going to truck repairs instead; no merch/gift cards currently, t-shirt idea is a 'someday.'\n\nDoes all that look right, or is there anything to fix?"
+    ],
+    [
+      "Michael \"Big Mike\" Dawson",
+      "Yeah man that all sounds about right to me you got it all down good, thats basically everything we talked about. Only thing Id add and I dont think you got it wrong just wanna make sure its clear, that 4 day rush job thing I did that one time cause it near killed me and Deb said never again, so like dont want the bot makin it sound like we do that regular, more like hey maybe possible but gotta check with Mike first thats what you already said so I think were good there actually.\n\nOh and the smoker holdin 150 plates thats right but that was for the big wedding back in 2019 that near did me in that time, just wanted to tell that story again but yeah 150 plates thats accurate.\n\nEverything else you said lines up good, menu prices right, catering pricing right, deposit thing right, cancellation policy right, Facebook only right, all of it. You did real good Birdie I think we ready to move forward whenever you are, just gotta run the name thing by Deb first she gonna have somethin to say about Lil Smokey versus Pit Boss I already know it."
+    ],
+    [
+      "Birdie",
+      "Awesome, Mike, thank you for all the detail — and for putting up with all my questions! Here's what happens next: this all gets handed off to the build team to put together, and you and Deb can settle on the bot's name (Lil Smokey vs Pit Boss) whenever works for y'all. Appreciate you taking the time, and tell Brisket the dog I said hey."
+    ]
+  ],
+  "brief": {
+    "contact_name": "Michael Dawson (Big Mike)",
+    "business_name": "Big Mike's Smoke Pit",
+    "industry": "BBQ food truck & catering",
+    "business_description": "Run by Mike and his wife Deb, started 9 years ago as a tent at the farmers market, now operate a food truck and also do catering. Truck runs Thursday-Sunday, location varies week to week - Deb posts daily location on Facebook each morning (also does Instagram, but Facebook is the real-time location spot). Catering smoker rig (converted trailer, built by Mike) holds about 150 plates worth of meat at a time - bottleneck for very large events, requiring back-to-back batches. Previously tried a website (built cheaply by Deb's cousin) for locations but it kept crashing/going down. Team: Mike runs the smoker/cooking; Deb handles Facebook/Instagram, messages, the books, and has her own calendar system for booking catering; Tyrell helps serve on weekends and handles the card reader/tech side. Married 22 years. Based in Lubbock, TX. No merch or gift cards currently - t-shirts with dog Brisket's face and a second smoker are 'someday' ideas, not active.",
+    "problem_to_solve": null,
+    "target_audience": null,
+    "channels": [
+      "Facebook (Messenger/page messages) - primary and only channel, matches past bad experience with a website"
+    ],
+    "integrations": null,
+    "conversation_volume": "Rough estimate: 20-30 messages per week via Facebook, busier Thursday-Sunday when truck is out (owner unsure of exact number, Deb handles most of the messaging)",
+    "languages": [
+      "English only"
+    ],
+    "success_criteria": null,
+    "budget": null,
+    "timeline": null,
+    "services_and_pricing": [
+      "Truck menu - Pulled pork plate: $14",
+      "Truck menu - Brisket plate: $18",
+      "Truck menu - Ribs half rack: $16",
+      "Truck menu - Ribs full rack: $28",
+      "Truck menu - Sides (mac and cheese, collard greens, cornbread, coleslaw): $4 each, or 2 for $7 (better deal)",
+      "Catering - private events (weddings, birthdays, corporate, etc): $12/person for groups of 25+, includes 2 meats and 2 sides; drops to $10/person for groups over 75",
+      "Catering lead time - normally 2 weeks notice required (needed to plan smoker schedule and order meat from supplier); rush jobs possible in as little as 4 days for smaller groups but this was a one-time exception that was very stressful, not something done regularly - Deb said 'never again'"
+    ],
+    "faq_answers": [
+      "Where's the truck today? -> Bot should point customers to the Facebook page, where Deb posts the daily location each morning.",
+      "Can you do a rush/short-notice catering order? -> Bot should say 2 weeks notice is standard, and short notice is not a regular thing but MAY be possible for smaller groups - have them reach out to Mike directly to check, don't imply it's routine. For large groups (100+) on short notice, bot should NOT promise availability since smoker only holds 150 plates and brisket takes 14-16 hours to cook properly - must check with Mike first before confirming anything.",
+      "How can I pay at the truck? -> Both cash and card accepted (using a Square-type reader on Tyrell's/Mike's phone).",
+      "What happens if I cancel my catering booking? -> Bot should state the official policy: deposit (30%) is non-refundable if cancelled within 7 days of the event."
+    ],
+    "business_policies": [
+      "Catering deposit: 30% due at booking, remainder due day of event",
+      "Catering payment: cash or Venmo for remaining balance",
+      "Truck payment: cash or card (Square-type reader), no cash-only restriction",
+      "Truck hours: Thursday through Sunday only",
+      "Truck location varies day to day/week to week, posted on Facebook each morning by Deb",
+      "Catering booking policy: standard is 2 weeks notice; short notice (as little as 4 days) has been done once for a smaller-scale rush but is not a regular offering - bot should never confirm short-notice large orders (100+ people) without checking with Mike first, due to smoker capacity (150 plates, per a 2019 wedding that pushed the limit) and brisket cook time (14-16 hrs)",
+      "Cancellation policy (bot should state only this): deposit (30%) is non-refundable if cancelled within 7 days of the event. (Note: in practice Mike sometimes makes exceptions for regulars/sympathetic cases, which Deb disapproves of - confirmed that the bot should state the official policy only, not the exceptions.)",
+      "No-show/non-payment risk: rare; deposit covers meat cost if customer flakes. One incident where booker was unreachable day-of but a third party at the delivery address paid the balance in cash."
+    ],
+    "escalation_rules": [
+      "For rush/large catering inquiries or anything needing Mike's direct attention, bot should direct customers to message the Facebook page (Deb monitors it closely). No dedicated business phone/text line exists. Regulars who already have Mike's number may call him directly, but that's not the bot's routing path."
+    ],
+    "open_items": [
+      "Bot name not finalized - Mike is considering 'Lil Smokey' or 'Pit Boss' but wants to run it by Deb before deciding.",
+      "Mike is undecided whether to keep offering weekday catering long-term - it cuts into truck prep time for Thursday, and he goes back and forth on whether it's worth it. Not a settled decision - bot should not state that weekday catering is stopping or continuing definitively unless Mike confirms."
+    ],
+    "additional_notes": [
+      "Smoker rig (converted trailer) holds ~150 plates worth of meat at a time - was pushed to its limit at a 2019 wedding (200 guests), requiring two batches back to back",
+      "Deb's collard greens recipe is a family recipe from her grandmother",
+      "Brisket takes 14-16 hours to cook properly, cannot be rushed",
+      "Past website (built by Deb's cousin) was unreliable and kept crashing",
+      "Bot scope decision: bot should answer questions (menu, hours, location pointer, catering pricing/policies) but NOT take bookings or payments - actual booking/deposit handling stays with Mike and Deb due to smoker capacity limits and Deb's own calendar system. Possible to revisit expanding bot's role later if it works well.",
+      "Tone: friendly and folksy, matching the brand, not stiff or corporate - should be conversational but not ramble on.",
+      "Mike wants a second smoker (~$8k) to solve the 150-plate bottleneck for big weddings, but keeps having to spend that saved money on truck repairs instead - ongoing pain point, not resolved."
+    ]
+  },
+  "analysis": null,
+  "completed": true,
+  "turns": 33
+}

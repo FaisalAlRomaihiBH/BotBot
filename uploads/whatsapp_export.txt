@@ -1,52 +1,28 @@
-[Mon 9:12 AM] Dana: Hi! Do you do same-day flat repairs?
-[Mon 9:40 AM] Sunny: Yes
-[Mon 9:41 AM] Dana: Great, walk-in okay or should I book?
-[Mon 9:55 AM] Sunny: Walk-in
-[Mon 9:56 AM] Dana: Perfect, what's the cost?
-[Mon 10:20 AM] Sunny: 15
-
-[Tue 2:03 PM] Marcus: Hey do you guys do bike fits? Been having knee pain
-[Tue 3:47 PM] Sunny: Yes
-[Tue 3:48 PM] Marcus: How long is the session and what's it cost?
-[Tue 4:15 PM] Sunny: 90 min. 120
-[Tue 4:16 PM] Marcus: Need a deposit to book?
-[Tue 5:02 PM] Sunny: 20. nonrefundable
-[Tue 5:10 PM] Marcus: Ok can I do Saturday?
-[Tue 6:30 PM] Sunny: Jae's here sat, ask him
-[Tue 6:31 PM] Marcus: Wait is Jae doing the fit or you?
-[no response]
-
-[Wed 11:15 AM] Priya: Hi, my Trek needs a full tune up, gears skipping. How much and how long?
-[Wed 1:02 PM] Sunny: 85. couple days
-[Wed 1:05 PM] Priya: Could it be sooner? Leaving for a trip Friday
-[Wed 3:40 PM] Sunny: maybe
-[Wed 3:41 PM] Priya: Maybe as in yes or no? 😅
-[Wed 4:55 PM] Sunny: depends on parts
-[Wed 4:56 PM] Priya: What parts might you need?
-[no response]
-
-[Thu 9:30 AM] Priya: Following up — any update on my Trek?
-[Thu 9:31 AM] Priya: Also can I drop it off today?
-[Thu 4:12 PM] Sunny: yes
-
-[Fri 10:05 AM] Colin: Do you carry e-bike repair? Battery issue on my Rad
-[Fri 1:20 PM] Sunny: Not yet
-[Fri 1:21 PM] Colin: Planning to soon?
-[Fri 1:45 PM] Sunny: maybe. thinking about it
-[Fri 1:46 PM] Colin: Ok let me know! Anyone nearby you'd recommend meanwhile?
-[no response]
-
-[Sat 12:10 PM] Dana: Btw is the shop the one with no sign next to the laundromat?
-[Sat 12:44 PM] Sunny: yea
-[Sat 12:45 PM] Sunny: [image: strip mall storefront, unit 4]
-[Sat 12:46 PM] Dana: Got it thanks!
-
-[Sun 8:02 PM] Elena: Hi are you open tomorrow? Want to bring in my road bike for a wheel true
-[Mon 10:31 AM] Sunny: yes 10-6
-[Mon 10:32 AM] Elena: What's the price and do I need appt?
-[Mon 10:50 AM] Sunny: 20. no appt
-
-[Tue 3:15 PM] Marcus: Hey following up from last week — can I still book Saturday fit?
-[Tue 5:40 PM] Sunny: yes. venmo deposit
-[Tue 5:41 PM] Marcus: Sent! Should I bring my old bike or the new one I'm considering?
-[no response]
+[6/2, 9:14 AM] Mike: hey there yeah we do catering for sure just depends on the weekend cause we also run the truck thursday through sunday you seen the truck yet its the one with the pig painted on the side my cousin did that airbrush thing took him like three days lol
+[6/2, 9:15 AM] Sarah T: Haha no I haven't! I'm looking for catering for a graduation party, about 60 people, June 21st. What would that cost?
+[6/2, 9:22 AM] Mike: oh june that's gonna be hot as heck we did a wedding last june and the ice sculpture melted before the ceremony even started people were sliding on the grass lol anyway yeah 60 people we can do that no problem
+[6/2, 9:23 AM] Sarah T: Awesome, and the price?
+[6/2, 9:31 AM] Mike: so for 60 that'd be right around 12 a head with two meats two sides so like brisket and pulled pork with mac and greens or whatever yall want that's about 720 give or take we can talk sides later
+[6/2, 9:32 AM] Sarah T: Perfect that works for us. How do we lock in the date?
+[6/2, 9:40 AM] Mike: 30 percent down holds the date rest is due day of, cash or venmo deb handles all that money stuff shes way better with it than me lol one time i forgot to invoice a whole wedding for like 3 weeks
+[6/2, 9:41 AM] Sarah T: Got it, I'll send the deposit today. Do you need a headcount ahead of time?
+[6/2, 9:55 AM] Mike: yeah closer to the date is fine we usually smoke enough extra anyway my brisket takes like 15 hours in the smoker so i start that thing at like 2 in the morning deb hates it cause the smell gets in the house lol
+[6/9, 4:02 PM] Sarah T: Hi Mike, just following up — did the deposit come through ok? Also wanted to ask about setup time on the day.
+[6/9, 6:47 PM] Mike: let me check with deb on that one she does the venmo stuff ill get back to you
+[6/13, 11:10 AM] Sarah T: Hey just checking in again, we're getting close to the date!
+[6/13, 11:30 AM] Mike: yeah no worries we got you down for the 21st you're gonna love the brisket we tried a new rub last week actually kinda spicy hope thats ok for the graduation crowd
+[6/13, 11:31 AM] Sarah T: Did the deposit go through though?
+[6/13, 11:44 AM] Mike: oh yeah i think so ill double check with deb tonight she's at her sisters right now
+[6/17, 2:15 PM] Sarah T: Hi! 4 days out — can you confirm setup time and final headcount is 58?
+[6/17, 3:03 PM] Mike: yeah 58 is fine we can flex a little either way honestly we always smoke extra anyway one time we had 40 extra plates from a quinceanera and just gave em to the fire station down the street lol good guys
+[6/17, 3:04 PM] Sarah T: Ha nice. Setup time?
+[6/17, 3:20 PM] Mike: probably like an hour before yall wanna eat so if its at noon we'll roll in around 11 depends on traffic too construction on 82nd has been brutal lately took me 40 min to get across town yesterday
+[6/17, 3:21 PM] Sarah T: Great, party starts at 1pm so noon works. Thanks!
+[6/19, 10:05 AM] James (new inquiry): Hi do you guys do vegetarian options for catering?
+[6/19, 1:47 PM] Mike: haha good question we had a guy ask that at a bbq competition once and got laughed off stage but honestly yeah we can do like a loaded mac and cheese or extra sides plate for veggie folks it's not fancy but it works
+[6/19, 1:48 PM] James: Cool, roughly how much for that per person?
+[6/19, 2:35 PM] Mike: oh man good question let me think on that one and get back to you never priced that out separate before
+[6/25, 8:00 AM] Sarah T: Everything was amazing on Saturday, thank you!! Quick question though — we were charged 750 not 720, was that the headcount adjustment?
+[6/25, 12:12 PM] Mike: oh good glad yall loved it that brisket batch turned out real good even tho i almost overslept the smoker alarm didnt go off lol scared the heck outta me at 4am — the price thing let me check with deb she does the final numbers ill ask her tonight
+[7/1, 9:00 AM] Sarah T: Hey following up on that pricing question from last week?
+[7/1, no response logged]

@@ -1,0 +1,61 @@
+{
+  "fact_capture": 7,
+  "no_repeats": 9,
+  "evidence_use": 8,
+  "naturalness": 8,
+  "completeness": 4,
+  "efficiency": 5,
+  "findings": [
+    {
+      "problem": "Birdie never asked why Mike wants a chatbot or what problem it should solve — the brief's `problem_to_solve` is null even though the interview opened straight into service inventory. The obvious pain (Deb permanently glued to the phone answering 'where are you parked' and catering questions) was never framed as the goal.",
+      "excerpt": "Birdie: Hey Big Mike, great to meet you — and yes, I'm Birdie, I'm here to help you figure out exactly what you'd want a chatbot to do for Big Mike's Smoke Pit. Love the story about starting at the farmers market with Deb! Let's dig in — first off, what all do you offer? Like walk me through everything — truck menu, catering, all of it."
+    },
+    {
+      "problem": "No question about success criteria, budget, or timeline anywhere in 33 turns; the interview closed straight into hand-off, leaving four brief fields null.",
+      "excerpt": "Birdie: Awesome, Mike, thank you for all the detail — and for putting up with all my questions! Here's what happens next: this all gets handed off to the build team to put together, and you and Deb can settle on the bot's name (Lil Smokey vs Pit Boss) whenever works for y'all."
+    },
+    {
+      "problem": "Target audience never explored (truck walk-ups vs. wedding/corporate catering buyers are very different audiences with different questions) — `target_audience` is null.",
+      "excerpt": "Birdie: That makes total sense, keeping the booking and money side with you and Deb for now. Should the bot have a particular personality or tone — like friendly and folksy to match the brand — and did you want to give it a name, or just call it something simple like 'Big Mike's Smoke Pit Assistant'?"
+    },
+    {
+      "problem": "Mike volunteered a genuine operational pain point — repeated close calls on late delivery because he underestimates brisket smoke time — and Birdie moved on to contact details instead of probing. The brief records the 14-16 hr cook time but never records the near-miss/late-delivery risk as a problem the bot should help prevent.",
+      "excerpt": "Michael \"Big Mike\" Dawson: ...dont want the bot just sayin yes to everybody and then me scramblin like a chicken with its head cut off at 2am tryin to get brisket done in time, had a couple close calls like that already and I dont wanna push my luck again."
+    },
+    {
+      "problem": "Truck time-of-day hours were never asked. The brief says only 'Thursday through Sunday' — a food-truck bot cannot answer the single most common question ('are y'all open now / what time do you close?').",
+      "excerpt": "Michael \"Big Mike\" Dawson: Oh and the truck we only run Thursday through Sunday, we post where we at on the Facebook cause we move around to different spots around town, some days we by the mall some days out by the highway depends on whats goin on that week."
+    },
+    {
+      "problem": "Catering availability by day of week was never pinned down. Mike books catering any day (that's why weekday events cut into Thursday prep), but the brief only lists 'Truck hours: Thursday through Sunday only', so the bot could wrongly imply catering is Thurs-Sun too.",
+      "excerpt": "Michael \"Big Mike\" Dawson: Now the catering side thats a whole different animal, we do private events, weddings, birthdays, corporate stuff, whatever, you gotta book at least 2 weeks out normally though Ive done rush jobs in as little as 4 days before"
+    },
+    {
+      "problem": "The brief distorts the rush-job facts: it states the 4-day job was 'a one-time exception... Deb said never again', omitting Mike's explicit statement that he'd likely do it again. This over-hardens a deliberately flexible policy.",
+      "excerpt": "Michael \"Big Mike\" Dawson: ...but honestly that near killed me Deb was not happy about that one she said never again but you know me I probably will again haha."
+    },
+    {
+      "problem": "Volume estimate was accepted as an unverified guess with no attempt to firm it up (e.g. suggesting Mike check with Deb, who actually handles the inbox) — the resulting number is nearly useless for sizing.",
+      "excerpt": "Michael \"Big Mike\" Dawson: I wanna say maybe 20 30 messages a week but honestly that might be low or high I really aint never sat down and counted it, Deb might know better than me she the one glued to it"
+    },
+    {
+      "problem": "Double-barreled turn: Birdie makes a channel recommendation, asks for confirmation, and stacks an unrelated volume question in the same breath, which is why the volume answer came back so vague.",
+      "excerpt": "Birdie: Given the website gave you nothing but headaches before, and your customers already message you on Facebook, I'd say stick with Facebook Messenger for the bot — no extra site to maintain, no new place for folks to look. Sound good? Also, roughly how many messages or orders would you guess come in through Facebook in a typical week?"
+    },
+    {
+      "problem": "Turn budget (33 entries, above the 20-30 norm) was spent on low-yield topics — merch/gift cards, language support, no-show anecdotes — while core discovery fields (goal, success, budget, timeline, audience, hours) went unasked.",
+      "excerpt": "Birdie: Good deal, English it is. Before we wrap up — anything else you offer besides the truck menu and catering, even small or occasional stuff, like merch or gift cards or anything like that?"
+    }
+  ],
+  "top_improvement": "Add a mandatory discovery block early in the interview — 'why do you want a bot / what's eating your time today', 'what would make this a win in 3 months', plus budget and timeline — and block the wrap-up/read-back until problem_to_solve, success_criteria, target_audience, budget and timeline are non-null or explicitly declined by the owner.",
+  "schema_suggestions": [
+    "Add an `operating_hours` field structured per service line (days AND times, plus which services run which days) — truck hours vs. catering availability currently collapse into a single ambiguous policy bullet.",
+    "Add an `operational_constraints` / `capacity_limits` field: the 150-plate smoker ceiling, 14-16 hr brisket cook time, and double-booking risk are hard bot-behavior constraints but are scattered across business_policies, faq_answers and additional_notes.",
+    "Add a `pain_points` field distinct from `problem_to_solve` (near-miss late deliveries, Deb's phone burden, inconsistent deposit waivers) — these currently have no home and were largely dropped.",
+    "Add a `bot_scope` / `automation_boundaries` field (answers-only vs. transactional, what it must never promise) — this key decision is buried in additional_notes prose.",
+    "Add a `tone_and_persona` field (name, voice, style constraints) — currently crammed into additional_notes and open_items.",
+    "Add a `staffing_and_roles` field — Mike/Deb/Tyrell/day-hire roles are relevant for escalation routing but are only narrated inside business_description.",
+    "Add a confidence/verification flag on estimate-type fields (e.g. conversation_volume) so unverified guesses are machine-visible and can be re-checked with the person who actually knows (Deb).",
+    "Interviewer lacks a mechanism to flag questions that must be answered by a second stakeholder (Deb owns the inbox, books and calendar); add a `follow_up_with` field so those items are routed rather than left as vague guesses."
+  ]
+}
