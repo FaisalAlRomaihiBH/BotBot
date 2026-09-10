@@ -1,0 +1,18 @@
+{
+  "fact_capture": 6,
+  "no_repeats": 10,
+  "evidence_use": 8,
+  "naturalness": 9,
+  "completeness": 5,
+  "efficiency": 8,
+  "findings": [
+    "Critical omission: Birdie never asked about the $20 new-customer deposit policy (bank transfer, refundable if cancelled 24hrs ahead, Gary often forgets to enforce it). For a chatbot meant to handle bookings, this is a core policy that should have been surfaced but is completely absent from the brief's business_policies and escalation_rules.",
+    "Critical omission: the fact sheet explicitly notes Gary is 'unsure/uncertain' whether he needs 'a full booking app or just something simple' and keeps flip-flopping on this — Birdie never asked this question at all, despite it being central to scoping the actual chatbot solution. The brief's open_items list doesn't mention this ambiguity either, even though it was flagged as a known uncertainty the interview should have surfaced.",
+    "Minor loss: the nuance that Monday is 'meant to be' paperwork/van maintenance day but Gary 'mostly just does maintenance and the paperwork goes right out the window' is mentioned in transcript ('don't tell Denise I said that') but the brief flattens this to a plain statement ('Mondays reserved for paperwork/van maintenance (not customer-facing)'), losing the humanizing/behavioral detail that might matter for how the bot handles Monday inquiries.",
+    "Minor loss: Victoria, Australia (state) is in the fact sheet as location context but never explicitly confirmed or included in the brief's business_description (only 'Ballarat' is used) — low stakes but a small completeness gap.",
+    "Positive: Birdie did well capturing the pricing table, service area, escalation triggers (matted dogs, aggressive dogs, angry customers, same-day bookings), and success criteria, and appropriately flagged the matted-dog pricing inconsistency as an open item with a good paraphrase of Gary's own words ('eyeballs it').",
+    "Positive: the final summary/read-back was accurate for everything it covered and gave Gary a chance to correct/add (he added Tue-Sat hours confirmation and Chloe's Saturday role), which is a good practice — but the read-back also didn't include booking/deposit policy or booking-app-vs-simple, so Gary had no prompt to raise them himself.",
+    "The open_items list is reasonably good (walk-up inquiries, matted pricing, timeline vagueness, Chloe's access) but should also have included 'deposit/payment enforcement process' and 'scope: simple reminder tool vs full booking app' as open items given they were never resolved."
+  ],
+  "top_improvement": "Add a dedicated question (or checklist pass) explicitly covering booking/payment mechanics — e.g., 'Do you take deposits or require any payment before confirming a booking, and how is that currently handled?' — and a scoping question like 'Are you picturing a full booking/payment app, or something simpler like automated replies and calendar sync?' before wrapping up, since these are foundational to what the chatbot must actually do and were both silently skipped despite being known Gary uncertainties."
+}

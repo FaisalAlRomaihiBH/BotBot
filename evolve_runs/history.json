@@ -1,0 +1,13 @@
+[
+  {
+    "cycle": 1,
+    "stamp": "20260910_075729",
+    "persona": "Mobile pet grooming services / Gary rambles constantly and goes off on tangents — he'll start answering a simple question and end up telling you about his footy team, his knee replacement, or a dog he groomed in 2019 named Baxter. He does eventually circle back to answer, but you have to wade through a lot of unrelated chat. He's friendly and well-meaning, just easily distracted.",
+    "score": 7.67,
+    "completed": true,
+    "improved": true,
+    "reverted": false,
+    "commit_before": "075a29b2c78cd02a81bd3d32d3c57a0bde8bff62",
+    "top_improvement": "Add a dedicated question (or checklist pass) explicitly covering booking/payment mechanics — e.g., 'Do you take deposits or require any payment before confirming a booking, and how is that currently handled?' — and a scoping question like 'Are you picturing a full booking/payment app, or something simpler like automated replies and calendar sync?' before wrapping up, since these are foundational to what the chatbot must actually do and were both silently skipped despite being known Gary uncertainties."
+  }
+]
