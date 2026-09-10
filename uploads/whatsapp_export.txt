@@ -1,33 +1,32 @@
-[Mon 9:12 AM] Customer (Elise): Hi! Do you have space in the beginner wheel-throwing class this Thursday?
-[Mon 9:40 AM] Mars: hii yes!! we have space come at 10am its $45 for the session super fun
-[Mon 9:41 AM] Mars: actually wait i think thursday might be full let me check my notebook
-[Mon 11:15 AM] Mars: ok you're good!! 10am thursday see you then
-[Mon 11:16 AM] Mars: oh also thinking about it we might do 5pm instead of 10am this week bc kiln stuff, i'll confirm tmrw
-[Tue 8:50 AM] Elise: Any update on the time?
-[Tue 3:20 PM] Mars: let me check with Teo and get back to you!!
-[Wed 6:05 PM] Elise: Hi just following up — is it 10am or 5pm tomorrow?
-[Thu 9:02 AM] Mars: 10am!! see you soon 😊
-[Thu 9:44 AM] Elise: Great, on my way
-[Fri 2:10 PM] Customer (Dev): Hey, interested in a custom set of 6 dinner plates. How much would that run?
-[Fri 2:30 PM] Mars: oh i love this!! for 6 plates probably like $150 total depending on glaze
-[Fri 2:31 PM] Mars: actually the glaze i'm thinking of is pricier so maybe closer to $200
-[Fri 5:45 PM] Dev: Ok, so is it $150 or $200?
-[Fri 5:52 PM] Mars: lets say $180 to be fair!! deposit is 50% to start
-[Sat 10:03 AM] Dev: Sounds good, sending the deposit now. How long until they're ready?
-[Sat 10:20 AM] Mars: like a week!! maybe less
-[Sat 10:21 AM] Mars: oh wait i have 3 kiln loads ahead of you already so maybe more like 3 weeks, sorry!!
-[Sun 1:00 PM] Customer (Renata): Hi, is the 6-week course still running this term? What's the price?
-[Sun 4:12 PM] Mars: yes!! $220 for the full 6 weeks
-[Sun 4:13 PM] Mars: honestly i'm thinking of not running it this term, attendance has been low, let me think about it and let you know
-[Mon 9:00 AM] Renata: Any update? I need to know before I commit to the schedule.
-[Mon 9:00 AM] Renata: Also is there a discount if I bring a friend?
-[Mon 2:47 PM] Mars: omg sorry been slammed!! ok yes running it, and yes discount for friends, $180 each if two of you sign up
-[Tue 10:00 AM] Renata: Perfect, we'll take two spots at $180 each then
-[Tue 10:44 AM] Mars: wait i need to double check that discount with Teo he said i keep doing this lol i'll confirm by tonight
-[Wed 8:00 AM] Renata: Did you confirm the discount price?
-[Fri 12:15 PM] Customer (Sam): Hi, do you rent studio time for people not currently enrolled in a class?
-[Fri 1:00 PM] Mars: hmm normally that's just for current students but for you sure!! $15/hr
-[Fri 1:02 PM] Mars: actually you know what let me just make it free for now since we're quiet this month
-[Fri 6:30 PM] Sam: Amazing, so free open studio access — when can I come by?
-[Sat 9:15 AM] Mars: this week hours are kind of all over bc of a kiln issue, let me sort it out and text you
-[Sun 5:00 PM] Sam: Just checking in — any hours yet?
+[03/06, 9:14am] Sandra M: Hi, do you have any medium storage units available this week?
+[03/06, 9:20am] Colin Pratt: Yeah plenty, medium's £32 a week, take your pick
+[03/06, 11:02am] Sandra M: Great, and is that inclusive of insurance for my stuff?
+[03/06, 11:05am] Colin Pratt: Yep you're covered up to a grand with us no bother
+[03/06, 2:47pm] Denise (Front Desk): Sandra hiya, just to say — we don't actually provide insurance, you'd need your own cover, sorry for confusion
+[03/06, 2:50pm] Sandra M: Oh ok, thanks for clarifying!
+[04/06, 10:03am] Tom W: Quote for a 3 bed house move, Stretford to Chorlton?
+[04/06, 10:11am] Colin Pratt: That'll be the flat £280, covers everything including fuel and two lads
+[04/06, 4:32pm] Colin Pratt: Actually thinking on it the £280 doesn't include fuel, that's on top, sorry mate
+[04/06, 4:33pm] Tom W: Right... so what's the fuel roughly?
+[04/06, 4:40pm] Colin Pratt: Let me check with Ryan and get back to you
+[07/06, 8:55am] Tom W: Hey any update on the fuel cost?
+[10/06, 1:15pm] Tom W: Hi Colin, still keen to book, just need the total figure
+[15/06, 5:02pm] Ana K: Hi, are you open Sundays? Need to drop stuff off
+[15/06, 5:10pm] Colin Pratt: Nah closed Sundays mate, strictly Mon-Sat 8-6
+[15/06, 5:44pm] Ana K: Oh no that's a shame, I only have Sunday free
+[15/06, 5:50pm] Colin Pratt: Tell you what leave it with me I'll sort something for Sunday, come by 10am
+[18/06, 9:02am] James R: How much is the key deposit for a unit please
+[18/06, 9:10am] Colin Pratt: £25 refundable
+[19/06, 3:15pm] James R: My mate said his was £50, is that changed recently?
+[19/06, 3:20pm] Colin Pratt: Yeah it's £50 now, went up
+[22/06, 11:00am] Priya S: Hi, if I store for 6+ months is there a discount?
+[22/06, 11:06am] Colin Pratt: Yeah definitely 10% off for long term, no problem
+[25/06, 1:40pm] Kev D: Heard from a mate you do discounts for long term storage, is that right?
+[25/06, 1:52pm] Colin Pratt: Nah we don't really do that, price's the price sorry
+[28/06, 10:20am] Fiona L: Can I book the van for this Saturday morning, need it for about 2 hours
+[28/06, 10:25am] Colin Pratt: Yeah should be fine, £45/hr 2hr minimum so £90
+[28/06, 10:26am] Fiona L: Perfect, and is the second van the one that's free? Heard the other's in the garage
+[28/06, 10:40am] Colin Pratt: Let me check with the mechanic and confirm which van's ready, back to you shortly
+[02/07, 9:00am] Fiona L: Hiya just checking in, is the van sorted for Saturday?
+[06/07, 4:12pm] Priya S: Hi just following up — can I get that 10% long term discount confirmed in writing for my records?
+[06/07, 4:50pm] Denise (Front Desk): Hi Priya, I'll need to check with Colin on that and come back to you, he's out with the van today
