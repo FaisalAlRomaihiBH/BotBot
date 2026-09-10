@@ -1,58 +1,36 @@
-[09/03, 10:12] Sarah K: Hi! Do you do puncture repairs same day?
-[09/03, 10:15] Marcus: Yeah course, bring it in
-[09/03, 10:15] Marcus: actually if it's after 3 might have to be next morning, depends what else is on
-[09/03, 10:16] Sarah K: Ok! And roughly how much?
-[09/03, 10:16] Marcus: tenner
-[09/03, 10:20] Marcus: oh wait no I put the price up, it's £15 now
-[09/03, 14:02] Sarah K: Cool, I'll pop by tomorrow morning then
-
-[11/03, 09:40] Dan R: Morning, interested in a custom frame, steel, touring geometry. What's your lead time at the moment?
-[11/03, 09:55] Marcus: about 6 weeks mate
-[11/03, 10:30] Marcus: actually thinking about it more like 10, I've got two ahead of you
-[11/03, 10:31] Dan R: Ok good to know. And ballpark price?
-[11/03, 10:32] Marcus: £1200 all in
-[11/03, 10:40] Marcus: hang on no that was last year's price, more like £1500 now, materials gone up
-[11/03, 15:00] Dan R: Right, is that firm or could it go higher
-[11/03, 15:01] Marcus: nah that's firm
-[11/03, 15:03] Marcus: well firm-ish
-
-[13/03, 08:15] Priya M: Are you open Mondays? Want to drop a bike off
-[13/03, 08:30] Marcus: yep open Mondays now
-[13/03, 08:31] Marcus: actually no scrap that we stopped doing Mondays
-[13/03, 08:31] Marcus: tell you what just come Tuesday to be safe
-[13/03, 08:45] Priya M: haha ok, Tuesday it is
-
-[14/03, 11:00] Dan R: Following up — can you confirm the frame price before I transfer the deposit?
-[14/03, 11:20] Marcus: let me check my notes and get back to you
-[16/03, 09:00] Dan R: Any update?
-[18/03, 17:40] Dan R: Hi Marcus, just following up again on the frame quote
-
-[20/03, 13:00] Grace T: Hi do you sell the Brother Cycles Kepler frame in stock?
-[20/03, 13:10] Marcus: yeah got one in a 54
-[20/03, 13:12] Marcus: oh wait that might be sold actually, let me check with Ollie
-[20/03, 13:12] Marcus: he's in Thurs, I'll ask then
-
-[22/03, 09:30] Grace T: Hey, did Ollie know about the Kepler frame?
-[22/03, 18:45] Marcus: he's not sure either honestly, we'll do a stock check this week
-
-[25/03, 10:00] Sarah K: Hi again, back for a full service quote please
-[25/03, 10:05] Marcus: £70
-[25/03, 10:06] Marcus: actually depends what it needs, could be up to £90
-[25/03, 10:07] Marcus: bring it in and I'll have a proper look, don't want to promise a number
-[25/03, 10:08] Sarah K: Sure that's fine
-
-[27/03, 16:00] Dan R: Marcus I really need to know the frame price, three weeks now
-[27/03, 16:45] Marcus: sorry mate been mental in here, it's £1500, that's final, I'll get the jig set up this week
-[27/03, 16:46] Dan R: Great, and timeline?
-[27/03, 16:47] Marcus: 6 weeks from deposit
-[27/03, 16:48] Marcus: might be 8 with the queue, I'll confirm once I start
-[27/03, 16:50] Dan R: ...ok, transferring deposit now
-[27/03, 16:52] Marcus: 👍 legend, oh also fun fact one of my frames placed 3rd in the regional TT last year
-
-[29/03, 12:00] Grace T: Any news on that Kepler frame in stock?
-[29/03, 12:00] Grace T: hello?
-
-[02/04, 09:00] Priya M: Hi Marcus, dropping bike off today, is card payment sorted yet?
-[02/04, 09:20] Marcus: cash or transfer only still, machine's still on order
-[02/04, 09:21] Marcus: honestly not sure it's ever arriving at this point ha
-[02/04, 09:22] Priya M: haha no worries, I'll bring cash
+[14/03, 9:12am] Sandra Okoye: Hi! Do you do a full valet for a Ford Focus? How much and when's your next slot?
+[14/03, 9:20am] KB ShineRight: Yeah easy, full valet in n out for that size car is £110
+[14/03, 9:21am] KB ShineRight: I could do Thursday 11am
+[14/03, 11:45am] KB ShineRight: actually thinking about it Thursday's tight, Friday better for you?
+[14/03, 12:02pm] Sandra Okoye: Friday works, so £110 total yeah?
+[14/03, 12:10pm] KB ShineRight: yh should be fine, might be £130 if it's really mucky inside but we'll see on the day
+[14/03, 12:11pm] Sandra Okoye: Oh okay, and do you come to my house or do I bring it somewhere?
+[14/03, 12:15pm] KB ShineRight: nah we mobile we come to u, that's the whole thing lol
+[16/03, 8:03am] KB ShineRight: morning! just to confirm tmrw 11am for the Focus
+[16/03, 8:04am] KB ShineRight: oh wait that's actually Friday not tmrw my bad, Friday 11am
+[18/03, 10:58am] Sandra Okoye: Hey just to confirm still on for 11 today?
+[18/03, 11:40am] KB ShineRight: yep omw, might be more like 12 traffic's mad
+[20/03, 3:14pm] Marcus T: hi mate do u still do the ceramic coating thing? saw it on ur insta
+[20/03, 4:02pm] KB ShineRight: yeah still do that, £250 on top of a full valet
+[20/03, 6:30pm] KB ShineRight: actually you know what I might be phasing that out, let me check my diary and get back to u
+[23/03, 1:00pm] Marcus T: any update on the ceramic coating?
+[26/03, 9:15am] Marcus T: hello?
+[02/04, 5:45pm] Priya Nair: Hi, what time do you close on Saturdays? Want to book a wash for tomorrow
+[02/04, 5:50pm] KB ShineRight: we go til 6pm sat
+[02/04, 5:52pm] KB ShineRight: oh hold on Junior's not in tmrw so probably closing 3pm, come early to be safe
+[02/04, 6:01pm] Priya Nair: okay how much is just a basic wash
+[02/04, 6:03pm] KB ShineRight: £25 for basic
+[02/04, 6:10pm] KB ShineRight: actually for a bigger car like an SUV it's more like £35, what u driving
+[02/04, 6:11pm] Priya Nair: it's a Polo
+[02/04, 6:12pm] KB ShineRight: sweet £25 then easy
+[04/04, 2:20pm] Priya Nair: hey do you take card payment on the day?
+[04/04, 2:55pm] KB ShineRight: yeah got a reader
+[04/04, 3:10pm] KB ShineRight: actually bring cash if u can, reader's been playing up
+[10/04, 11:00am] Dave Holloway: If I need to cancel last minute is there a fee?
+[10/04, 11:20am] KB ShineRight: nah don't worry about it we're chill
+[10/04, 11:22am] KB ShineRight: well unless it's like same day same day we do charge a little £15 just so it's fair on the next customer
+[10/04, 11:23am] Dave Holloway: okay good to know, so booking for driveway is fine? does your insurance cover that?
+[10/04, 11:30am] KB ShineRight: yeah should be sound, let me just double check that with my insurance people actually and confirm
+[15/04, 9:00am] Dave Holloway: hey any update on the insurance question?
+[19/04, 4:12pm] Dave Holloway: hi just checking in on this before I book, kind of need to know
+[19/04, 4:50pm] KB ShineRight: sorry been mad busy, yeah should be totally fine don't worry
