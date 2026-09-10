@@ -1,30 +1,38 @@
-[Mon 14/8, 9:12am] Sarah (customer): Hi! Wanting a quote for a small neon 'OPEN' sign for my cafe, about 30cm wide
-[Mon 14/8, 11:47am] Jonno: hey yeah easy one that'll be around $450 mate
-[Mon 14/8, 11:48am] Jonno: actually hang on thinking about it more probably $550, glass cost went up
-[Mon 14/8, 2:03pm] Sarah: Oh ok, which one is it?
-[Mon 14/8, 2:55pm] Jonno: yeah $550 sounds right let's go with that
-[Tue 15/8, 10:20am] Sarah: Great, how long would it take?
-[Tue 15/8, 10:41am] Jonno: 2 weeks tops we're not backed up atm
-[Wed 16/8, 4:12pm] Jonno: oh wait i just remembered i got 3 jobs ahead of you so more like 4 weeks sorry
-[Thu 17/8, 8:03am] Marcus (customer): hey following up on my shopfront sign, you said 3 weeks back in June, it's been 9 weeks now
-[Thu 17/8, 8:03am] Marcus (customer): what's going on with it
-[Thu 17/8, 1:44pm] Jonno: yeah sorry mate glass supplier's been slow, let me check where it's at and get back to you today
-[Fri 25/8, 10:15am] Marcus (customer): still haven't heard anything jonno it's been over a week since you said today
-[Sat 19/8, 9:30am] Priya (customer): hi do you do LED flex neon and what's the price for a 60cm name sign
-[Sat 19/8, 9:52am] Jonno: yep flex is our bread and butter these days, $350 for that size
-[Sat 19/8, 10:01am] Priya: perfect, does it come with a warranty?
-[Sat 19/8, 10:14am] Jonno: yeah 6 months warranty no worries
-[Mon 21/8, 3:30pm] Jonno: actually thinking about it we don't really do warranty on the LED stuff, it either works or it doesn't
-[Mon 21/8, 3:31pm] Priya: wait so is there a warranty or not?
-[Mon 21/8, 6:02pm] Jonno: nah let's just say if it dies in first month I'll fix it free, that's basically a warranty
-[Tue 22/8, 9:00am] Sarah: Hi just confirming - is my sign deposit 50%? Should I transfer now?
-[Tue 22/8, 9:44am] Jonno: nah don't worry about deposit for you, you're sweet
-[Wed 23/8, 2:18pm] Jonno: actually on second thought better send the 50% deposit, keeps things fair with other customers
-[Wed 23/8, 2:19pm] Sarah: haha ok, how much exactly and to which account?
-[Wed 23/8, 5:40pm] Jonno: I'll send account details tonight
-[Fri 25/8, 11:00am] Dave (customer): hey mate what are your opening hours Saturday, keen to drop by and look at samples
-[Fri 25/8, 4:52pm] Jonno: yeah open sat, come by anytime after 10
-[Sat 26/8, 10:30am] Dave: here now, workshop looks closed?
-[Sat 26/8, 12:15pm] Jonno: oh nah not this sat, had a family thing came up, sorry mate
-[Sun 27/8, 7:02pm] Priya: any update on my flex sign? also never got the account details for deposit
-[Mon 28/8, 8:15am] Jonno: on it today for sure
+[03/06, 09:14] Sam R: Hi! Do you do same-day tune-ups or do I need to book ahead?
+[03/06, 09:20] Marcus - Spoke & Sprocket: Yeah same-day is fine just bring it in
+[03/06, 09:21] Marcus - Spoke & Sprocket: actually thinking about it Saturday's bad, Ola's not in til 11 so maybe avoid Saturday
+[03/06, 09:22] Marcus - Spoke & Sprocket: or come Saturday afternoon that's fine too honestly just message before
+[03/06, 09:22] Sam R: haha ok, so how much roughly for a tune up?
+[03/06, 09:25] Marcus - Spoke & Sprocket: £45 usually
+[03/06, 09:31] Marcus - Spoke & Sprocket: though if it needs new cables that's extra, honestly for most bikes it ends up more like £60
+[03/06, 09:31] Marcus - Spoke & Sprocket: let's just say £45 and see when you get here
+[06/06, 14:02] Priya D: Hi, following up on the frame quote you gave me last week - you said £2200?
+[06/06, 15:47] Marcus - Spoke & Sprocket: Did I say 2200? I think it's more like 1900 for that geometry
+[06/06, 15:48] Marcus - Spoke & Sprocket: actually no hang on I was looking at my supplier invoice and steel's gone up, probably 2400 now
+[06/06, 15:49] Marcus - Spoke & Sprocket: I'll firm this up properly and message you
+[08/06, 11:03] Priya D: Any update on the number?
+[08/06, 11:03] Priya D: no worries if not yet
+[10/06, 17:22] Jonah K: What are your opening hours on weekdays?
+[10/06, 17:40] Marcus - Spoke & Sprocket: 9-6 Tues to Sat
+[10/06, 17:41] Marcus - Spoke & Sprocket: though I've been thinking of switching to Mon-Fri, might do that from next month
+[10/06, 17:41] Marcus - Spoke & Sprocket: for now it's Tues-Sat though, come whenever
+[12/06, 08:55] Sam R: Bike's making a weird clicking noise near the pedals, is that a quick fix?
+[12/06, 10:12] Marcus - Spoke & Sprocket: probably bottom bracket, could be £30 could be £80 depending what's wrong
+[12/06, 10:13] Marcus - Spoke & Sprocket: bring it in and I'll have a look, shouldn't take more than a day
+[12/06, 10:20] Marcus - Spoke & Sprocket: actually if it's the bracket I've got none in stock so might be a few days for parts
+[15/06, 13:00] Priya D: Hi Marcus, checking in again on the frame quote
+[15/06, 13:00] Priya D: also did you decide on the deposit amount?
+[15/06, 19:44] Marcus - Spoke & Sprocket: sorry been mad busy - let's say 2300 for the frame and 25% deposit
+[15/06, 19:45] Marcus - Spoke & Sprocket: actually you know what half up front is safer for me given the steel prices, let's do half
+[15/06, 19:45] Marcus - Spoke & Sprocket: I'll confirm tomorrow when I've spoken to my supplier again
+[17/06, 09:10] Priya D: Did you get a chance to speak to them?
+[19/06, 12:30] Ola (Sat assistant): hi this is Ola, Marcus asked me to say the wheel truing job is ready, £30
+[19/06, 12:31] Ola (Sat assistant): he said it might've been quoted as £25 originally so he says just pay whatever you were told
+[19/06, 12:45] Jonah K: haha fair enough, I'll bring cash
+[20/06, 10:02] Marcus - Spoke & Sprocket: oh do you take card now? I bought the reader
+[20/06, 10:02] Jonah K: you're asking me?
+[20/06, 10:15] Marcus - Spoke & Sprocket: ha yeah sorry, no it's not set up yet, cash or transfer still, sorting the reader this week for real this time
+[22/06, 16:40] Priya D: Marcus I really need a final number for the frame, can we lock something in?
+[22/06, 18:05] Marcus - Spoke & Sprocket: ok final answer £2350 all in, half deposit, 6 weeks build time
+[22/06, 18:06] Marcus - Spoke & Sprocket: unless my Sheffield guy's new batch prices come in different, will know end of week
+[22/06, 18:06] Marcus - Spoke & Sprocket: but let's plan around 2350 for now
