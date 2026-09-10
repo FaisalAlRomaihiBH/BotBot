@@ -473,7 +473,8 @@
       "Add a `facts_needing_verification` list with source/confidence flags, so owner-hedged values (phone number, giant-breed price range) are structurally distinguished from confirmed ones.",
       "Add an `evidence_reviewed` field capturing uploaded artifacts and what each one substantiated; the Marco/cat-boarding finding is currently a stray line in additional_notes with no link to the decision it drove.",
       "Add `business_profile` sub-fields for location/service area and years in operation — nothing in the schema prompts for them, so both were skipped entirely."
-    ]
+    ],
+    "improve_done": true
   },
   {
     "cycle": 10,
