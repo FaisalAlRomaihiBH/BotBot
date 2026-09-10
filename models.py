@@ -28,7 +28,22 @@ class BusinessRequirements(BaseModel):
     faq_answers: Optional[list[str]] = None           # confirmed question->answer pairs the bot can use
     business_policies: Optional[list[str]] = None     # cancellations, rush requests, coverage area, VAT...
     escalation_rules: Optional[list[str]] = None      # what goes to a human, to whom, via what channel
-    open_items: Optional[list[str]] = None            # things the owner was unsure about / left unresolved
+    escalation_contacts: Optional[list[str]] = None   # WHO to reach when the owner is unavailable: backup
+                                                      # person/number, out-of-hours cover, urgent-query path
+    capacity_constraints: Optional[list[str]] = None  # the owner's operational rules of thumb and limits,
+                                                      # in their own numbers ("2-3 events a weekend with
+                                                      # my sister helping", "max 8 covers past 9pm")
+    owner_sentiment_or_concerns: Optional[list[str]] = None  # qualitative/adoption feelings about the bot
+                                                      # ("worried about losing the human feeling",
+                                                      # "doesn't trust computers") — reasons, not blockers
+    # --- follow-ups, split by WHO must act (open_items stays as the catch-all) ---
+    unresolved_business_facts: Optional[list[str]] = None   # facts the OWNER must still supply (IBAN,
+                                                            # kids-menu prices, exact opening hours)
+    pending_design_decisions: Optional[list[str]] = None    # bot/product decisions still open (how to
+                                                            # handle a thumbs-up reply, tone, fallback)
+    customer_replies_owed: Optional[list[str]] = None       # replies the owner owes real customers,
+                                                            # surfaced from the materials
+    open_items: Optional[list[str]] = None            # unresolved items fitting none of the three above
     additional_notes: Optional[list[str]] = None      # important facts that fit no other field — never lose a fact
 
 
@@ -38,6 +53,11 @@ class ConversationAnalysis(BaseModel):
     resolved_patterns: list[str]     # inquiries where the materials SHOW how staff answers
     knowledge_gaps: list[str]        # inquiries whose resolution is NOT visible -> ask the owner
     facts_learned: list[str]         # hard facts about the business found in the materials
+    # Concrete incidents, each tied to its date/time and a short quote, so the
+    # interviewer can probe the actual pain point live ("I saw the
+    # international customer waited 3 weeks — is that typical?").
+    # Defaulted: older saved analyses have no such key.
+    notable_incidents: list[str] = []
 
 
 class InterviewTurn(BaseModel):

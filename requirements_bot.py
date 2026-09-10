@@ -49,6 +49,13 @@ Study them and produce:
   observed example — these become interview questions for the owner.
 - facts_learned: hard facts about the business visible in the materials (hours,
   services, prices, channels, languages used...).
+- notable_incidents: specific single events worth asking the owner about, each
+  written as "<date/time from the material> — <what happened> (quote: "...")".
+  Include long waits before a reply, complaints, apologies, lost or abandoned
+  customers, unanswered messages, and promises made. Use the timestamps exactly
+  as they appear in the material; if a message has no timestamp, say
+  "(no timestamp)" rather than inventing one. These get raised verbatim in the
+  live interview, so they must be quotable.
 
 Wrap your entire output in this format and provide no other text
 """
@@ -108,6 +115,8 @@ Wrap your entire output in this format and provide no other text
             f"Inquiry categories observed:\n{bullet(analysis.inquiry_categories)}\n"
             f"Resolved patterns (already learnable, do not ask):\n{bullet(analysis.resolved_patterns)}\n"
             f"KNOWLEDGE GAPS (ask about these, one at a time, citing the example):\n{bullet(analysis.knowledge_gaps)}\n"
+            f"NOTABLE INCIDENTS (raise these live, quoting the date/detail, and ask "
+            f"whether they are typical):\n{bullet(analysis.notable_incidents)}\n"
             f"Facts learned (fill the form with these, do not ask):\n{bullet(analysis.facts_learned)}"
         )
 
@@ -125,7 +134,8 @@ class RequirementsBot:
     ANALYSIS_DONE_NOTE = (
         "(System note: the analysis of the shared materials is now in your "
         "instructions. React to it: mention 1-2 useful things you learned, "
-        "then ask about the first knowledge gap.)")
+        "then ask about the first knowledge gap or notable incident, quoting "
+        "the specific dated example you saw.)")
     ANALYSIS_EMPTY_NOTE = (
         "(System note: the uploads folder is empty — no readable files. "
         "Gently tell the owner nothing was found and how to add files, "
