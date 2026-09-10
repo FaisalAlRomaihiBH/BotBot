@@ -1,37 +1,35 @@
-[03/11, 10:14] Valentina Ríos: Hola! I want to ask about a custom dining table, seats 6, in raulí wood. How much roughly?
-[03/11, 10:22] Tomás Ferraro: Hola Valentina! For 6 seats in raulí, I'd say around 480,000 pesos
-[03/11, 10:23] Tomás Ferraro: Actually wait, raulí has gotten expensive lately from my supplier, let's say 520,000
-[03/11, 11:47] Valentina Ríos: Ok! And how long would it take?
-[03/11, 12:03] Tomás Ferraro: About 3 weeks, maybe less if the wood is in stock
-[03/11, 12:04] Tomás Ferraro: Actually you know what, I have a big order ahead of yours, better say 4 weeks to be safe
-[03/11, 20:51] Tomás Ferraro: Sorry, thinking about it more tonight — I could probably squeeze yours in faster if you don't need the fancy joinery, maybe 2 weeks then
-[03/12, 09:15] Valentina Ríos: haha ok, so is it 2, 3 or 4 weeks?
-[03/12, 09:40] Tomás Ferraro: Let's say 3. I'll confirm once I order the wood
-[03/12, 09:41] Valentina Ríos: And the deposit, how much do you need upfront?
-[03/12, 09:52] Tomás Ferraro: 50% to start
-[03/12, 09:53] Tomás Ferraro: Actually for regular customers I sometimes do 30%, but you're new so let's do 40%
-[03/12, 09:53] Tomás Ferraro: Eh, let's just say 50%, easier for me to track
-[03/13, 14:20] Valentina Ríos: Sounds good, I'll transfer it today
-[03/13, 14:35] Tomás Ferraro: Perfect, talk soon!
----
-[03/15, 16:02] Julián Mendez: Hi, do you do kitchen cabinet refreshes? Just need new doors, about 8 cabinets
-[03/15, 18:44] Tomás Ferraro: Yes! Usually around 200,000 for that kind of job
-[03/15, 18:45] Tomás Ferraro: But with 8 doors specifically, probably more like 260,000, depends on hardware
-[03/16, 08:10] Julián Mendez: ok can you come see the kitchen first?
-[03/16, 08:30] Tomás Ferraro: Sure, let me check my week and get back to you
-[03/20, 19:12] Julián Mendez: Hey, any update on scheduling a visit?
-[03/22, 07:45] Julián Mendez: Hello?
----
-[03/18, 11:00] Carla Dietz: Hola, I'm outside Bariloche, in Dina Huapi. What's the delivery cost for a bookshelf?
-[03/18, 11:30] Tomás Ferraro: For Dina Huapi, delivery is around 25,000
-[03/18, 11:31] Tomás Ferraro: Hmm, actually gas has gone up, let's say 35,000
-[03/18, 15:02] Carla Dietz: ok, and can Nico do a rush delivery this Saturday?
-[03/18, 15:20] Tomás Ferraro: Yes definitely, he's usually free Saturdays
-[03/18, 15:21] Tomás Ferraro: Actually wait, he started a new job on weekends now, so maybe not this Saturday, let me check with him
-[03/18, 15:22] Tomás Ferraro: I'll ask him tonight and let you know
-[03/25, 10:03] Carla Dietz: Hi, still waiting to hear about Saturday delivery — did you ask Nico?
----
-[03/26, 09:00] Valentina Ríos: Hey Tomás, any update on the table, you said 3 weeks and it's been almost 2
-[03/26, 09:30] Tomás Ferraro: Going well! Should be done in about a week and a half
-[03/26, 09:31] Tomás Ferraro: Oh actually the raulí I got had a knot I didn't like, sent it back, might add a few more days
-[03/26, 20:05] Tomás Ferraro: Thinking about it, I could use a different piece I have in the shop and skip the delay — let me sleep on it and decide tomorrow
+[03/06/2024, 09:14] Grant Ashworth: Morning! Ashworth & Sons here, how can I help
+[03/06/2024, 09:20] Customer (Laura): Hi! Looking for a solid oak dining table, seats 6. What would that run me?
+[03/06/2024, 09:26] Grant Ashworth: For 6 seater oak I'd say around £1400 all in mate, oak's not too bad on price right now
+[03/06/2024, 09:27] Grant Ashworth: Could do it in 6 weeks
+[03/06/2024, 11:02] Customer (Laura): Great, that works for us. How do we book in?
+[03/06/2024, 11:15] Grant Ashworth: Actually hang on — just checked with my supplier, oak's gone up a fair bit this month. Realistically looking more like £1800 now sorry
+[03/06/2024, 14:40] Customer (Laura): Oh, that's a big jump from this morning
+[03/06/2024, 14:52] Grant Ashworth: Yeah sorry, it's a nightmare at the minute, prices all over the place. Let's say £1600 and call it even
+[03/06/2024, 14:53] Grant Ashworth: Deposit's 50% to get you in the queue
+[04/06/2024, 08:10] Customer (Laura): OK, and the timeline — still 6 weeks?
+[04/06/2024, 08:33] Grant Ashworth: Should be fine, though we've got a backlog just now so could be more like 8-10
+[04/06/2024, 08:34] Grant Ashworth: Honestly depends how the week goes, I'll know more once Jamie's cleared the two sideboards ahead of you
+[04/06/2024, 08:35] Customer (Laura): Right... can you let me know by Friday?
+[04/06/2024, 08:36] Grant Ashworth: Will do
+[10/06/2024, 16:02] Customer (Laura): Hi Grant, following up — any update on timeline?
+[13/06/2024, 09:44] Grant Ashworth: Sorry, been mad here, let me check the book and get back to you
+[19/06/2024, 10:03] Customer (Laura): Still hoping to hear back on this when you get a chance
+[02/07/2024, 07:55] Customer (Mark): Hey, do you do wardrobe fitting? Need two built-in ones for a new build
+[02/07/2024, 08:20] Grant Ashworth: We do! Start from about £3000 each depending on size and finish
+[02/07/2024, 08:21] Grant Ashworth: Deposit's 30% for wardrobes, bit different from furniture
+[02/07/2024, 15:10] Customer (Mark): Perfect, when could you start?
+[02/07/2024, 15:30] Grant Ashworth: We're quiet on the wardrobe side, could start in 2 weeks
+[03/07/2024, 09:02] Grant Ashworth: Actually just remembered we've got a restoration job booked in that fortnight, more like 4 weeks before we can start yours
+[03/07/2024, 09:03] Grant Ashworth: Also deposit's 50% not 30%, I was thinking of a different job, apologies
+[03/07/2024, 09:15] Customer (Mark): No worries, just want to make sure the number's right before I transfer anything
+[03/07/2024, 09:20] Grant Ashworth: Yep 50% is right, sorry for the confusion
+[15/07/2024, 13:40] Customer (Sasha): Hi, do you repair antique chairs? Got one with a broken leg
+[15/07/2024, 17:02] Grant Ashworth: Yeah we do repairs, £45/hr, that job's probably an hour or two
+[16/07/2024, 08:15] Grant Ashworth: Actually for antiques I usually charge £50/hr, the joinery's fiddlier
+[16/07/2024, 08:16] Grant Ashworth: But bring it in, we'll have a look and give you a proper number
+[16/07/2024, 08:40] Customer (Sasha): Sounds good, are you open Saturdays?
+[16/07/2024, 09:01] Grant Ashworth: Not usually but I can probably do a Saturday drop off if you give me a bit of notice
+[20/07/2024, 10:12] Customer (Sasha): Could I drop it off this Saturday morning then?
+[20/07/2024, 10:45] Grant Ashworth: Let me check with Jamie and confirm
+[27/07/2024, 11:30] Customer (Sasha): Hey, never heard back — is Saturday still on?
