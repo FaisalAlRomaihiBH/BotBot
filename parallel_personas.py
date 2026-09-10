@@ -156,7 +156,7 @@ class ParallelPersonaRunner:
 
     def __init__(self, count: int, concurrency: int,
                  persona_model: str = "claude-sonnet-5",
-                 judge_model: str = "claude-sonnet-5"):
+                 judge_model: str = "claude-opus-5"):
         self.count = count
         self.concurrency = concurrency
         # One shared client for personas/judging is fine — invoke() is thread-safe.
@@ -433,7 +433,7 @@ Rules:
 """
 
 
-def fix_code_issues(summary: dict) -> None:
+def fix_code_issues(summary: dict, model: str = "claude-opus-5") -> None:
     """Hand the run's structural findings to a headless Claude Code agent that
     edits the code, verifies it, commits and pushes."""
     import shutil
@@ -451,6 +451,7 @@ def fix_code_issues(summary: dict) -> None:
         suggestions="\n".join(f"- {s}" for s in suggestions))
     r = subprocess.run(
         [exe, "-p", prompt,
+         "--model", model,
          "--permission-mode", "acceptEdits",
          "--allowedTools", "Bash(python*) Bash(git add:*) Bash(git commit:*) Bash(git push:*)"],
         cwd=ROOT, capture_output=True, text=True, timeout=1800)
@@ -467,11 +468,19 @@ if __name__ == "__main__":
                     help="how many run at the same time")
     ap.add_argument("--no-improve", action="store_true",
                     help="only measure; don't rewrite the prompt or push")
+    ap.add_argument("--persona-model", default="claude-sonnet-5",
+                    help="model that role-plays the business owners")
+    ap.add_argument("--judge-model", default="claude-opus-5",
+                    help="model that judges transcripts and improves the prompt")
+    ap.add_argument("--fix-model", default="claude-opus-5",
+                    help="model for the headless code-fix agent (claude -p)")
     args = ap.parse_args()
-    runner = ParallelPersonaRunner(args.count, args.concurrency)
+    runner = ParallelPersonaRunner(args.count, args.concurrency,
+                                   persona_model=args.persona_model,
+                                   judge_model=args.judge_model)
     run_summary = runner.run()
     if not args.no_improve:
         records = [json.loads(p.read_text(encoding="utf-8"))
                    for p in sorted(runner.run_dir.glob("interview_*.json"))]
         improve_and_push(runner, records, run_summary)
-        fix_code_issues(run_summary)
+        fix_code_issues(run_summary, model=args.fix_model)
