@@ -1,30 +1,54 @@
-[Mar 3, 2:14 PM] Ella R: Hi! Do you have studio time available this Saturday afternoon?
-[Mar 3, 2:40 PM] Jonas: hey! yeah should be free, what time you thinking
-[Mar 3, 2:41 PM] Ella R: Maybe 2-5pm? For a 3 song demo
-[Mar 3, 2:52 PM] Jonas: yeah that works, i can engineer it myself so 1200/hr, so like 3600 total
-[Mar 3, 2:53 PM] Jonas: actually you know what let's just do 3000 flat since its 3 songs
-[Mar 3, 6:20 PM] Ella R: Oh nice, thank you! Should I pay a deposit?
-[Mar 3, 6:45 PM] Jonas: nah dont worry about it, just pay when you get here
-[Mar 3, 6:46 PM] Jonas: actually hold on let me check if Pao is free that day too in case you want a better engineer
-[Mar 5, 11:02 AM] Ella R: Hi Jonas, just following up — is Pao available? And is it still 3000?
-[Mar 5, 4:15 PM] Jonas: oh sorry totally forgot to ask him, let me check tonight
-[Mar 8, 9:30 AM] Ella R: Hey! Saturday is in 2 days, can you confirm the time and price please?
-[Mar 8, 10:01 AM] Jonas: yes yes we're good, 2-5pm, umm let's actually do 3500 kasi if Pao comes in his rate is a bit higher, pero if it's just me its 3000 pa rin
-[Mar 8, 10:02 AM] Jonas: I'll let you know who's engineering closer to the day
-[Mar 9, 1:10 PM] Ella R: Any update on who's engineering? Trying to plan who's coming with me
-[Mar 9, 7:44 PM] Jonas: hi sorry ang busy today, its me na lang, so 3000 is fine
-[Mar 15, 5:00 PM] Marco T: Hi, how much for mixing a 4-song EP?
-[Mar 15, 5:22 PM] Jonas: depends on how complex the tracks are, roughly 2500-4000 per song
-[Mar 15, 5:23 PM] Jonas: for 4 songs maybe like 12k total as a package? let me think about it
-[Mar 15, 5:45 PM] Marco T: Okay, when could you have a firmer quote?
-[Mar 15, 5:50 PM] Jonas: I'll check the reference tracks you sent and get back to you tomorrow!
-[Mar 20, 3:12 PM] Marco T: Hey Jonas, following up on the EP mixing quote from last week
-[Mar 22, 8:05 AM] Jonas: ah sorry so sorry, been slammed. can we hop on a call today
-[Apr 2, 11:00 AM] Kat D: Hi! Do you guys have a hard cancellation policy? Might need to reschedule a session
-[Apr 2, 11:30 AM] Jonas: technically 24hrs notice or 50% charge pero honestly wag ka mag alala if its once lang
-[Apr 2, 11:31 AM] Jonas: actually wait, if it's a weekend slot i do need to charge kasi hard to rebook those
-[Apr 2, 11:32 AM] Jonas: ah pero depende, let's just see when the time comes haha
-[Apr 10, 2:00 PM] Kat D: Understood! Also is the self-engineered rate still 800/hr?
-[Apr 10, 2:20 PM] Jonas: yeah pero i've been thinking of raising rates this year, might go up to 1000
-[Apr 10, 2:21 PM] Jonas: but for you since you booked already, 800 lang muna
-[Apr 10, 2:22 PM] Jonas: actually you know what let's just settle on 900 to be safe hehe
+[Mon, Mar 3, 9:14 AM] Jenna (customer): Hi! Looking to get 30 shirts printed for a family reunion, 1 color logo. How much per shirt?
+[Mon, Mar 3, 9:22 AM] Marcus: Hey! For 30 that'd be about $9/shirt if you supply the shirts, so $270 total
+[Mon, Mar 3, 9:23 AM] Marcus: actually wait let me recalc, at 30 pieces you're kind of in between my tiers, might be closer to $10.50/shirt
+[Mon, Mar 3, 9:24 AM] Jenna (customer): Ok so which is it lol
+[Mon, Mar 3, 9:41 AM] Marcus: honestly let's just say $9.50/shirt flat, that's fair for both of us
+[Mon, Mar 3, 9:41 AM] Jenna (customer): perfect, i'll take it. how long for turnaround?
+[Mon, Mar 3, 9:50 AM] Marcus: I can probably have it done in 5 business days once you approve the art
+[Mon, Mar 3, 12:05 PM] Marcus: hmm actually thinking about it more, 5 days might be tight, Dana's only in tue/thu/sat this week, let's say 8 business days to be safe
+[Mon, Mar 3, 12:06 PM] Jenna (customer): ok, 8 days it is, I'll send the logo tonight
+
+[Tue, Mar 4, 10:02 AM] Raj (customer): Do you guys do embroidery on polos? Need 15 for our office
+[Tue, Mar 4, 10:15 AM] Marcus: Yes! Embroidery is $9-12 per item depending on stitch count, plus a one time $3 digitizing fee if it's a new logo
+[Tue, Mar 4, 10:16 AM] Raj (customer): Ok what would 15 come to roughly
+[Tue, Mar 4, 10:20 AM] Marcus: probably around $165 total including digitizing
+[Tue, Mar 4, 11:47 AM] Marcus: actually you know what, since it's only 15 pieces and that's under my usual minimum, I might need to add a small order fee, let me think about that
+[Tue, Mar 4, 11:48 AM] Raj (customer): a fee of how much?
+[Tue, Mar 4, 3:30 PM] Marcus: still figuring that out, I'll let you know
+
+[Wed, Mar 5, 8:55 AM] Priya (customer): Hi, need 100 hoodies for a school fundraiser, 2 color print. Timeline is 3 weeks out.
+[Wed, Mar 5, 9:10 AM] Marcus: 100 hoodies 2 color, that's a great order, I'd say $17/hoodie including the hoodie itself
+[Wed, Mar 5, 9:11 AM] Priya (customer): Great, and over 100 pieces you give a discount right?
+[Wed, Mar 5, 9:15 AM] Marcus: yes 10% off for orders over 100
+[Wed, Mar 5, 9:16 AM] Marcus: actually I think I've done 15% for bigger school orders before, let me check my notes and get back to you
+[Wed, Mar 5, 9:16 AM] Priya (customer): sounds good, take your time
+[Fri, Mar 14, 2:40 PM] Priya (customer): hey following up, did you find that discount info? also did the price change at all
+[Fri, Mar 14, 2:41 PM] Priya (customer): we're getting close to needing to place this order
+
+[Thu, Mar 6, 1:03 PM] Sam (customer): Quick q — what are your shop hours on Saturday? Want to drop off some sample shirts
+[Thu, Mar 6, 1:20 PM] Marcus: officially 10-2 but honestly I'm usually there til the evening most Saturdays, come by whenever
+[Thu, Mar 6, 1:21 PM] Sam (customer): perfect, i'll swing by around 3
+
+[Fri, Mar 7, 4:12 PM] Jenna (customer): Hey just checking the timeline is still good, you said 8 business days from when I sent the art?
+[Fri, Mar 7, 4:50 PM] Marcus: yes! should be done by the 15th
+[Fri, Mar 7, 4:52 PM] Marcus: oh wait, actually Dana's out next week for a family thing, so it might slip to the 18th, sorry
+[Fri, Mar 7, 4:52 PM] Jenna (customer): ok as long as it's before the 22nd (reunion date) we're fine
+[Fri, Mar 7, 4:53 PM] Marcus: should be no problem then
+
+[Mon, Mar 10, 10:30 AM] Raj (customer): hey any update on that small order fee for the polos?
+[Mon, Mar 10, 6:15 PM] Marcus: oh sorry it's been a busy week, still need to check with Dana on the machine time cost, will get back to you tomorrow
+
+[Wed, Mar 12, 11:00 AM] New Customer - Tola: Hi, do you have a minimum order for basic tshirt printing?
+[Wed, Mar 12, 11:22 AM] Marcus: minimum is technically 24 but I can go lower if I'm not slammed that week
+[Wed, Mar 12, 11:23 AM] Tola (customer): I only need 10, is that doable and how much would it be?
+[Wed, Mar 12, 11:40 AM] Marcus: yeah should be fine, maybe $12/shirt for that small a batch
+[Wed, Mar 12, 11:41 AM] Marcus: actually thinking about it, might have to be $14 since it's such a small run, the setup cost doesn't change whether it's 10 or 24
+[Wed, Mar 12, 11:41 AM] Tola (customer): lol ok, can you just confirm a final number when you're sure?
+[Wed, Mar 12, 11:55 AM] Marcus: will do, let me sit with it
+
+[Thu, Mar 13, 9:00 AM] Jenna (customer): hi just double checking - is it still the 18th for pickup?
+[Thu, Mar 13, 9:45 AM] Marcus: yes should be
+[Thu, Mar 13, 9:46 AM] Marcus: actually hold on, we had a press jam yesterday, might push to the 19th, I'll confirm tomorrow
+
+[Sat, Mar 15, 3:00 PM] Sam (customer): dropped the samples off, did you get a chance to look?
+[Sat, Mar 15, 3:00 PM] Sam (customer): (no reply yet, following up again)
