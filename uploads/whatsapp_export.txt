@@ -1,38 +1,32 @@
-[03/06, 09:14] Sam R: Hi! Do you do same-day tune-ups or do I need to book ahead?
-[03/06, 09:20] Marcus - Spoke & Sprocket: Yeah same-day is fine just bring it in
-[03/06, 09:21] Marcus - Spoke & Sprocket: actually thinking about it Saturday's bad, Ola's not in til 11 so maybe avoid Saturday
-[03/06, 09:22] Marcus - Spoke & Sprocket: or come Saturday afternoon that's fine too honestly just message before
-[03/06, 09:22] Sam R: haha ok, so how much roughly for a tune up?
-[03/06, 09:25] Marcus - Spoke & Sprocket: £45 usually
-[03/06, 09:31] Marcus - Spoke & Sprocket: though if it needs new cables that's extra, honestly for most bikes it ends up more like £60
-[03/06, 09:31] Marcus - Spoke & Sprocket: let's just say £45 and see when you get here
-[06/06, 14:02] Priya D: Hi, following up on the frame quote you gave me last week - you said £2200?
-[06/06, 15:47] Marcus - Spoke & Sprocket: Did I say 2200? I think it's more like 1900 for that geometry
-[06/06, 15:48] Marcus - Spoke & Sprocket: actually no hang on I was looking at my supplier invoice and steel's gone up, probably 2400 now
-[06/06, 15:49] Marcus - Spoke & Sprocket: I'll firm this up properly and message you
-[08/06, 11:03] Priya D: Any update on the number?
-[08/06, 11:03] Priya D: no worries if not yet
-[10/06, 17:22] Jonah K: What are your opening hours on weekdays?
-[10/06, 17:40] Marcus - Spoke & Sprocket: 9-6 Tues to Sat
-[10/06, 17:41] Marcus - Spoke & Sprocket: though I've been thinking of switching to Mon-Fri, might do that from next month
-[10/06, 17:41] Marcus - Spoke & Sprocket: for now it's Tues-Sat though, come whenever
-[12/06, 08:55] Sam R: Bike's making a weird clicking noise near the pedals, is that a quick fix?
-[12/06, 10:12] Marcus - Spoke & Sprocket: probably bottom bracket, could be £30 could be £80 depending what's wrong
-[12/06, 10:13] Marcus - Spoke & Sprocket: bring it in and I'll have a look, shouldn't take more than a day
-[12/06, 10:20] Marcus - Spoke & Sprocket: actually if it's the bracket I've got none in stock so might be a few days for parts
-[15/06, 13:00] Priya D: Hi Marcus, checking in again on the frame quote
-[15/06, 13:00] Priya D: also did you decide on the deposit amount?
-[15/06, 19:44] Marcus - Spoke & Sprocket: sorry been mad busy - let's say 2300 for the frame and 25% deposit
-[15/06, 19:45] Marcus - Spoke & Sprocket: actually you know what half up front is safer for me given the steel prices, let's do half
-[15/06, 19:45] Marcus - Spoke & Sprocket: I'll confirm tomorrow when I've spoken to my supplier again
-[17/06, 09:10] Priya D: Did you get a chance to speak to them?
-[19/06, 12:30] Ola (Sat assistant): hi this is Ola, Marcus asked me to say the wheel truing job is ready, £30
-[19/06, 12:31] Ola (Sat assistant): he said it might've been quoted as £25 originally so he says just pay whatever you were told
-[19/06, 12:45] Jonah K: haha fair enough, I'll bring cash
-[20/06, 10:02] Marcus - Spoke & Sprocket: oh do you take card now? I bought the reader
-[20/06, 10:02] Jonah K: you're asking me?
-[20/06, 10:15] Marcus - Spoke & Sprocket: ha yeah sorry, no it's not set up yet, cash or transfer still, sorting the reader this week for real this time
-[22/06, 16:40] Priya D: Marcus I really need a final number for the frame, can we lock something in?
-[22/06, 18:05] Marcus - Spoke & Sprocket: ok final answer £2350 all in, half deposit, 6 weeks build time
-[22/06, 18:06] Marcus - Spoke & Sprocket: unless my Sheffield guy's new batch prices come in different, will know end of week
-[22/06, 18:06] Marcus - Spoke & Sprocket: but let's plan around 2350 for now
+[03/06/2024, 09:12] Sarah T: Hi! Do you do full interior/exterior details? How much would that be for a Golf?
+[03/06/2024, 09:40] Femi (Shine Squad): Yeah we do that! For a Golf probably around £90 all in
+[03/06/2024, 09:41] Femi (Shine Squad): Actually thinking about it, more like £110 if you want the seats shampooed too
+[03/06/2024, 10:15] Sarah T: Ok which one is it, £90 or £110?
+[03/06/2024, 10:52] Femi (Shine Squad): Let's say £100 to split the difference lol, sound good?
+[03/06/2024, 11:03] Sarah T: Sure. When can you fit me in?
+[03/06/2024, 11:20] Femi (Shine Squad): I'll check the diary and get back to you
+[05/06/2024, 08:44] Sarah T: Any update?
+[06/06/2024, 19:02] Femi (Shine Squad): sorry been mad busy!! how about Saturday 10am
+[06/06/2024, 19:10] Sarah T: perfect, do you need a deposit?
+[06/06/2024, 19:15] Femi (Shine Squad): nah just pay me when I get there
+[07/06/2024, 08:01] Femi (Shine Squad): actually on second thought can you do £20 deposit now just so I know you're serious, bank transfer is fine
+[12/06/2024, 14:30] Marcus O: hi mate what do you charge for ceramic coating on a range rover
+[12/06/2024, 15:10] Femi (Shine Squad): we do ceramic! £150 for that
+[12/06/2024, 15:11] Femi (Shine Squad): oh wait for an SUV it'd be more like £180 with the size surcharge
+[13/06/2024, 09:22] Marcus O: ok so £180?
+[13/06/2024, 20:47] Femi (Shine Squad): honestly bro I'm not sure I'm even doing ceramic anymore, takes way too long for what I charge. let me think about it and get back to you
+[18/06/2024, 12:00] Marcus O: any word on the ceramic coating?
+[19/06/2024, 07:55] Kwame (Shine Squad): hi yes we can do it £160 saturday works
+[19/06/2024, 08:40] Femi (Shine Squad): wait what did Kwame tell you, he's not meant to be quoting jobs
+[20/06/2024, 10:00] Marcus O: he said £160 for saturday, is that not right?
+[20/06/2024, 18:33] Femi (Shine Squad): ignore that for now let me sort out my diary and prices properly, will message you
+[24/06/2024, 09:15] Priya D: Hi, what are your opening hours? Want to book a basic wash for my Corsa
+[24/06/2024, 09:30] Femi (Shine Squad): Tue-Sat 9-5 usually! Basic wash is £30
+[24/06/2024, 09:31] Femi (Shine Squad): actually for a small car like a Corsa I'd do £25
+[24/06/2024, 09:45] Priya D: great, does Thursday 2pm work?
+[24/06/2024, 10:02] Femi (Shine Squad): should be fine, I'll confirm night before
+[26/06/2024, 18:00] Priya D: hey just confirming tomorrow 2pm?
+[26/06/2024, 18:45] Femi (Shine Squad): oh damn sorry van's playing up again, battery dead, can we do Friday instead
+[27/06/2024, 08:10] Priya D: Friday works, same time?
+[27/06/2024, 08:20] Femi (Shine Squad): yep locked in, no deposit needed for a basic wash don't worry
+[27/06/2024, 08:21] Femi (Shine Squad): actually just send £10 booking fee so I know it's real, been getting a lot of no-shows lately
