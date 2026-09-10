@@ -1,0 +1,72 @@
+{
+  "fact_capture": 5,
+  "no_repeats": 7,
+  "evidence_use": 5,
+  "naturalness": 6,
+  "completeness": 3,
+  "efficiency": 4,
+  "findings": [
+    {
+      "problem": "Interview never completed — it cuts off mid-question with no wrap-up, no confirmation of the captured facts, and no chance for the owner to add anything. The brief was generated from an unfinished conversation.",
+      "excerpt": "Birdie: Simple it is — just answering questions, no bookings built in. During peak season (March-June) when things get busy, is there a point where you'd want the bot to warn brides that turnaround might be even longer, or to stop taking new orders altogether?"
+    },
+    {
+      "problem": "The hard 'no rush jobs under 3 weeks' rule was never elicited — arguably the single most bot-critical policy for a stationery studio (brides constantly ask for rush work). Turnaround was discussed twice and never probed for urgent/short-notice requests or a minimum lead time.",
+      "excerpt": "Birdie: Noted — peak season March to June runs 10-12 weeks. Now, save-the-dates: what's the price range and typical turnaround for those?\nDeirdre Walsh: 90 a pop for 25. Add-on, really. Turnaround's same as the invites."
+    },
+    {
+      "problem": "Never established what starts the turnaround clock ('6-8 weeks from final proof approval'). The brief states plain 6-8 weeks, which a bot will misquote as from order date — a real customer-expectation risk.",
+      "excerpt": "Birdie: Got it — standard from €480/50, custom illustrated from €650, 30-set minimum. What's the usual turnaround time for wedding invites, start to finish?\nDeirdre Walsh: 6-8 weeks. Longer in peak season."
+    },
+    {
+      "problem": "Owner's live uncertainty about discontinuing custom illustrated suites was never surfaced, so the brief hard-codes them as an offered product — the bot could be quoting a service she's about to drop.",
+      "excerpt": "Deirdre Walsh: Custom illustrated ones start at 650. Minimum order's 30."
+    },
+    {
+      "problem": "Never asked whether prices are stable / a rise is planned. Owner has been considering a new-year increase for a year; brief presents €480/€650 as fixed with no volatility flag.",
+      "excerpt": "Deirdre Walsh: 480 for 50 sets. Standard."
+    },
+    {
+      "problem": "Business history/tenure (14 years operating, two vintage Heidelberg presses) never asked — standard trust-building content for a bot's 'about us' answers is absent from business_description.",
+      "excerpt": "Birdie: Where's the business based — city or area — and do you have a premises customers actually visit, or is it all online/by appointment?\nDeirdre Walsh: Kilkenny. Garage, sort of. Not really visitors."
+    },
+    {
+      "problem": "Accepted the staffing answer without probing: Aoife only helps during busy months, and only Tues/Thurs. Brief implies she is a year-round Tues/Thurs helper.",
+      "excerpt": "Birdie: Is it just you running things, or is there anyone else helping — even part-time?\nDeirdre Walsh: Niece. Aoife. Tues/Thurs, packing mostly."
+    },
+    {
+      "problem": "Stated studio hours were taken at face value as 'reachable' hours; the crucial reality (she's often in the back, slow to answer phone/door, so response is delayed) was never probed, yet the bot will promise phone contact during those hours.",
+      "excerpt": "Birdie: Since there's no shop customers visit, are there set hours you're generally reachable or working — for the bot to reference if someone asks?\nDeirdre Walsh: Tuesday to Friday, ten to four. Studio hours anyway."
+    },
+    {
+      "problem": "Repeated 'Not sure' answers were accepted immediately with no alternative angle (e.g. ranges, comparisons, 'what did the last quote look like'), leaving budget, volume and payment methods as near-empty brief fields.",
+      "excerpt": "Birdie: What kind of budget are you thinking for this, and any timeline in mind for getting it up and running?\nDeirdre Walsh: Not sure. Cheap as possible. No rush."
+    },
+    {
+      "problem": "Low-yield admin questions (budget, timeline, languages, message volume) were spent early/mid-interview while core operational policies (rush jobs, proof cycle, seasonality behaviour) went unasked — poor prioritisation across a 61-entry run that still didn't finish.",
+      "excerpt": "Birdie: Roughly how many customer messages or emails would you say you get in a typical week?\nDeirdre Walsh: Not sure. Handful, maybe.\nBirdie: That's fine, a handful a week is a good ballpark. Just English for the bot, or other languages too?"
+    },
+    {
+      "problem": "Acknowledgement filler is formulaic and repetitive ('Got it', 'Good', 'Noted', 'Good to know', 'That's fine') on nearly every turn, making the exchange feel like a form being filled rather than a conversation, and it never mirrors the owner's terseness back into deeper questions.",
+      "excerpt": "Birdie: Got it — 50% to book, rest before shipping. What payment methods do you accept?\nDeirdre Walsh: Not sure. Bank transfer mostly."
+    },
+    {
+      "problem": "The evidence/upload request was dropped in the middle of the interview and abandoned instantly on a one-word refusal, with no explanation of value or lighter alternative (e.g. paste one typical email) — no evidence was ever used to sharpen questions.",
+      "excerpt": "Birdie: Before we dive into pricing details — if you've got any real customer chats or emails handy (screenshots or exports), sharing a few would help me ask much sharper questions. You can drop them in the 'uploads' folder next to this program and just tell me when done. If that's a hassle, no worries — we can carry on without them. Want to try, or shall we skip it?\nDeirdre Walsh: Skip it."
+    },
+    {
+      "problem": "Immediately re-asked for more services after the owner had just listed them, producing a near-duplicate turn that yielded nothing.",
+      "excerpt": "Deirdre Walsh: Wedding invites. Save-the-dates. Place cards. That sort of thing.\nBirdie: Great, that's a good core list — anything else you offer or charge for, even smaller or occasional jobs, besides invites, save-the-dates and place cards?\nDeirdre Walsh: Not really. That's about it."
+    }
+  ],
+  "top_improvement": "Add a mandatory, prioritised 'hard limits & edge cases' checkpoint before optional/admin topics: for every service with a lead time, force questions on (a) what starts the clock (e.g. proof approval), (b) rush/short-notice requests and any absolute minimum lead time, (c) whether exceptions are ever made and for whom, and (d) whether prices/offerings are stable or under review — and require the interviewer to reach an explicit wrap-up/confirmation turn rather than trailing off mid-question.",
+  "schema_suggestions": [
+    "Add a `pending_decisions_and_volatility` field for facts the owner is genuinely unsure about or actively reconsidering (planned price rise, possible discontinuation of a product line) so the bot can hedge instead of stating them as fixed.",
+    "Add a `hard_constraints_and_exceptions` field (absolute rules like 'no rush jobs under 3 weeks', plus known informal exceptions) — currently such rules have nowhere to live except a generic policies list.",
+    "Add a structured `lead_times` object per service with a `clock_starts_from` attribute (e.g. 'final proof approval') and `seasonal_variation`; peak-season info is currently duplicated across services_and_pricing and dumped into additional_notes.",
+    "Add explicit `bot_scope` / `capabilities_required` field — scope decisions ('Q&A only, no bookings/payments') are currently buried in additional_notes.",
+    "Add a `contact_channels` field with per-channel values and a responsiveness/SLA note (e.g. 'slow to answer phone'), plus a status flag for missing values, so the pending phone number isn't only tracked as a free-text open item.",
+    "Add a `staffing_and_availability` field with per-person days/seasonality, and a `business_profile` field (years trading, equipment/craft details) for trust-building answers — neither has a home in the current schema.",
+    "Capability gap: the interviewer has no mechanism to detect chronically monosyllabic/'not sure' respondents and switch to concrete, example-based or multiple-choice prompting; add an adaptive low-information-answer strategy plus a turn-budget-aware closing routine that guarantees a completed brief."
+  ]
+}

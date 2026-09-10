@@ -1,0 +1,299 @@
+{
+  "transcript": [
+    [
+      "Birdie",
+      "Hi! I help businesses figure out exactly what they need from a chatbot. Before we start — what's your name?"
+    ],
+    [
+      "Deirdre Walsh",
+      "Deirdre."
+    ],
+    [
+      "Birdie",
+      "Nice to meet you, Deirdre! What's the exact name of your business, as you'd want it written?"
+    ],
+    [
+      "Deirdre Walsh",
+      "Thistle & Ink Press."
+    ],
+    [
+      "Birdie",
+      "Lovely name, Deirdre. What's making you want a chatbot right now — what problem should it solve, or what's eating up your time?"
+    ],
+    [
+      "Deirdre Walsh",
+      "People asking the same questions over and over. Prices, turnaround. That."
+    ],
+    [
+      "Birdie",
+      "Makes sense. A few months from now, what would tell you this bot is actually working?"
+    ],
+    [
+      "Deirdre Walsh",
+      "Fewer emails, I suppose."
+    ],
+    [
+      "Birdie",
+      "Good. Who are your customers typically — and are there different groups who tend to ask different things?"
+    ],
+    [
+      "Deirdre Walsh",
+      "Brides mostly. Some ask prices, some ask timing. Same stuff really."
+    ],
+    [
+      "Birdie",
+      "Got it. What kind of budget are you thinking for this, and any timeline in mind for getting it up and running?"
+    ],
+    [
+      "Deirdre Walsh",
+      "Not sure. Cheap as possible. No rush."
+    ],
+    [
+      "Birdie",
+      "Where's the business based — city or area — and do you have a premises customers actually visit, or is it all online/by appointment?"
+    ],
+    [
+      "Deirdre Walsh",
+      "Kilkenny. Garage, sort of. Not really visitors."
+    ],
+    [
+      "Birdie",
+      "Before we dive into pricing details — if you've got any real customer chats or emails handy (screenshots or exports), sharing a few would help me ask much sharper questions. You can drop them in the 'uploads' folder next to this program and just tell me when done. If that's a hassle, no worries — we can carry on without them. Want to try, or shall we skip it?"
+    ],
+    [
+      "Deirdre Walsh",
+      "Skip it."
+    ],
+    [
+      "Birdie",
+      "No problem. So, what do you actually offer — what are all the products or services Thistle & Ink Press sells?"
+    ],
+    [
+      "Deirdre Walsh",
+      "Wedding invites. Save-the-dates. Place cards. That sort of thing."
+    ],
+    [
+      "Birdie",
+      "Great, that's a good core list — anything else you offer or charge for, even smaller or occasional jobs, besides invites, save-the-dates and place cards?"
+    ],
+    [
+      "Deirdre Walsh",
+      "Not really. That's about it."
+    ],
+    [
+      "Birdie",
+      "Let's start with wedding invites — what's the price range you typically quote for those?"
+    ],
+    [
+      "Deirdre Walsh",
+      "480 for 50 sets. Standard."
+    ],
+    [
+      "Birdie",
+      "Good to know. Does that price change with quantity (more or fewer than 50 sets), or with different paper/design options?"
+    ],
+    [
+      "Deirdre Walsh",
+      "Custom illustrated ones start at 650. Minimum order's 30."
+    ],
+    [
+      "Birdie",
+      "Got it — standard from €480/50, custom illustrated from €650, 30-set minimum. What's the usual turnaround time for wedding invites, start to finish?"
+    ],
+    [
+      "Deirdre Walsh",
+      "6-8 weeks. Longer in peak season."
+    ],
+    [
+      "Birdie",
+      "When it's peak season, roughly how much longer does that turnaround stretch — and what should the bot tell a bride asking during that busy stretch?"
+    ],
+    [
+      "Deirdre Walsh",
+      "10-12 weeks. March to June, that is."
+    ],
+    [
+      "Birdie",
+      "Noted — peak season March to June runs 10-12 weeks. Now, save-the-dates: what's the price range and typical turnaround for those?"
+    ],
+    [
+      "Deirdre Walsh",
+      "90 a pop for 25. Add-on, really. Turnaround's same as the invites."
+    ],
+    [
+      "Birdie",
+      "And place cards — what do those go for, and what's the turnaround?"
+    ],
+    [
+      "Deirdre Walsh",
+      "Not sure, actually. Don't get asked much."
+    ],
+    [
+      "Birdie",
+      "That's fine — if a bride does ask about place cards, should the bot just say to contact you directly for a quote, or is there a rough starting price you're comfortable giving?"
+    ],
+    [
+      "Deirdre Walsh",
+      "Just say contact me."
+    ],
+    [
+      "Birdie",
+      "Do you take deposits on orders — and if so, how much, and what payment methods do you accept?"
+    ],
+    [
+      "Deirdre Walsh",
+      "50% to book. Rest before shipping."
+    ],
+    [
+      "Birdie",
+      "Got it — 50% to book, rest before shipping. What payment methods do you accept?"
+    ],
+    [
+      "Deirdre Walsh",
+      "Not sure. Bank transfer mostly."
+    ],
+    [
+      "Birdie",
+      "That's fine, bank transfer as the main one it is. Do you offer any refunds or cancellations if a bride changes her mind after booking?"
+    ],
+    [
+      "Deirdre Walsh",
+      "No refunds once plates are cut."
+    ],
+    [
+      "Birdie",
+      "Understood. Do you offer any kind of guarantee — like reprints if there's a printing error or damage in transit?"
+    ],
+    [
+      "Deirdre Walsh",
+      "Not really thought about that. Depends on the case."
+    ],
+    [
+      "Birdie",
+      "Fair enough — so if a bride messages about a printing error or damage, should the bot just say to contact you directly to sort it out, case by case?"
+    ],
+    [
+      "Deirdre Walsh",
+      "Yeah."
+    ],
+    [
+      "Birdie",
+      "Is it just you running things, or is there anyone else helping — even part-time?"
+    ],
+    [
+      "Deirdre Walsh",
+      "Niece. Aoife. Tues/Thurs, packing mostly."
+    ],
+    [
+      "Birdie",
+      "Good to know. When a customer question needs a human — like a dispute or a tricky order issue — should the bot point them to you directly, and what's the best way for them to reach you (phone, email, WhatsApp)?"
+    ],
+    [
+      "Deirdre Walsh",
+      "Ring me. Or the whatsapp-thing, I s'pose."
+    ],
+    [
+      "Birdie",
+      "What's the actual phone number (or WhatsApp number, if different) the bot should give customers?"
+    ],
+    [
+      "Deirdre Walsh",
+      "Eh... 087 something. I'll dig it out and send it on."
+    ],
+    [
+      "Birdie",
+      "No worries, just send it whenever you have it. Now — what channels do you want this bot working on? Website chat, WhatsApp, Instagram, Facebook, something else?"
+    ],
+    [
+      "Deirdre Walsh",
+      "Website, I s'pose. Maybe the whatsapp-thing too."
+    ],
+    [
+      "Birdie",
+      "Good. Roughly how many customer messages or emails would you say you get in a typical week?"
+    ],
+    [
+      "Deirdre Walsh",
+      "Not sure. Handful, maybe."
+    ],
+    [
+      "Birdie",
+      "That's fine, a handful a week is a good ballpark. Just English for the bot, or other languages too?"
+    ],
+    [
+      "Deirdre Walsh",
+      "English."
+    ],
+    [
+      "Birdie",
+      "Since there's no shop customers visit, are there set hours you're generally reachable or working — for the bot to reference if someone asks?"
+    ],
+    [
+      "Deirdre Walsh",
+      "Tuesday to Friday, ten to four. Studio hours anyway."
+    ],
+    [
+      "Birdie",
+      "Good. And do you want this to be a simple bot that just answers questions and gives info, or something fuller that handles bookings/payments too?"
+    ],
+    [
+      "Deirdre Walsh",
+      "Just answers, I think. Keep it simple."
+    ],
+    [
+      "Birdie",
+      "Simple it is — just answering questions, no bookings built in. During peak season (March-June) when things get busy, is there a point where you'd want the bot to warn brides that turnaround might be even longer, or to stop taking new orders altogether?"
+    ]
+  ],
+  "brief": {
+    "contact_name": "Deirdre",
+    "business_name": "Thistle & Ink Press",
+    "industry": "Wedding stationery / print press",
+    "business_description": "Based in Kilkenny; works out of a garage/workshop, not really set up for visitors. Team: Deirdre (owner) and niece Aoife, who helps Tuesdays/Thursdays with packing.",
+    "problem_to_solve": "Customers repeatedly ask the same questions (prices, turnaround times), which takes up Deirdre's time.",
+    "target_audience": "Mostly brides; questions tend to be about prices or timing.",
+    "channels": [
+      "Website chat",
+      "WhatsApp (possibly)"
+    ],
+    "integrations": null,
+    "conversation_volume": "Estimate: a handful of customer messages/emails per week (owner unsure of exact number)",
+    "languages": [
+      "English"
+    ],
+    "success_criteria": "Fewer repetitive emails coming in.",
+    "budget": "As cheap as possible (no specific figure given)",
+    "timeline": "No rush / no specific timeline",
+    "services_and_pricing": [
+      "Wedding invites (standard) - €480 for 50 sets - turnaround 6-8 weeks normally, 10-12 weeks during peak season (March-June)",
+      "Wedding invites (custom illustrated) - starts at €650 - turnaround 6-8 weeks normally, 10-12 weeks during peak season (March-June)",
+      "Minimum order for invites: 30 sets",
+      "Save-the-dates - €90 per 25 - usually an add-on to invites - turnaround same as invites (6-8 weeks normally, 10-12 weeks peak season)",
+      "Place cards - no set price/turnaround; bot should tell customer to contact Deirdre directly for a quote"
+    ],
+    "faq_answers": [
+      "Place cards pricing/turnaround: bot says 'contact me directly for a quote' (rarely asked about, no standard pricing)",
+      "Printing errors/damage: bot says to contact Deirdre directly to sort it out, handled case by case"
+    ],
+    "business_policies": [
+      "Deposit: 50% required to book an order; remaining 50% due before shipping.",
+      "Payment method: mostly bank transfer; owner unsure of other accepted methods.",
+      "Refunds: no refunds once printing plates are cut.",
+      "Reprints/damage guarantee: no fixed policy — handled case-by-case; bot tells customer to contact Deirdre directly.",
+      "Studio hours: Tuesday to Friday, 10am-4pm."
+    ],
+    "escalation_rules": [
+      "For disputes/tricky issues, bot should direct customer to phone Deirdre or reach her on WhatsApp. Exact number pending — owner to send it on."
+    ],
+    "open_items": [
+      "Deirdre's exact phone/WhatsApp number for escalation — she'll send it on."
+    ],
+    "additional_notes": [
+      "Peak season is March to June, when turnaround stretches to 10-12 weeks.",
+      "Bot scope: simple Q&A / info bot only — no booking or payment handling."
+    ]
+  },
+  "analysis": null,
+  "completed": false,
+  "turns": 61
+}
