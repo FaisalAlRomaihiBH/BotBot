@@ -282,8 +282,12 @@ class ParallelPersonaRunner:
                 transcript.append(("Bot", msg))
             running = (usd(bot.model, bot.usage)
                        + usd(self.persona_model, persona_usage))
+            in_tok = sum(bot.usage[k] + persona_usage[k]
+                         for k in ("fresh_in", "cache_read", "cache_write"))
+            out_tok = bot.usage["out"] + persona_usage["out"]
             log(f"{tag} turn {turn_no}: owner {len(owner_msg.split())}w"
-                f" -> bot {len(messages[-1].split())}w | ${running:.2f} so far"
+                f" -> bot {len(messages[-1].split())}w"
+                f" | in {in_tok:,} out {out_tok:,} | ${running:.2f} so far"
                 + (" [analyzed files]" if len(messages) > 1 else "")
                 + (" [COMPLETE]" if bot.complete else "")
                 + (" [OWNER LEFT]" if owner_left else ""))
@@ -332,7 +336,9 @@ class ParallelPersonaRunner:
     def run_one(self, idx: int, persona: Persona) -> dict:
         tag = f"[{idx:03d} {persona.industry[:30]}]"
         try:
-            log(f"{tag} interviewing...")
+            log(f"{tag} interviewing... "
+                f"(bot: claude-sonnet-5, persona: {self.persona_model}, "
+                f"judge: {self.judge_model})")
             result = self.run_interview(idx, persona)
             log(f"{tag} completed={result['completed']} ({result['ended_by']}) "
                 f"in {result['turns']} entries; judging...")

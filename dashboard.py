@@ -53,6 +53,7 @@ async function tick(){
         <span class="score">${iv.score??''}</span>
         <div class="bar"><i style="width:${pct}%"></i></div>
         <span class="muted">${iv.status} — turn ${iv.turn}${iv.findings!=null?' · '+iv.findings+' findings':''}
+        ${iv.models?'<br>'+iv.models:''}${iv.live_io?'<br>'+iv.live_io:''}
         ${iv.tokens?'<br>'+iv.tokens:''}${iv.cost?'<br><b>'+iv.cost+'</b>':''}</span>
         <div class="mini" id="mini${iv.index}">${iv.log.join('\\n')}</div></div>`;
     }).join('');
@@ -103,11 +104,16 @@ def collect() -> dict:
         iv = interviews.setdefault(idx, {"index": idx, "industry": industry,
                                          "turn": 0, "status": "interviewing",
                                          "score": None, "findings": None,
-                                         "tokens": None, "cost": None, "log": []})
+                                         "tokens": None, "cost": None,
+                                         "models": None, "live_io": None, "log": []})
         # This interview's own line, without the shared [idx industry] prefix.
         iv["log"] = (iv["log"] + [line[line.index("]") + 1:].strip()])[-150:]
+        if "interviewing... (" in line:
+            iv["models"] = line.split("interviewing... (")[1].rstrip(")")
         if "] turn " in line:
             iv["turn"] = int(line.split("] turn ")[1].split(":")[0].split("/")[0])
+            if " | in " in line:  # live token counts, e.g. "| in 45,120 out 3,240"
+                iv["live_io"] = "in " + line.split(" | in ")[1].split(" | ")[0]
             if " | $" in line:  # live running cost, e.g. "| $0.42 so far"
                 iv["cost"] = "$" + line.split(" | $")[1].split(" [")[0]
             if "[OWNER LEFT]" in line:
