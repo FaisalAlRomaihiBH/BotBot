@@ -159,6 +159,7 @@ class RequirementsBot:
 
     def __init__(self, model: str = "claude-sonnet-5",
                  uploads_dir: Path = ROOT / "uploads"):
+        self.model = model
         # Explicit max_tokens: the interviewer re-emits the FULL form as JSON
         # every turn, so replies grow throughout the interview and must never
         # be truncated. 8000 proved too small once a talkative owner filled

@@ -33,6 +33,38 @@ RUNS_DIR = ROOT / "parallel_runs"
 # breaker only — it should never fire; hitting it means a runaway loop.
 SAFETY_CEILING = 60
 
+# $ per 1M tokens (input, output), Anthropic API rates (cached 2026-06).
+# Cache writes bill at 1.25x input, cache reads at 0.10x input.
+PRICING = {
+    "claude-sonnet-5": (2.00, 10.00),
+    "claude-opus-5": (5.00, 25.00),
+    "claude-haiku-4-5": (1.00, 5.00),
+    "claude-fable-5": (10.00, 50.00),
+}
+
+
+def usd(model: str, usage: dict) -> float:
+    """Dollar cost of a usage dict {fresh_in, cache_write, cache_read, out}."""
+    inp, outp = PRICING.get(model, (5.00, 25.00))  # unknown model: price as Opus
+    return (usage.get("fresh_in", 0) * inp
+            + usage.get("cache_write", 0) * inp * 1.25
+            + usage.get("cache_read", 0) * inp * 0.10
+            + usage.get("out", 0) * outp) / 1_000_000
+
+
+def add_usage(acc: dict, reply) -> None:
+    """Accumulate one model reply's usage counters into acc."""
+    u = reply.response_metadata.get("usage") or {}
+    acc["fresh_in"] += u.get("input_tokens") or 0
+    acc["cache_read"] += u.get("cache_read_input_tokens") or 0
+    acc["cache_write"] += u.get("cache_creation_input_tokens") or 0
+    acc["out"] += u.get("output_tokens") or 0
+
+
+def empty_usage() -> dict:
+    return {"fresh_in": 0, "cache_read": 0, "cache_write": 0, "out": 0}
+
+
 _print_lock = threading.Lock()
 _log_file: Path | None = None  # set per run; dashboard.py tails it
 
@@ -175,6 +207,8 @@ class ParallelPersonaRunner:
                  judge_model: str = "claude-opus-5"):
         self.count = count
         self.concurrency = concurrency
+        self.persona_model = persona_model
+        self.judge_model = judge_model
         # One shared client for personas/judging is fine — invoke() is thread-safe.
         from langchain_anthropic import ChatAnthropic
         self.persona_llm = ChatAnthropic(model=persona_model, max_tokens=8000,
@@ -227,6 +261,7 @@ class ParallelPersonaRunner:
         transcript = [("Bot", RequirementsBot.GREETING)]
         tag = f"[{idx:03d} {persona.industry[:30]}]"
         ended_by = "safety_ceiling"
+        persona_usage = empty_usage()
 
         for turn_no in range(1, SAFETY_CEILING + 1):
             convo = "\n".join(f"{who}: {msg}" for who, msg in transcript)
@@ -234,6 +269,7 @@ class ParallelPersonaRunner:
                 owner_name=persona.owner_name, business_name=persona.business_name,
                 industry=persona.industry, personality=persona.personality,
                 background_facts=persona.background_facts, transcript=convo))
+            add_usage(persona_usage, reply)
             owner_msg = _blocks_to_text(reply.content).strip()
             owner_left = "[LEAVES]" in owner_msg
             owner_msg = owner_msg.replace("[LEAVES]", "").strip()
@@ -269,11 +305,15 @@ class ParallelPersonaRunner:
             "ended_by": ended_by,
             "turns": len(transcript),
             "usage": u,
+            "persona_usage": persona_usage,
+            "models": {"bot": bot.model, "persona": self.persona_model,
+                       "judge": self.judge_model},
         }
 
-    def evaluate(self, persona: Persona, result: dict) -> Evaluation:
+    def evaluate(self, persona: Persona, result: dict) -> tuple[Evaluation, dict]:
         parser = PydanticOutputParser(pydantic_object=Evaluation)
         convo = "\n".join(f"{who}: {msg}" for who, msg in result["transcript"])
+        judge_usage = empty_usage()
         reply = self.judge_llm.invoke(EVAL_PROMPT.format(
             facts=persona.background_facts,
             materials=persona.whatsapp_export,
@@ -283,7 +323,8 @@ class ParallelPersonaRunner:
             completed=result["completed"], ended_by=result["ended_by"],
             turns=result["turns"],
             format_instructions=parser.get_format_instructions()))
-        return parser.parse(_blocks_to_text(reply.content))
+        add_usage(judge_usage, reply)
+        return parser.parse(_blocks_to_text(reply.content)), judge_usage
 
     # ---------------- one full interview + judge ----------------
     def run_one(self, idx: int, persona: Persona) -> dict:
@@ -293,18 +334,31 @@ class ParallelPersonaRunner:
             result = self.run_interview(idx, persona)
             log(f"{tag} completed={result['completed']} ({result['ended_by']}) "
                 f"in {result['turns']} entries; judging...")
-            ev = self.evaluate(persona, result)
+            ev, judge_usage = self.evaluate(persona, result)
             score = round((ev.fact_capture + ev.no_repeats + ev.naturalness
                            + ev.completeness + ev.efficiency) / 5, 2)
+            m = result["models"]
+            cost = {
+                "bot_usd": round(usd(m["bot"], result["usage"]), 4),
+                "persona_usd": round(usd(m["persona"], result["persona_usage"]), 4),
+                "judge_usd": round(usd(m["judge"], judge_usage), 4),
+            }
+            cost["total_usd"] = round(sum(cost.values()), 4)
             record = {
                 "index": idx,
                 "persona": persona.model_dump(),
                 "interview": result,
                 "evaluation": ev.model_dump(),
+                "judge_usage": judge_usage,
+                "cost": cost,
                 "score": score,
                 "error": None,
             }
             log(f"{tag} score {score}/10, {len(ev.findings)} findings")
+            log(f"{tag} cost: ${cost['total_usd']:.2f} "
+                f"(bot {m['bot']} ${cost['bot_usd']:.2f} + "
+                f"persona {m['persona']} ${cost['persona_usd']:.2f} + "
+                f"judge {m['judge']} ${cost['judge_usd']:.2f})")
         except Exception as e:
             record = {"index": idx, "persona": persona.model_dump(),
                       "interview": None, "evaluation": None, "score": None,
@@ -349,11 +403,16 @@ class ParallelPersonaRunner:
                          if r["interview"].get("usage"))
                 for key in ("fresh_in", "cache_read", "cache_write", "out")
             },
+            "models": {"bot": "claude-sonnet-5", "persona": self.persona_model,
+                       "judge": self.judge_model},
+            "total_cost_usd": round(sum(r["cost"]["total_usd"] for r in scored
+                                        if r.get("cost")), 2),
         }
         (self.run_dir / "summary.json").write_text(
             json.dumps(summary, indent=2, ensure_ascii=False), encoding="utf-8")
         log(f"\n=== done: {summary['succeeded']}/{self.count} judged, "
-            f"avg score {summary['avg_score']}/10 -> {self.run_dir}")
+            f"avg score {summary['avg_score']}/10, "
+            f"total cost ${summary['total_cost_usd']:.2f} -> {self.run_dir}")
         return summary
 
 

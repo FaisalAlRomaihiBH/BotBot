@@ -53,7 +53,7 @@ async function tick(){
         <span class="score">${iv.score??''}</span>
         <div class="bar"><i style="width:${pct}%"></i></div>
         <span class="muted">${iv.status} — turn ${iv.turn}${iv.findings!=null?' · '+iv.findings+' findings':''}
-        ${iv.tokens?'<br>'+iv.tokens:''}</span>
+        ${iv.tokens?'<br>'+iv.tokens:''}${iv.cost?'<br><b>'+iv.cost+'</b>':''}</span>
         <div class="mini" id="mini${iv.index}">${iv.log.join('\\n')}</div></div>`;
     }).join('');
     document.querySelectorAll('.mini').forEach(m=>{
@@ -103,7 +103,7 @@ def collect() -> dict:
         iv = interviews.setdefault(idx, {"index": idx, "industry": industry,
                                          "turn": 0, "status": "interviewing",
                                          "score": None, "findings": None,
-                                         "tokens": None, "log": []})
+                                         "tokens": None, "cost": None, "log": []})
         # This interview's own line, without the shared [idx industry] prefix.
         iv["log"] = (iv["log"] + [line[line.index("]") + 1:].strip()])[-150:]
         if "] turn " in line:
@@ -112,6 +112,8 @@ def collect() -> dict:
                 iv["status"] = "owner left"
         if "] tokens: " in line:
             iv["tokens"] = line.split("] tokens: ")[1]
+        if "] cost: " in line:
+            iv["cost"] = line.split("] cost: ")[1]
         if "judging..." in line:
             iv["status"] = "judging"
         if "] score " in line:
@@ -132,6 +134,12 @@ def collect() -> dict:
             u = s["bot_token_usage"]
             summary += (f" · bot tokens: {u['fresh_in']} fresh, "
                         f"{u['cache_read']} cached, {u['out']} out")
+        if s.get("total_cost_usd") is not None:
+            summary += f" · TOTAL COST ${s['total_cost_usd']:.2f}"
+        if s.get("models"):
+            m = s["models"]
+            summary += (f" · models: bot {m['bot']}, persona {m['persona']}, "
+                        f"judge {m['judge']}")
 
     return {"run_dir": run.name, "log": log_text[-40000:], "summary": summary,
             "interviews": sorted(interviews.values(), key=lambda i: i["index"])}
