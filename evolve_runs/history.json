@@ -752,5 +752,60 @@
       "Add a `future_roadmap` field (planned expansions, loyalty program) so speculative-but-relevant plans aren't mixed with actionable open items.",
       "Give the interviewer a capability/knowledge module for answering basic feasibility questions (updatable knowledge base, integrations, real-time notifications) so it stops deflecting every technical question to 'the build team'."
     ]
+  },
+  {
+    "cycle": 15,
+    "stamp": "20260910_142136",
+    "persona": "Event catering (backyard parties, corporate lunches, small weddings) / Chronically vague about numbers — Gail almost never commits to a firm price, headcount, quantity, or date. Everything is 'roughly,' 'somewhere around,' 'ballpark,' or 'depends on the day.' Ask her the cost per head and she'll say 'oh, could be fifteen, could be twenty-five, just depends what you want' without narrowing it down even after follow-ups. Quantities of food, number of staff she's sending, how many hours setup takes — all get the same fuzzy treatment. She's not being cagey on purpose; she genuinely thinks in ranges and finds exact numbers stressful and 'kind of pointless until the day of.' She's friendly and reassuring throughout, which makes the vagueness oddly disarming, but customers planning a budget find it maddening because the range she quotes can shift by 50% between messages.",
+    "score": 6.5,
+    "completed": true,
+    "improved": false,
+    "top_improvement": "Instruct Birdie that when an owner reveals a symptom or an operational slip (overbooking a weekend, 'padding so we don't run short'), she must not accept or praise it — she must probe for the hard limit and the root cause behind it (max guests per event, max events per weekend, why quantities get under-estimated). These capacity/pain-point facts are what the bot must protect against, and here all three were dropped.",
+    "findings": [
+      {
+        "problem": "Maximum event size (~80 guests for weddings/showers) was never asked about or captured. The brief records a 15-person minimum but no upper bound, so the bot could accept a 200-person inquiry as normal.",
+        "excerpt": "Gail Petrosky: Hi there! I'm Gail, I run Two Forks Backyard Catering — we do backyard BBQ stuff, corporate lunches, small weddings, that kind of thing. What can I help ya with?"
+      },
+      {
+        "problem": "Gail volunteered that she overbooks weekends, and Birdie never probed the obvious follow-up: how many events can she actually handle in one weekend? This is a genuine unresolved question for her ('two no problem' vs 'one is plenty') and should have landed in open_items.",
+        "excerpt": "Gail Petrosky: Yeah, May through October's usually crazy for us — weddings, backyard parties, all of it. Sometimes I don't even realize I've overbooked a weekend till like the week of, ha, which is not great but that's how it goes. Off season, like winter, I've got way more wiggle room and can squeeze people in last minute."
+      },
+      {
+        "problem": "Birdie complimented the padding practice instead of probing it, so the owner's real operational pain (she chronically under-quotes quantities, runs out of food, and pads inconsistently) was never surfaced. The brief records padding as a settled, deliberate policy — the opposite of the truth.",
+        "excerpt": "Birdie: Also saw you mention you pad headcounts a bit so you don't run short, which is smart. One thing I wanted to ask about: I saw a message thread where someone (Marcus) asked how much extra the chicken salad box costs compared to the others, and it looks like that never got a firm answer."
+      },
+      {
+        "problem": "Deposit *timing* was never probed — only amount. Gail's actual (unenforced) intent is two weeks before the event; the brief just says 'timing not fixed', losing a policy the bot could have stated softly.",
+        "excerpt": "Gail Petrosky: I just ask for a deposit sometime before the event, doesn't gotta be that second, and then the rest whenever — day of, after, somewhere in there."
+      },
+      {
+        "problem": "Basic business-profile facts never asked: how long she's been operating (6 years), her full name, and whether she serves beyond Dayton (travel radius). target_audience is null in the brief.",
+        "excerpt": "Birdie: Nice to meet you, Gail — Two Forks sounds like a lot of fun! What's the main reason you're looking into a chatbot right now — what problem are you hoping it solves for you?"
+      },
+      {
+        "problem": "The brief leads the BBQ pricing line with '$20-25 per head' (Birdie's own file-derived guess) even though Gail explicitly corrected it to $18-28; a bot built from this may quote too narrow a band.",
+        "excerpt": "Gail Petrosky: Yeah that sounds about right on the boxed lunches, though honestly the BBQ package can swing wider than that — I've done it as low as $18 and up around $28 if folks want the fancier stuff, brisket and all that."
+      },
+      {
+        "problem": "File-derived assertions were written into the brief without ever being confirmed in conversation ('skipping dessert decreases it', 'graduation parties, birthdays', 'Menu-planning calls are scheduled flexibly, even weeks out, without urgency, per observed patterns'). The last one is vague filler with no actionable value and no provenance marker.",
+        "excerpt": "Birdie: Okay Gail, I went through what you sent — really helpful! I can see your team quotes event catering around $20-25 a head depending on menu, and boxed lunches around $12-16 a box depending on the sandwich — sound about right?"
+      },
+      {
+        "problem": "Turns were spent on low-value items (bot name/personality) while success criteria, timeline, budget, and any menu/dietary content (vegetarian options, allergens) — all standard for a catering FAQ bot — were never asked; four brief fields remain null.",
+        "excerpt": "Birdie: Perfect, plain and friendly it is, no gimmicky name. I think I've got a good picture now — before I wrap up, is there anything else on your mind about pricing or the business that you want the bot to know about, or that's been bugging you?"
+      },
+      {
+        "problem": "Interview ran to 46 entries — well past the ~20-30 norm — partly because several questions were split into two turns that could have been one (handoff person, then handoff number).",
+        "excerpt": "Birdie: What number should the bot give out for that handoff — the same cell people already text you at?\nGail Petrosky: Yep, same one — the cell number people already text. Don't have a separate business line or anything fancy, it's all just the one phone glued to my hip, ha."
+      }
+    ],
+    "schema_suggestions": [
+      "Add a dedicated `capacity_constraints` field (max guests per event, max concurrent/weekend events, staffing thresholds, service radius). Right now the 40-person staffing rule is buried in business_policies and max event size has nowhere to live, so it was never asked.",
+      "Add an `uncertain_or_contradictory_facts` field distinct from `open_items` — for things the owner states inconsistently (soft 15-person minimum, 'not a hard rule' staffing, deposit timing) so the bot knows to hedge rather than assert. Currently these are mixed into business_policies as if they were firm.",
+      "Add a `source`/`confirmed` tag per extracted fact (owner-stated vs inferred from uploaded files). The brief contains file-derived claims ('skipping dessert decreases it', 'per observed patterns') indistinguishable from confirmed statements.",
+      "Add explicit `bot_scope` and `tone_and_persona` fields — both are currently crammed into free-text additional_notes despite being core build requirements.",
+      "Add a `lead_time_and_availability` field (per-service lead times, response hours, seasonality) — this information is currently scattered across services_and_pricing, business_policies, and additional_notes.",
+      "Give the interviewer a capability to record the owner's *root pain point* separately from the presenting complaint (`problem_to_solve` only captured 'phone won't stop ringing'; the costly problem — running out of food from bad quantity estimates — has no home in the schema)."
+    ]
   }
 ]

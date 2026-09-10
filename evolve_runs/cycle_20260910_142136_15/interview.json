@@ -1,0 +1,280 @@
+{
+  "transcript": [
+    [
+      "Birdie",
+      "Hi! I help businesses figure out exactly what they need from a chatbot. Before we start — what's your name?"
+    ],
+    [
+      "Gail Petrosky",
+      "Hi there! I'm Gail, I run Two Forks Backyard Catering — we do backyard BBQ stuff, corporate lunches, small weddings, that kind of thing. What can I help ya with?"
+    ],
+    [
+      "Birdie",
+      "Nice to meet you, Gail — Two Forks sounds like a lot of fun! What's the main reason you're looking into a chatbot right now — what problem are you hoping it solves for you?"
+    ],
+    [
+      "Gail Petrosky",
+      "Oh gosh, honestly? People text and call me at all hours asking \"how much for 30 people\" or \"can you do a taco bar\" and I'm elbow deep in coleslaw half the time. Would just be nice if something could answer the basic stuff for me so I'm not glued to my phone at 6am when I'm trying to prep. Doesn't need to be fancy or anything."
+    ],
+    [
+      "Birdie",
+      "That sounds exhausting, Gail! Totally get wanting your phone back during prep time. Where do most of these messages come from — is it texts to your cell, calls, or things like Facebook/Instagram messages too?"
+    ],
+    [
+      "Gail Petrosky",
+      "Oh, all of the above honestly. Mostly texts to my cell, but I get a good chunk through Facebook too — people find us from a wedding we did and just message the page. Every once in a while somebody calls, but I try not to answer before 9 if I can help it, so those usually just go to voicemail and I call back whenever."
+    ],
+    [
+      "Birdie",
+      "Good to know — so texts, Facebook Messenger, and calls-to-voicemail. Before we go further, it'd really help me to see a few real examples of the messages you get — like a chat export or screenshots from your texts or Facebook. If you can, just drop a few files in the 'uploads' folder next to this program and let me know when they're in. If that's a hassle, you could just paste a few example messages here instead."
+    ],
+    [
+      "Gail Petrosky",
+      "Oh sure, I already tossed a few in there for ya — think there's like three or four texts and a couple Facebook messages, somethin' like that. Should give you the idea anyway, people ask pretty much the same stuff over and over — \"how much for X people,\" \"do you do tacos,\" \"are you free that weekend,\" you know the drill."
+    ],
+    [
+      "Birdie",
+      "Perfect, thanks Gail! Give me a moment to look through those — I'll be right back with some sharper questions."
+    ],
+    [
+      "Birdie",
+      "Okay Gail, I went through what you sent — really helpful! I can see your team quotes event catering around $20-25 a head depending on menu, and boxed lunches around $12-16 a box depending on the sandwich — sound about right? Also saw you mention you pad headcounts a bit so you don't run short, which is smart. One thing I wanted to ask about: I saw a message thread where someone (Marcus) asked how much extra the chicken salad box costs compared to the others, and it looks like that never got a firm answer. Do you know offhand what the actual upcharge is, or is that still something you'd need to check with your supplier?"
+    ],
+    [
+      "Gail Petrosky",
+      "Yeah that sounds about right on the boxed lunches, though honestly the BBQ package can swing wider than that — I've done it as low as $18 and up around $28 if folks want the fancier stuff, brisket and all that. Depends what they want on the plate, really.\n\nAnd oh gosh, the chicken salad thing — I think it's like a dollar or two more than the regular boxes? Chicken salad's pricier to make, but I never nailed down an exact number, I just kinda eyeball it when I'm quoting. Might be worth me actually calling my supplier on that one, ha."
+    ],
+    [
+      "Birdie",
+      "Got it, good to know it swings that wide on the BBQ side — I'll note $18-28 a head depending on what's on the plate. For timing — when someone books an event or a boxed lunch order, how much lead time do you usually need? Like, is there a minimum notice for a wedding versus a corporate lunch order?"
+    ],
+    [
+      "Gail Petrosky",
+      "Oh man, that's a good question and I honestly don't have a real answer for you, ha. Weddings I'd say give me a couple weeks at least, but I've thrown together smaller stuff with way less notice if it's a slow week. Boxed lunches are usually easier 'cause it's just sandwiches, so sometimes people call me like two days out and I can still make it work. It just kinda depends what's already on my books that weekend — busy season I need more lead time, off season not so much."
+    ],
+    [
+      "Birdie",
+      "That makes sense, it really depends on your calendar. Speaking of which — do you have a busy season, like certain months where you're slammed and might have to turn people away or push back on tight timelines?"
+    ],
+    [
+      "Gail Petrosky",
+      "Yeah, May through October's usually crazy for us — weddings, backyard parties, all of it. Sometimes I don't even realize I've overbooked a weekend till like the week of, ha, which is not great but that's how it goes. Off season, like winter, I've got way more wiggle room and can squeeze people in last minute."
+    ],
+    [
+      "Birdie",
+      "Good to know, May–October being crazy makes sense. I also saw a message thread where a customer, Priya, asked if you could add a rum cake to her order, and you mentioned you weren't sure if you needed a permit to sell that and would need to check with the county. Did that ever get resolved, or is that still up in the air?"
+    ],
+    [
+      "Gail Petrosky",
+      "Oh gosh, no, still up in the air — I keep meaning to call the county about that and then it's like 6am and I'm elbow deep in something else and it slips my mind. So officially, still a \"let me get back to you\" on the rum cake situation, ha. Probably should just bite the bullet and call before somebody actually orders it."
+    ],
+    [
+      "Birdie",
+      "No worries, I'll just flag that as a to-do on your end. Similar situation — I saw a thread with Karen where she bumped her headcount from 50 to 55 and asked for the new total, and it looks like you said things like 'probably not even $100 more' but never gave a firm number. Is there an actual method you use to recalculate pricing when headcount changes, or is it really just a judgment call each time?"
+    ],
+    [
+      "Gail Petrosky",
+      "Ha, yeah, that's pretty much it — judgment call. I don't sit there with a calculator doing five extra heads times whatever, I just kinda feel out whether it bumps things up a little or a lot, depends what package they're on. Like if it's boxed lunches, sure, five more is basically just five more boxes, easy math. But if it's the BBQ package with sides and stuff, sometimes five more people doesn't even change much 'cause I already padded for extra, so it might just even out. I know that's not the tidy answer you want, ha, but that's honestly how it works in my head."
+    ],
+    [
+      "Birdie",
+      "That's a totally normal way to work, no worries — I'll just note that repricing after headcount changes is a judgment call rather than a fixed formula, so the bot would need to route those to you rather than quote a firm new number. Switching gears a bit — how do customers actually pay you? Cash, card, transfer, some mix?"
+    ],
+    [
+      "Gail Petrosky",
+      "Oh, bit of everything honestly — a lot of folks just Venmo or Zelle me, some do cash, and every once in a while somebody wants to write a check, which is fine too. I don't really have like a card reader or anything fancy set up. I just ask for a deposit sometime before the event, doesn't gotta be that second, and then the rest whenever — day of, after, somewhere in there."
+    ],
+    [
+      "Birdie",
+      "Got it — Venmo, Zelle, cash, or check, no card reader. On the deposit side, is there a rough amount or percentage you usually ask for, like a flat fee or a percent of the total?"
+    ],
+    [
+      "Gail Petrosky",
+      "Oh gosh, I don't really do a percentage or anything like that, ha. It's more just... whatever feels right for the size of the event? Like for a smaller thing maybe I'll ask for fifty bucks just so they're committed, and for a bigger wedding-type deal maybe more like a couple hundred. I don't have it written down as a rule, I just kinda go with my gut on that one too."
+    ],
+    [
+      "Birdie",
+      "Makes sense, no fixed rule there. I also noticed an internal message between you and Deb where you were checking whether a wedding deposit had ever actually been confirmed with a bride — do you have any way of tracking which deposits have come in, or is that mostly just kept in your head / text history?"
+    ],
+    [
+      "Gail Petrosky",
+      "Oh yeah, that's mostly just in my head, or I gotta go scroll back through texts to find where somebody said \"sent it!\" Deb'll ask me sometimes and I'm like, \"did they? lemme check,\" ha. I don't have a spreadsheet or nothin' fancy, it's pretty loosey-goosey. Probably not the best system but it's what I got."
+    ],
+    [
+      "Birdie",
+      "Gotcha, that tracks with everything else being pretty flexible! What about if someone needs to cancel — do you have any kind of policy, like keeping the deposit or a cutoff date, or is that also case-by-case?"
+    ],
+    [
+      "Gail Petrosky",
+      "Ha, yeah, also case-by-case, sorry — I know I'm a broken record today. If somebody cancels way ahead of time I usually just give the deposit back, or I'll say \"keep it on file for next time\" if they wanna rebook. If it's like last minute, real close to the date, I might keep it 'cause by then I've already bought food for it. But I don't have like a \"7 days out\" rule written down anywhere, I just kinda feel out whether it's fair or not depending on the situation."
+    ],
+    [
+      "Birdie",
+      "No worries at all, that's genuinely useful to know! Let's talk team for a sec — is it just you and Deb running things, and what's Deb's role exactly? Like does she help with quotes too, or is that all you?"
+    ],
+    [
+      "Gail Petrosky",
+      "Oh, it's me, Deb, and Marcus, the three of us. Deb and Marcus mostly help serve and set up day-of, they're not really doing quotes or anything like that — that's all me. If it's a bigger event, like over 40 people, I try to bring in a third person too, but that kinda depends who's free that weekend. Deb's been with me longest though, she's basically my right hand for the actual event stuff, just not the pricing side."
+    ],
+    [
+      "Birdie",
+      "That's a solid little crew. Now, when the bot can't answer something and needs to hand off to a human, who should it point people to — should it always say 'Gail will get back to you' with your number, or is there someone else customers should be told to contact?"
+    ],
+    [
+      "Gail Petrosky",
+      "Oh no, it's always just me for that stuff — Deb and Marcus aren't really the ones fielding questions, they'd have no idea what to quote somebody. So yeah, just have it say Gail'll get back to you and give my number, that's basically the only way it works right now."
+    ],
+    [
+      "Birdie",
+      "Perfect, that keeps it simple. What number should the bot give out for that handoff — the same cell people already text you at?"
+    ],
+    [
+      "Gail Petrosky",
+      "Yep, same one — the cell number people already text. Don't have a separate business line or anything fancy, it's all just the one phone glued to my hip, ha."
+    ],
+    [
+      "Birdie",
+      "Got it. Rough guess — how many inquiries would you say you get in a typical week, even just a ballpark? More like 5, 15, 30?"
+    ],
+    [
+      "Gail Petrosky",
+      "Oh man, ballpark... probably somewhere in the 10-15 range most weeks? But during busy season it's way more, could be double that, and then dead winter weeks I might get like three. Really just depends what's going on that week, ha, sorry — no such thing as a \"typical\" week for me."
+    ],
+    [
+      "Birdie",
+      "That's helpful, thank you. Now thinking about the bot itself — do you want something pretty simple, like it just answers common questions and sends people your number when it can't help, or would you also want it to handle things like actual bookings, taking deposits, or syncing to a calendar?"
+    ],
+    [
+      "Gail Petrosky",
+      "Oh gosh, I think just keep it simple for now, ha. I don't need it takin' deposits or messin' with a calendar or anything fancy like that — honestly I'd probably just get confused trying to check it. I think it'd be great if it just answered the basic stuff — like the price ranges, do we do tacos, what's the deal with lead time — and then if it's something like an actual date or a firm number, it just says \"Gail'll text ya back\" and gives my number. Keep it low-key, one less thing on my plate, not more."
+    ],
+    [
+      "Birdie",
+      "That's a great plan, nice and simple — I'll note it as an FAQ-and-handoff bot, no booking or payment features. Quick one on logistics: where's the business based (just city/area is fine), and do you want the bot to mention any set hours, or is 'text anytime, Gail replies when she can' more accurate?"
+    ],
+    [
+      "Gail Petrosky",
+      "Yeah, \"text anytime, Gail replies when she can\" is pretty much dead on, ha. We're based out of Dayton, Ohio — I run outta a commissary kitchen there. And honestly maybe the bot could just mention I don't usually get to calls before 9am, since I'm elbow deep in prep before that, but texts and Facebook messages I'll get to whenever I surface."
+    ],
+    [
+      "Birdie",
+      "Got it, Dayton, Ohio it is — and I'll note the bot can mention calls before 9am usually go to voicemail. Last couple quick ones: do you want the bot to have any particular personality or name, or just keep it plain and friendly like you'd text yourself?"
+    ],
+    [
+      "Gail Petrosky",
+      "Oh just keep it plain and friendly, like it's texting the way I would — no need for it to have some cutesy name or a whole personality thing. Doesn't need to call itself \"Two Forks Bot 3000\" or whatever, ha. Just friendly and helpful is plenty."
+    ],
+    [
+      "Birdie",
+      "Perfect, plain and friendly it is, no gimmicky name. I think I've got a good picture now — before I wrap up, is there anything else on your mind about pricing or the business that you want the bot to know about, or that's been bugging you?"
+    ],
+    [
+      "Gail Petrosky",
+      "Hmm, let me think... oh! The taco bar thing — should probably have it mention that as an add-on since people ask about it a lot, it's like $6 or $7 more a head, sometimes more like $9 if they want shrimp on there. And I guess technically I've got a 15-person minimum for events, but honestly if it's a slow month I've taken smaller ones anyway, so maybe don't make that sound too strict, ha. Other than that... I think you got the gist of it. I ramble, I don't do firm numbers till the day of, but the bot doesn't gotta be as wishy-washy as me, ha — long as it points people my way when they need a real answer."
+    ],
+    [
+      "Birdie",
+      "Great, that's really helpful — thanks Gail! Here's everything I've got, want to double check it with you:\n\n**Services & Pricing:**\n- BBQ/event catering (weddings, parties, etc.): $18-28/head depending on menu, 15-person minimum (soft rule, flexed in slow months), ~2+ weeks lead time for weddings, less for smaller/off-season events\n- Taco bar add-on: $6-7/head extra, ~$9/head with shrimp\n- Boxed lunches (corporate): $12-16/box depending on sandwich, chicken salad ~$1-2 more (unconfirmed exact amount), lead time as short as 2 days\n\n**Open items you still need to resolve on your end:**\n- Exact chicken salad upcharge (need supplier check)\n- Rum cake/specialty item permit status (need county call)\n\n**Policies:**\n- Payments: Venmo, Zelle, cash, occasional check — no card reader\n- Deposits: no fixed amount, judged by event size (~$50 small, a couple hundred for weddings); no formal tracking system\n- Cancellations: case-by-case — refunded or held on file if early, may keep deposit if last-minute\n- Headcount changes: judgment call, not a fixed formula\n- Food quantities are padded for buffer\n- Busy season May-Oct, more flexibility in winter\n- Events over 40 people need a 3rd staffer if available\n\n**Team:** Gail (owner, all quotes/pricing), Deb (day-of lead help), Marcus (day-of help)\n\n**Location:** Dayton, Ohio commissary kitchen\n\n**Channels:** Texts to Gail's cell, Facebook Messenger, calls (usually voicemail before 9am)\n\n**Bot scope:** Simple FAQ + handoff bot only — no booking, payments, or calendar features. Plain, friendly tone, no persona/name needed.\n\n**Handoff:** Anything needing a firm answer or date goes to Gail directly via her cell number.\n\n**Volume:** ~10-15 inquiries/week typically, up to double in busy season, as low as ~3/week in winter.\n\nDoes all that look right, or is there anything you want me to change?"
+    ],
+    [
+      "Gail Petrosky",
+      "Yeah, that all looks pretty darn close, nice job! Only tiny thing I'd tweak — you said \"over 40 people need a 3rd staffer if available,\" which is right, but just don't make it sound like a hard rule, it's really just me seeing who's free that weekend, ha. Everything else you got is spot on though. Think that covers it!"
+    ],
+    [
+      "Birdie",
+      "Awesome, thanks so much Gail — this was really helpful! I've got everything written down, including that soft touch on the 40-person staffing thing. I'll pass all this along so the team can start putting the bot together. Appreciate you taking the time, and good luck with the rest of your prep today!"
+    ]
+  ],
+  "brief": {
+    "contact_name": "Gail",
+    "business_name": "Two Forks Backyard Catering",
+    "industry": "Catering (BBQ, corporate lunches, small weddings)",
+    "business_description": "Backyard BBQ catering business also doing corporate lunches and small weddings, based out of a commissary kitchen in Dayton, Ohio. Team: Gail (owner, handles all quotes/pricing and customer communication), Deb (longest-tenured, helps with day-of serving/setup, her 'right hand' for event execution but not pricing), Marcus (helps with day-of serving/setup). For events over 40 people, Gail tries to bring in a third helper if someone happens to be free that weekend — not a strict rule.",
+    "problem_to_solve": "Gail gets texts and calls at all hours (e.g., early morning while prepping) asking basic questions like pricing for X guests or menu options (e.g., taco bar); wants a bot to answer the basic stuff so she's not glued to her phone.",
+    "target_audience": null,
+    "channels": [
+      "SMS/text to her cell",
+      "Facebook Messenger (via business page)",
+      "Phone calls (often go to voicemail before 9am)"
+    ],
+    "integrations": null,
+    "conversation_volume": "Roughly 10-15 inquiries/week typically; can double during busy season (May-Oct); as low as ~3/week in dead winter weeks.",
+    "languages": [
+      "English"
+    ],
+    "success_criteria": null,
+    "budget": null,
+    "timeline": null,
+    "services_and_pricing": [
+      "Event catering / BBQ package (weddings, graduation parties, birthdays): typically $20-25 per head, but can range as low as $18 to as high as $28 depending on menu (e.g., fancier items like brisket increase cost, skipping dessert decreases it). Lead time: weddings ideally 2+ weeks notice, though smaller events sometimes done with less notice in slow periods. Minimum of 15 people for events, though Gail has taken smaller ones during slow months — not meant to be a hard/strict rule.",
+      "Taco bar add-on: roughly $6-7 more per head, up to about $9 more per head if shrimp is added.",
+      "Corporate boxed lunches: typically $12-16 per box depending on sandwich type; chicken salad option costs roughly $1-2 more but exact upcharge not nailed down — Gail eyeballs it and may need to confirm with supplier. Lead time: often as little as 2 days out since it's simpler (just sandwiches)."
+    ],
+    "faq_answers": [
+      "Common customer questions include: 'how much for X people', 'do you do tacos', 'are you free that weekend'",
+      "Taco bar is offered as an add-on, roughly $6-7/head extra, ~$9/head if shrimp added."
+    ],
+    "business_policies": [
+      "Business intentionally overestimates ('pads') food quantities for headcount buffer purposes, per Gail's own words: 'we always kind of pad the numbers a little anyway so we won't run short'",
+      "Busy season is May–October (weddings, backyard parties); off season (winter) has more flexibility for last-minute bookings. Gail has occasionally overbooked a weekend without realizing until the week of.",
+      "Headcount change repricing is a judgment call, not a fixed formula: for boxed lunches it's straightforward (linear per-box math), but for BBQ packages small headcount increases may not change the price much since quantities are already padded.",
+      "Payment methods accepted: Venmo, Zelle, cash, occasionally checks. No card reader/card payments currently. A deposit is requested sometime before the event (amount/timing not fixed), with the balance due 'whenever' — day of or after.",
+      "Deposit amount is not a fixed rule/percentage — Gail decides by gut feel based on event size, e.g. ~$50 for smaller events, a couple hundred for bigger weddings.",
+      "No formal deposit-tracking system — Gail keeps track 'in her head' or scrolls back through old texts to confirm if a deposit was sent; no spreadsheet or record system in place.",
+      "Cancellation policy is case-by-case, no written rule: deposit usually refunded or held 'on file' if cancelled well ahead of time; deposit may be kept if cancellation is very last-minute since food has already been purchased.",
+      "For events over 40 people, Gail tries to bring in a third staffer, but it's not a strict rule — just depends on who's free that weekend.",
+      "No fixed business hours for responding to texts/Facebook — 'text anytime, Gail replies when she can.' Phone calls before 9am usually go unanswered since she's in prep; those go to voicemail.",
+      "15-person minimum for events exists officially, but Gail has flexed on it for smaller events during slow months — she doesn't want the bot to state it too strictly."
+    ],
+    "escalation_rules": [
+      "All questions the bot can't answer should be routed to Gail directly, using her personal cell number (the same one customers already text) — she is the sole point of contact for quotes/pricing/logistics decisions; Deb and Marcus do not field customer questions."
+    ],
+    "open_items": [
+      "Exact chicken salad box upcharge unconfirmed — Gail estimates $1-2 more but hasn't confirmed with supplier",
+      "Rum cake / specialty item permit status unresolved — Gail hasn't called the county yet, doesn't know if she's allowed to sell it without a permit"
+    ],
+    "additional_notes": [
+      "Menu-planning calls are scheduled flexibly, even weeks out, without urgency, per observed patterns.",
+      "Lead time needed varies by season/how booked up Gail is — busy season needs more notice, off season less; no fixed minimum, it's case-by-case.",
+      "Gail wants a simple bot: answer basic FAQ (price ranges, menu items like tacos, lead times) and hand off firm bookings/numbers to her directly — no deposit-taking or calendar features desired.",
+      "Bot tone: plain, friendly, conversational — like Gail texting herself. No cute persona or name needed.",
+      "Gail's own note: she doesn't do firm numbers till the day of, but the bot doesn't need to be as flexible/wishy-washy as her — it should just point people to her for real answers."
+    ]
+  },
+  "analysis": {
+    "inquiry_categories": [
+      "Event catering quotes (weddings, graduation parties, birthdays) - ~35% - customers ask for total or per-head pricing for a group event",
+      "Corporate/bulk lunch orders (boxed lunches) - ~20% - businesses requesting quotes for a set headcount on a specific date",
+      "Specialty/custom menu item requests (e.g., rum cake) - ~15% - customers asking if an item can be added, sometimes triggering legal/permit questions",
+      "Order/headcount changes and price recalculation - ~15% - customers updating guest counts and asking how it affects the quoted total",
+      "Payment/deposit status confirmation - ~15% - confirming deposits or logistics for booked events (seen internally between staff)"
+    ],
+    "resolved_patterns": [
+      "Per-head catering pricing for an event: Staff gives a range immediately based on headcount (e.g., 'for 50 people probably $20-25 a head, could be less depending what you pick').",
+      "Boxed lunch corporate pricing: Staff gives an immediate range per box based on sandwich choice (e.g., 'boxed lunches would work best for that size, roughly $12-16 a box depending what sandwiches you want').",
+      "General headcount buffer policy: Staff explains they intentionally over-prepare food quantities ('we always kind of pad the numbers a little anyway so we won't run short') when asked about small headcount increases.",
+      "Timeline flexibility for menu planning: Staff is comfortable scheduling menu-building calls anytime before the event, even if the event is weeks away, without expressing urgency."
+    ],
+    "knowledge_gaps": [
+      "Exact upcharge for premium menu items: Marcus asked how much more the chicken salad box costs; Gail said she'd 'check with my supplier' but never provided pricing across many follow-ups spanning a week (8/9 to 8/16), leaving the true price differential unknown.",
+      "Legality/permit requirements for selling homemade specialty items (rum cake): Priya asked if a rum cake could be added to her order; Gail admitted she wasn't sure if she's 'allowed to sell that one without some extra permit thing' and needed to call the county — this was never resolved over 3+ weeks of follow-up (9/1 to 9/6), and the actual permit/regulatory answer is unknown.",
+      "Exact final cost recalculation after headcount change: Karen asked for a specific new total after increasing headcount from 50 to 55; Gail repeatedly deferred ('probably not even $100 more,' 'let me sit down and actually run it this week') without ever supplying a firm number, so the actual method/formula for repricing after menu lock-in is unclear.",
+      "Deposit confirmation process for events: An internal staff message reveals uncertainty over whether a wedding deposit was ever confirmed with the customer ('did we ever confirm the deposit... Bride's asking'), indicating no visible standard process for tracking/confirming deposits.",
+      "Response time / follow-up standards: Multiple examples show multi-day delays before staff responds to time-sensitive customer questions (chicken salad pricing, rum cake permit, headcount repricing), but there's no visible policy for expected response times or escalation."
+    ],
+    "facts_learned": [
+      "Business offers event catering for parties (e.g., graduation parties, weddings, birthdays) and corporate boxed lunches.",
+      "Catering pricing for events is typically quoted at $20-25 per head, varying by menu choices (e.g., taco bar increases cost, skipping dessert decreases it).",
+      "Boxed lunch pricing for corporate orders is typically $12-16 per box depending on sandwich type; chicken salad option costs more (exact premium unconfirmed in materials).",
+      "The business handles wedding catering, including deposits, as referenced by an internal staff conversation.",
+      "Owner/operator 'Gail' personally manages customer quotes and communications via WhatsApp.",
+      "There is at least one other staff member ('Deb') who communicates with Gail in a group chat about logistics.",
+      "Communication with customers happens over WhatsApp text messaging, in English.",
+      "The business does not currently have a confirmed answer about permits needed to sell certain homemade goods (e.g., rum cake) and may need county-level clearance.",
+      "The business intentionally overestimates ('pads') food quantities for headcount buffer purposes.",
+      "Response times to customer follow-up questions have ranged from same-day to multi-day (up to a week or more) delays in the observed materials."
+    ]
+  },
+  "completed": true,
+  "turns": 46
+}

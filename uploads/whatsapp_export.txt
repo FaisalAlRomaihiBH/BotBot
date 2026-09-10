@@ -1,48 +1,33 @@
-[Mon Mar 3, 9:12am] Ngozi: Hi, how much for full detail on a Toyota Camry?
-[Mon Mar 3, 9:20am] Tunde: Camry which year na?
-[Mon Mar 3, 9:21am] Ngozi: 2016
-[Mon Mar 3, 9:25am] Tunde: Ehen. And where you dey stay, Lekki or Mainland?
-[Mon Mar 3, 9:26am] Ngozi: Lekki Phase 1
-[Mon Mar 3, 9:30am] Tunde: Ok good. When last you wash the car sef?
-[Mon Mar 3, 9:31am] Ngozi: Lol why does that matter, just tell me the price
-[Mon Mar 3, 9:40am] Tunde: I dey ask because if e too dirty e go take extra time, that's why I dey find out first. So when last?
-[Mon Mar 3, 9:41am] Ngozi: Maybe 2 weeks ago
-[Mon Mar 3, 9:50am] Tunde: Ok that one straightforward. Full detail na 25k for that kind car.
-[Mon Mar 3, 9:51am] Ngozi: Great, can I book for Saturday?
-[Mon Mar 3, 9:55am] Tunde: Saturday you go dey house the whole time or you go comot?
-[Mon Mar 3, 9:56am] Ngozi: I'll be around
-[Mon Mar 3, 10:02am] Tunde: Perfect, Blessing go call you to fix time.
-
-[Wed Mar 5, 2:14pm] Kingsley: do you guys do ceramic coating? how much
-[Wed Mar 5, 2:30pm] Tunde: Which car and how big?
-[Wed Mar 5, 2:31pm] Kingsley: Range Rover Sport
-[Wed Mar 5, 2:40pm] Tunde: Ah that one big o. Why you want ceramic, na for resale or you just like the shine?
-[Wed Mar 5, 2:41pm] Kingsley: I just want it protected, does the price matter why I want it?
-[Wed Mar 5, 2:50pm] Tunde: Lol no wahala. For that size e fit reach 150k, but let me check the coating stock price this week, dollar don move again.
-[Wed Mar 5, 2:51pm] Kingsley: ok please let me know
-[Fri Mar 7, 5:00pm] Kingsley: any update on the price?
-
-[Sat Mar 8, 11:02am] Amaka: Good morning, do you work on Sundays for emergencies?
-[Sat Mar 8, 11:10am] Tunde: Which kind emergency you dey talk about?
-[Sat Mar 8, 11:11am] Amaka: My car got really muddy from a trip, need it clean before Monday
-[Sat Mar 8, 11:15am] Tunde: Muddy how, like off-road mud or just dust?
-[Sat Mar 8, 11:16am] Amaka: Actual mud, thick
-[Sat Mar 8, 11:20am] Tunde: Hmm that one na proper job. But you go still dey around this weekend or you dey travel again?
-[Sat Mar 8, 11:21am] Amaka: I'll be home, can someone come tomorrow or not
-[Sat Mar 8, 11:30am] Tunde: We dey close Sunday normally but why you no book Friday self before you travel?
-[Sat Mar 8, 11:31am] Amaka: I didn't know I'd need this, can you help or not
-[Sat Mar 8, 11:45am] Tunde: Let me ask Emeka if he fit come, I go tell you.
-
-[Tue Mar 11, 8:03am] Ngozi: Hi, following up — did Blessing ever confirm my Saturday slot? Nobody called
-[Tue Mar 11, 8:40am] Tunde: You get the slot already or not?
-[Tue Mar 11, 8:41am] Ngozi: That's what I'm asking you!
-[Tue Mar 11, 9:15am] Tunde: Ok make I check with Blessing, she dey handle that side.
-
-[Thu Mar 13, 3:00pm] Oba: hey do you guys clean engine bays alone, not full car
-[Thu Mar 13, 3:20pm] Tunde: You want am alone why, engine giving problem?
-[Thu Mar 13, 3:21pm] Oba: no just want it clean before I sell the car
-[Thu Mar 13, 3:30pm] Tunde: Ah selling, ok. When you dey sell am, this week?
-[Thu Mar 13, 3:31pm] Oba: yes this weekend, can you just tell me the price
-[Thu Mar 13, 3:45pm] Tunde: Engine bay clean na 10k. You dey Mainland or Island so I know who go come?
-[Thu Mar 13, 3:46pm] Oba: Ikeja
-[Thu Mar 13, 4:00pm] Tunde: Ok Chidi dey your side, I go link you both.
+[8/2, 9:14 AM] Karen (customer): Hi! Looking into catering for my daughter's graduation party, about 50 people. What would that run us?
+[8/2, 10:47 AM] Gail: Hi Karen! Congrats to her :) for 50 people probably looking at somewhere in the $20-25 a head range, could be a bit less depending what you pick
+[8/2, 10:48 AM] Karen: Ok that's helpful, so roughly $1000-1250 total?
+[8/2, 11:52 AM] Gail: Yeah probably around there, sometimes it's a little more with the taco bar stuff, sometimes less if you skip dessert, hard to say exact till we build the menu
+[8/2, 11:53 AM] Karen: Got it, when can we build the menu?
+[8/2, 3:10 PM] Gail: We can hop on that whenever, no rush, event's not for a while right?
+[8/2, 3:11 PM] Karen: It's in 5 weeks
+[8/2, 3:40 PM] Gail: Oh perfect that's plenty of time lol
+[8/9, 1:02 PM] Marcus T. (customer): Hey do you guys do corporate lunches? Need something for 25 people next Tuesday
+[8/9, 4:15 PM] Gail: Yes we do! Boxed lunches would probably work best for that size, roughly $12-16 a box depending what sandwiches you want
+[8/9, 4:16 PM] Marcus T.: So like $350ish total?
+[8/9, 4:44 PM] Gail: Somewhere in there yeah, could be a little higher if people want the chicken salad one, that one's a bit pricier
+[8/9, 4:45 PM] Marcus T.: How much pricier
+[8/9, 5:20 PM] Gail: Not too bad, maybe a couple bucks more per box, I'd have to check with my supplier on the chicken price this week
+[8/9, 5:21 PM] Marcus T.: Ok can you check and let me know by tomorrow? Need to get this approved
+[8/9, 5:22 PM] Gail: Yep will do!
+[8/12, 9:03 AM] Marcus T.: Hi following up, did you hear back on the chicken salad pricing?
+[8/13, 6:40 PM] Marcus T.: Hello?
+[8/16, 11:15 AM] Gail: Hey so sorry! Been slammed with a wedding this week, let me look into that
+[9/1, 2:20 PM] Priya (customer): Hi, do you have a rum cake option for a birthday party? Someone mentioned you'd made one before
+[9/1, 5:03 PM] Gail: Oh yeah I've made one before, it's really good haha. Honestly not 100% sure I'm allowed to sell that one without some extra permit thing, I've been meaning to call the county about it
+[9/1, 5:04 PM] Priya: Oh ok, is that something you could find out before our date?
+[9/1, 5:30 PM] Gail: Should be able to, I'll try to figure that out for you
+[9/6, 10:12 AM] Priya: Hi just checking in on the rum cake permit question, our party's in 3 weeks
+[9/6, 3:47 PM] Gail: Still on my list! Will get to it this week I think
+[9/20, 8:55 AM] Karen (customer): Hi Gail, just confirming final headcount is 55 now, not 50. Does that change the total much?
+[9/20, 12:10 PM] Gail: Should be fine, we always kind of pad the numbers a little anyway so we won't run short, might just bump the total up a small bit
+[9/20, 12:11 PM] Karen: Like how much is 'a small bit'? Trying to finalize my budget
+[9/20, 1:35 PM] Gail: Honestly probably not even $100 more, could be less. I'll have a real number closer to the day once we lock the menu in!
+[9/20, 1:36 PM] Karen: We locked the menu in 3 weeks ago though
+[9/20, 3:02 PM] Gail: Oh right! Ok let me sit down and actually run it this week, promise
+[10/4, 9:00 AM] Deb (staff, group chat): Gail did we ever confirm the deposit for the Saturday wedding? Bride's asking
+[10/4, 9:41 AM] Gail: Ugh good catch, I'll message her today
