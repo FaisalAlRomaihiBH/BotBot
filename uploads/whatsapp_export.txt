@@ -1,27 +1,32 @@
-[03/06, 9:41am] Customer (Priya): Hi! Do you do wedding dress alterations? Mine needs a bustle and the hem taken up
-[03/06, 11:15am] Roz: Oh a bustle, lovely, we did three of those last month, one girl came in absolutely certain she wanted a ballroom bustle and by the fitting she'd changed her mind entirely, you should have seen her mother's face! Anyway yes we do, it's a busy time of year for me, my knee's been giving me grief too with all the standing at fittings but we manage. What sort of dress is it, is it heavy beading or a simpler style?
-[03/06, 11:16am] Customer (Priya): It's a satin dress, not much beading. How much would that be roughly?
-[03/06, 2:03pm] Roz: Satin's easier thankfully, some of the lace ones take me an age with the machine, my old Bernina from '87 bless it, still going but I do wonder if I should finally retire it haha. For a satin dress with a bustle and hem, somewhere around £120 to £140, depends a bit on how much fabric there is to work with. When's the big day?
-[03/06, 2:05pm] Customer (Priya): September 14th
-[03/06, 2:40pm] Roz: Ooh plenty of time then, good, because June and July I'm absolutely rammed, brides everywhere, Effie my niece helps me Saturdays but even so. Come in for a fitting whenever suits, just ring ahead so I know to clear a slot
-[04/06, 8:12am] Customer (Dave): Hi mate, need a suit jacket sleeve shortened, how much and how long
-[04/06, 10:30am] Roz: Morning! Sleeves are £18, that's a straightforward one really, though it depends slightly if there's a working buttonhole cuff, some of these modern suits have them and it's fiddly. Turnaround's normally 5 to 7 days but honestly with the weather being so nice everyone's suddenly wanting things done for garden parties so it might run a touch longer, I had four in yesterday alone
-[04/06, 10:31am] Customer (Dave): Ok so end of next week?
-[04/06, 10:45am] Roz: Should think so! Bring it in and I'll have a proper look, sometimes what looks simple isn't
-[05/06, 3:20pm] Customer (Sandra): Do you take card payments
-[05/06, 3:55pm] Roz: We do yes, card or cash, whichever's easier, I still remember when it was all cash only and I'd have this little tin under the counter, my husband used to worry about it so much bless him
-[06/06, 9:02am] Customer (Meera): Hi, can you replace a zip in a leather jacket?
-[06/06, 1:47pm] Roz: Leather's a different beast altogether, needs a special needle and the machine doesn't love it, there was a chap a few years back brought in a motorbike jacket and it took me twice as long as normal. Let me have a proper think about whether I want to take that on right now with everything else going on, I'll get back to you
-[08/06, 10:10am] Customer (Meera): Hey just checking in on the leather jacket zip?
-[10/06, 4:33pm] Customer (Meera): Hi Roz, any update?
-[13/06, 8:15am] Customer (James): Hiya, what are your hours?
-[13/06, 9:00am] Roz: Tuesday to Saturday, 9:30 til 5, though Saturdays Effie's here too so it's a bit livelier, and Mondays I'm shut, that's my paperwork day and also the dog's vet day, he's not been himself lately poor thing
-[13/06, 9:01am] Customer (James): Great, is it walk in or appointment for a quick hem?
-[13/06, 9:20am] Roz: Walk in's usually fine for a simple hem, though if it's during wedding season I might have a queue, best to just pop your head in and ask, I'm generally around unless I've popped to the post office
-[15/06, 5:55pm] Customer (Priya): Hi Roz! Just confirming my fitting for next week, does Tuesday work?
-[16/06, 11:02am] Roz: Tuesday's a bit mad actually, that's when I catch up from the weekend, could we do Wednesday instead, oh but wait Effie's off Wednesday and I might need the extra pair of hands for pinning, let me check the book properly and get back to you
-[19/06, 2:00pm] Customer (Priya): Hey just following up, did Wednesday work?
-[21/06, 9:15am] Customer (Tom): Hi, do you do rush alterations? Need trousers hemmed by Friday, it's Wednesday today
-[21/06, 12:40pm] Roz: Rush jobs, ooh, well I can sometimes squeeze them in, there's usually a bit extra on top for that, I've never quite settled on a proper rate for it if I'm honest, sometimes I charge half again, sometimes less if it's a regular customer, depends how my week's looking. Bring them in and I'll see what I can do, no promises mind, my knee's been playing up again this week
-[21/06, 12:41pm] Customer (Tom): So roughly how much extra?
-[21/06, 3:15pm] Roz: Hard to say really! Come by and we'll sort it out, I don't like quoting rush prices blind, every garment's a bit different
+[03/06, 08:12] Roz - Shaggy Dog House: Morning! Sorry it's early I've been up since six, Maple (my collie, not a customer dog haha) decided the postman was an intruder again
+[03/06, 08:13] Roz - Shaggy Dog House: anyway what can I do for you lovely
+[03/06, 08:20] Customer - Beth: Hi! Just wondering how much a full groom is for a cockapoo, medium size
+[03/06, 08:41] Roz - Shaggy Dog House: Oh cockapoos, I do love a cockapoo, had one in yesterday actually called Biscuit, an absolute menace on the table but sweet as anything, took me twice as long because he kept trying to eat the clippers
+[03/06, 08:42] Roz - Shaggy Dog House: full groom for medium is £55, that's wash cut nails ears the lot
+[03/06, 08:42] Roz - Shaggy Dog House: does he mat much? cockapoos can be a nightmare for matting behind the ears
+[03/06, 08:55] Customer - Beth: A bit yeah. Do you have space this Friday?
+[03/06, 09:14] Roz - Shaggy Dog House: Fridays are Tilly's day, she's ever so good with the mats, patient as anything, not like me I just want to get in there with the clippers ha
+[03/06, 09:15] Roz - Shaggy Dog House: she might be moving to Bristol you know, her fella's got a job there, so I don't know what autumn looks like for Fridays if I'm honest, bit up in the air
+[03/06, 09:15] Roz - Shaggy Dog House: but THIS Friday should be fine
+[03/06, 09:30] Customer - Beth: Great, can you confirm a time?
+[03/06, 11:02] Roz - Shaggy Dog House: let me just check the book, it's out in the stable and I'm in the kitchen having my tea now, will look in a bit
+[04/06, 14:20] Customer - Beth: Hiya, any update on the Friday time? 😊
+[05/06, 09:03] Roz - Shaggy Dog House: OH gosh sorry love, completely forgot, Maple got into next door's chickens yesterday, whole afternoon sorting that out, dreadful business, nobody hurt thank god
+[05/06, 09:04] Roz - Shaggy Dog House: how about 10am Friday
+[05/06, 09:04] Customer - Beth: 10am works, thank you!
+[10/06, 16:45] Customer - Ian: Hi, do you have boarding for 2 dogs 15th-20th July? Springer spaniels, they're brothers, get on fine
+[10/06, 17:30] Roz - Shaggy Dog House: Oh springers, lovely energetic dogs aren't they, we had a springer years back before Maple, called him Duke, could jump a five bar gate would you believe
+[10/06, 17:31] Roz - Shaggy Dog House: July's always mad because of the school holidays starting, everyone wants that week
+[10/06, 17:31] Roz - Shaggy Dog House: I THINK I've got room but I'd need to walk out and count the runs properly, I never trust my memory on it
+[11/06, 08:10] Customer - Ian: No worries, could you check today?
+[13/06, 19:22] Roz - Shaggy Dog House: sorry it's been mad here, the boiler went and I've had a man out twice this week, honestly the state of it
+[13/06, 19:23] Roz - Shaggy Dog House: I'll get out there tomorrow and check the runs I promise
+[18/06, 12:00] Customer - Ian: Hi Roz, following up again — any luck checking availability for July 15-20?
+[19/06, 09:47] Roz - Shaggy Dog House: hiya! yes so I think two of the runs are free that week but I do need to double check because of the Hendersons possibly extending their booking, they're away in Portugal and always seem to add days last minute
+[19/06, 09:48] Roz - Shaggy Dog House: also is your insurance sorted for two dogs same run, I ought to ring mine and check that's even allowed, been meaning to for ages
+[19/06, 09:48] Roz - Shaggy Dog House: anyway lovely to hear from you, how's the weather your end, we've had nothing but rain
+[20/06, 10:15] Customer - Ian: Ha, sunny here! So are the July dates confirmed or not yet?
+[22/06, 15:30] Roz - Shaggy Dog House: Not yet love, sorry, bear with me x
+[02/07, 11:00] Customer - Grace: Hi, do you do nail trims without an appointment, could I just pop by?
+[02/07, 11:20] Roz - Shaggy Dog House: Oh popping by is fine usually, though Tuesday mornings are a bit of a zoo because that's when the feed delivery comes and it's always chaos, boxes everywhere, poor Tilly nearly went flying over a sack of kibble last week
+[02/07, 11:21] Roz - Shaggy Dog House: nail trims are £8, any afternoon's usually calmer

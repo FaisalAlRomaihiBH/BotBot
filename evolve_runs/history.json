@@ -1042,5 +1042,65 @@
       "Add a `current_tools_and_records` field (paper appointment book, card machine, 4-year-old answerphone, no calendar software) — integration-relevant facts are currently split between `integrations: null` and additional_notes.",
       "Give the interviewer a capability/step to request and record the owner's actual contact and channel identifiers before wrap-up, not just narrative descriptions of them."
     ]
+  },
+  {
+    "cycle": 18,
+    "stamp": "20260910_143602",
+    "persona": "Pet grooming & small-scale dog boarding (village-based, UK) / Chronic rambler — Roz cannot answer even a simple question without a detour into unrelated stories: her own dogs, the weather, a customer from 1997, her knee surgery, a mix-up at the feed shop. She's warm, well-meaning, and genuinely tries to help, and she usually DOES eventually answer the question — but it's buried three paragraphs deep in a tangent, sometimes across four or five separate messages, and customers often have to fish the actual answer out or ask again in a very narrow, closed way ('yes or no, Tuesday?') to get anything usable. She never seems to notice she's gone off track and will happily start a new tangent immediately after finishing one.",
+    "score": 6.67,
+    "completed": true,
+    "improved": false,
+    "top_improvement": "Add a hard rule that facts derived from uploaded evidence must be framed as questions ('I think I see X in one of these — is that right?') and never asserted as 'this matches what you told me'; anything the owner disputes must be deleted from the brief rather than softened, and unverified evidence-derived claims must be tagged as unconfirmed.",
+    "findings": [
+      {
+        "problem": "Brief invents WhatsApp as a live channel ('WhatsApp (used with some customers)' and 'Roz's personal mobile (same number used for the bot/WhatsApp)') when Roz explicitly said she never got WhatsApp Business working and doesn't use it.",
+        "excerpt": "Rosalind 'Roz' Fenwick: Don't really do WhatsApp properly like I said, and no Instagram or any of that, Tilly keeps saying \"Auntie Roz you should be on Instagram, dogs getting groomed do ever so well,\" and I say yes, yes, one day"
+      },
+      {
+        "problem": "Birdie fabricated a 'confirmed' fact from the uploads — a nail-trim walk-in policy with Tuesday-morning exclusion and calmer afternoons — and presented it as matching what Roz had said. Roz had never mentioned it and had to correct it in the summary review.",
+        "excerpt": "Birdie: Thanks for those, Roz — really helpful. Two things jumped out: I can see the full groom price (£55 for a medium like a cockapoo) and the nail trim/walk-in policy (£8, walk-ins fine except Tuesday mornings, afternoons calmer) match what you told me, so that's confirmed."
+      },
+      {
+        "problem": "Even after the correction, the disputed walk-in/feed-delivery material was retained in the brief's services_and_pricing and faq_answers ('walk-ins generally fine; Roz notes feed delivery is usually a Wednesday...'), embedding unverified detail Roz explicitly asked not to promise customers.",
+        "excerpt": "Rosalind 'Roz' Fenwick: But one bit's pulled me up — that nails only thing, \"walk-ins fine except Tuesday mornings because of feed delivery, afternoons calmer\" — I don't actually recall saying that one, love, and it doesn't sound quite right either"
+      },
+      {
+        "problem": "Budget and timeline for the chatbot project were never asked about at all; both fields are null. The only cost/timeline talk was about the kennel run, and Birdie never converted the moment into a project budget/timeline question.",
+        "excerpt": "Rosalind 'Roz' Fenwick: there's the fourth kennel run I keep saying I'll put in, been \"thinking about it\" for two years now if I'm honest with myself, no proper cost worked out or anything, just an idea Terry and I bat back and forth over tea."
+      },
+      {
+        "problem": "Birdie never established where the bot would actually live/be deployed (no website was ever mentioned or asked about — Facebook page, SMS and phone are the only touchpoints), leaving a critical build requirement undefined.",
+        "excerpt": "Rosalind 'Roz' Fenwick: So — phone, text, or Facebook message, those are your three, really. Was that what you needed?"
+      },
+      {
+        "problem": "Near-duplicate questioning: Birdie asked how customers reach Roz after she had already, in the handoff question, spelled out mobile-only, no business line and no working WhatsApp.",
+        "excerpt": "Birdie: Aw, Biscuit sounds like a little star! Right, switching gears a bit — where do customers usually reach you now: is it phone calls and texts mostly, or do you get messages on WhatsApp, Facebook, that sort of thing too?"
+      },
+      {
+        "problem": "Low-value turn spent on multilingual support for a village-only, word-of-mouth rural business, adding a padded 'languages' entry rather than probing an unfilled area (deployment, budget, data handling for vaccination proof).",
+        "excerpt": "Birdie: One last thing before I pull it all together — will everyone messaging you be writing in English, or do you sometimes get messages in another language too?"
+      },
+      {
+        "problem": "A whole turn was spent re-asking about puppy sessions that Roz had already fully priced and described, yielding only anecdote (Biscuit) and a duration figure.",
+        "excerpt": "Birdie: Go on then, tell me about the puppy sessions — anything more to add beyond the £15 and getting them used to the table and dryer?"
+      },
+      {
+        "problem": "Minor lost facts: Roz's age/background (58, started after her knee injury ended her school-run job) and the specific 12-month recency of the kennel cough requirement being customer-provable via card/vet printout are only partially reflected; the origin story is dropped entirely from the brief.",
+        "excerpt": "Rosalind 'Roz' Fenwick: Started it after my knee went and I couldn't do the school run job anymore, funny how these things work out isn't it."
+      },
+      {
+        "problem": "Interview ran long (46 entries, above the 20–30 norm) partly because several questions were double-barrelled or scoped so broadly that Roz's rambling answers required follow-up confirmation turns rather than tight, single-fact questions.",
+        "excerpt": "Birdie: That's great, thank you — I've got the hours and location noted, including that tricky turning! Yes, let's do the puppy sessions bit too, but first — when the bot can't answer something or a customer needs a real person, what number or way should it point them to reach you (or Terry/Tilly), and what should it say if that's out of hours?"
+      }
+    ],
+    "schema_suggestions": [
+      "Add a structured `hours` field (regular hours, informal/out-of-hours behaviour, staff-specific availability days) — currently hours are buried in the free-text business_description.",
+      "Add a `team_and_capacity` field (staff, days worked, physical capacity limits like 3 kennel runs, seasonal peaks) — this recurred and got scattered across business_description, business_policies and additional_notes.",
+      "Add a `bot_persona_and_tone` field — tone/name preferences were crammed into additional_notes despite being a core build requirement.",
+      "Add an `example_customer_messages` field — sample enquiries are essential for tone tuning but currently sit as a bullet in additional_notes.",
+      "Add a `deployment_surfaces` field distinct from `channels` (where the bot will actually be installed vs where enquiries currently arrive), plus a capability/prompt step requiring Birdie to ask whether a website exists.",
+      "Add a `disputed_or_unverified_facts` field so evidence-derived claims the owner rejected (e.g. the Tuesday walk-in rule) are recorded as retracted instead of being reworded into faq_answers.",
+      "Add a `notify_owner`/reminder-behaviour field: Roz's key requirement is proactive nudging of the owner about outstanding requests, which has no home except escalation_rules prose."
+    ]
   }
 ]
