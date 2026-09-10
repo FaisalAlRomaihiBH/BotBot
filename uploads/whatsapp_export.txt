@@ -1,56 +1,37 @@
-[Mon 09:14] Hi, do you do same-day puncture repairs?
-[Mon 09:20] Colin: Yeah easy, bring it in, done by lunch
-[Mon 09:21] Colin: actually hang on if Ruth's not in today it might be end of day, she does the quick stuff
-[Mon 09:22] Colin: no you know what bring it in, I'll sort it, lunch time
-[Mon 09:45] Great, I'll drop it at 10
-[Mon 09:46] Colin: perfect
-
-[Wed 14:02] Hi Colin, how much for a full service on a hybrid bike?
-[Wed 14:30] Colin: full service is £90
-[Wed 14:31] Colin: or £110 if it needs new cables, which yours probably will tbh
-[Wed 14:33] Colin: actually let's just say £100 flat, easier for both of us
-[Wed 14:34] Colin: unless it's really grimy then more, we'll see when it's in
-[Wed 15:10] Ok... so roughly £90-110?
-[Wed 15:40] Colin: yeah basically
-
-[Thu 11:05] Do you build custom frames? Looking for a steel touring frame
-[Thu 16:20] Colin: I do! Love that stuff honestly
-[Thu 16:21] Colin: price wise... I'd say £1200 to start
-[Thu 16:22] Colin: though last one I did took me way longer than quoted so maybe more like £1400
-[Thu 16:23] Colin: I genuinely don't know honestly, let me think on it properly and get back to you
-[Fri 09:00] Any update on the frame pricing?
-[no reply]
-
-[Sat 10:15] Hi, can I book a drop off for Tuesday morning for a tune-up?
-[Sat 10:40] Colin: Tuesday's good, come at 9:30
-[Sat 10:41] Colin: actually Tuesday I might have someone else's bike booked in that slot, better make it Wednesday
-[Sat 10:42] Colin: no wait Tuesday's fine, I mixed it up with last week
-[Sat 10:50] So... Tuesday 9:30?
-[Sat 11:15] Colin: yes Tuesday 9:30 locked in
-
-[Sun 19:00] What time do you open tomorrow?
-[Mon 08:55] Colin: 9:30! sorry just saw this
-
-[Tue 09:32] I'm here for the 9:30 drop off
-[Tue 09:50] Colin: sorry running behind, be there in ten
-
-[Tue 16:00] Hey any chance my bike's ready today, was told 2-3 days
-[Tue 16:45] Colin: ooh let me check where it's at, back to you shortly
-[no further reply that day]
-
-[Thu 10:00] Still no word on my bike from Tuesday drop off, what's going on?
-[Thu 12:15] Colin: so sorry, it's actually ready, my bad, come whenever
-
-[Fri 13:00] Do you take card payments?
-[Fri 13:20] Colin: not yet, cash or bank transfer
-[Fri 13:21] Colin: actually I keep meaning to get the card machine sorted, might have it by next month
-[Fri 13:22] Colin: honestly don't hold your breath though
-
-[Sat 15:00] Wheel truing - how much and how long?
-[Sat 15:30] Colin: £15, takes like 20 mins while you wait
-[Sat 15:31] Colin: unless it's badly buckled then I'd rather keep it overnight
-[Sat 15:32] Colin: bring it Saturday, I'll have a look and tell you then honestly
-
-[Sun 20:00] Hi, do you sell tubes/tyres in shop?
-[Mon 09:40] Colin: yeah got a small rack
-[Mon 09:41] Colin: honestly thinking of getting rid of it though, barely worth it, we'll see
+[Mon 9:14 AM] Marcus: Hey! Wanted to book studio time for my band, 3 hours this Saturday. What's the rate?
+[Mon 9:20 AM] Jonno: hey! yeah for you it's $35/hr since it's a first booking
+[Mon 9:21 AM] Jonno: actually wait let me reconsider, Saturdays are prime time, gonna be $45/hr
+[Mon 9:22 AM] Jonno: you know what, split the difference, $40/hr. final answer
+[Mon 11:02 AM] Marcus: haha ok. so $120 for 3 hrs?
+[Mon 11:45 AM] Jonno: yep that works
+[Tue 2:15 PM] Priya: Hi, interested in the podcast recording + edit package, is it still $150?
+[Tue 2:40 PM] Jonno: yeah $150 for 2 hrs
+[Tue 2:41 PM] Jonno: hmm actually I've been thinking the edit takes me longer than it should, gonna bump it to $200
+[Tue 6:03 PM] Jonno: ok scratch that, $200 feels like a lot for a first timer, let's do $150 like i said
+[Tue 6:04 PM] Priya: lol ok so $150, got it
+[Tue 6:20 PM] Jonno: yeah $150 sounds right, don't quote me on that though
+[Wed 10:05 AM] Marcus: Quick q, are you open Sundays? Might need a makeup session
+[Wed 10:30 AM] Jonno: nah closed sundays
+[Wed 10:31 AM] Jonno: actually i might start opening sundays soon, been thinking about it
+[Wed 10:32 AM] Jonno: let me get back to you on that
+[Sat 12:00 PM] Marcus: hey any update on Sunday hours?
+[no response]
+[Thu 3:12 PM] Dana: Hi! Wondering about voiceover recording rates and if you have a booth big enough for two people
+[Thu 3:50 PM] Jonno: voiceover is $60/hr, and yeah the booth fits 2 comfortably
+[Thu 4:10 PM] Jonno: actually thinking about it, it's a little tight for 2, might be better with one at a time
+[Thu 4:11 PM] Jonno: let me check the actual measurements tonight and confirm
+[no follow-up]
+[Fri 8:00 AM] Priya: Also — do you charge extra for card payment?
+[Fri 8:45 AM] Jonno: yeah 3% fee
+[Fri 8:46 AM] Jonno: actually I usually forget to charge that lol just do cash or venmo if you can
+[Sat 1:30 PM] Marcus: We're here for our session, all good?
+[Sat 1:33 PM] Jonno: yep! Del's setting up the mics now
+[Sat 1:34 PM] Jonno: wait it's Del's day off today isn't it? one sec let me check
+[Sat 1:40 PM] Jonno: ok I'll just run sound myself, no worries
+[Sun 9:00 AM] Dana: Any update on the booth size for two people?
+[no response]
+[Mon 11:15 AM] Priya: So to confirm — final price for the podcast package is $150 right?
+[Mon 11:50 AM] Jonno: yeah $150
+[Mon 11:52 AM] Jonno: unless you want the longer edit, then it's more, we can talk when you get here
+[Mon 11:53 AM] Priya: ...ok, I'll just bring cash and we'll figure it out
+[Mon 11:54 AM] Jonno: perfect that works
