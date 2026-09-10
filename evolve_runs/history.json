@@ -546,7 +546,8 @@
       "Add a `contact_channels` field with per-channel values and a responsiveness/SLA note (e.g. 'slow to answer phone'), plus a status flag for missing values, so the pending phone number isn't only tracked as a free-text open item.",
       "Add a `staffing_and_availability` field with per-person days/seasonality, and a `business_profile` field (years trading, equipment/craft details) for trust-building answers — neither has a home in the current schema.",
       "Capability gap: the interviewer has no mechanism to detect chronically monosyllabic/'not sure' respondents and switch to concrete, example-based or multiple-choice prompting; add an adaptive low-information-answer strategy plus a turn-budget-aware closing routine that guarantees a completed brief."
-    ]
+    ],
+    "improve_done": true
   },
   {
     "cycle": 11,
@@ -631,6 +632,7 @@
       "Add a `current_tools_and_records` field (notebook + WhatsApp, no spreadsheet/CRM, no website) — this operational reality is currently dumped in `additional_notes` and duplicated there and in open_items.",
       "Add a `business_profile` field (founded year, size/growth stage) — the interviewer has no slot prompting for company history, so the 2014 roadside-stall origin was never asked about.",
       "Add a `quote_terms` field (validity period, what triggers a re-quote) — the schema has deposit and refund coverage but no home for quote lifetime, which is likely why it was never asked."
-    ]
+    ],
+    "improve_done": true
   }
 ]
