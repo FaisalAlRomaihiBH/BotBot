@@ -1,41 +1,36 @@
-[Mon 9:12 AM] Sarah M: Hi! Interested in a custom dining table, seats 6, what would that run?
-[Mon 9:20 AM] Tom: hey! for 6 seater probably around $1200 in oak
-[Mon 9:21 AM] Tom: actually walnut looks better honestly, that'd be more like $1600
-[Mon 9:35 AM] Sarah M: ok can you give me a firm number so I can budget?
-[Mon 10:02 AM] Tom: lets say 1400 flat. no wait — 1200. lets do 1200 im just gonna go with oak pricing
-[Mon 10:03 AM] Sarah M: great, 1200 it is, how long would it take?
-[Mon 10:15 AM] Tom: 3 weeks easy
-[Mon 4:40 PM] Tom: hmm actually thinking about it i have two other tables ahead of you so more like 6 weeks. maybe less
-[Tue 8:05 AM] Sarah M: ok, 6 weeks. do you need a deposit?
-[Tue 8:30 AM] Tom: yeah 50% to start
-[Tue 8:31 AM] Tom: actually can we do 30%? trying to keep it light for you
-[Tue 8:45 AM: Sarah M: sure, whatever works, just tell me the number
-[Tue 12:10 PM] Tom: ill send you the invoice tonight
-[Fri 3:00 PM] Sarah M: hey just following up, never got the invoice
-[Fri 6:45 PM] Tom: oh sorry been slammed, ill get it to you this weekend
----
-[Wed 11:00 AM] Jake R: do you guys deliver? im in Wauwatosa
-[Wed 11:20 AM] Tom: yeah delivery's included no charge
-[Wed 2:15 PM] Tom: actually my trucks been having transmission issues so might have to charge like $75 for delivery, or you pick up
-[Wed 2:16 PM] Tom: or maybe ill just borrow deshawns truck, dont worry about it itll be free
-[Thu 9:00 AM] Jake R: lol ok well let me know for sure closer to the date
-[Thu 9:10 AM] Tom: will do
----
-[Sat 1:30 PM] Amelia P: hi do you do floating shelves? whats the price for 3
-[Sat 2:00 PM] Tom: yep! $80 each so $240 for 3
-[Sat 2:02 PM] Tom: oh wait if you want the same wood as each other and matched grain it'd be more like $100 each, so $300
-[Sat 2:05 PM] Amelia P: ok $300 works, when could these be ready
-[Sat 2:10 PM] Tom: 2 weeks
-[Sat 5:45 PM] Tom: hmm might be closer to a month, i keep going back and forth on whether im doing custom orders or switching to a standard line, been thinking about that a lot lately, sorry, ill know more soon
-[Sun 10:00 AM] Amelia P: ...ok? should I look elsewhere or wait?
-[Sun 10:00 AM] Amelia P: hello?
----
-[Mon 8:00 AM] Priya K: hi, can you refinish an old dresser? what would that cost
-[Mon 8:40 AM] Tom: sure! probably $200
-[Mon 8:41 AM] Tom: depends on condition though could be $350 if its rough
-[Mon 9:00 AM] Priya K: it's pretty beat up honestly
-[Mon 9:05 AM] Tom: ok $350. actually you know what lets just say $300, ill eat the difference
-[Mon 9:06 AM] Priya K: haha ok, $300, deal. when can I drop it off?
-[Mon 9:10 AM] Tom: anytime this week, we're open tues-sat 9-5
-[Mon 9:11 AM] Tom: well i mightnt be here thursday actually, deshawn will be tho
-[Mon 9:12 AM] Priya K: got it, thanks!
+[03/09/24, 10:12] Sarah H: Hi, wondering how much a medium storage unit is per month?
+[03/09/24, 10:20] Marcus - SafeSpace: hiya! medium unit is £55 a month that's our standard rate
+[03/09/24, 10:34] Sarah H: Great, and is that inclusive of insurance?
+[03/09/24, 10:41] Marcus - SafeSpace: oh yeah don't worry we cover the first £500 of anything in there
+[03/09/24, 11:02] Marcus - SafeSpace: actually hold on Dave just told me off, that's not right, you need your own insurance sorry about that
+[03/09/24, 11:03] Sarah H: Oh okay, no worries, thanks for clarifying!
+[04/09/24, 09:15] Tom R: Hi mate can I book the van for a house move on the 20th?
+[04/09/24, 09:40] Marcus - SafeSpace: yep should be fine, we'll pencil you in for the 20th
+[04/09/24, 15:20] Marcus - SafeSpace: hang on just checked the diary, Dave's got a job that day already, can you do the 22nd instead?
+[04/09/24, 15:45] Tom R: Sure, 22nd works. How much roughly for a 2 bed flat move?
+[04/09/24, 16:01] Marcus - SafeSpace: normally we do flat rate £120 for smaller moves like that
+[04/09/24, 16:30] Marcus - SafeSpace: actually thinking about it more it'll probably be closer to £150 with the hours it'll take, better to say £150 to be safe
+[05/09/24, 08:02] Tom R: Ok good to know, thank you
+[05/09/24, 08:10] Marcus - SafeSpace: no worries! oh wait actually we charge £45 an hour with 2 hour min so it might just be £90 if it's quick, depends on traffic honestly
+[05/09/24, 08:11] Tom R: haha ok, so somewhere between £90-150 then?
+[05/09/24, 08:15] Marcus - SafeSpace: yeah exactly that
+[06/09/24, 13:00] Priya K: Do you take card payments? Your website says you do
+[06/09/24, 13:22] Marcus - SafeSpace: yes should be working now
+[06/09/24, 13:23] Marcus - SafeSpace: actually let me check with Dave, the machine broke a while back not 100% sure it's been fixed
+[06/09/24, 13:24] Marcus - SafeSpace: will get back to you on that
+[10/09/24, 09:00] Priya K: Hi just following up, is the card machine working?
+[13/09/24, 17:45] Marcus - SafeSpace: sorry been mad busy, will check tomorrow!
+[07/09/24, 11:00] Liam D: Are you open Sundays? Need to grab stuff from my unit urgently
+[07/09/24, 11:10] Marcus - SafeSpace: nah sorry we're closed Sundays, Mon-Sat 8-6
+[07/09/24, 11:32] Marcus - SafeSpace: although actually if it's urgent I could probably meet you there, we sometimes open if someone asks nicely lol
+[07/09/24, 11:33] Liam D: oh great, so are you open or not? I'll come at 11am Sunday if that works
+[07/09/24, 11:50] Marcus - SafeSpace: yeah come at 11 should be fine i'll ask Ollie to open up
+[07/09/24, 14:00] Marcus - SafeSpace: hold on Ollie doesn't work weekends anymore did i not tell you that, let me sort something and message you back
+[08/09/24, 09:00] Liam D: Any update on Sunday?
+[09/09/24, 19:30] Ellie M: Hi, what's your discount for long term storage, 3 months plus?
+[09/09/24, 19:50] Marcus - SafeSpace: it's 15% off for anything over 3 months
+[09/09/24, 20:05] Marcus - SafeSpace: actually I think Dave said it's only 10%, I always mix those two up, I'll double check and confirm proper number
+[11/09/24, 12:00] Ellie M: Did you manage to check on the discount?
+[15/09/24, 08:40] Marcus - SafeSpace: hiya sorry for the delay yes it's definitely 15%
+[15/09/24, 08:41] Marcus - SafeSpace: wait no I looked at the old sign, might genuinely be 10%, I'll check with Dave properly tonight and text you
+[02/10/24, 10:00] Ellie M: Hey just checking in again about the discount, been a few weeks now
