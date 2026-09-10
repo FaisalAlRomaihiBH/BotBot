@@ -1,28 +1,30 @@
-[Mon, Mar 3, 9:14 AM] Jenna R: Hi! I'm interested in a custom steel frame. What's the price range and how long would it take?
-[Mon, Mar 3, 11:02 AM] Tomek - Koło Cycles: Hi Jenna! Depends on tubing but usually $1800 to $2400. Timeline maybe 6 weeks total
-[Mon, Mar 3, 11:03 AM] Tomek - Koło Cycles: We can definitely fit you in before spring, no problem
-[Mon, Mar 3, 2:45 PM] Jenna R: Great, that works for my budget! Should I come in to start the design?
-[Mon, Mar 3, 6:30 PM] Tomek - Koło Cycles: Actually thinking about it, we are pretty backed up right now, maybe more like 10-12 weeks. Let me check my calendar
-[Tue, Mar 4, 1:15 PM] Jenna R: Oh — that's different from what you said yesterday. Which is it?
-[Tue, Mar 4, 4:02 PM] Tomek - Koło Cycles: I said 10-12 from the start haha, the 6 weeks was just for the design part
-[Wed, Mar 5, 10:30 AM] Jenna R: Ok. And the price — is paint included in that $1800-2400?
-[Wed, Mar 5, 5:47 PM] Tomek - Koło Cycles: Paint is extra, maybe $200-300 depending on color
-[Thu, Mar 6, 9:00 AM] Tomek - Koło Cycles: Actually you know what for you I'll just throw in basic paint, no charge
-[Mon, Mar 10, 8:12 AM] Carlos M: Hey do you guys do same day brake repairs?
-[Mon, Mar 10, 12:40 PM] Tomek - Koło Cycles: Yes if Ola is in, she does Sat/Sun mostly
-[Mon, Mar 10, 12:41 PM] Tomek - Koło Cycles: Actually she also comes in sometimes Wed, let me check her schedule and get back to you
-[Wed, Mar 12, 3:20 PM] Carlos M: Any update? I was hoping to bring it in tomorrow
-[Fri, Mar 14, 11:05 AM] Sarah T: Hi, what's the current price for a basic tune-up?
-[Fri, Mar 14, 11:47 AM] Tomek - Koło Cycles: $65
-[Fri, Mar 14, 11:48 AM] Sarah T: Oh I thought it was $55 based on your website
-[Fri, Mar 14, 12:10 PM] Tomek - Koło Cycles: Yeah we haven't raised prices, still $55, sorry typo
-[Fri, Mar 14, 12:11 PM] Tomek - Koło Cycles: Wait actually I think DeShawn already updated the register to $65 last month, let me check
-[Fri, Mar 14, 12:11 PM] Tomek - Koło Cycles: I'll just charge you $55 don't worry about it
-[Tue, Mar 18, 2:30 PM] Jenna R: Hi again — putting down the deposit today, just confirming it's refundable if I change my mind?
-[Tue, Mar 18, 3:15 PM] Tomek - Koło Cycles: Once we order the frame from Italy it's non-refundable, that's the policy
-[Tue, Mar 18, 3:16 PM] Tomek - Koło Cycles: But honestly if you change your mind in like the first two weeks just tell me, I'll sort it out
-[Wed, Mar 19, 9:00 AM] Jenna R: Ok good to know. Also — when does the tubing shipment actually arrive? You mentioned delays before
-[Wed, Mar 19, 4:55 PM] Tomek - Koło Cycles: Should be 3 weeks
-[Thu, Mar 20, 10:20 AM] Tomek - Koło Cycles: Actually just talked to my supplier again, sounds more like 6 weeks now, these guys keep changing the story on me lol
-[Fri, Mar 21, 1:00 PM] Jenna R: Haha ok. I'll just wait to hear from you
-[Sat, Mar 22, 5:40 PM] Carlos M: Still never heard back about the brake repair scheduling, just fixed it myself lol all good
+[Mar 3, 2:14 PM] Ella R: Hi! Do you have studio time available this Saturday afternoon?
+[Mar 3, 2:40 PM] Jonas: hey! yeah should be free, what time you thinking
+[Mar 3, 2:41 PM] Ella R: Maybe 2-5pm? For a 3 song demo
+[Mar 3, 2:52 PM] Jonas: yeah that works, i can engineer it myself so 1200/hr, so like 3600 total
+[Mar 3, 2:53 PM] Jonas: actually you know what let's just do 3000 flat since its 3 songs
+[Mar 3, 6:20 PM] Ella R: Oh nice, thank you! Should I pay a deposit?
+[Mar 3, 6:45 PM] Jonas: nah dont worry about it, just pay when you get here
+[Mar 3, 6:46 PM] Jonas: actually hold on let me check if Pao is free that day too in case you want a better engineer
+[Mar 5, 11:02 AM] Ella R: Hi Jonas, just following up — is Pao available? And is it still 3000?
+[Mar 5, 4:15 PM] Jonas: oh sorry totally forgot to ask him, let me check tonight
+[Mar 8, 9:30 AM] Ella R: Hey! Saturday is in 2 days, can you confirm the time and price please?
+[Mar 8, 10:01 AM] Jonas: yes yes we're good, 2-5pm, umm let's actually do 3500 kasi if Pao comes in his rate is a bit higher, pero if it's just me its 3000 pa rin
+[Mar 8, 10:02 AM] Jonas: I'll let you know who's engineering closer to the day
+[Mar 9, 1:10 PM] Ella R: Any update on who's engineering? Trying to plan who's coming with me
+[Mar 9, 7:44 PM] Jonas: hi sorry ang busy today, its me na lang, so 3000 is fine
+[Mar 15, 5:00 PM] Marco T: Hi, how much for mixing a 4-song EP?
+[Mar 15, 5:22 PM] Jonas: depends on how complex the tracks are, roughly 2500-4000 per song
+[Mar 15, 5:23 PM] Jonas: for 4 songs maybe like 12k total as a package? let me think about it
+[Mar 15, 5:45 PM] Marco T: Okay, when could you have a firmer quote?
+[Mar 15, 5:50 PM] Jonas: I'll check the reference tracks you sent and get back to you tomorrow!
+[Mar 20, 3:12 PM] Marco T: Hey Jonas, following up on the EP mixing quote from last week
+[Mar 22, 8:05 AM] Jonas: ah sorry so sorry, been slammed. can we hop on a call today
+[Apr 2, 11:00 AM] Kat D: Hi! Do you guys have a hard cancellation policy? Might need to reschedule a session
+[Apr 2, 11:30 AM] Jonas: technically 24hrs notice or 50% charge pero honestly wag ka mag alala if its once lang
+[Apr 2, 11:31 AM] Jonas: actually wait, if it's a weekend slot i do need to charge kasi hard to rebook those
+[Apr 2, 11:32 AM] Jonas: ah pero depende, let's just see when the time comes haha
+[Apr 10, 2:00 PM] Kat D: Understood! Also is the self-engineered rate still 800/hr?
+[Apr 10, 2:20 PM] Jonas: yeah pero i've been thinking of raising rates this year, might go up to 1000
+[Apr 10, 2:21 PM] Jonas: but for you since you booked already, 800 lang muna
+[Apr 10, 2:22 PM] Jonas: actually you know what let's just settle on 900 to be safe hehe
