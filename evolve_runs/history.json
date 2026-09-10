@@ -9,5 +9,24 @@
     "reverted": false,
     "commit_before": "075a29b2c78cd02a81bd3d32d3c57a0bde8bff62",
     "top_improvement": "Add a dedicated question (or checklist pass) explicitly covering booking/payment mechanics — e.g., 'Do you take deposits or require any payment before confirming a booking, and how is that currently handled?' — and a scoping question like 'Are you picturing a full booking/payment app, or something simpler like automated replies and calendar sync?' before wrapping up, since these are foundational to what the chatbot must actually do and were both silently skipped despite being known Gary uncertainties."
+  },
+  {
+    "cycle": 2,
+    "stamp": "20260910_080956",
+    "persona": "Home-based catering and daily tiffin service / Chronically vague about numbers — Priya almost never gives a firm price, headcount, or time. She answers with ranges, 'depends,' 'roughly,' or 'let me think about it' and often contradicts her own earlier estimate. She's warm and eager to help, but customers have to push hard to pin down anything concrete, and even then she'll hedge at the last second.",
+    "score": 6.17,
+    "completed": true,
+    "improved": true,
+    "reverted": false,
+    "commit_before": "78389dd18f6ee148bf909907d6ff64e55ecb6f65",
+    "top_improvement": "Systematically walk through EVERY service tier mentioned in the business (tiffin, party trays, full event catering, delivery) with an explicit price-range question for each, instead of asking broadly about 'tiffin pricing and delivery areas' and letting bigger-ticket items (event catering) fall through entirely.",
+    "schema_suggestions": [
+      "Add a dedicated 'business_background' or 'business_context' field (location, licensing/permit status, years in operation, how the business has grown) — currently business_description is null with no mechanism forcing Birdie to ask basic background questions.",
+      "Add an explicit 'hours_of_operation' field to the schema — there is currently no slot for this at all, which is why it was never asked despite being fundamental to a customer-facing bot.",
+      "Add a 'staff_or_team' field to capture who does what (owner-operated vs. helpers, schedules) — currently this information has nowhere to live and gets dropped even when mentioned in passing (Anjali).",
+      "Add a 'services_and_pricing' completeness check/field that requires listing ALL service tiers with a range or 'unknown/varies' flag per tier, rather than a free-text list that can silently omit an entire tier (event catering was fully dropped).",
+      "Add a 'known_pain_points' or 'owner_concerns' field distinct from 'open_items' — currently pain points like undercharging, subscriber count uncertainty, and hiring anxiety have no home and were simply never elicited, likely because there's no schema slot prompting the interviewer to ask 'what's frustrating you about the business side of things.'",
+      "The 'additional_notes' and 'open_items' fields are being used as a catch-all for scope decisions and policy gaps (e.g., deposit policy, calendar tool) — consider a structured 'unresolved_decisions' field so these aren't mixed in with generic notes and follow-up reminders."
+    ]
   }
 ]

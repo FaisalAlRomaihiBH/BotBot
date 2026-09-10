@@ -170,6 +170,8 @@ class Evaluation(BaseModel):
     efficiency: int           # 0-10: no wasted/low-value questions; finished in sane turns
     findings: list[str]       # specific observed problems, each citing the transcript
     top_improvement: str      # the single most valuable change to the interviewer prompt
+    schema_suggestions: list[str]  # STRUCTURAL fixes needing code (new form fields, new
+                                   # capabilities) — humans review these, the loop cannot apply them
 
 
 eval_parser = PydanticOutputParser(pydantic_object=Evaluation)
@@ -192,6 +194,12 @@ Interview completed: {completed} (in {turns} transcript entries; fewer is better
 Score each rubric dimension 0-10 harshly. In findings, list concrete problems and
 QUOTE or reference the moment in the transcript. Compare the fact sheet against the
 brief for lost facts. Then name the ONE most valuable prompt improvement.
+
+Separately, in schema_suggestions, list STRUCTURAL problems that prompt wording
+cannot fix — e.g. a kind of fact that recurringly has no proper form field (check
+the brief's additional_notes and open_items for facts crammed somewhere wrong), or
+a capability the interviewer lacks entirely. Suggest the field/capability to add.
+Empty list if none.
 
 Wrap your entire output in this format and provide no other text
 {format_instructions}"""
@@ -292,6 +300,10 @@ def run_cycle(cycle_no: int, history: list) -> dict:
     print(f"    score: {score}/10 | findings: {len(ev.findings)}")
     for f in ev.findings[:5]:
         print(f"      - {f[:120]}")
+    if ev.schema_suggestions:
+        print(f"    SCHEMA SUGGESTIONS (need human review):")
+        for s in ev.schema_suggestions:
+            print(f"      * {s[:150]}")
 
     # ratchet check BEFORE improving: did the PREVIOUS improvement hurt us?
     reverted = False
@@ -314,6 +326,7 @@ def run_cycle(cycle_no: int, history: list) -> dict:
         "improved": bool(improved), "reverted": reverted,
         "commit_before": commit_before,
         "top_improvement": ev.top_improvement,
+        "schema_suggestions": ev.schema_suggestions,
     }
     history.append(entry)
     HISTORY_FILE.write_text(json.dumps(history, indent=2, ensure_ascii=False), encoding="utf-8")

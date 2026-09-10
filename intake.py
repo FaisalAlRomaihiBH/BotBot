@@ -44,6 +44,7 @@ class BusinessRequirements(BaseModel):
     business_policies: Optional[list[str]] = None     # cancellations, rush requests, coverage area, VAT...
     escalation_rules: Optional[list[str]] = None      # what goes to a human, to whom, via what channel
     open_items: Optional[list[str]] = None            # things the owner was unsure about / left unresolved
+    additional_notes: Optional[list[str]] = None      # important facts that fit no other field — never lose a fact
 
 
 # ---- What the analysis of uploaded materials produces ----
