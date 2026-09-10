@@ -29,6 +29,8 @@ def write_pdf(path, batch, improved_desc, old_prompt, new_prompt):
     styles = getSampleStyleSheet()
     h1, h2, body = styles["Title"], styles["Heading2"], styles["BodyText"]
     small = ParagraphStyle("small", parent=body, fontSize=9, leading=12)
+    quote = ParagraphStyle("quote", parent=small, leftIndent=18,
+                           textColor="#555555", fontSize=8, leading=11)
     doc = SimpleDocTemplate(str(path), pagesize=A4,
                             leftMargin=2 * cm, rightMargin=2 * cm,
                             topMargin=2 * cm, bottomMargin=2 * cm)
@@ -48,7 +50,13 @@ def write_pdf(path, batch, improved_desc, old_prompt, new_prompt):
     for h in batch:
         story.append(Paragraph(f"<b>Cycle {h['cycle']} ({esc(h['persona'])})</b>", body))
         for f in h.get("findings", []):
-            story.append(Paragraph(f"• {esc(f)}", small))
+            if isinstance(f, str):
+                story.append(Paragraph(f"• {esc(f)}", small))
+                continue
+            story.append(Paragraph(f"• {esc(f['problem'])}", small))
+            if f.get("excerpt"):
+                story.append(Paragraph(
+                    "<i>" + esc(f["excerpt"]).replace("\n", "<br/>") + "</i>", quote))
         story.append(Paragraph(f"<i>Top suggested fix: {esc(h['top_improvement'])}</i>", small))
         if h.get("schema_suggestions"):
             for s in h["schema_suggestions"]:
@@ -71,14 +79,14 @@ def write_pdf(path, batch, improved_desc, old_prompt, new_prompt):
 
 def improve_pass(history) -> str | None:
     """Improve from all not-yet-fixed history entries; write a PDF. Returns PDF path."""
-    done = json.loads(POINTER_FILE.read_text())["done"] if POINTER_FILE.exists() else len(history)
+    done = json.loads(POINTER_FILE.read_text())["done"] if POINTER_FILE.exists() else 0
     batch = history[done:]
     if not batch:
         print(">>> improve pass: nothing new registered, skipping.")
         return None
     print(f">>> improve pass: {len(batch)} new interview(s)...")
     findings = "\n\n".join(
-        f"[{h['persona']}]\n" + "\n".join(f"- {f}" for f in h.get("findings", []))
+        f"[{h['persona']}]\n" + "\n".join(evolve.fmt_finding(f) for f in h.get("findings", []))
         for h in batch)
     tops = "\n".join(f"- {h['top_improvement']}" for h in batch)
     old_prompt = evolve.PROMPT_FILE.read_text(encoding="utf-8")

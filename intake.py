@@ -72,16 +72,18 @@ NO_MATERIALS = "No materials shared yet."
 # of BotBot — the self-improvement loop (evolve.py) may rewrite that file, never this code.
 PROMPT_FILE = Path(__file__).parent / "interviewer_prompt.txt"
 
-interview_prompt = ChatPromptTemplate.from_messages(
-    [
-        ("system", PROMPT_FILE.read_text(encoding="utf-8")),
-        ("placeholder", "{chat_history}"),
-        ("human", "{query}"),
-    ]
-).partial(format_instructions=interview_parser.get_format_instructions())
-
-# No tools needed for the interview -> no agent/executor; a plain chain is enough.
-interview_chain = interview_prompt | llm
+def _build_interview_chain():
+    """Read the prompt file FRESH so improvements made by evolve take effect
+    on the very next turn, not on the next process restart."""
+    prompt = ChatPromptTemplate.from_messages(
+        [
+            ("system", PROMPT_FILE.read_text(encoding="utf-8")),
+            ("placeholder", "{chat_history}"),
+            ("human", "{query}"),
+        ]
+    ).partial(format_instructions=interview_parser.get_format_instructions())
+    # No tools needed for the interview -> no agent/executor; a plain chain is enough.
+    return prompt | llm
 
 
 def _blocks_to_text(content) -> str:
@@ -92,7 +94,7 @@ def _blocks_to_text(content) -> str:
 
 
 def ask(question: str, chat_history: list, analysis_text: str = NO_MATERIALS):
-    reply = interview_chain.invoke({
+    reply = _build_interview_chain().invoke({
         "query": question,
         "chat_history": chat_history,
         "analysis": analysis_text,

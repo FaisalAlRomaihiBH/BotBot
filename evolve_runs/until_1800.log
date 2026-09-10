@@ -40,3 +40,49 @@ For troubleshooting, visit: https://docs.langchain.com/oss/python/langchain/erro
     interviewing...
     completed=True in 35 entries
     evaluating...
+    score: 7.33/10 | findings: 7
+      - MAJOR OMISSION: Emergency lockout pricing (£65 call-out + £35 labour, cash preferred, card machine 'usually works') was 
+      - Cash-preferred / card-machine-unreliable detail was never surfaced, despite being directly relevant since Birdie explici
+      - Derek's stated uncertainty about raising the call-out fee to £75, and his confusion about VAT registration thresholds, w
+      - Age (61) and town/location context from the fact sheet were never asked about; minor, but could matter for tone/personal
+      - Good save: Birdie initially mislabeled the business 'family-run' in the readback, and Derek corrected it ('don't go call
+    SCHEMA SUGGESTIONS (need human review):
+      * Add a structured field for 'payment_methods_accepted' (cash/card/preferences) — this recurringly gets missed or would otherwise be dumped into busines
+      * Add a field like 'pending_business_decisions' or 'owner_uncertainties' to capture things the owner is actively unsure about (e.g., 'should I raise my 
+      * The 'additional_notes' field is being used as a catch-all for behaviorally important facts (e.g., 'customers can text any time but Derek doesn't respo
+    committed. cycle done.
+
+=== CYCLE 4: generating persona...
+    Marisol Fuentes — Fuentes Custom Woodworks (Custom furniture making and woodworking / small workshop)
+    personality: Chronically indecisive and self-contradicting — Marisol will state a price, policy, or timeline confidently, then reverse herself minutes or days later without acknowledging the change. She second-guesses quotes ('actually, let's say...'), changes deadlines, flip-flops on whether she can take a job, and sometimes claims she 'never said' something she clearly said earlier in the same conversation. She's enthusiastic and genuinely wants to help, which makes the flip-flopping more confusing since she sounds sure each time.
+    interviewing...
+Running cycles until 2026-09-10 18:00:00. Improve pass every 60 min.
+
+=== CYCLE 4: generating persona...
+    Marisol Vega — Vega Ink Custom Apparel (Screen printing and embroidery shop (custom t-shirts, hoodies, hats, team uniforms))
+    personality: Chronically indecisive and self-contradicting — Marisol will give you a confident, specific answer (a price, a deadline, a minimum order) and then reverse herself minutes later, often blaming 'the machine' or 'my supplier' or just saying she changed her mind. She's enthusiastic and wants to please everyone, so she tends to say yes to conflicting requests rather than disappoint anyone, which means customers often get two or three different versions of the same quote in one conversation.
+    interviewing...
+Running cycles until 2026-09-10 18:00:00. Improve pass every 60 min.
+
+=== CYCLE 4: generating persona...
+    Marisol Vega — Vega Ink Custom Apparel (Screen printing, embroidery, and custom apparel shop)
+    personality: Chronically indecisive and self-contradicting — Marisol will confidently state a price, deadline, or policy, then reverse herself moments later without acknowledging she's changed anything ('okay so it's $8 a shirt — wait no actually let's say $9, or maybe do $8.50, ugh let me just think'). She often flip-flops between two options mid-sentence, changes her mind about turnaround times, minimum orders, and even whether she can do a job at all. She's not trying to mislead anyone — she's genuinely torn between wanting to please customers and protecting her margins — but customers often need to get her final answer in writing or ask her to just pick one.
+    interviewing...
+Running cycles until 2026-09-10 18:00:00. Improve pass every 60 min.
+
+=== CYCLE 4: generating persona...
+    Marisol Vega — InkTank Custom Apparel (Custom screen printing and embroidery for teams, events, and small businesses)
+    personality: Constantly changes her mind mid-conversation — she'll quote a price, policy, or timeline, then reverse herself moments later ('actually no, wait'), often flip-flopping between two answers multiple times in the same chat. She's confident and fast-talking, never apologizes for the reversals, and seems to genuinely believe whatever she's saying in the moment. Customers often end up with three different answers to the same question.
+    interviewing...
+Running cycles until 2026-09-10 18:00:00. Improve pass every 60 min.
+
+=== CYCLE 4: generating persona...
+    Marisol "Mari" Reyes — Reyes Custom Signs & Graphics (Custom signage, vehicle wraps & vinyl lettering shop)
+    personality: Chronic mind-changer — Mari will give you a firm answer (a price, a deadline, a policy) and then reverse it minutes or days later, often without acknowledging she said something different before. She's upbeat and confident each time, stating the new version as if it were always true. She blames the flip-flops on 'the vinyl supplier,' 'market changes,' 'thinking about it more,' or just says 'actually you know what, let's do it this way instead.' She's not trying to deceive anyone — she's genuinely enthusiastic and wants to please whoever she's talking to at that moment, which is exactly the problem.
+    interviewing...
+Running cycles until 2026-09-10 18:00:00. Improve pass every 60 min.
+
+=== CYCLE 4: generating persona...
+    Kevin "Kev" Ashworth — Ashworth Neon & Signage (Custom neon sign fabrication and shopfront lighting installation)
+    personality: Constantly changes his mind mid-conversation and contradicts what he said earlier, often without acknowledging it — he'll quote a price, then twenty minutes later insist he 'never said that' and quote something different, flip-flop on turnaround times, reverse decisions about deposits or colours, and sometimes blame the customer for 'mishearing' him. He's confident and chatty in the moment, which makes the flip-flopping harder to catch — he says each new version like it's the one he always believed.
+    interviewing...

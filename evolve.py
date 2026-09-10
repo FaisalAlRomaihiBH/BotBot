@@ -30,9 +30,9 @@ RUNS_DIR = ROOT / "evolve_runs"
 HISTORY_FILE = RUNS_DIR / "history.json"
 PROMPT_FILE = ROOT / "interviewer_prompt.txt"
 MAX_TURNS = 30            # hard stop so a cycle can never run away
-MAX_PROMPT_CHARS = 9000   # cap prompt bloat: improver must stay concise
 
-llm = intake.llm
+llm = intake.llm                 # Sonnet: personas + Birdie itself (via intake)
+strong_llm = intake.ChatAnthropic(model="claude-opus-5")  # Opus: judge + improver
 _blocks = intake._blocks_to_text
 
 
@@ -159,6 +159,11 @@ def run_interview(persona: Persona) -> dict:
 
 
 # ---------------- 3. EVALUATE ----------------
+class Finding(BaseModel):
+    problem: str              # the specific observed problem
+    excerpt: str              # the exact transcript lines where it happened, copied verbatim
+
+
 class Evaluation(BaseModel):
     fact_capture: int         # 0-10: did every hard fact the owner gave land in the brief?
     no_repeats: int           # 0-10: never asked about things already answered
@@ -166,7 +171,7 @@ class Evaluation(BaseModel):
     naturalness: int          # 0-10: warm, human, adapted to the owner's personality
     completeness: int         # 0-10: brief usable by a developer; unknowns in open_items
     efficiency: int           # 0-10: no wasted/low-value questions; finished in sane turns
-    findings: list[str]       # specific observed problems, each citing the transcript
+    findings: list[Finding]   # specific observed problems, each with its transcript excerpt
     top_improvement: str      # the single most valuable change to the interviewer prompt
     schema_suggestions: list[str]  # STRUCTURAL fixes needing code (new form fields, new
                                    # capabilities) — humans review these, the loop cannot apply them
@@ -189,9 +194,12 @@ The final requirements brief Birdie produced:
 Interview completed: {completed} (in {turns} transcript entries; fewer is better,
 ~20-30 is normal, non-completion is a serious failure)
 
-Score each rubric dimension 0-10 harshly. In findings, list concrete problems and
-QUOTE or reference the moment in the transcript. Compare the fact sheet against the
-brief for lost facts. Then name the ONE most valuable prompt improvement.
+Score each rubric dimension 0-10 harshly. In findings, list concrete problems;
+for EACH finding, copy into its excerpt the exact transcript lines (speaker names
+included, 1-4 lines) where the problem occurred — verbatim, no paraphrasing.
+Compare the fact sheet against the brief for lost facts (for a lost fact, the
+excerpt is the line where the owner stated it). Then name the ONE most valuable
+prompt improvement.
 
 Separately, in schema_suggestions, list STRUCTURAL problems that prompt wording
 cannot fix — e.g. a kind of fact that recurringly has no proper form field (check
@@ -205,12 +213,22 @@ Wrap your entire output in this format and provide no other text
 
 def evaluate(persona: Persona, result: dict) -> Evaluation:
     convo = "\n".join(f"{who}: {msg}" for who, msg in result["transcript"])
-    reply = llm.invoke(EVAL_PROMPT.format(
+    reply = strong_llm.invoke(EVAL_PROMPT.format(
         facts=persona.background_facts, transcript=convo,
         brief=json.dumps(result["brief"], indent=2, ensure_ascii=False),
         completed=result["completed"], turns=result["turns"],
         format_instructions=eval_parser.get_format_instructions()))
     return eval_parser.parse(_blocks(reply.content))
+
+
+def fmt_finding(f) -> str:
+    """One finding -> '- problem' plus its indented transcript excerpt.
+    Accepts Finding objects, dicts (from history.json) and old plain strings."""
+    if isinstance(f, str):
+        return f"- {f}"
+    d = f if isinstance(f, dict) else f.model_dump()
+    ex = "\n".join("    | " + line for line in d.get("excerpt", "").splitlines() if line.strip())
+    return f"- {d['problem']}" + (f"\n{ex}" if ex else "")
 
 
 def avg_score(ev: Evaluation) -> float:
@@ -220,7 +238,9 @@ def avg_score(ev: Evaluation) -> float:
 
 # ---------------- 4. IMPROVE (guardrailed) ----------------
 IMPROVE_PROMPT = """You maintain the system prompt of "Birdie", an AI interviewer.
-Below is its CURRENT prompt, then QA findings from the latest test interview.
+Below is its CURRENT prompt, then QA findings from one or more test interviews
+with different business owners. Under each finding, indented lines starting
+with | quote the exact chat moment where the problem occurred.
 
 Rewrite the prompt to fix the problems found. STRICT rules:
 - Prefer GENERAL principles over specific cases: fix the underlying habit, not
@@ -233,17 +253,17 @@ Rewrite the prompt to fix the problems found. STRICT rules:
 - Keep everything that clearly works; keep the existing tone and structure.
 - The result MUST still contain the literal placeholders {{analysis}} and
   {{format_instructions}} exactly once each.
-- HARD LIMIT: stay under {cap} characters (current: {cur}). Aim to stay at or
-  BELOW the current size unless a genuinely new problem demands space.
+- Aim to stay near the current size ({cur} characters) unless a genuinely new
+  problem demands space — quality of rules over quantity.
 - Output ONLY the complete new prompt text. No commentary, no code fences.
 
 === CURRENT PROMPT ===
 {prompt}
 
-=== QA FINDINGS ===
+=== QA FINDINGS (with chat excerpts) ===
 {findings}
 
-=== TOP SUGGESTED IMPROVEMENT ===
+=== EACH INTERVIEW'S TOP SUGGESTED IMPROVEMENT ===
 {top}
 """
 
@@ -252,18 +272,17 @@ def improve_prompt(findings: str, top: str) -> Optional[str]:
     """Rewrite the prompt from this cycle's findings.
     Returns a description of the change, or None if rejected by guardrails."""
     current = PROMPT_FILE.read_text(encoding="utf-8")
-    reply = llm.invoke(IMPROVE_PROMPT.format(
-        cap=MAX_PROMPT_CHARS, cur=len(current), prompt=current,
-        findings=findings, top=top))
+    reply = strong_llm.invoke(IMPROVE_PROMPT.format(
+        cur=len(current), prompt=current, findings=findings, top=top))
     new = _blocks(reply.content).strip()
     if new.startswith("```"):
         new = new.strip("`").lstrip("text").strip()
     # ---- guardrails ----
     if new.count("{analysis}") != 1 or new.count("{format_instructions}") != 1:
         return None  # would break the template
-    if len(new) > MAX_PROMPT_CHARS or len(new) < 500:
-        return None  # bloated or gutted
-    if new == current:
+    if len(new) < 500:
+        return None  # gutted, or the model replied with commentary instead of a prompt
+    if new == current.strip():
         return None
     PROMPT_FILE.write_text(new + "\n", encoding="utf-8")
     return f"prompt updated ({len(current)} -> {len(new)} chars)"
@@ -283,8 +302,8 @@ def load_history() -> list:
 
 def run_cycle(cycle_no: int, history: list, improve: bool = True) -> dict:
     stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    run_dir = RUNS_DIR / f"cycle_{stamp}"
-    run_dir.mkdir(parents=True)
+    run_dir = RUNS_DIR / f"cycle_{stamp}_{cycle_no}"
+    run_dir.mkdir(parents=True, exist_ok=True)
 
     used = [h["persona"] for h in history]
     print(f"\n=== CYCLE {cycle_no}: generating persona...")
@@ -305,7 +324,7 @@ def run_cycle(cycle_no: int, history: list, improve: bool = True) -> dict:
     (run_dir / "evaluation.json").write_text(ev.model_dump_json(indent=2), encoding="utf-8")
     print(f"    score: {score}/10 | findings: {len(ev.findings)}")
     for f in ev.findings[:5]:
-        print(f"      - {f[:120]}")
+        print(f"      - {f.problem[:120]}")
     if ev.schema_suggestions:
         print(f"    SCHEMA SUGGESTIONS (need human review):")
         for s in ev.schema_suggestions:
@@ -316,7 +335,7 @@ def run_cycle(cycle_no: int, history: list, improve: bool = True) -> dict:
     improved = None
     if improve:
         print("    improving prompt from this interview's findings...")
-        improved = improve_prompt("\n".join(f"- {f}" for f in ev.findings),
+        improved = improve_prompt("\n".join(fmt_finding(f) for f in ev.findings),
                                   ev.top_improvement)
         print(f"    {improved or 'improvement rejected by guardrails / no change'}")
 
@@ -326,7 +345,7 @@ def run_cycle(cycle_no: int, history: list, improve: bool = True) -> dict:
         "score": score, "completed": result["completed"],
         "improved": bool(improved),
         "top_improvement": ev.top_improvement,
-        "findings": ev.findings,
+        "findings": [f.model_dump() for f in ev.findings],
         "schema_suggestions": ev.schema_suggestions,
     }
     history.append(entry)
