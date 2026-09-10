@@ -122,7 +122,11 @@ def _ask_retry(question, chat_history, analysis_text, tries=3):
     last = None
     for attempt in range(1, tries + 1):
         try:
-            return intake.ask(question, chat_history, analysis_text)
+            q = question if attempt == 1 else (
+                question + "\n\n(System note: your previous reply was empty or "
+                "not valid JSON. Reply now with ONLY the complete JSON form, "
+                "nothing else.)")
+            return intake.ask(q, chat_history, analysis_text)
         except Exception as e:
             last = e
             print(f"    interviewer turn failed to parse "
