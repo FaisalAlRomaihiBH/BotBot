@@ -106,6 +106,9 @@ def ask(question: str, chat_history: list, analysis_text: str = NO_MATERIALS):
         "analysis": analysis_text,
     })
     output = _blocks_to_text(reply.content)
+    if not output.strip():
+        meta = getattr(reply, "response_metadata", {}) or {}
+        raise ValueError(f"empty model reply (stop_reason={meta.get('stop_reason')})")
     return interview_parser.parse(output), output
 
 

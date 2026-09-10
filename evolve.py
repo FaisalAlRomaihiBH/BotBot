@@ -81,6 +81,7 @@ def invoke_parsed(model, text, parser, tries=3):
         except Exception as e:
             last = e
             print(f"    parse failed (attempt {attempt}/{tries}): {type(e).__name__}")
+            time.sleep(5 * attempt)  # transient overload can return empty replies
     raise last
 
 
@@ -126,6 +127,7 @@ def _ask_retry(question, chat_history, analysis_text, tries=3):
             last = e
             print(f"    interviewer turn failed to parse "
                   f"(attempt {attempt}/{tries}): {type(e).__name__}")
+            time.sleep(5 * attempt)  # transient overload can return empty replies
     raise last
 
 
