@@ -19,10 +19,13 @@ PAGE = """<!doctype html><html><head><meta charset="utf-8">
  header{padding:14px 22px;background:#171a21;border-bottom:1px solid #262b36;
         display:flex;justify-content:space-between;align-items:baseline}
  h1{font-size:17px;margin:0} #rundir{color:#8a93a6;font-size:13px}
- #cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+ #cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));
         gap:10px;padding:16px 22px}
  .card{background:#171a21;border:1px solid #262b36;border-radius:8px;padding:10px 14px}
  .card b{font-size:13px} .muted{color:#8a93a6;font-size:12px}
+ .mini{background:#0a0c10;border:1px solid #232834;border-radius:6px;margin-top:8px;
+       padding:8px;font:11px/1.5 Consolas,monospace;white-space:pre-wrap;
+       height:150px;overflow-y:auto;color:#9fd0a0}
  .bar{height:6px;background:#262b36;border-radius:3px;margin:8px 0}
  .bar i{display:block;height:6px;border-radius:3px;background:#4f8cff}
  .done .bar i{background:#3ecf6a} .failed .bar i{background:#e5534b}
@@ -39,6 +42,10 @@ async function tick(){
   try{
     const d = await (await fetch('/data')).json();
     document.getElementById('rundir').textContent = d.run_dir || 'no runs yet';
+    const stickiness = {};
+    document.querySelectorAll('.mini').forEach(m=>{
+      stickiness[m.id] = m.scrollTop + m.clientHeight >= m.scrollHeight - 20;
+    });
     document.getElementById('cards').innerHTML = d.interviews.map(iv=>{
       const cls = iv.status==='complete'?'done':(iv.status==='failed'?'failed':'');
       const pct = Math.min(100, Math.round(100*iv.turn/30));
@@ -46,8 +53,12 @@ async function tick(){
         <span class="score">${iv.score??''}</span>
         <div class="bar"><i style="width:${pct}%"></i></div>
         <span class="muted">${iv.status} — turn ${iv.turn}${iv.findings!=null?' · '+iv.findings+' findings':''}
-        ${iv.tokens?'<br>'+iv.tokens:''}</span></div>`;
+        ${iv.tokens?'<br>'+iv.tokens:''}</span>
+        <div class="mini" id="mini${iv.index}">${iv.log.join('\\n')}</div></div>`;
     }).join('');
+    document.querySelectorAll('.mini').forEach(m=>{
+      if (stickiness[m.id] !== false) m.scrollTop = m.scrollHeight;
+    });
     document.getElementById('summary').textContent = d.summary || '';
     const log = document.getElementById('log');
     const stick = log.scrollTop + log.clientHeight >= log.scrollHeight - 30;
@@ -92,7 +103,9 @@ def collect() -> dict:
         iv = interviews.setdefault(idx, {"index": idx, "industry": industry,
                                          "turn": 0, "status": "interviewing",
                                          "score": None, "findings": None,
-                                         "tokens": None})
+                                         "tokens": None, "log": []})
+        # This interview's own line, without the shared [idx industry] prefix.
+        iv["log"] = (iv["log"] + [line[line.index("]") + 1:].strip()])[-150:]
         if "] turn " in line:
             iv["turn"] = int(line.split("] turn ")[1].split(":")[0].split("/")[0])
             if "[OWNER LEFT]" in line:
