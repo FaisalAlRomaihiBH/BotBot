@@ -59,6 +59,12 @@ class FakeLLM:
             kind, out = "evaluate", evaluation_json()
         elif "You maintain the system prompt" in text:
             kind, out = "improve", self.improve_reply
+        elif "plain-language hourly digest" in text:
+            kind, out = "summary", json.dumps({
+                "interviews": [{"cycle": 1, "issue": "Missed payment methods."},
+                               {"cycle": 2, "issue": "Missed payment methods."}],
+                "fix": "Birdie now always asks how customers pay.",
+                "attention": ["Decide whether to add a payment field."]})
         else:
             raise AssertionError("FakeLLM got an unrecognized prompt:\n" + text[:200])
         self.calls.append((kind, text))

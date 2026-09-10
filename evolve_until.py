@@ -4,7 +4,6 @@
 # (problems -> fixes) into evolve_runs/reports/ for emailing.
 #
 # Usage: python evolve_until.py [HH:MM]
-import difflib
 import json
 import sys
 import time
@@ -14,8 +13,7 @@ from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import cm
-from reportlab.platypus import (SimpleDocTemplate, Paragraph, Spacer, Table,
-                                TableStyle)
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 
 import evolve
 
@@ -28,105 +26,125 @@ def esc(s: str) -> str:
     return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
 
-def short_persona(persona: str, limit=90) -> str:
-    """'industry / long personality essay' -> 'industry — first clause of trait'."""
-    industry, _, trait = persona.partition(" / ")
-    for stop in (" — ", ". ", "; ", ", "):
-        if stop in trait:
-            trait = trait.split(stop)[0]
-            break
-    label = industry.strip() + (f" — {trait.strip()}" if trait.strip() else "")
-    return label[:limit].rstrip() + ("…" if len(label) > limit else "")
+def short_persona(persona: str, limit=60) -> str:
+    """'industry / long personality essay' -> just the business type."""
+    industry = persona.partition(" / ")[0].strip()
+    return industry[:limit].rstrip() + ("…" if len(industry) > limit else "")
 
 
-def prompt_diff(old: str, new: str, max_lines=60) -> list[str]:
-    lines = [l.rstrip() for l in difflib.unified_diff(
-        old.splitlines(), new.splitlines(), lineterm="", n=1)][2:]  # drop ---/+++
-    if len(lines) > max_lines:
-        lines = lines[:max_lines] + [f"… ({len(lines) - max_lines} more diff lines)"]
-    return lines
+SUMMARY_PROMPT = """You write a plain-language hourly digest of QA test results
+for a business owner with no technical background. Below are this hour's test
+interviews of their AI interviewer bot ("Birdie"), each with QA findings, plus
+a description of the prompt fix applied (if any).
+
+Return ONLY JSON, no other text, in exactly this shape:
+{{"interviews": [{{"cycle": <n>, "issue": "<ONE short simple sentence: the
+single biggest problem in that interview>"}}],
+"fix": "<ONE short simple sentence: what was improved this hour, or empty
+string if nothing>",
+"attention": ["<up to 3 short simple sentences: things that need a human
+decision>"]}}
+
+Keep every sentence under 20 words. No jargon, no field names, no quotes from
+transcripts.
+
+=== THIS HOUR'S INTERVIEWS ===
+{batch}
+
+=== FIX APPLIED ===
+{fix}
+"""
+
+
+def summarize_batch(batch, improved_desc) -> dict:
+    """One-line plain-language summaries via the strong model, with a
+    deterministic fallback so the report always renders."""
+    fallback = {
+        "interviews": [{"cycle": h["cycle"],
+                        "issue": (h.get("top_improvement") or "")[:160]}
+                       for h in batch],
+        "fix": improved_desc or "",
+        "attention": [s[:160] for h in batch
+                      for s in h.get("schema_suggestions", [])][:3],
+    }
+    try:
+        raw = "\n\n".join(
+            f"Cycle {h['cycle']} — {h['persona']} — score {h['score']}/10\n"
+            + "\n".join(f"- {f['problem'] if isinstance(f, dict) else f}"
+                         for f in h.get("findings", []))
+            + (f"\nNeeds human decision: {'; '.join(h.get('schema_suggestions', []))}"
+               if h.get("schema_suggestions") else "")
+            for h in batch)
+        reply = evolve.strong_llm.invoke(SUMMARY_PROMPT.format(
+            batch=raw, fix=improved_desc or "(no prompt change this hour)"))
+        text = evolve._blocks(reply.content).strip()
+        if text.startswith("```"):
+            text = text.strip("`").lstrip("json").strip()
+        out = json.loads(text)
+        issues = {i["cycle"]: i["issue"] for i in out.get("interviews", [])}
+        return {
+            "interviews": [{"cycle": h["cycle"],
+                            "issue": issues.get(h["cycle"]) or "(no summary)"}
+                           for h in batch],
+            "fix": out.get("fix", ""),
+            "attention": [a for a in out.get("attention", []) if a][:3],
+        }
+    except Exception as e:
+        print(f">>> summary model failed ({type(e).__name__}) — using fallback text")
+        return fallback
 
 
 def write_pdf(path, batch, improved_desc, old_prompt, new_prompt):
+    """A one-page, all-bullets digest a non-technical reader can skim."""
     styles = getSampleStyleSheet()
-    h1, h2, body = styles["Title"], styles["Heading2"], styles["BodyText"]
-    h3 = ParagraphStyle("h3", parent=styles["Heading3"], spaceBefore=10)
-    small = ParagraphStyle("small", parent=body, fontSize=9, leading=12)
-    quote = ParagraphStyle("quote", parent=small, leftIndent=18,
-                           textColor="#555555", fontSize=8, leading=11)
-    mono = ParagraphStyle("mono", parent=small, fontName="Courier",
-                          fontSize=7.5, leading=9.5)
+    h1 = styles["Title"]
+    h2 = ParagraphStyle("h2", parent=styles["Heading2"], spaceBefore=14,
+                        textColor=colors.HexColor("#2b3a55"))
+    body = ParagraphStyle("body", parent=styles["BodyText"],
+                          fontSize=10.5, leading=15)
+    bullet = ParagraphStyle("bullet", parent=body, leftIndent=14,
+                            bulletIndent=2, spaceAfter=4)
     doc = SimpleDocTemplate(str(path), pagesize=A4,
                             leftMargin=2 * cm, rightMargin=2 * cm,
                             topMargin=2 * cm, bottomMargin=2 * cm)
 
-    def para(text, style):
-        # one Paragraph per source line: huge multi-line paragraphs are what
-        # made ReportLab garble and overlap text in earlier reports
-        return [Paragraph(esc(line) if line.strip() else "&nbsp;", style)
-                for line in text.splitlines()]
+    def b(text):
+        return Paragraph(esc(text), bullet, bulletText="•")
 
+    s = summarize_batch(batch, improved_desc)
     avg = round(sum(h["score"] for h in batch) / len(batch), 2)
-    story = [Paragraph("BotBot Evolve — Hourly Report", h1),
-             Paragraph(datetime.now().strftime("%A %d %B %Y, %H:%M"), body),
-             Spacer(1, 10)]
+    story = [Paragraph("BotBot Evolve — Hourly Summary", h1),
+             Paragraph(datetime.now().strftime("%A %d %B %Y, %H:%M"),
+                       styles["BodyText"]),
+             Spacer(1, 8)]
 
-    # ---- at a glance ----
+    story.append(Paragraph("This hour", h2))
+    story.append(b(f"{len(batch)} test interview(s), average score {avg}/10."))
+    story.append(b("The bot's instructions were improved this hour."
+                   if improved_desc else "No instruction change this hour."))
+    incomplete = [h for h in batch if not h["completed"]]
+    if incomplete:
+        story.append(b(f"{len(incomplete)} interview(s) did not finish — worth a look."))
+
+    story.append(Paragraph("Each interview, in one line", h2))
+    issue_by_cycle = {i["cycle"]: i["issue"] for i in s["interviews"]}
+    for h in batch:
+        story.append(b(f"{short_persona(h['persona'])} — {h['score']}/10. "
+                       f"{issue_by_cycle.get(h['cycle'], '')}"))
+
+    story.append(Paragraph("What got better", h2))
+    story.append(b(s["fix"] if s["fix"]
+                   else "Nothing this hour — the problems found are queued for the next fix."))
+
+    if s["attention"]:
+        story.append(Paragraph("Needs your decision", h2))
+        for a in s["attention"]:
+            story.append(b(a))
+
+    story.append(Spacer(1, 10))
     story.append(Paragraph(
-        f"<b>{len(batch)}</b> interview(s) · average score <b>{avg}/10</b> · "
-        + ("<b>prompt updated</b> this hour"
-           if improved_desc else "no prompt change this hour"), body))
-    rows = [["Cycle", "Persona", "Score", "Done"]]
-    for h in batch:
-        rows.append([str(h["cycle"]),
-                     Paragraph(esc(short_persona(h["persona"])), small),
-                     f"{h['score']}/10", "yes" if h["completed"] else "NO"])
-    table = Table(rows, colWidths=[1.5 * cm, 11 * cm, 2 * cm, 1.5 * cm])
-    table.setStyle(TableStyle([
-        ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#2b3a55")),
-        ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
-        ("FONTSIZE", (0, 0), (-1, -1), 9),
-        ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.HexColor("#f2f4f8")]),
-        ("GRID", (0, 0), (-1, -1), 0.4, colors.HexColor("#c8cdd6")),
-        ("VALIGN", (0, 0), (-1, -1), "TOP"),
-    ]))
-    story += [Spacer(1, 6), table]
-
-    # ---- problems, one section per interview ----
-    story.append(Paragraph("Problems found", h2))
-    for h in batch:
-        story.append(Paragraph(
-            f"Cycle {h['cycle']} — {esc(short_persona(h['persona']))} "
-            f"({h['score']}/10)", h3))
-        for i, f in enumerate(h.get("findings", []), 1):
-            problem = f if isinstance(f, str) else f["problem"]
-            story.append(Paragraph(f"<b>{i}.</b> {esc(problem)}", small))
-            excerpt = "" if isinstance(f, str) else f.get("excerpt", "")
-            for line in excerpt.splitlines():
-                if line.strip():
-                    story.append(Paragraph(f"<i>{esc(line.strip())}</i>", quote))
-        story.append(Paragraph(
-            f"<b>Top suggested fix:</b> {esc(h['top_improvement'])}", small))
-        for s in h.get("schema_suggestions", []):
-            story.append(Paragraph(
-                f"<b>⚠ Needs human/code change:</b> {esc(s)}", small))
-
-    # ---- what changed, as a diff instead of the whole prompt ----
-    story.append(Paragraph("Prompt change this hour", h2))
-    if improved_desc:
-        story.append(Paragraph(esc(improved_desc), body))
-        story.append(Paragraph("Diff against the previous prompt "
-                               "(- removed, + added):", small))
-        for line in prompt_diff(old_prompt, new_prompt):
-            color = ("#1a7f37" if line.startswith("+")
-                     else "#b42318" if line.startswith("-") else "#555555")
-            story.append(Paragraph(
-                f'<font color="{color}">{esc(line) or "&nbsp;"}</font>', mono))
-    else:
-        story.append(Paragraph(
-            "No prompt change (improvement rejected by guardrails or produced "
-            "no change). The full current prompt lives in "
-            "interviewer_prompt.txt in the repo.", body))
+        "Full details (transcripts, findings, prompt changes) are in the "
+        "BotBot repo under evolve_runs/.", styles["Italic"]))
     doc.build(story)
 
 
