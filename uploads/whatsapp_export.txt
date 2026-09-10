@@ -1,33 +1,38 @@
-[Mon 9:12 AM] Sarah T: Hi! Do you do rekeying for apartment locks? How much roughly?
-[Mon 9:40 AM] Vince: Yeah we do that. Depends on the lock.
-[Mon 9:41 AM] Sarah T: Ok roughly how much though? Just need a ballpark
-[Mon 11:15 AM] Vince: Could be 25, could be 40. Easier if you just call the shop.
-[Mon 11:16 AM] Sarah T: I'd rather text if that's ok, I'm at work
-[Mon 11:50 AM] Vince: Alright. We'll figure it out when Danny looks at it.
-[Tue 8:03 AM] Marcus P: Locked myself out of my car at the Shell station on 9th, can someone come now?
-[Tue 8:05 AM] Vince: On our way. 70 bucks cash.
-[Tue 8:41 AM] Marcus P: Great thank you, all done, paid Danny
-[Wed 2:20 PM] Renee K: Hi, interested in a smart lock install for my front door, Schlage Encode. What's the cost and can you do Thursday?
-[Wed 3:05 PM] Vince: We can look at it. Smart locks are tricky, honestly not sure I love doing those lately.
-[Wed 3:06 PM] Renee K: Oh - is that a no?
-[Wed 4:30 PM] Vince: Didn't say no. Let me check with Danny and call you.
-[Fri 10:00 AM] Renee K: Hey just following up on the smart lock quote from earlier this week?
-[Fri 10:00 AM] Renee K: No worries if you're busy, just want to know if it's happening
-[No response]
-[Sat 9:15 AM] James O: Do you take card? Getting a deadbolt installed today
-[Sat 9:50 AM] Vince: Cash is easier for us honestly. We got a card thing but half the time it don't work right
-[Sat 9:51 AM] James O: Ok I'll bring cash then, how much total
-[Sat 10:30 AM] Vince: 120 to 150 with the hardware, we'll settle up when Danny's done
-[Sat 1:45 PM] James O: All good, paid 135, thanks guys
-[Sun 6:02 PM] Priya D: Hi, is this number for Fortress Lock & Key? Want to ask about camera system pricing for a small shop
-[Sun 6:02 PM] Priya D: 4 cameras, exterior
-[Mon 8:15 AM] Vince: Yes this is us. Cameras start around 300 but really depends what you want, better to call so I can understand the setup
-[Mon 8:16 AM] Priya D: Can you give me a range at least? Trying to budget
-[Mon 9:00 AM] Vince: Somewhere between 300 and 800 probably. Hard to say exact over text
-[Mon 9:01 AM] Priya D: Ok I'll try calling this afternoon
-[Tue 3:10 PM] Priya D: Called twice, no answer, left a voicemail
-[No response]
-[Thu 11:00 AM] Danny (staff): hey this is Danny, Vince's nephew, saw some messages he didn't get back to, sorry about that, we can quote the camera job if you resend the address
-[Thu 11:20 AM] Priya D: Appreciate it! Address is 44 Larkspur Rd
-[Thu 2:00 PM] Danny (staff): got it, we'll swing by this week and give a real number
-[No further response logged]
+[12/03/2024, 09:14] Sandra Miles: Hi, my fridge isn't cooling properly, can you help?
+[12/03/2024, 09:20] Dariusz Kowalczyk: yes
+[12/03/2024, 09:21] Sandra Miles: Great, how much roughly?
+[12/03/2024, 09:25] Dariusz Kowalczyk: depends
+[12/03/2024, 09:26] Sandra Miles: On what?
+[12/03/2024, 09:40] Dariusz Kowalczyk: part
+[12/03/2024, 09:41] Sandra Miles: Ok, can you give me a range?
+[12/03/2024, 09:52] Dariusz Kowalczyk: 50-90
+[12/03/2024, 09:53] Sandra Miles: When could you come?
+[12/03/2024, 09:58] Dariusz Kowalczyk: thursday
+[12/03/2024, 09:59] Sandra Miles: Morning or afternoon?
+[12/03/2024, 10:15] Dariusz Kowalczyk: morning
+[12/03/2024, 10:16] Sandra Miles: What time exactly?
+[12/03/2024, 10:20] Dariusz Kowalczyk: morning
+[13/03/2024, 14:02] James Petrov: Hi Dariusz, do you fix dishwashers too? Bosch brand
+[13/03/2024, 15:47] Dariusz Kowalczyk: yes
+[13/03/2024, 15:48] James Petrov: How long for parts if needed?
+[13/03/2024, 16:03] Dariusz Kowalczyk: 2-4 days usually
+[13/03/2024, 16:04] James Petrov: And if it's an older model?
+[13/03/2024, 16:10] Dariusz Kowalczyk: let me check
+[15/03/2024, 11:00] James Petrov: Hi, any update on the older Bosch part availability?
+[17/03/2024, 08:30] James Petrov: Hello?
+[19/03/2024, 19:22] Dariusz Kowalczyk: washing machine also broken?
+[19/03/2024, 19:30] James Petrov: No I asked about my dishwasher part
+[19/03/2024, 19:45] Dariusz Kowalczyk: ok
+[02/04/2024, 10:12] Priya Anand: Hi, do you cover Dunstable? That's about 12 miles from Luton
+[02/04/2024, 10:30] Dariusz Kowalczyk: yes
+[02/04/2024, 10:31] Priya Anand: Great, and is there a call-out charge?
+[02/04/2024, 10:40] Dariusz Kowalczyk: 25
+[02/04/2024, 10:41] Priya Anand: Is that waived if you do the repair?
+[02/04/2024, 10:55] Dariusz Kowalczyk: yes
+[02/04/2024, 10:56] Priya Anand: Perfect, and what's the warranty on labour after?
+[02/04/2024, 11:10] Dariusz Kowalczyk: 3 months
+[10/04/2024, 09:00] Priya Anand: Hi, just checking in, my washing machine broke again after the repair last month, thought it was 6 months warranty?
+[10/04/2024, 09:45] Dariusz Kowalczyk: hmm
+[10/04/2024, 09:46] Priya Anand: So is it 3 or 6 months?
+[10/04/2024, 14:20] Dariusz Kowalczyk: I check book
+[14/04/2024, 08:10] Priya Anand: Hi, any update?
