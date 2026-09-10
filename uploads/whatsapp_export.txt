@@ -1,35 +1,61 @@
-[03/11, 9:14am] Anna Kowalczyk: Hi! I saw your Instagram, I'd like a custom oak dining table, seats 6. How much would that run?
-[03/11, 9:41am] Tomasz Wik: Hi Anna! For oak, 6 seats, that's 4200 PLN, solid price, no surprises
-[03/11, 9:42am] Tomasz Wik: I can start next week even
-[03/11, 11:03am] Anna Kowalczyk: Great, and how long would it take start to finish?
-[03/11, 11:20am] Tomasz Wik: Two weeks, maybe less if the wood is dry already
-[03/12, 3:15pm] Anna Kowalczyk: Perfect, do you need a deposit to book me in?
-[03/12, 4:02pm] Tomasz Wik: Yes 30% please, then rest on delivery
-[03/14, 10:30am] Anna Kowalczyk: Just to confirm - 4200 PLN, 30% deposit, ready in 2 weeks?
-[03/14, 6:47pm] Tomasz Wik: Actually oak table like that is more like 5800 PLN, prices went up on me this month
-[03/14, 6:48pm] Tomasz Wik: And realistically 6-8 weeks, I have a big staircase job ahead of you
-[03/14, 6:49pm] Anna Kowalczyk: Wait, on Monday you said 4200 and two weeks?
-[03/14, 7:10pm] Tomasz Wik: No I don't think I said that, I always quote 5800 for 6-seater oak
-[03/15, 9:00am] Anna Kowalczyk: I have it in writing from you haha but ok, let's go with 5800. Deposit is 30%?
-[03/15, 11:22am] Tomasz Wik: For you, no deposit needed, I trust you
-[03/16, 8:05am] Tomasz Wik: Actually send the 50% deposit please, standard policy
-[03/16, 8:12am] Anna Kowalczyk: 30 or 50?
-[03/16, 8:40am] Tomasz Wik: 50, always 50
-[03/20, 1:00pm] Piotr (customer): Hi, do you make kitchen cabinets too or just tables?
-[03/20, 4:45pm] Tomasz Wik: Yes kitchens, all custom, price is per meter, roughly 900-1000 PLN a meter
-[03/20, 4:46pm] Piotr (customer): Great how long to get a quote for my kitchen (about 4 meters)?
-[03/20, 4:50pm] Tomasz Wik: Let me check with my supplier on the panel prices, I'll message you tomorrow
-[03/27, 2:15pm] Piotr (customer): Hi just following up on the kitchen quote?
-[04/02, 9:00am] Piotr (customer): Hello? Still interested if you have time
-[04/09, 5:30pm] Bartek (apprentice, from shop phone): hi this is Bartek, Tomasz is at the wood supplier, he says he'll call you about the kitchen this week
-[04/10, 12:00pm] Anna Kowalczyk: Hi, any update on my table? It's been 5 weeks
-[04/10, 12:30pm] Tomasz Wik: Almost done! Just finishing the legs, ready Friday
-[04/10, 12:31pm] Tomasz Wik: Actually Friday might be tight, we have the church pews due first, let's say next Wednesday
-[04/10, 12:45pm] Anna Kowalczyk: You said 6-8 weeks total back in March, so Wednesday works within that I guess
-[04/10, 1:10pm] Tomasz Wik: Wednesday for sure, or Thursday at the very latest, table looks beautiful by the way
-[04/22, 10:00am] Nowa Klientka: Hi, are you taking new orders right now or fully booked?
-[04/22, 10:15am] Tomasz Wik: We have room, come by anytime this month
-[04/22, 10:16am] Tomasz Wik: Oh wait, actually no, I forgot about the church commission, we're full until at least June
-[04/22, 10:20am] Nowa Klientka: So... June?
-[04/22, 10:44am] Tomasz Wik: Maybe May, let me check the calendar and get back to you
-[04/24, 8:00am] Kuba (apprentice, from shop phone): hey it's Kuba, boss said to tell you probably July for new orders, sorry for the back and forth
+[Mon 09:14] Hannah: Hi! Do you do puncture repairs walk-in or do I need to book?
+[Mon 09:20] Costas: Walk in mate, no booking needed for that
+[Mon 09:21] Costas: actually Tuesdays are mental, better book
+[Mon 09:22] Costas: nah you know what just come whenever, we'll sort it
+[Mon 09:23] Hannah: 😅 okay, cool, I'll pop by tomorrow then
+[Mon 09:24] Costas: perfect see you then
+
+[Tue 11:02] Hannah: Just arrived, shop looks closed?
+[Tue 11:15] Costas: ah sorry got called to pick up tubing, back in an hour
+
+[Wed 14:30] Marcus: How much for a full tune up on a road bike
+[Wed 14:45] Costas: £45 usually
+[Wed 14:52] Costas: wait no that was last year's price, it's £55 now with parts going up
+[Wed 15:10] Costas: actually if it's just gears and brakes no full clean, I could do £40
+[Wed 15:11] Marcus: haha ok which is it
+[Wed 15:20] Costas: let's say £45 and we see when it's on the stand
+
+[Wed 16:00] Marcus: Sounds good, when can you fit it in
+[Wed 16:10] Costas: Friday no bother
+[Wed 16:40] Costas: actually Friday's rammed, Jayden's not in til Saturday, let's do Monday
+[Wed 16:41] Marcus: Monday works
+[Wed 16:55] Costas: yeah Monday. or Tuesday if Monday's mad. I'll message you
+
+[Thu 10:00] Priya: Hi, interested in a custom steel frame build, what's the starting price and timeline?
+[Thu 10:22] Costas: starts around £1200 for a basic build, lead time is about 6 weeks
+[Thu 10:30] Costas: actually thinking about it more realistically with the tubing supplier delays it's more like 10-12 weeks
+[Thu 10:31] Costas: and price wise I'd say £1400 to be safe, steel's gone up
+[Thu 10:35] Priya: ok, could you confirm which one when you have a min? happy to wait
+[Thu 10:36] Costas: for sure will confirm
+
+[Sat 09:40] Priya: hey just checking in on the frame quote from Thursday
+[no reply]
+
+[Sun 12:15] James: Do you still do e-bike battery diagnostics?
+[Sun 12:40] Costas: yep bring it in
+[Sun 13:02] Costas: actually you know I've been having second thoughts on that machine, might not be reliable enough, safer if you send it to the manufacturer
+[Sun 13:03] James: right, so no then?
+[Sun 13:20] Costas: I'll have a proper look and let you know, don't want to say no and then it turns out fine
+
+[Mon 09:30] Marcus: hey any update on Monday for the tune up?
+[Mon 09:50] Costas: actually let's push to Tuesday, sorry got a custom frame emergency
+
+[Tue 15:00] Marcus: Here now, is the £45 still the price?
+[Tue 15:12] Costas: yeah should be fine
+[Tue 15:40] Costas: oh actually your chain's shot too so with that it'll be closer to £60
+[Tue 15:41] Marcus: ok that's fine
+
+[Wed 10:00] Hannah: What are your actual opening hours, website says 9:30-6
+[Wed 10:15] Costas: yeah that's right Tue-Sat
+[Wed 10:16] Costas: though honestly I sometimes open at 10 if I've been up late on a frame
+[Wed 10:17] Costas: best to text before coming down tbh
+
+[Thu 11:00] James: any update on the e-bike thing?
+[no reply]
+
+[Fri 13:00] Priya: hi Costas, just following up again on my frame build - would love to get a deposit down if you can confirm price/timeline
+[Fri 13:45] Costas: yes sorry been mental, let's say £1300 and 8 weeks, that feels about right
+[Fri 13:46] Priya: brilliant, I'll take that! how do I pay deposit
+[Fri 13:50] Costas: bank transfer easiest, I'll send details, though actually card machine's playing up so bank transfer definitely
+[Fri 13:51] Priya: perfect, sending now
+[Fri 14:10] Costas: got it! we're on, I'll confirm start date once I hear from my tubing guy
