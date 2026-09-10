@@ -174,14 +174,25 @@ class ParallelPersonaRunner:
 
     # ---------------- pipeline steps ----------------
     def generate_personas(self) -> list[Persona]:
-        """Batch-generate personas, 10 per model call."""
+        """Batch-generate personas, 10 per model call. Each batch retries on
+        malformed output (e.g. unescaped quotes inside a JSON string) — one
+        bad character must not kill a whole run before it starts."""
         parser = PydanticOutputParser(pydantic_object=PersonaBatch)
         personas: list[Persona] = []
         while len(personas) < self.count:
             n = min(10, self.count - len(personas))
-            reply = self.persona_llm.invoke(PERSONA_BATCH_PROMPT.format(
-                n=n, format_instructions=parser.get_format_instructions()))
-            batch = parser.parse(_blocks_to_text(reply.content)).personas[:n]
+            last_error = None
+            for attempt in range(1, 4):
+                reply = self.persona_llm.invoke(PERSONA_BATCH_PROMPT.format(
+                    n=n, format_instructions=parser.get_format_instructions()))
+                try:
+                    batch = parser.parse(_blocks_to_text(reply.content)).personas[:n]
+                    break
+                except Exception as e:
+                    last_error = e
+                    log(f"[personas] batch attempt {attempt} unparseable, retrying...")
+            else:
+                raise last_error
             personas.extend(batch)
             log(f"[personas] {len(personas)}/{self.count} generated")
         return personas
