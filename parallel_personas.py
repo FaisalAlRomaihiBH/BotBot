@@ -109,6 +109,8 @@ class Evaluation(BaseModel):
     efficiency: int           # 0-10: no wasted/low-value questions; finished in sane turns
     findings: list[Finding]   # specific observed problems, each with its transcript excerpt
     top_improvement: str      # the single most valuable change to the interviewer prompt
+    code_suggestions: list[str]  # STRUCTURAL problems prompt wording cannot fix (missing form
+                                 # fields, crashes, missing capabilities) — fixed by a coding agent
 
 
 EVAL_PROMPT = """You are a strict QA judge for an AI interviewer ("RequirementsBot")
@@ -131,6 +133,12 @@ for EACH finding, copy into its excerpt the exact transcript lines (speaker name
 included, 1-4 lines) where the problem occurred — verbatim, no paraphrasing.
 Compare the fact sheet against the brief for lost facts. Then name the ONE most
 valuable prompt improvement.
+
+Separately, in code_suggestions, list STRUCTURAL problems that prompt wording
+cannot fix — e.g. a kind of fact that recurringly has no proper form field
+(check the brief's additional_notes and open_items for facts crammed somewhere
+wrong), a crash or malformed output, or a capability the interviewer lacks
+entirely. Suggest the field/capability to add. Empty list if none.
 
 Wrap your entire output in this format and provide no other text
 {format_instructions}"""
@@ -267,6 +275,8 @@ class ParallelPersonaRunner:
                       for r in sorted(scored, key=lambda r: r["score"])[:10]],
             "all_scores": {r["index"]: r["score"] for r in records},
             "errors": {r["index"]: r["error"] for r in records if r["error"]},
+            "code_suggestions": sorted({s for r in scored
+                                        for s in r["evaluation"].get("code_suggestions", [])}),
         }
         (self.run_dir / "summary.json").write_text(
             json.dumps(summary, indent=2, ensure_ascii=False), encoding="utf-8")
@@ -365,6 +375,54 @@ def improve_and_push(runner: "ParallelPersonaRunner", records: list[dict],
         log("    " + (_git("push", "origin", "main") or "pushed"))
 
 
+CODE_FIX_PROMPT = """You are maintaining RequirementsBot in this repository
+(requirements_bot.py, models.py, main.py, interviewer_prompt.txt). A mass
+persona-testing run of the bot surfaced STRUCTURAL problems that prompt
+wording cannot fix. Fix them in code now:
+
+{suggestions}
+
+Rules:
+- Read the relevant files first and make the smallest correct change for each
+  problem (e.g. a new Optional field on BusinessRequirements in models.py plus
+  a short mention in interviewer_prompt.txt, or a bug fix in
+  requirements_bot.py). Skip any suggestion that is wrong, already handled,
+  or too risky to apply blindly — and say so.
+- Never remove existing form fields or break to_dict/from_dict compatibility.
+- Verify with a syntax check (python -c "import requirements_bot, models")
+  before committing.
+- Commit the changes with a clear message ending in
+  "Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
+  and push to origin main. If you changed nothing, commit nothing.
+"""
+
+
+def fix_code_issues(summary: dict) -> None:
+    """Hand the run's structural findings to a headless Claude Code agent that
+    edits the code, verifies it, commits and pushes."""
+    import shutil
+    import subprocess
+    suggestions = summary.get("code_suggestions") or []
+    if not suggestions:
+        log("=== no code-level suggestions from this run.")
+        return
+    exe = shutil.which("claude")
+    if not exe:
+        log("=== claude CLI not found; code suggestions saved in summary.json only.")
+        return
+    log(f"=== fixing {len(suggestions)} code-level suggestion(s) via claude -p ...")
+    prompt = CODE_FIX_PROMPT.format(
+        suggestions="\n".join(f"- {s}" for s in suggestions))
+    r = subprocess.run(
+        [exe, "-p", prompt,
+         "--permission-mode", "acceptEdits",
+         "--allowedTools", "Bash(python*) Bash(git add:*) Bash(git commit:*) Bash(git push:*)"],
+        cwd=ROOT, capture_output=True, text=True, timeout=1800)
+    log(r.stdout.strip()[-2000:] or "(no output)")
+    if r.returncode != 0:
+        log(f"    code-fix agent exited {r.returncode}: {r.stderr.strip()[-500:]}")
+
+
 if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     ap = argparse.ArgumentParser()
@@ -380,3 +438,4 @@ if __name__ == "__main__":
         records = [json.loads(p.read_text(encoding="utf-8"))
                    for p in sorted(runner.run_dir.glob("interview_*.json"))]
         improve_and_push(runner, records, run_summary)
+        fix_code_issues(run_summary)
