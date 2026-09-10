@@ -1,4 +1,4 @@
-# persona_test.py — manual persona testing for the requirements bot (intake.py).
+# persona_test.py — manual persona testing for RequirementsBot.
 #
 # A human (or an agent) role-plays a business-owner persona and talks to the
 # bot one message at a time. Each session keeps its full state on disk, so a
@@ -20,113 +20,86 @@ import json
 import sys
 from pathlib import Path
 
-import intake
+from requirements_bot import RequirementsBot
 
 ROOT = Path(__file__).parent
 SESSIONS_DIR = ROOT / "persona_sessions"
 
-GREETING = ("Hi! I help businesses figure out exactly what they need from a "
-            "chatbot. Before we start — what's your name?")
 
-ANALYSIS_DONE_NOTE = (
-    "(System note: the analysis of the shared materials is now in your "
-    "instructions. React to it: mention 1-2 useful things you learned, "
-    "then ask about the first knowledge gap.)")
-ANALYSIS_EMPTY_NOTE = (
-    "(System note: the uploads folder is empty — no readable files. "
-    "Gently tell the owner nothing was found and how to add files, "
-    "then continue the interview.)")
+class PersonaSession:
+    """One persisted interview: a RequirementsBot plus its transcript on disk."""
 
+    def __init__(self, name: str, state: dict):
+        self.name = name
+        self.transcript: list[list[str]] = state["transcript"]
+        self.form: dict | None = state["form"]
+        self.brief: dict | None = state["brief"]
+        self.bot = RequirementsBot.from_dict(state["bot"])
 
-def _path(name: str) -> Path:
-    return SESSIONS_DIR / f"{name}.json"
+    # ---------------- persistence ----------------
+    @staticmethod
+    def _path(name: str) -> Path:
+        return SESSIONS_DIR / f"{name}.json"
 
+    @classmethod
+    def create(cls, name: str) -> "PersonaSession":
+        session = cls(name, {
+            "bot": RequirementsBot().to_dict(),
+            "transcript": [["Bot", RequirementsBot.GREETING]],
+            "form": None,
+            "brief": None,
+        })
+        session.save()
+        return session
 
-def _load(name: str) -> dict:
-    p = _path(name)
-    if not p.exists():
-        sys.exit(f"no session named '{name}' — start one with: "
-                 f"python persona_test.py new {name}")
-    return json.loads(p.read_text(encoding="utf-8"))
+    @classmethod
+    def load(cls, name: str) -> "PersonaSession":
+        path = cls._path(name)
+        if not path.exists():
+            sys.exit(f"no session named '{name}' — start one with: "
+                     f"python persona_test.py new {name}")
+        return cls(name, json.loads(path.read_text(encoding="utf-8")))
 
+    def save(self) -> None:
+        SESSIONS_DIR.mkdir(exist_ok=True)
+        self._path(self.name).write_text(
+            json.dumps({
+                "bot": self.bot.to_dict(),
+                "transcript": self.transcript,
+                "form": self.form,
+                "brief": self.brief,
+            }, indent=2, ensure_ascii=False),
+            encoding="utf-8")
 
-def _save(name: str, state: dict) -> None:
-    SESSIONS_DIR.mkdir(exist_ok=True)
-    _path(name).write_text(json.dumps(state, indent=2, ensure_ascii=False),
-                           encoding="utf-8")
+    # ---------------- one conversational turn ----------------
+    def say(self, message: str) -> None:
+        if self.bot.complete:
+            sys.exit("this interview is already complete — see: "
+                     f"python persona_test.py form {self.name}")
 
+        messages, turn = self.bot.send(message)
+        self.transcript.append(["Owner", message])
+        for msg in messages:
+            self.transcript.append(["Bot", msg])
+            print("Bot:", msg)
 
-def cmd_new(name: str) -> None:
-    _save(name, {
-        "history": [["ai", GREETING]],
-        "transcript": [["Bot", GREETING]],
-        "analysis_text": intake.NO_MATERIALS,
-        "analysis": None,
-        "form": None,
-        "brief": None,
-        "complete": False,
-    })
-    print("Bot:", GREETING)
-
-
-def cmd_say(name: str, message: str) -> None:
-    state = _load(name)
-    if state["complete"]:
-        sys.exit("this interview is already complete — see: "
-                 f"python persona_test.py form {name}")
-    history = [tuple(pair) for pair in state["history"]]
-
-    turn, raw = intake.ask(message, history, state["analysis_text"])
-    history += [("human", message), ("ai", raw)]
-    state["transcript"] += [["Owner", message], ["Bot", turn.next_message]]
-    print("Bot:", turn.next_message)
-
-    # The bot decided the owner's files are ready: analyze, then let it react.
-    if turn.run_file_analysis:
-        analysis, filenames = intake.analyze_uploads()
-        if analysis is None:
-            note = ANALYSIS_EMPTY_NOTE
-        else:
-            state["analysis"] = analysis.model_dump()
-            state["analysis_text"] = intake.analysis_to_prompt_text(analysis)
-            note = ANALYSIS_DONE_NOTE
-            print(f"[analyzed {len(filenames)} file(s): {', '.join(filenames)}]")
-        turn, raw = intake.ask(note, history, state["analysis_text"])
-        history += [("human", "(files were analyzed)"), ("ai", raw)]
-        state["transcript"] += [["Bot", turn.next_message]]
-        print("Bot:", turn.next_message)
-
-    state["history"] = [list(pair) for pair in history]
-    state["form"] = turn.requirements.model_dump()
-    if turn.interview_complete:
-        state["complete"] = True
-        state["brief"] = {
-            "requirements": state["form"],
-            "conversation_analysis": state["analysis"],
-        }
-        print("\n[COMPLETE] final brief:")
-        print(json.dumps(state["form"], indent=2, ensure_ascii=False))
-    _save(name, state)
-
-
-def cmd_transcript(name: str) -> None:
-    for who, msg in _load(name)["transcript"]:
-        print(f"{who}: {msg}\n")
-
-
-def cmd_form(name: str) -> None:
-    print(json.dumps(_load(name)["form"], indent=2, ensure_ascii=False))
+        self.form = turn.requirements.model_dump()
+        if self.bot.complete:
+            self.brief = self.bot.brief(turn)
+            print("\n[COMPLETE] final brief:")
+            print(json.dumps(self.form, indent=2, ensure_ascii=False))
+        self.save()
 
 
 def cmd_list() -> None:
     if not SESSIONS_DIR.exists():
         print("(no sessions)")
         return
-    for p in sorted(SESSIONS_DIR.glob("*.json")):
-        state = json.loads(p.read_text(encoding="utf-8"))
-        status = "complete" if state["complete"] else "in progress"
+    for path in sorted(SESSIONS_DIR.glob("*.json")):
+        state = json.loads(path.read_text(encoding="utf-8"))
+        status = "complete" if state["bot"]["complete"] else "in progress"
         turns = len(state["transcript"])
-        print(f"{p.stem:20s} {status:12s} {turns} transcript entries")
+        print(f"{path.stem:20s} {status:12s} {turns} transcript entries")
 
 
 if __name__ == "__main__":
@@ -136,13 +109,15 @@ if __name__ == "__main__":
         sys.exit(__doc__ or "see file header for usage")
     cmd = args[0]
     if cmd == "new" and len(args) == 2:
-        cmd_new(args[1])
+        PersonaSession.create(args[1])
+        print("Bot:", RequirementsBot.GREETING)
     elif cmd == "say" and len(args) == 3:
-        cmd_say(args[1], args[2])
+        PersonaSession.load(args[1]).say(args[2])
     elif cmd == "transcript" and len(args) == 2:
-        cmd_transcript(args[1])
+        for who, msg in PersonaSession.load(args[1]).transcript:
+            print(f"{who}: {msg}\n")
     elif cmd == "form" and len(args) == 2:
-        cmd_form(args[1])
+        print(json.dumps(PersonaSession.load(args[1]).form, indent=2, ensure_ascii=False))
     elif cmd == "list" and len(args) == 1:
         cmd_list()
     else:
