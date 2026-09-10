@@ -692,6 +692,7 @@
       "Add a `seasonality` field — the March-June wedding spike and conservative-timeline instruction is currently smeared across services_and_pricing and business_policies.",
       "Add a `things_bot_must_not_say` / hard-guardrail list (no repair quotes, no weatherproofing guarantees, no glass-neon commitments) so these safety constraints are machine-readable rather than scattered prose.",
       "Give `open_items` structured subfields (decision, owner, blocking impact on bot copy) and prompt the interviewer to sweep for unresolved decisions at wrap-up — the outdoor-warranty indecision was voiced but never landed in open_items."
-    ]
+    ],
+    "improve_done": true
   }
 ]
