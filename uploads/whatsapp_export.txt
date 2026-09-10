@@ -1,29 +1,40 @@
-[Mon Mar 3, 9:12am] Elena Marsh: Hi Gareth! Wondering about a custom dining table, seats 6, in oak. What would that run?
-[Mon Mar 3, 9:40am] Gareth Voss: Oak's good right now, I'd say $1200 all in
-[Mon Mar 3, 9:41am] Gareth Voss: Actually with the leg style you probably want, more like $1400
-[Mon Mar 3, 11:02am] Gareth Voss: sorry been thinking - let's just say $1200 flat, I'll eat the difference
-[Mon Mar 3, 11:03am] Elena Marsh: Haha ok! And timeline?
-[Mon Mar 3, 11:15am] Gareth Voss: 2 weeks easy
-[Mon Mar 3, 2:30pm] Gareth Voss: actually thinking about it, more realistically 4-5 weeks, I've got two other jobs ahead of you
-[Mon Mar 3, 2:31pm] Gareth Voss: sorry, don't want to overpromise
-[Tue Mar 4, 8:05am] Elena Marsh: No worries! Do you need a deposit?
-[Tue Mar 4, 8:20am] Gareth Voss: yep 50% to start
-[Tue Mar 4, 8:45am] Gareth Voss: actually you know what you seem organized, let's do 30% and settle rest on delivery
-[Wed Mar 5, 10:00am] Priya Nair: Hi, do you repair dining chairs? Have 4 that need regluing
-[Wed Mar 5, 10:30am] Gareth Voss: yeah we do that, $60 a chair usually
-[Wed Mar 5, 4:15pm] Gareth Voss: actually I've been meaning to stop taking these small repair jobs, they're not really worth my time anymore
-[Wed Mar 5, 4:16pm] Gareth Voss: let me think on it and get back to you
-[Fri Mar 7, 9:00am] Priya Nair: Any update on the chairs?
-[Fri Mar 7, 9:00am] Priya Nair: totally fine if not, just checking
-[Mon Mar 17, 3:00pm] Priya Nair: Hi Gareth, following up again on the chairs whenever you get a chance
-[Thu Mar 6, 1:12pm] Sam Okafor: Looking for built-in shelving for a home office, roughly 10ft wall. Ballpark cost?
-[Thu Mar 6, 1:50pm] Gareth Voss: for that size probably $2200-2500
-[Thu Mar 6, 6:40pm] Gareth Voss: hmm actually depends heavily on whether you want doors on the lower units, could push to $3000
-[Fri Mar 7, 9:30am] Sam Okafor: Ok, let's say doors on lower units — so $3000?
-[Fri Mar 7, 11:00am] Gareth Voss: yeah let's go with that number
-[Fri Mar 7, 3:15pm] Gareth Voss: actually rethinking the door hardware, might add $150-200, will confirm once I measure
-[Sat Mar 8, 10:00am] Sam Okafor: Any chance to swing by and measure this week?
-[Sat Mar 8, 10:45am] Gareth Voss: let me check my schedule and get back to you
-[Tue Mar 11, 8:00am] Elena Marsh: Hi! Just confirming table is still on for the 4-5 week window?
-[Tue Mar 11, 9:20am] Gareth Voss: actually good news, moving faster than expected, could be done in 3 weeks now
-[Tue Mar 11, 9:21am] Gareth Voss: though don't quote me on that, timber delivery's been unpredictable lately
+[14/03, 09:12] Dave R: Hi, how much for a full service on a road bike?
+[14/03, 09:40] Bax Cycle Works: Full strip down and rebuild is £120, that's everything done
+[14/03, 09:41] Bax Cycle Works: bearings, cables, the lot
+[14/03, 11:15] Dave R: Great, and how long would that take?
+[14/03, 11:50] Bax Cycle Works: Two days usually
+[15/03, 08:03] Dave R: Perfect I'll drop it Monday then
+[15/03, 08:20] Bax Cycle Works: Oh we're not open Mondays mate
+[15/03, 08:21] Dave R: You said 9-5:30 Tue-Sat on your Facebook
+[15/03, 08:33] Bax Cycle Works: yeah that's right
+[15/03, 08:34] Bax Cycle Works: drop it Tuesday then
+[20/03, 13:02] Sarah T: Hi! Interested in a custom steel frame, what's the starting price?
+[20/03, 13:45] Bax Cycle Works: Starting around £1400 depending on geometry and tubing
+[20/03, 13:46] Bax Cycle Works: I'll need 50% deposit to start
+[22/03, 10:11] Sarah T: Ok sending the deposit today then, is £700 right?
+[22/03, 16:30] Bax Cycle Works: Oh I don't really do deposits mate, bad practice, pay when it's done
+[22/03, 16:44] Sarah T: ...you asked for 50% two days ago?
+[22/03, 17:02] Bax Cycle Works: did I? nah I don't usually
+[25/03, 09:30] Sarah T: Ok well how much roughly for the whole build then, all in?
+[25/03, 12:15] Bax Cycle Works: Realistically looking at £1800 for what you want
+[25/03, 12:16] Bax Cycle Works: powder coat included
+[25/03, 15:00] Sarah T: That's £400 more than you first said
+[25/03, 15:20] Bax Cycle Works: things change mate, tubing prices
+[02/04, 11:00] Liam K: Hey, do you do wheel truing while I wait?
+[02/04, 11:40] Bax Cycle Works: Yeah quick job, £25, pop in anytime
+[02/04, 14:10] Liam K: Cool, coming by Thursday around 2
+[02/04, 14:30] Bax Cycle Works: let me check the book and confirm
+[05/04, 09:00] Liam K: Hey just confirming Thursday 2pm still ok?
+[07/04, 18:22] Liam K: Hello? Did you check?
+[10/04, 09:14] Priya N: Hi, how long does powder coating usually take once you send it off?
+[10/04, 10:02] Bax Cycle Works: About a week, my mate's quick
+[16/04, 08:45] Priya N: It's been a week and a half, any update?
+[16/04, 19:40] Bax Cycle Works: he's normally 3 weeks this time of year honestly
+[16/04, 19:41] Bax Cycle Works: forgot to say
+[18/04, 10:00] Priya N: So is it one week or three weeks generally?
+[18/04, 12:15] Bax Cycle Works: depends what he's got on
+[24/04, 13:00] Tom H: Any space on the custom frame waitlist? Roughly how many ahead of me?
+[24/04, 13:50] Bax Cycle Works: think you'd be 3rd, maybe 4th
+[24/04, 13:51] Bax Cycle Works: I'll double check the list and get back to you
+[01/05, 09:30] Tom H: Hi Bax, any update on where I am on the list?
+[01/05, 09:31] Tom H: Just want to plan roughly when to budget for it
