@@ -1,43 +1,39 @@
-[14/03, 10:12] Sarah B: Hi! Do you hire out the Princess Castle for a 5th birthday, and how much for a Saturday?
-[14/03, 10:45] Trev - Bounce & Bash: Yeah no bother, Saturday's £120 for that one
-[14/03, 10:46] Trev - Bounce & Bash: delivery's free if you're not too far out
-[14/03, 15:30] Sarah B: Great, we're in Cheadle, is that ok? And can we book 12th April?
-[14/03, 16:02] Trev - Bounce & Bash: Cheadle's fine that's covered
-[14/03, 16:03] Trev - Bounce & Bash: 12th april let me just check the book
-[15/03, 09:15] Sarah B: Any luck checking?
-[16/03, 20:47] Trev - Bounce & Bash: sorry mad day, yeah that date's free go for it
-[16/03, 20:48] Trev - Bounce & Bash: I'll pop you down for 80 quid deposit
-[16/03, 21:10] Sarah B: Wait, I thought it was £120 total, is £80 just the deposit?
-[16/03, 21:34] Trev - Bounce & Bash: oh na sorry brain not working, £80 IS the total for that one on a weekday but Saturdays it's the full 120, deposit's 20% of that so like £24
-[16/03, 21:35] Trev - Bounce & Bash: 👍
-[17/03, 08:02] Sarah B: Ok so £120 total and £24 deposit? Just want it in writing so we're clear
-[17/03, 12:15] Trev - Bounce & Bash: yep that's it
----
-[22/03, 11:00] Mark T: Hi mate, looking at the 6x9 marquee for a work do, 40 people, end of June. What's the damage
-[22/03, 13:44] Trev - Bounce & Bash: big one's £600 mate that includes the tables too
-[23/03, 09:12] Mark T: Perfect, does that include chairs as well or extra?
-[23/03, 09:40] Trev - Bounce & Bash: na that's separate, chairs are like a quid each I think, let me check how many we've actually got left in stock at the minute, had a rough do recently
-[23/03, 09:41] Trev - Bounce & Bash: I'll get back to you on numbers
-[02/04, 19:20] Mark T: Hey any update on chair numbers? Also is June 28th free?
-[04/04, 08:55] Trev - Bounce & Bash: yeah should be fine
-[10/04, 14:02] Mark T: Sorry which bit - the chairs or the date?? Can you confirm both please
----
-[01/04, 17:30] Jenna W: Hiya, need a castle for a wedding, want the Disco Dome, price for a Saturday in August plus what deposit do you need
-[01/04, 18:05] Trev - Bounce & Bash: Disco Dome's a good one that, weekend rate's 120 same as the others
-[01/04, 18:06] Trev - Bounce & Bash: deposit wise honestly if it's a wedding don't worry about deposit, I trust ya, just sort me on the day
-[15/04, 10:40] Jenna W: Amazing thank you! Booking August 16th then, no deposit needed as discussed
-[15/04, 19:55] Trev - Bounce & Bash: actually thinking about it I'd better take a deposit, weddings I get burned on sometimes, 20% do you
-[15/04, 19:56] Trev - Bounce & Bash: sorry didn't mean to change on ya just being careful
-[16/04, 08:10] Jenna W: No worries, that's £24 then like the other lady got told?
-[16/04, 08:41] Trev - Bounce & Bash: na for the Disco Dome deposit's more like £30 cos it's our popular one
----
-[03/04, 20:15] Priya N (staff): Uncle Trev did you ever confirm insurance renewal date to that woman who asked last week
-[03/04, 20:16] Trev - Bounce & Bash: which one
-[03/04, 20:17] Priya N (staff): the one asking for her council event, needed to see certificate expiry
-[03/04, 20:45] Trev - Bounce & Bash: oh yeah I'll dig it out this week
-[19/04, 11:02] Priya N (staff): did you find it??
----
-[07/04, 09:00] Callum (son): dad it's blowing a gale sat, forecast says 30mph, we can't put the castle up
-[07/04, 09:20] Trev - Bounce & Bash: nah it'll be grand we'll risk it they've paid already
-[07/04, 09:22] Callum (son): it's against the insurance rule dad 24mph cutoff
-[07/04, 09:40] Trev - Bounce & Bash: ...ok fine cancel it, tell them we'll refund
+[03/11/2024, 10:12] Sam R: Hi! Do you do wheel truing? How much roughly?
+[03/11/2024, 10:20] Marcus Whitfield: Yeah course, £15 usually
+[03/11/2024, 10:21] Marcus Whitfield: actually more like £20 if it's a rear wheel with cassette off, more work
+[03/11/2024, 10:35] Sam R: ok, and how long would it take?
+[03/11/2024, 10:36] Marcus Whitfield: same day no bother
+[03/11/2024, 10:52] Marcus Whitfield: hmm actually Deano's not in till thursday so if you bring it before then it might sit a couple days, sorry
+[03/11/2024, 11:01] Sam R: right, so today or Thursday?
+[03/11/2024, 11:20] Marcus Whitfield: bring it today, I'll have a go myself
+[05/11/2024, 14:02] Priya N: Hi, interested in a custom steel frame. What's the ballpark price and timeline?
+[05/11/2024, 14:40] Marcus Whitfield: Ballpark £1800 all in, about 8-12 weeks
+[05/11/2024, 15:10] Marcus Whitfield: though honestly with lugged construction more like 16 weeks, being safe
+[05/11/2024, 15:11] Marcus Whitfield: no wait that's if we're doing full custom geometry, standard geo I can probably do it in 10
+[05/11/2024, 15:12] Priya N: so which is it, 8, 10, or 16 weeks?
+[05/11/2024, 16:45] Marcus Whitfield: let's say 10-12 and I'll keep you posted if it slips
+[06/11/2024, 09:15] Priya N: ok and deposit?
+[06/11/2024, 09:50] Marcus Whitfield: 50% to start the tubes
+[06/11/2024, 09:51] Marcus Whitfield: actually I've been doing 25% lately, less risk for you
+[06/11/2024, 09:51] Marcus Whitfield: I'll confirm when you're ready to go, don't want to lock it in wrong
+[08/11/2024, 08:30] Tom H: Hey do you still do e-bike conversions?
+[08/11/2024, 09:05] Marcus Whitfield: yeah still doing them
+[08/11/2024, 09:06] Marcus Whitfield: well - I said I'd stop taking new ones this year actually
+[08/11/2024, 09:07] Marcus Whitfield: tell you what let me think on it and get back to you
+[15/11/2024, 12:00] Tom H: any update on the e-bike thing?
+[16/11/2024, 08:00] Marcus Whitfield: sorry mate, still deciding, will let you know
+[09/11/2024, 17:20] Claire B: Hi, standard tune up - is it still £45?
+[09/11/2024, 17:45] Marcus Whitfield: yep £45
+[09/11/2024, 17:46] Marcus Whitfield: unless it needs new brake pads too then more like £60
+[09/11/2024, 17:47] Marcus Whitfield: honestly I've been thinking of just doing £55 flat for everything, haven't decided
+[09/11/2024, 18:00] Claire B: so what do I pay when I bring it in?
+[09/11/2024, 18:22] Marcus Whitfield: bring it in and we'll see what it needs, I'll be fair on it
+[11/11/2024, 09:00] Claire B: brought the bike in, Deano said £45 works?
+[11/11/2024, 09:30] Marcus Whitfield: yeah that's fine if Deano said so
+[12/11/2024, 13:00] Gareth P: Do you have a card machine yet? Bit awkward with cash
+[12/11/2024, 14:10] Marcus Whitfield: on order mate, been on order a while if I'm honest
+[12/11/2024, 14:11] Marcus Whitfield: bank transfer's easiest for now
+[20/11/2024, 10:00] Priya N: Any update on my frame deposit amount + start date?
+[20/11/2024, 10:00] Priya N: [no response]
+[27/11/2024, 09:00] Priya N: hi Marcus, following up on the frame build - deposit and start date?
+[27/11/2024, 09:00] Priya N: [no response]
