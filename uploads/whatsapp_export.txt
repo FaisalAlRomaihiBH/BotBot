@@ -1,32 +1,35 @@
-[03/06, 9:14am] Sandra M: Hi, do you have any medium storage units available this week?
-[03/06, 9:20am] Colin Pratt: Yeah plenty, medium's £32 a week, take your pick
-[03/06, 11:02am] Sandra M: Great, and is that inclusive of insurance for my stuff?
-[03/06, 11:05am] Colin Pratt: Yep you're covered up to a grand with us no bother
-[03/06, 2:47pm] Denise (Front Desk): Sandra hiya, just to say — we don't actually provide insurance, you'd need your own cover, sorry for confusion
-[03/06, 2:50pm] Sandra M: Oh ok, thanks for clarifying!
-[04/06, 10:03am] Tom W: Quote for a 3 bed house move, Stretford to Chorlton?
-[04/06, 10:11am] Colin Pratt: That'll be the flat £280, covers everything including fuel and two lads
-[04/06, 4:32pm] Colin Pratt: Actually thinking on it the £280 doesn't include fuel, that's on top, sorry mate
-[04/06, 4:33pm] Tom W: Right... so what's the fuel roughly?
-[04/06, 4:40pm] Colin Pratt: Let me check with Ryan and get back to you
-[07/06, 8:55am] Tom W: Hey any update on the fuel cost?
-[10/06, 1:15pm] Tom W: Hi Colin, still keen to book, just need the total figure
-[15/06, 5:02pm] Ana K: Hi, are you open Sundays? Need to drop stuff off
-[15/06, 5:10pm] Colin Pratt: Nah closed Sundays mate, strictly Mon-Sat 8-6
-[15/06, 5:44pm] Ana K: Oh no that's a shame, I only have Sunday free
-[15/06, 5:50pm] Colin Pratt: Tell you what leave it with me I'll sort something for Sunday, come by 10am
-[18/06, 9:02am] James R: How much is the key deposit for a unit please
-[18/06, 9:10am] Colin Pratt: £25 refundable
-[19/06, 3:15pm] James R: My mate said his was £50, is that changed recently?
-[19/06, 3:20pm] Colin Pratt: Yeah it's £50 now, went up
-[22/06, 11:00am] Priya S: Hi, if I store for 6+ months is there a discount?
-[22/06, 11:06am] Colin Pratt: Yeah definitely 10% off for long term, no problem
-[25/06, 1:40pm] Kev D: Heard from a mate you do discounts for long term storage, is that right?
-[25/06, 1:52pm] Colin Pratt: Nah we don't really do that, price's the price sorry
-[28/06, 10:20am] Fiona L: Can I book the van for this Saturday morning, need it for about 2 hours
-[28/06, 10:25am] Colin Pratt: Yeah should be fine, £45/hr 2hr minimum so £90
-[28/06, 10:26am] Fiona L: Perfect, and is the second van the one that's free? Heard the other's in the garage
-[28/06, 10:40am] Colin Pratt: Let me check with the mechanic and confirm which van's ready, back to you shortly
-[02/07, 9:00am] Fiona L: Hiya just checking in, is the van sorted for Saturday?
-[06/07, 4:12pm] Priya S: Hi just following up — can I get that 10% long term discount confirmed in writing for my records?
-[06/07, 4:50pm] Denise (Front Desk): Hi Priya, I'll need to check with Colin on that and come back to you, he's out with the van today
+[03/06/2024, 09:12:07] Sarah Mbeki: Hi! Do you do pickups of an old wardrobe? How much would that be?
+[03/06/2024, 09:20:44] Marlene - Second Chance: Hiya! Yes we do, it'd be free if we think we can resell it
+[03/06/2024, 09:21:10] Marlene - Second Chance: actually hang on, we've started charging £15 for pickups now, fuel's gone up
+[03/06/2024, 09:21:39] Marlene - Second Chance: unless it's a really nice piece then I'll waive it, let's see when we get there
+[03/06/2024, 09:22:01] Sarah Mbeki: Haha okay, so is it £15 or free?
+[03/06/2024, 09:30:15] Marlene - Second Chance: Let's say £15 for now! I'll let you know on the day
+[04/06/2024, 14:02:33] James Okafor: What time are you open till today?
+[04/06/2024, 14:10:02] Marlene - Second Chance: Til 4! Well probably more like 3:30, Ana's leaving early
+[04/06/2024, 14:10:20] Marlene - Second Chance: actually you know what come at 2, I might just shut up shop after that, it's been dead
+[04/06/2024, 14:15:44] James Okafor: Right, I'll come at 2 then to be safe
+[06/06/2024, 11:03:19] Priya Anand: Hi, wondering about a commission - I've got a chest of drawers I'd love repainted and the handles changed. What would that roughly cost?
+[06/06/2024, 11:40:02] Marlene - Second Chance: Ooh lovely, that'd start from £50 usually
+[06/06/2024, 11:41:15] Marlene - Second Chance: though thinking about it, handles too, probably more like £80 all in
+[06/06/2024, 11:41:50] Marlene - Second Chance: no wait sorry, £50 should cover it, I was thinking of a bigger piece
+[06/06/2024, 11:55:33] Priya Anand: Ha, okay - so is there a deposit needed to book it in?
+[06/06/2024, 12:10:09] Marlene - Second Chance: Yes normally 50% upfront
+[06/06/2024, 12:10:41] Marlene - Second Chance: actually let's not bother with a deposit for this one, just pay when it's done
+[06/06/2024, 12:11:02] Priya Anand: Great, that's easier for me anyway!
+[10/06/2024, 16:22:51] Tom Fletcher: Hi, I dropped off a side table for you to sell 3 weeks ago, has it sold? And how long will you hold onto it if not?
+[10/06/2024, 17:05:12] Marlene - Second Chance: Let me have a look and get back to you!
+[13/06/2024, 08:41:07] Tom Fletcher: Hi Marlene, just following up on this - any news on the side table?
+[17/06/2024, 19:30:44] Tom Fletcher: Hello? Still there? Just want to know if I should come collect it
+[02/07/2024, 10:15:23] Grace Liu: Hiya, do you take card payments? Would rather not do a bank transfer
+[02/07/2024, 10:30:09] Marlene - Second Chance: Not yet I'm afraid! Cash or transfer only, though I keep meaning to get one of those little card readers, been saying it for months now honestly
+[02/07/2024, 10:31:02] Grace Liu: No worries, I'll do a transfer then
+[15/07/2024, 13:12:38] Sarah Mbeki: Hi again, coming to collect the wardrobe pickup today - is it definitely £15?
+[15/07/2024, 13:40:19] Marlene - Second Chance: Oh! Actually since it's summer and quiet I'll just do it free this time, don't worry about it
+[20/07/2024, 09:02:55] James Okafor: Are you expanding into the unit next door? Someone mentioned it and I've got a big lot of furniture to bring you in a few months
+[20/07/2024, 09:25:11] Marlene - Second Chance: Oh yes! Definitely doing that in the spring, need the extra storage badly
+[20/07/2024, 09:26:03] Marlene - Second Chance: actually you know I've gone back and forth on it so much, I think I've decided against it now, too much hassle with the landlord
+[20/07/2024, 09:26:40] Marlene - Second Chance: I'll let you know though! Ask me again closer to the time
+[22/07/2024, 15:44:12] Grace Liu: Hi, just checking - did the delivery for my dresser get booked in for Friday? You said £10 for delivery
+[22/07/2024, 16:10:37] Marlene - Second Chance: Yes should be fine, Callum can bring it Saturday
+[22/07/2024, 16:11:02] Marlene - Second Chance: oh wait you said Friday didn't you, let me check with him and come back to you
+[26/07/2024, 12:00:00] Grace Liu: Hi, following up - is this happening today or not? I've rearranged my whole afternoon
