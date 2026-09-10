@@ -6,14 +6,19 @@
 # push goes through evolve.sync_push, which rebases onto siblings' pushes and
 # merges the shared history instead of losing either side's work.
 #
-# Usage: python evolve_batch.py [cycles]     (default 3)
+# Usage: python evolve_batch.py [cycles] [--no-improve]     (default 3)
+#   --no-improve: register interviews only; a designated sibling routine runs
+#   the single hourly improve pass, so the prompt is rewritten once per hour
+#   instead of once per routine (repeated rewrites are what bloated it).
 import sys
 
 import evolve
 import evolve_until
 
 if __name__ == "__main__":
-    n = int(sys.argv[1]) if len(sys.argv) > 1 else 3
+    args = [a for a in sys.argv[1:] if a != "--no-improve"]
+    do_improve = "--no-improve" not in sys.argv
+    n = int(args[0]) if args else 3
     history = evolve.load_history()
     failures = 0
     for _ in range(n):
@@ -35,9 +40,12 @@ if __name__ == "__main__":
         # sync after every cycle: publishes results early and rebases us onto
         # whatever sibling routines pushed meanwhile
         evolve.sync_push(history)
-    try:
-        evolve_until.improve_pass(history)  # commits + syncs + writes the PDF
-    except Exception as e:
-        print(f"!!! improve pass failed: {type(e).__name__}: {e}")
-        evolve.git("checkout", "--", "interviewer_prompt.txt")
+    if do_improve:
+        try:
+            evolve_until.improve_pass(history)  # commits + syncs + writes the PDF
+        except Exception as e:
+            print(f"!!! improve pass failed: {type(e).__name__}: {e}")
+            evolve.git("checkout", "--", "interviewer_prompt.txt")
+    else:
+        print("register-only batch: improve pass left to the designated routine.")
     print("BATCH DONE.")
