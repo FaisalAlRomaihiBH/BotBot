@@ -1,0 +1,282 @@
+{
+  "transcript": [
+    [
+      "Birdie",
+      "Hi! I help businesses figure out exactly what they need from a chatbot. Before we start — what's your name?"
+    ],
+    [
+      "Marcus Webb",
+      "Hey! Marcus Webb, I own Glow Theory Neon Co. out of Austin — we do custom LED neon signs mostly, some real glass, storefront stuff, wedding rentals too. What do you need from me?"
+    ],
+    [
+      "Birdie",
+      "Great to meet you, Marcus! Glow Theory Neon Co. sounds like a fun business. To start — what's the main problem or headache you're hoping a chatbot would solve for you (like too many repetitive questions, missed leads after hours, something else)?"
+    ],
+    [
+      "Marcus Webb",
+      "Yeah honestly it's the after-hours stuff — we're an Instagram-driven shop so people message us at like 11pm asking pricing and turnaround and we lose 'em if Jenna's not around to answer fast. Also I'm tired of typing out \"it's $175 a foot\" fifty times a day lol. If the bot could just handle the basic \"how much, how long, are you open\" questions that'd free up a ton of time."
+    ],
+    [
+      "Birdie",
+      "That makes total sense, Marcus — losing leads at 11pm is rough. Is Instagram DM the only place customers message you, or do they also reach out by text, phone, email, or your website?"
+    ],
+    [
+      "Marcus Webb",
+      "Mostly Instagram DMs, that's like 90% of it. Some texts to the shop line too, and every once in a while an email through the website but that's rare — we don't really get walk-ins to speak of since we're not on a busy street. So honestly if the bot could live on Instagram and handle DMs that'd cover most of it."
+    ],
+    [
+      "Birdie",
+      "Got it — Instagram DM as the main channel makes sense. Before we dig into specifics, it'd help a ton if you could share a few real example conversations — screenshots or exports of actual DMs where people ask about pricing or turnaround. If you can, just drop them in the 'uploads' folder next to this program and let me know when you're done. If that's a hassle, you could also just paste in a couple of example messages here, or have Jenna send some screenshots. No worries if you'd rather skip it."
+    ],
+    [
+      "Marcus Webb",
+      "Yeah I just tossed a few in the uploads folder for ya. Should be some good ones in there — typical \"how much for a foot\" and \"can you do this by next week\" type stuff. That's like 80% of what we get honestly."
+    ],
+    [
+      "Birdie",
+      "Perfect, give me a moment to go through those conversations you shared."
+    ],
+    [
+      "Birdie",
+      "Okay Marcus, I went through those DMs — really helpful. I can see the big recurring asks are pricing per foot, turnaround time, and rental questions for events. I also noticed your team (you, Jenna, and Elias for the glass/technical side) covers different parts of this.\n\nOne thing I want to nail down: in the chats, I saw you quote $150/ft to one customer, then say 'actually' it's $200/ft, and then offer $175/ft as a discount for someone's first sign. What's the actual current rate per linear foot for LED signs, and are there real rules for when you'd discount it?"
+    ],
+    [
+      "Marcus Webb",
+      "Yeah so $175/ft is the real number, that's the base rate straight up. The $150 and $200 you saw were probably outliers — like a bigger job gets a break per foot, or if it's a rush thing I'm bumping it. I don't really \"discount,\" it's more like I read the room, you know? Someone's doing their first sign for their bar, I wanna make it work for 'em. But if you're building the bot, just have it quote $175/ft flat, keep it simple. That's the number."
+    ],
+    [
+      "Birdie",
+      "Got it — $175/ft flat, simple and clean. Next thing: I saw you tell one customer rush orders are 'no extra cost,' but Jenna told another customer there's a 30% rush fee. What's the real policy — is there a rush fee, and if so how much?"
+    ],
+    [
+      "Marcus Webb",
+      "Yeah okay so the real policy is 30% rush fee, that's always been the case — that \"no extra cost\" thing was probably me just being nice in the moment, or maybe I was talking about something else, like just prioritizing the order in the queue not actually rushing the fabrication. But for the bot, yeah, bake in the 30% for anything under the standard 3-4 week window. Keep Jenna happy lol."
+    ],
+    [
+      "Birdie",
+      "Good, 30% rush fee it is. Now the deposit question — I saw you tell one customer '50%, non-refundable once we start designing' and another customer '30%, fully refundable before cutting.' What's the actual deposit policy you want the bot to quote?"
+    ],
+    [
+      "Marcus Webb",
+      "Okay real policy is 50% upfront, non-refundable once design's approved — that's the standard, always has been. The 30% refundable thing, I think I was just being flexible with somebody who had cold feet, that's not like an official thing. Have the bot say 50% deposit, non-refundable after design approval. Simple."
+    ],
+    [
+      "Birdie",
+      "Perfect — 50% deposit, non-refundable once design is approved. Now, on outdoor rentals: in the chats I saw you first say outdoor events are 'totally fine,' then mention needing to check with Elias because of past condensation issues, then promise to 'seal the edges extra.' What should the bot actually tell customers about outdoor durability — any real limits, warranty, or conditions on that?"
+    ],
+    [
+      "Marcus Webb",
+      "Honestly man, outdoor's totally fine — we do it all the time. Just have the bot say we handle outdoor installs no problem, standard weatherproofing included.\n\n...actually you know what, hold on, let's not have it promise anything on warranty for that. We've had a couple humid-weather hiccups, so maybe just have it say \"outdoor installs available, ask us for details\" instead of guaranteeing durability — don't want Jenna dealing with another callback like last time. Elias would probably kill me if I let the bot flat-out promise weatherproofing lol."
+    ],
+    [
+      "Birdie",
+      "Smart move, better safe than another callback. I've got the bot saying 'outdoor installs available, ask us for details' with no durability promises. Now on rentals — I've got indoor at $75 and outdoor at $120, both for a 3ft sign. Are those flat rates regardless of exact size, or does price scale up for bigger signs, longer rentals (multi-day), or extended hours?"
+    ],
+    [
+      "Marcus Webb",
+      "Oh yeah so it's really more about size than indoor/outdoor — like $75 is your smaller signs, $120's for the bigger ones, that's kinda the range regardless of the setting. Multi-day or extended hours we just handle case by case, I don't really upcharge for that unless it's like a full weekend thing. And it's a refundable deposit either way, they get it back after the event long as nothing's damaged. Keep it simple for the bot — just say \"$75-$120 depending on sign size, refundable deposit.\""
+    ],
+    [
+      "Birdie",
+      "Good to know, that simplifies things — $75 to $120 based on size, refundable deposit after the event if nothing's damaged. What's that rental deposit amount, roughly — a flat number or a percentage of the rental price?"
+    ],
+    [
+      "Marcus Webb",
+      "Oh, it's just the rental fee itself basically — like the $75-120 IS the deposit, they pay that upfront and get it back minus nothing if the sign comes back in one piece. So there's not like a separate deposit on top of a separate rental charge, it's the same number doing double duty. Keep it easy for the bot: \"pay $75-$120 upfront based on size, refunded after the event if undamaged.\""
+    ],
+    [
+      "Birdie",
+      "Nice, that's clean. Now let's cover glass neon — you mentioned Elias handles that as a specialty option. Do you have a typical price or price range you quote for glass neon pieces, and roughly how long they take?"
+    ],
+    [
+      "Marcus Webb",
+      "Ah man, glass neon — that's Elias's whole world, only he can bend that stuff. Pricing's kinda all over the place honestly 'cause it's so much slower and more labor intensive than LED, so I usually just say \"starts higher than LED, ask for a custom quote\" rather than throwing out a number the bot could get held to. Turnaround's longer too, like don't even bake in the standard 3-4 weeks for that, it's its own thing.\n\nReal talk though — Elias has been cutting back his hours lately so I honestly go back and forth on whether we should even keep pushing glass as an option or just quietly let it fade. Some days I'm like \"nah it's our whole specialty, gotta keep it,\" other days I'm like \"it's more trouble than it's worth.\" For the bot maybe just have it say \"real glass neon available on a case-by-case basis, contact us for details\" — keeps us flexible either way."
+    ],
+    [
+      "Birdie",
+      "That's a smart hedge for now. Switching gears a bit — how do customers actually pay you (cash, card, Venmo/Zelle, etc.), and is that pretty reliable, or do you run into issues collecting?"
+    ],
+    [
+      "Marcus Webb",
+      "Oh, we take pretty much everything — card, Venmo, Zelle, even Cash App if someone's weird about the others. Card's probably most common through the website invoice thing we send. Honestly collecting's not really an issue, people pay the deposit fine, it's more like getting the *rest* on completion that sometimes drags a little, but that's a Jenna problem not a bot problem lol. For the bot maybe just say \"we accept card, Venmo, Zelle, and Cash App\" — keep payment stuff simple, don't need it chasing balances or anything."
+    ],
+    [
+      "Birdie",
+      "Easy enough — card, Venmo, Zelle, Cash App, and no balance-chasing duty for the bot. Now let's talk hours: what days/hours is the shop actually open, and where are you located (just city is fine, or full address if you want it shared)?"
+    ],
+    [
+      "Marcus Webb",
+      "Yeah so we're open Tue through Sat, 11 to 6, closed Sundays and Mondays. Based in Austin, TX — just say Austin, don't need to give out the full address through the bot, we can send that directly if someone's actually coming by for a repair or whatever. Jenna's usually the one physically there Tue-Fri if that matters for the bot to know, but hours-wise Tue-Sat 11-6 is the number to give people."
+    ],
+    [
+      "Birdie",
+      "Got it — Tue-Sat 11-6, Austin, no full address through the bot. Now for the handoff: when a question is too complex or a customer wants to actually book, who or what should the bot point them to — a specific person, phone number, or Instagram handle — and what happens if that's outside business hours?"
+    ],
+    [
+      "Marcus Webb",
+      "Good question — probably just point 'em back to Instagram DM, that's where 90% of this lives anyway, and say \"Jenna or Marcus will follow up during business hours.\" Jenna's the one actually glued to the DMs Tue-Fri so she'll usually jump on it fast, but if it's after hours the bot should just be like \"thanks for reaching out, we'll get back to you when we open\" — no need to promise a callback time or anything, don't want people expecting a 2am response lol. If it's like a repair question specifically, just have it say \"come by the shop, we'll take a look\" since we don't quote those over text anyway."
+    ],
+    [
+      "Birdie",
+      "Perfect, that's clear. Shifting to workload — roughly how many custom sign orders or rental inquiries do you get in a typical week, and are there busy seasons (like wedding season) where you get slammed or have to turn work away?"
+    ],
+    [
+      "Marcus Webb",
+      "Yeah so we're doing like 8 to 10 custom jobs a month total — signs, storefront stuff, all of it lumped together. Weddings def spike in spring/early summer, that's when the rental inquiries go nuts and Jenna's inbox turns into a warzone. Bar and boutique orders are pretty steady year-round though, that's our bread and butter. We don't really \"turn away\" work exactly, more like turnaround stretches out during the busy months — so maybe the bot should be a lil more conservative on timeline promises March through June-ish. Rest of the year 3-4 weeks is solid."
+    ],
+    [
+      "Birdie",
+      "That's helpful context, thanks. Let's talk about the bot's personality — do you want it to sound casual and fun (fitting the neon/creative vibe), more straightforward and professional, or somewhere in between? And is there a name you'd want it to go by, or just keep it unbranded?"
+    ],
+    [
+      "Marcus Webb",
+      "Ha, definitely not stiff/corporate — we're a neon shop not a law firm. I'd say casual and fun but still gets the info across quick, like it's got a lil personality but isn't rambling. Maybe throw in a lil glow/light pun here or there if it fits naturally, don't force it though.\n\nName-wise... honestly hadn't thought about it but I kinda like the idea of giving it one instead of just \"Glow Theory Bot\" or whatever. Something like \"Glo\" could be cute? Short for Glow Theory. Keep it simple, on brand, easy to say in a DM."
+    ],
+    [
+      "Birdie",
+      "Love it — Glo it is, with a little personality but no rambling. Now, scope-wise: do you want Glo to just answer questions and hand off to you/Jenna (like an FAQ + routing bot), or do you want it to actually handle bookings/payments and calendar stuff too?"
+    ],
+    [
+      "Marcus Webb",
+      "Nah, keep Glo simple — FAQ plus routing, that's it. I don't want it touching payments or calendars, that's a headache waiting to happen, and honestly Jenna would kill me if some bot double-booked us or took a deposit wrong. Just have it answer the pricing/turnaround/hours stuff, and if somebody's actually ready to book, hand 'em off to Instagram DM like we said. Keep it lightweight — answer, route, done."
+    ],
+    [
+      "Birdie",
+      "Perfect, lightweight FAQ-and-route bot it is. Quick one — does Glo need to handle any language besides English, or is everyone messaging you in English?"
+    ],
+    [
+      "Marcus Webb",
+      "Yeah just English, we're not really getting messages in anything else. Keep it simple."
+    ],
+    [
+      "Birdie",
+      "Noted, English only. You mentioned sending invoices through a website tool — is that some kind of system (like Square, Shopify, etc.) we should know about, or is it just a manual thing you send out, totally separate from the bot?"
+    ],
+    [
+      "Marcus Webb",
+      "Yeah it's just Square, we send invoices through there manually — nothing fancy, no integration or anything. Totally separate from the bot, Jenna just punches it in by hand when a job's ready to invoice. Glo doesn't need to touch that side at all."
+    ],
+    [
+      "Birdie",
+      "Good, keeping Square totally separate makes sense. One more policy question: if someone cancels a custom order before their deposit is due, or never picks up a finished sign, is there any cancellation or no-show policy — or does that not really come up?"
+    ],
+    [
+      "Marcus Webb",
+      "Honestly that barely comes up — most people who ghost, ghost before they even pay a deposit, so nothing to enforce there. And once a sign's done and paid off, nobody's ever just... not picked it up, lol, it's their sign they already own. So no real policy needed for the bot on that one — I'd just skip it entirely, don't overcomplicate Glo with an edge case we basically never see."
+    ],
+    [
+      "Birdie",
+      "Makes sense, no need to overbuild for something that doesn't happen. Last one before I wrap up — anything else on your mind about pricing, policies, or the business in general that you want Glo to know or avoid?"
+    ],
+    [
+      "Marcus Webb",
+      "Honestly just... keep it flexible where it needs to be, ya know? Like don't have Glo quoting anything on repairs — that's a \"come see us\" thing every time, every piece is different so a bot spitting out a number would just get us in trouble. Same with the glass neon stuff, don't let it commit us one way or the other on that.\n\nOh and storefront signage — didn't even think of it till now but that's basically priced the same as LED signs, $175/ft, no real difference, so Glo can just lump that in with the standard pricing answer.\n\nOther than that I think you got it all, man. Just want Glo to feel like talking to me or Jenna, not some robot reading a manual — quick, friendly, gets people the basics, hands off the real stuff to us. That's really it."
+    ],
+    [
+      "Birdie",
+      "Alright Marcus, I think I've got everything. Here's the full picture for Glo:\n\n**Services & Pricing:**\n- Custom LED signs & storefront signage: $175/ft flat, 3-4 week standard turnaround (a bit more conservative March-June, wedding season)\n- Rush option: ~10 days, +30% fee\n- Glass neon: no fixed price/timeline — bot says 'starts higher than LED, ask for a custom quote' and 'available case-by-case, contact us for details,' no commitment either way\n- Event rentals: $75-$120 based on sign size, that amount is both the fee and refundable deposit (refunded if undamaged); multi-day/extended hours handled case-by-case\n- Repairs: never quoted — always 'come by the shop, we'll take a look'\n\n**Policies:**\n- 50% deposit on custom orders, non-refundable once design's approved\n- Payment via card, Venmo, Zelle, Cash App — bot doesn't chase balances\n- No guarantees on outdoor durability — just 'outdoor installs available, ask us for details'\n- No cancellation/no-show policy needed\n\n**Hours & Location:** Tue-Sat, 11am-6pm, Austin TX (no full address via bot)\n\n**Team:** You (Marcus) and Jenna handle DMs/quotes, Elias handles glass/technical\n\n**Handoff:** Bot routes to Instagram DM, says Jenna or Marcus will follow up during business hours; after-hours it just thanks them and says you'll respond when open\n\n**Bot setup:** Named 'Glo,' casual/fun tone with light puns, concise not rambling, English only, FAQ + routing only — no bookings, payments, or calendar\n\n**Volume:** ~8-10 custom jobs/month, wedding season (spring/early summer) spikes rental inquiries heavily\n\n**Still open:** whether to keep glass neon as an active offering long-term (up in the air due to Elias's reduced hours) — Glo's copy is written to stay flexible either way\n\nDoes all this look right, or is there anything you want to tweak?"
+    ],
+    [
+      "Marcus Webb",
+      "Yeah man, that's it exactly — you nailed it. Glo's ready to shine (had to lol). Only thing I'd add, rush is 10-14 days not just 10, but that's a nitpick. Otherwise ship it!"
+    ],
+    [
+      "Birdie",
+      "Ha, love it — Glo's ready to shine indeed. Thanks so much for walking through all this with me, Marcus! I've got everything recorded — the pricing, policies, hours, handoff routing, and Glo's personality and scope. This'll go to the build team next to get Glo put together. Appreciate your time!"
+    ]
+  ],
+  "brief": {
+    "contact_name": "Marcus Webb",
+    "business_name": "Glow Theory Neon Co.",
+    "industry": "Custom LED neon signs (also some real glass), storefront signage, wedding rentals",
+    "business_description": "Based in Austin, TX. Makes custom LED neon signs, some real glass neon (specialty item made by Elias), storefront signage, and does wedding/event sign rentals. Instagram-driven business, no walk-in traffic (not on a busy street). Open Tue-Sat, 11am-6pm; closed Sundays and Mondays. Team: Marcus (primary sales/quotes contact), Jenna (also handles customer inquiries/follow-ups, chases balance payments on completion, usually physically at the shop Tue-Fri and glued to DMs during that time), Elias (technical/production specialist, especially glass neon and durability issues; has been cutting back his hours lately).",
+    "problem_to_solve": "After-hours Instagram messages (e.g. 11pm) asking pricing/turnaround go unanswered when Jenna isn't available, causing lost leads. Also wants to reduce repetitive manual replies about pricing (e.g. typing '$175 a foot' repeatedly).",
+    "target_audience": null,
+    "channels": [
+      "Instagram DM (primary, ~90% of inquiries)",
+      "Text/SMS to shop line (some)",
+      "Email via website (rare)"
+    ],
+    "integrations": [
+      "Square (used manually for invoicing by Jenna; no integration needed with the bot)"
+    ],
+    "conversation_volume": "Roughly 8-10 custom jobs/month total (signs, storefront, all lumped together). Rental inquiries spike heavily in spring/early summer (wedding season), described as making Jenna's inbox 'a warzone.' Bar/boutique orders are steady year-round.",
+    "languages": [
+      "English"
+    ],
+    "success_criteria": null,
+    "budget": null,
+    "timeline": null,
+    "services_and_pricing": [
+      "Custom LED neon signs - $175/ft flat base rate (confirmed by owner; bot should quote this flat, no discretionary discounting)",
+      "Storefront signage - same pricing as LED signs, $175/ft, no difference; bot can lump into standard pricing answer",
+      "Custom glass neon signs - specialty item via Elias, no fixed price (highly variable/labor intensive); bot should say 'starts higher than LED, ask for a custom quote'. Turnaround is longer than standard LED and does not follow the 3-4 week timeline; bot should say 'real glass neon available on a case-by-case basis, contact us for details'. Bot must not commit the business one way or the other on continuing to offer glass.",
+      "Standard production timeline (LED/storefront): 3-4 weeks, solid rest of year; owner wants bot to be more conservative on timeline promises March through June (wedding season busy period, turnaround stretches out)",
+      "Rush production (LED): 10-14 days, carries a 30% rush fee on top of base price for anything under the standard 3-4 week window (confirmed by owner)",
+      "Event sign rental: $75-$120 depending on sign size, this amount serves as both the rental fee and refundable deposit; multi-day or extended hours handled case-by-case, no standard upcharge unless full weekend",
+      "Repairs: never quoted a price by the bot — every repair is different, so bot should always say 'come by the shop, we'll take a look' rather than giving any number"
+    ],
+    "faq_answers": [
+      "Hours: Open Tuesday through Saturday, 11am-6pm. Closed Sundays and Mondays.",
+      "Location: Austin, TX (full address not given to bot; shared directly with customers when needed, e.g. for repairs)",
+      "Repair inquiries: bot should say 'come by the shop, we'll take a look' since repairs aren't quoted over text, no exceptions"
+    ],
+    "business_policies": [
+      "Deposit policy (custom orders): 50% upfront deposit, non-refundable once design is approved (confirmed as the standard, official policy)",
+      "LED/storefront pricing is $175/ft flat; owner says bigger jobs or rush jobs may get informal per-foot adjustments 'reading the room', but bot should just quote $175/ft flat, no discount logic",
+      "Rush fee: 30% surcharge for orders needing faster than standard 3-4 week turnaround, delivered in 10-14 days (confirmed as real, ongoing policy)",
+      "Outdoor rental durability: owner does NOT want the bot to guarantee weatherproofing/durability due to past humid-weather issues. Bot should say 'outdoor installs available, ask us for details' rather than promising durability or specific weatherproofing.",
+      "Rental deposit/fee: single payment of $75-$120 (based on sign size) paid upfront, refunded after the event if the sign comes back undamaged. No separate deposit on top.",
+      "Glass neon: no fixed pricing/turnaround policy given variability; bot should not commit to numbers, timelines, or whether it's a continuing offering — flag as case-by-case only.",
+      "Payment methods accepted: card (most common, via website invoice), Venmo, Zelle, Cash App. Deposit collection is reliable; collecting the remaining balance on completion sometimes drags, but owner does not want the bot handling balance chasing — that's handled manually by Jenna.",
+      "Business does not formally 'turn away' work during busy season (spring/early summer wedding season) but turnaround stretches out; bot should be more conservative on timeline promises during that window.",
+      "Invoicing handled manually via Square by Jenna; not connected to the bot.",
+      "No cancellation/no-show policy needed for the bot — owner says this rarely comes up (people who cancel do so before depositing; finished/paid signs are always picked up)."
+    ],
+    "escalation_rules": [
+      "Bot should route customers back to Instagram DM, saying 'Jenna or Marcus will follow up during business hours.' Jenna is primarily the one monitoring DMs Tue-Fri.",
+      "Out-of-hours fallback: bot should say 'thanks for reaching out, we'll get back to you when we open' — no specific callback time promised."
+    ],
+    "open_items": [
+      "Owner is undecided whether to keep actively promoting glass neon as a specialty offering or let it quietly fade, since Elias (the only person who can do it) has been cutting back hours. Bot copy ('available on a case-by-case basis, contact us for details') is meant to keep options open either way, but owner has not made a final decision on how much to feature it."
+    ],
+    "additional_notes": [
+      "Owner says ~80% of typical inquiries are 'how much for a foot' and 'can you do this by next week' type questions",
+      "Bot persona: name 'Glo' (short for Glow Theory), casual and fun tone, light glow/light puns welcome if natural, concise and information-forward, not rambling — should feel like talking to Marcus or Jenna, not a robot.",
+      "Scope: FAQ + routing only, no booking/payment/calendar handling — owner explicitly does not want bot touching payments or calendar to avoid double-booking or deposit errors."
+    ]
+  },
+  "analysis": {
+    "inquiry_categories": [
+      "Custom sign price quotes (~35%) - customers asking cost per size/linear foot for custom neon signs",
+      "Production timeline & rush order requests (~20%) - customers asking how long a sign takes and if it can be expedited",
+      "Material type questions (~15%) - customers asking LED vs. traditional glass neon options",
+      "Deposit/payment terms (~15%) - customers asking how much deposit is required to start an order",
+      "Event/rental inquiries (~15%) - customers asking about renting signs for events (weddings, outdoor use, durability, pricing)"
+    ],
+    "resolved_patterns": [
+      "Standard production timeline: staff consistently state 3-4 weeks standard turnaround, with a rush option available in as little as 10 days (Marcus to Sarah).",
+      "Material offering: staff confirm both LED and glass neon are offered — LED is now the primary/standard product line, while glass is treated as a specialty option done by a specific craftsperson (Elias) for customers who want it (Marcus to Priya).",
+      "Rental pricing structure exists and is tiered: indoor rental base price is $75 for a 3ft sign, outdoor rental is $120 due to extra weatherproofing labor (Marcus to Tom, after correction)."
+    ],
+    "knowledge_gaps": [
+      "Linear-foot pricing for custom LED signs is inconsistent: Marcus first quoted $150/ft, then said 'actually' it's $200/ft, then offered a discretionary $175/ft for Sarah's 'first sign' — no clear, final, consistent pricing policy is shown; owner should clarify the actual current rate and rules for discounts.",
+      "Rush order fee is unresolved: Marcus told Sarah rush costs 'no extra cost,' but Jenna later said rush orders carry a 30% fee and had to 'check with him' — no resolution was ever provided to the customer (follow-up on Mar 21 went unanswered in the material). Owner needs to confirm whether rush fees exist and how much.",
+      "Deposit percentage and refundability are inconsistent: Marcus told Priya deposit is '50%, non-refundable once we start designing,' then changed to '30% deposit, fully refundable before cutting' for the same customer with no clear rule cited (e.g., repeat customer discount) — owner should clarify actual deposit policy and any discount criteria.",
+      "Outdoor/humidity durability for rentals is not clearly resolved: Marcus initially said outdoor events are 'totally fine,' then admitted needing to check with Elias due to past 'condensation issues,' and finally promised to 'seal the edges extra' without clear technical explanation or guarantee — owner should clarify actual outdoor durability specs/warranty language.",
+      "Outdoor vs indoor rental pricing was not proactively disclosed: Marcus first quoted a flat $75, then corrected to $120 for outdoor only after the customer caught the discrepancy — unclear if there are other unlisted pricing tiers (e.g., different sizes, multi-day rental, extended hours) not shown in this material."
+    ],
+    "facts_learned": [
+      "Business creates custom neon signs (LED and glass) and also rents signs for events like weddings.",
+      "Customer communication channel is WhatsApp.",
+      "Staff members visible: Marcus (primary sales/quotes contact), Jenna (also handles customer inquiries/follow-ups), Elias (technical/production specialist, especially for glass neon and durability issues).",
+      "LED signs are priced per linear foot; company has moved to LED as the primary product due to durability, though glass neon is still offered as a specialty item via Elias.",
+      "Standard custom sign production time is 3-4 weeks; rush production can be done in about 10 days.",
+      "Deposits are required to begin custom orders; percentage cited varies between 50% (non-refundable once design starts) and 30% (fully refundable before cutting).",
+      "Sign rentals for events have separate pricing for indoor ($75 for 3ft) vs. outdoor ($120 for 3ft) due to added weatherproofing labor.",
+      "The business has previously done outdoor event installations but has experienced condensation-related issues with signs outdoors before."
+    ]
+  },
+  "completed": true,
+  "turns": 46
+}

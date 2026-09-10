@@ -634,5 +634,64 @@
       "Add a `quote_terms` field (validity period, what triggers a re-quote) — the schema has deposit and refund coverage but no home for quote lifetime, which is likely why it was never asked."
     ],
     "improve_done": true
+  },
+  {
+    "cycle": 13,
+    "stamp": "20260910_135830",
+    "persona": "Custom neon/LED signage design and fabrication / Chronic mind-changer — Marcus answers every question with total confidence, then reverses himself minutes or messages later without acknowledging the flip. Prices, deadlines, and policies shift mid-conversation ('$150 a foot' becomes '$200, always has been' becomes 'for you, $175'). He's enthusiastic and persuasive each time, genuinely seems to believe whatever he's currently saying, and if a customer points out the contradiction he blames his business partner, 'the old pricing sheet,' or says he 'meant something different.' He rarely apologizes for the inconsistency — he just moves forward as if it's settled.",
+    "score": 6.5,
+    "completed": true,
+    "improved": false,
+    "top_improvement": "When uploaded evidence contradicts a policy the owner states, do not stop at the first rationalization: ask a concrete follow-up about frequency ('how many times in the last few months did you actually give a refund / skip the rush fee?') and then record BOTH the official policy and the observed real-world practice as a flagged discrepancy/risk, rather than overwriting the evidence with the owner's claim.",
+    "findings": [
+      {
+        "problem": "Birdie surfaced the pricing contradiction from the uploaded DMs but accepted the owner's rationalization instantly and recorded '$175/ft flat' as fact. The real situation (no price sheet; quotes actually range $150-$225 based on Marcus's mood) is only faintly hinted at in the brief and the bot will be built on a number the owner himself doesn't honor.",
+        "excerpt": "Marcus Webb: Yeah so $175/ft is the real number, that's the base rate straight up. The $150 and $200 you saw were probably outliers — like a bigger job gets a break per foot, or if it's a rush thing I'm bumping it. I don't really \"discount,\" it's more like I read the room, you know?\nBirdie: Got it — $175/ft flat, simple and clean."
+      },
+      {
+        "problem": "Same failure on the rush fee: evidence showed Marcus telling a customer 'no extra cost,' he waved it away, and the brief now states the 30% fee is 'confirmed as real, ongoing policy.' The actual operational problem (Marcus promises rush timelines without the fee and Jenna has to chase billing afterward) is completely lost — this is exactly the kind of thing a bot could fix or worsen.",
+        "excerpt": "Marcus Webb: Yeah okay so the real policy is 30% rush fee, that's always been the case — that \"no extra cost\" thing was probably me just being nice in the moment, or maybe I was talking about something else, like just prioritizing the order in the queue not actually rushing the fabrication."
+      },
+      {
+        "problem": "Deposit contradiction likewise closed out after one deflection. The fact that Marcus has actually issued refunds twice this year and now sometimes tells customers refundable deposits are normal never surfaced; brief calls 50%/non-refundable 'confirmed as the standard, official policy' with no risk note.",
+        "excerpt": "Marcus Webb: Okay real policy is 50% upfront, non-refundable once design's approved — that's the standard, always has been. The 30% refundable thing, I think I was just being flexible with somebody who had cold feet, that's not like an official thing.\nBirdie: Perfect — 50% deposit, non-refundable once design is approved."
+      },
+      {
+        "problem": "The owner's genuine unresolved decision about outdoor/weatherproof work (two humid-weather failures; undecided whether to stop offering outdoor jobs or just add a disclaimer) was never named as an open decision. Birdie took the hedge wording and moved on, and open_items lists only the glass-neon question.",
+        "excerpt": "Marcus Webb: ...actually you know what, hold on, let's not have it promise anything on warranty for that. We've had a couple humid-weather hiccups, so maybe just have it say \"outdoor installs available, ask us for details\" instead of guaranteeing durability\nBirdie: Smart move, better safe than another callback."
+      },
+      {
+        "problem": "Birdie framed the outdoor durability issue as being about RENTALS and the brief encodes it as 'Outdoor rental durability', conflating event rentals with permanent outdoor/storefront installs — the failures were on installs. This mislabeling could send the bot's disclaimer to the wrong product line.",
+        "excerpt": "Birdie: Perfect — 50% deposit, non-refundable once design is approved. Now, on outdoor rentals: in the chats I saw you first say outdoor events are 'totally fine,' then mention needing to check with Elias because of past condensation issues, then promise to 'seal the edges extra.'"
+      },
+      {
+        "problem": "target_audience is null in the brief even though the owner explicitly named his customer mix (bars, boutiques, weddings) — a stated fact was dropped rather than mapped to its field.",
+        "excerpt": "Marcus Webb: Weddings def spike in spring/early summer, that's when the rental inquiries go nuts and Jenna's inbox turns into a warzone. Bar and boutique orders are pretty steady year-round though, that's our bread and butter."
+      },
+      {
+        "problem": "success_criteria, budget, and timeline were never asked about at all, leaving three brief fields null. Birdie asked the closing 'anything else' question instead of covering these.",
+        "excerpt": "Birdie: Last one before I wrap up — anything else on your mind about pricing, policies, or the business in general that you want Glo to know or avoid?"
+      },
+      {
+        "problem": "Low-yield questions inflated the interview past normal length: payment-method detail and a cancellation/no-show policy were pursued for a bot explicitly scoped to never touch payments or bookings, and both ended in 'skip it'.",
+        "excerpt": "Birdie: One more policy question: if someone cancels a custom order before their deposit is due, or never picks up a finished sign, is there any cancellation or no-show policy — or does that not really come up?\nMarcus Webb: Honestly that barely comes up ... I'd just skip it entirely, don't overcomplicate Glo with an edge case we basically never see."
+      },
+      {
+        "problem": "The final recap contained a factual error on rush turnaround that the owner had to correct, indicating Birdie's running notes drifted from what was actually said ('10-14 days' had been established earlier).",
+        "excerpt": "Marcus Webb: Only thing I'd add, rush is 10-14 days not just 10, but that's a nitpick. Otherwise ship it!"
+      },
+      {
+        "problem": "Repetitive acknowledgement formula ('Got it — X. Now...' / 'Perfect — X.') opens nearly every Birdie turn, making the back half feel like a checklist read-out rather than a conversation.",
+        "excerpt": "Birdie: Good, 30% rush fee it is. Now the deposit question — I saw you tell one customer '50%, non-refundable once we start designing' and another customer '30%, fully refundable before cutting.'"
+      }
+    ],
+    "schema_suggestions": [
+      "Add a `policy_discrepancies` field (official_policy / observed_practice / evidence_source / risk_to_bot) so contradictions found in uploaded chats aren't silently collapsed into the owner's self-report.",
+      "Add a dedicated `bot_persona` field (name, tone, style constraints) — currently 'Glo', casual tone and pun guidance are dumped into additional_notes.",
+      "Add explicit `in_scope` / `out_of_scope` fields — the critical 'FAQ + routing only, no bookings/payments/calendar' scope decision is buried in additional_notes.",
+      "Add a `seasonality` field — the March-June wedding spike and conservative-timeline instruction is currently smeared across services_and_pricing and business_policies.",
+      "Add a `things_bot_must_not_say` / hard-guardrail list (no repair quotes, no weatherproofing guarantees, no glass-neon commitments) so these safety constraints are machine-readable rather than scattered prose.",
+      "Give `open_items` structured subfields (decision, owner, blocking impact on bot copy) and prompt the interviewer to sweep for unresolved decisions at wrap-up — the outdoor-warranty indecision was voiced but never landed in open_items."
+    ]
   }
 ]
