@@ -8,7 +8,8 @@
     "improved": true,
     "reverted": false,
     "commit_before": "075a29b2c78cd02a81bd3d32d3c57a0bde8bff62",
-    "top_improvement": "Add a dedicated question (or checklist pass) explicitly covering booking/payment mechanics — e.g., 'Do you take deposits or require any payment before confirming a booking, and how is that currently handled?' — and a scoping question like 'Are you picturing a full booking/payment app, or something simpler like automated replies and calendar sync?' before wrapping up, since these are foundational to what the chatbot must actually do and were both silently skipped despite being known Gary uncertainties."
+    "top_improvement": "Add a dedicated question (or checklist pass) explicitly covering booking/payment mechanics — e.g., 'Do you take deposits or require any payment before confirming a booking, and how is that currently handled?' — and a scoping question like 'Are you picturing a full booking/payment app, or something simpler like automated replies and calendar sync?' before wrapping up, since these are foundational to what the chatbot must actually do and were both silently skipped despite being known Gary uncertainties.",
+    "improve_done": true
   },
   {
     "cycle": 2,
@@ -27,7 +28,8 @@
       "Add a 'services_and_pricing' completeness check/field that requires listing ALL service tiers with a range or 'unknown/varies' flag per tier, rather than a free-text list that can silently omit an entire tier (event catering was fully dropped).",
       "Add a 'known_pain_points' or 'owner_concerns' field distinct from 'open_items' — currently pain points like undercharging, subscriber count uncertainty, and hiring anxiety have no home and were simply never elicited, likely because there's no schema slot prompting the interviewer to ask 'what's frustrating you about the business side of things.'",
       "The 'additional_notes' and 'open_items' fields are being used as a catch-all for scope decisions and policy gaps (e.g., deposit policy, calendar tool) — consider a structured 'unresolved_decisions' field so these aren't mixed in with generic notes and follow-up reminders."
-    ]
+    ],
+    "improve_done": true
   },
   {
     "cycle": 3,
@@ -50,7 +52,8 @@
       "Add a structured field for 'payment_methods_accepted' (cash/card/preferences) — this recurringly gets missed or would otherwise be dumped into business_policies/additional_notes, but is a distinct, reusable fact type for many small businesses.",
       "Add a field like 'pending_business_decisions' or 'owner_uncertainties' to capture things the owner is actively unsure about (e.g., 'should I raise my fee', 'how does VAT affect me') — currently there is no home for this fact type at all, so it's simply never asked about or is at risk of being silently dropped rather than filed anywhere.",
       "The 'additional_notes' field is being used as a catch-all for behaviorally important facts (e.g., 'customers can text any time but Derek doesn't respond quickly') that actually describe response-time expectations relevant to bot messaging — consider a dedicated 'response_time_expectations' or 'availability_caveats' field distinct from business_policies and hours."
-    ]
+    ],
+    "improve_done": true
   },
   {
     "cycle": 4,
@@ -119,7 +122,8 @@
       "Add an `owner_uncertain_or_volatile_facts` field for things the owner genuinely cannot commit to (deposit %, delivery guarantees, expansion plans), so the build team knows which stated rules are unstable rather than burying them in `open_items`.",
       "Add a `bot_persona_and_tone` field plus explicit `languages` prompting — neither was elicited and tone is undefined for a brand-voice-sensitive Instagram deployment.",
       "Give the interviewer a capability to record verbatim customer-message examples in a structured `example_enquiries` field (currently paraphrased examples are wedged into `faq_answers`)."
-    ]
+    ],
+    "improve_done": true
   },
   {
     "cycle": 5,
@@ -178,7 +182,8 @@
       "Add an 'operational_constraints / capacity' field (staff count and roles, equipment limits, seasonal capacity, pending hiring or equipment decisions) so items like the overlocker and possible third tailor are stored as capacity signals rather than buried in budget text and additional_notes.",
       "Add a 'seasonality / demand_peaks' field; peak periods (Jan/May uniforms, December weddings) are currently smeared across target_audience and additional_notes.",
       "Add a 'data_sources_for_dynamic_answers' field (e.g. order status: paper notebook only) so the brief records what the bot cannot answer without a new system, instead of listing 'integrations: none' with no consequence noted."
-    ]
+    ],
+    "improve_done": true
   },
   {
     "cycle": 6,
@@ -246,7 +251,8 @@
       "Split `open_items` into `owner_decisions_pending` (real business questions like 'keep offering custom builds?') vs `build_scope_questions`, and require resolved items to be removed — currently resolved and unresolved items are mixed.",
       "Add a `known_inconsistencies` field for facts the owner states differently over time (deposit waivers, delivery, checks), instead of cramming this into prose inside `business_policies`.",
       "Give the interviewer an upload-manifest capability: echo back the exact filenames/message count actually ingested so the owner can confirm the evidence set before it is used to assert facts."
-    ]
+    ],
+    "improve_done": true
   },
   {
     "cycle": 7,
@@ -307,7 +313,8 @@
       "Add a `seasonality` field (peak periods, capacity impact, expected bot behaviour during peaks) — currently jammed into conversation_volume.",
       "Split open_items into `decisions_needed_from_owner` (e.g. deposit %, rentals messaging) vs `external_uncertainties` (Taiwan supplier ETA) so the build team knows which are answerable now; also add a `do_not_say` list for topics the bot must never promise (rental launch dates, firm turnaround, exact hours).",
       "Add a per-price `confidence/source` attribute so conflicting historical quotes (S$45 vs S$60, S$1,800 vs S$2,000, 30% vs 50%) are recorded as canonical-vs-legacy rather than narrated inside a single string."
-    ]
+    ],
+    "improve_done": true
   },
   {
     "cycle": 8,
@@ -366,7 +373,8 @@
       "Add a 'pending_owner_business_decisions' field, separate from chatbot open_items, for things like fleet expansion quotes and possible price increases — currently there is no home, so a dealer-quote remark got mis-filed as chatbot budget.",
       "Add an 'evidence_attachments' field with a delivery status flag, plus the capability to re-prompt for and confirm receipt of promised uploads before completing the interview.",
       "Add separate 'legal_business_name' vs 'known_as/nickname' fields with an explicit 'unverified' flag to prevent fabricated business names."
-    ]
+    ],
+    "improve_done": true
   },
   {
     "cycle": 9,
@@ -427,6 +435,7 @@
       "Add a `staffing_and_roles` field — Mike/Deb/Tyrell/day-hire roles are relevant for escalation routing but are only narrated inside business_description.",
       "Add a confidence/verification flag on estimate-type fields (e.g. conversation_volume) so unverified guesses are machine-visible and can be re-checked with the person who actually knows (Deb).",
       "Interviewer lacks a mechanism to flag questions that must be answered by a second stakeholder (Deb owns the inbox, books and calendar); add a `follow_up_with` field so those items are routed rather than left as vague guesses."
-    ]
+    ],
+    "improve_done": true
   }
 ]
