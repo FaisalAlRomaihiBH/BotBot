@@ -1,0 +1,69 @@
+{
+  "fact_capture": 4,
+  "no_repeats": 8,
+  "evidence_use": 6,
+  "naturalness": 8,
+  "completeness": 4,
+  "efficiency": 5,
+  "findings": [
+    {
+      "problem": "LOST FACT (major): Lead time / turnaround (officially 4-6 weeks, but Marek has quoted 2 and 10 weeks in the same fortnight) was never asked about at all, despite Marek explicitly naming 'how long' as one of the three questions the bot must answer. The brief contains no lead_time information whatsoever.",
+      "excerpt": "Marek Kowalski: So I guess... something that answers the basic \"are you open, how much, how long\" stuff without it being me at 9pm trying to remember what I told someone. That's the main thing. Maybe."
+    },
+    {
+      "problem": "Immediately after Marek flagged 'how long' as a core need, Birdie pivoted to pricing and never returned to turnaround at any point in 35 turns — the single most consequential omission in the interview.",
+      "excerpt": "Birdie: That makes total sense, Marek — pricing consistency is a real pain point. Let's dig into that a bit. For dining tables specifically, since that's your big one — even though it varies by wood, is there a rough price range you usually quote, like 'starts around £X for pine, up to £Y for oak or ash'?"
+    },
+    {
+      "problem": "LOST FACT: Capacity constraint (unsure whether he can take more than 2 big furniture jobs a month alongside repairs) never surfaced, even though Marek opened the door with 'mixed bag week to week'. A bot that answers 'how long' or 'can you take this on' needs this.",
+      "excerpt": "Marek Kowalski: Honestly it's a proper mixed bag week to week, depends what comes through the door."
+    },
+    {
+      "problem": "LOST FACT: Materials sourcing detail (oak/ash from a Halifax supplier, pine sourced locally, prices fluctuate weekly) is mentioned only obliquely as 'current timber yard cost'; Halifax supplier and local pine never recorded, despite being the root cause of his pricing volatility.",
+      "excerpt": "Marek Kowalski: We do custom furniture, mostly - dining tables are the big one, oak or pine usually, ash sometimes if the Halifax fella has good stock."
+    },
+    {
+      "problem": "LOST FACT: Basia's actual role — she does the bookkeeping and is the person who remembers what was agreed — is reduced in the brief to 'disapproves of free repairs' and 'wants a contract'. Her role as the record-keeper (and therefore the real escalation authority on agreed terms) is absent.",
+      "excerpt": "Marek Kowalski: Budget - ah, tight, if I'm honest. We're not exactly rolling in it, it's just me and Dawid and Basia doing the books, no big marketing pot or anything, that's why we've never really done more than the Instagram thing he potters about with."
+    },
+    {
+      "problem": "Marek's opening question about the existing Instagram 'thing' Dawid installed was never clarified, yet the brief asserts it is 'some kind of Instagram bot/tool' — an inference beyond what was said, then parked as an open item Birdie could easily have closed by asking.",
+      "excerpt": "Marek Kowalski: So look, I need something that can - actually, do you build the chatbot or do you just tell me what I need? Because Dawid, my apprentice, he already put some Instagram thing on our page, not sure if that counts."
+    },
+    {
+      "problem": "No escalation/handoff mechanics were captured: the bot is meant to say 'message Marek' but no phone number, Instagram handle, or fallback (Dawid? Basia?) for out-of-hours or unmanned-shop enquiries was ever requested.",
+      "excerpt": "Marek Kowalski: Just - answer the questions, give the hours, give the rough prices we talked about, and then say \"message Marek to sort the details\" or whatever. Keep the actual booking, the money side, all that - keep that with me and Basia."
+    },
+    {
+      "problem": "Bot tone/persona, name, and language coverage were never discussed (languages left null in brief) — standard requirements for an Instagram-facing bot representing a one-man craft brand.",
+      "excerpt": "Birdie: Great, I think I've got a clear picture now, Marek. Let me run it back to you:"
+    },
+    {
+      "problem": "Efficiency: interview ran 35 turns, above the normal band, partly on low-value slots (years in business) and on splitting the four price ranges into four separate single-service questions that could have been one combined ask.",
+      "excerpt": "Birdie: Eight years, that's a solid run! Roughly how many enquiries would you say come in through Instagram and phone calls in a typical week — just a ballpark, like handful, dozen, more?"
+    },
+    {
+      "problem": "Birdie deflected the dining-table pricing ambiguity ('note that as something to nail down later') instead of resolving it in the moment; the contradiction only got fixed because Marek himself caught it in the final summary — the brief's services_and_pricing still carries both instructions confusingly.",
+      "excerpt": "Birdie: Good to know, and totally fair to be cautious there — we can note that as something to nail down later. Let's move to repairs then: when someone brings in an old chair or table to fix, do you usually charge a flat rate, or is it always 'depends on the job'?"
+    },
+    {
+      "problem": "Birdie made a delivery commitment on the build team's behalf ('aiming to have it ready well before autumn'), which is outside a requirements-gatherer's remit and mirrors exactly the over-promising problem Marek complained about with Dawid.",
+      "excerpt": "Birdie: Thanks for all the detail, Marek, this gives whoever builds it everything they need to get started. I'll pass this along now — next step is the build team will use this to put together your bot, aiming to have it ready well before autumn."
+    },
+    {
+      "problem": "Evidence request was made once, softly, and abandoned when Marek waffled — no attempt to ask Dawid (who runs the account) to supply DM screenshots, so the brief has zero real customer-message evidence.",
+      "excerpt": "Marek Kowalski: Actually - hang on, let me see if he's screenshotted anything... nah, don't worry about it, just go with what I gave you, that's the gist of it anyway."
+    }
+  ],
+  "top_improvement": "Make turnaround/lead time and job capacity mandatory, non-skippable slots: whenever the owner names a question customers ask (here, literally 'are you open, how much, how long'), the prompt must force Birdie to convert each one into a covered requirement before summarising — and to probe variance ('what's the range you've actually quoted people?') rather than accepting only pricing detail.",
+  "schema_suggestions": [
+    "Add a dedicated `lead_time_and_turnaround` field (official quoted range + observed variance) — currently there is nowhere in the schema for delivery timeframes, which is a top-3 customer question for any made-to-order business.",
+    "Add a `capacity_constraints` field (max concurrent/monthly jobs, staffed hours) so the bot can be told when to stop encouraging new large enquiries.",
+    "Add a `staff_and_authority` structured field (who is present when, who may quote prices, who holds records) — currently Dawid's quoting problem is crammed into `escalation_rules` and Basia's role is scattered across `additional_notes`.",
+    "Add an `escalation_contacts` field (phone, IG handle, hours, fallback person) — the brief tells the bot to 'message Marek directly' with no contact route recorded.",
+    "Add an `existing_tools_and_systems` field (current bots, page/website status, who administers them) — right now the mystery Instagram tool and the dormant Facebook page are dumped in `additional_notes`/`open_items`.",
+    "Add an `owner_uncertain_or_volatile_facts` field for things the owner genuinely cannot commit to (deposit %, delivery guarantees, expansion plans), so the build team knows which stated rules are unstable rather than burying them in `open_items`.",
+    "Add a `bot_persona_and_tone` field plus explicit `languages` prompting — neither was elicited and tone is undefined for a brand-voice-sensitive Instagram deployment.",
+    "Give the interviewer a capability to record verbatim customer-message examples in a structured `example_enquiries` field (currently paraphrased examples are wedged into `faq_answers`)."
+  ]
+}

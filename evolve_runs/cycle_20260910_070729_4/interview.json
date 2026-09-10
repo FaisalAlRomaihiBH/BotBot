@@ -1,0 +1,201 @@
+{
+  "transcript": [
+    [
+      "Birdie",
+      "Hi! I help businesses figure out exactly what they need from a chatbot. Before we start — what's your name?"
+    ],
+    [
+      "Marek Kowalski",
+      "Marek, from Kowalski Woodcraft. Good to meet you - well, chat to you, whatever this is haha.\n\nSo look, I need something that can - actually, do you build the chatbot or do you just tell me what I need? Because Dawid, my apprentice, he already put some Instagram thing on our page, not sure if that counts."
+    ],
+    [
+      "Birdie",
+      "Good to meet you too, Marek! To answer your question: my job right now is just to understand exactly what you need — I'll gather all the details here, and then that gets handed off to the team who actually builds it. Think of me as the blueprint-maker, not the builder.\n\nNow, tell me a bit about Kowalski Woodcraft — what kind of woodworking do you do, and where are you located?"
+    ],
+    [
+      "Marek Kowalski",
+      "Right, blueprint-maker, got it, I like that.\n\nSo we're at Unit 4B, Riverside Trading Estate. Small unit, just me and Dawid part-time - he's in Tuesdays, Thursdays, Saturdays. We do custom furniture, mostly - dining tables are the big one, oak or pine usually, ash sometimes if the Halifax fella has good stock. Then shelving, wardrobes, that sort of bespoke stuff. And repairs - people bring in old chairs, tables, whatever needs fixing. And small bits too, chopping boards, stools, little commissions.\n\nHonestly it's a proper mixed bag week to week, depends what comes through the door."
+    ],
+    [
+      "Birdie",
+      "That's a great little operation, Marek — dining tables, wardrobes, repairs, chopping boards, sounds like no two days are the same! What's the main headache that's making you think 'I need a chatbot for this'? Like, is it people messaging at odd hours, too many repetitive questions, missed enquiries, something else?"
+    ],
+    [
+      "Marek Kowalski",
+      "Yeah, so - honestly it's mostly people asking \"how much for a table\" and I never know what to say straight off, depends on the wood that week, depends what mood I'm in half the time if I'm honest. So I end up going back and forth with people over messages for days.\n\nAlso the shop's not manned some mornings, I'm off at the timber yard in Halifax or out measuring up a job, so people turn up or call and there's nobody there, or it's Dawid and he's not supposed to be quoting prices but he does it anyway and then I have to un-say what he said, causes a right mess.\n\nSo I guess... something that answers the basic \"are you open, how much, how long\" stuff without it being me at 9pm trying to remember what I told someone. That's the main thing. Maybe."
+    ],
+    [
+      "Birdie",
+      "That makes total sense, Marek — pricing consistency is a real pain point. Let's dig into that a bit. For dining tables specifically, since that's your big one — even though it varies by wood, is there a rough price range you usually quote, like 'starts around £X for pine, up to £Y for oak or ash'?"
+    ],
+    [
+      "Marek Kowalski",
+      "Right, so - pine ones I usually start around £650, oak's more like £850 upwards. Ash is somewhere in between usually, depends what the Halifax bloke's charging that week.\n\nBut honestly - I've done pine ones for £550 before when I had offcuts lying about, and I quoted a fella £1,100 for an oak table last month 'cause it was a big one, extending table, loads of work. So it's not really fixed, it's more a... starting point? Maybe the bot should just say \"from £650\" and not commit to anything above that, let me sort the rest out myself when they message.\n\nActually - no, maybe just say \"get in touch for a quote\" is safer. I don't want it promising numbers I then have to walk back. That's literally the problem I've got now, don't want the bot doing the same thing Dawid does."
+    ],
+    [
+      "Birdie",
+      "Good to know, and totally fair to be cautious there — we can note that as something to nail down later. Let's move to repairs then: when someone brings in an old chair or table to fix, do you usually charge a flat rate, or is it always 'depends on the job'?"
+    ],
+    [
+      "Marek Kowalski",
+      "Ah, repairs - yeah, it's £40 to £120 depending on the piece, how much work it needs. Sometimes I'll even do one for free if it's a nice old piece and I fancy the challenge, or if I'm just bored that day and it's a quiet one, ha. Basia hates when I do that, says I'm giving away labour, but - eh, whatever, keeps me happy.\n\nSo again - not really a flat rate. Maybe the bot just says \"£40-£120 depending on the job, get in touch for a look\" or something? That feels safe enough, doesn't box me in."
+    ],
+    [
+      "Birdie",
+      "Ha, sounds like Basia keeps you honest! A £40-£120 range with 'get in touch for a look' sounds reasonable. Now what about the smaller stuff — chopping boards, stools, little commissions — roughly what do those go for?"
+    ],
+    [
+      "Marek Kowalski",
+      "Small stuff, yeah - chopping boards and stools, that's usually £35 to £75 depending on size, what wood I use, whether it's just a plain board or I'm doing some fancy edge or engraving or whatever.\n\nActually, thinking about it, chopping boards I sometimes just knock out for £25 if it's a small one and I've got scraps kicking about. But the nicer stools with proper joints, those can creep up to £80 odd. So... £35-£75 is probably the safe range to give people, yeah, let's say that. Don't quote the £25 one, that was a one-off for me neighbour.\n\nBit different every time though, if I'm honest with you."
+    ],
+    [
+      "Birdie",
+      "Got it, £35-£75 for the small stuff, that's easy to remember. Now the last pricing bucket — shelving and wardrobes, the bigger bespoke jobs. What kind of range do those usually fall in?"
+    ],
+    [
+      "Marek Kowalski",
+      "Shelving and wardrobes - yeah that's a bigger spread, £300 up to £900, just depends how big it is, fitted wardrobe versus a bit of open shelving, you know. A little bookshelf might only be £300, but a proper built-in wardrobe with doors and all that, that's creeping toward £900, sometimes a bit more if it's a weird shape room and I've gotta do loads of measuring and custom bits.\n\nActually - hmm, I did do a fitted one last year that I quoted low, think it was £850, and it near killed me time-wise, so maybe I should be pushing the top end higher now. But let's just say £300-£900 for the bot, that's roughly right. Roughly."
+    ],
+    [
+      "Birdie",
+      "That's really helpful, Marek, thanks for being so honest about the ranges. Let's switch gears a bit — what are your shop hours and days? Like when are you actually open for people to call or walk in?"
+    ],
+    [
+      "Marek Kowalski",
+      "Right, so officially we're Monday to Saturday, 8 till 5. That's what it says on the door anyway.\n\nBut like I said, some mornings there's nobody there - I'm at the timber yard or out measuring a job, and Dawid's only in Tuesdays, Thursdays, Saturdays. So realistically if you turn up on a random Wednesday morning you might just be staring at a locked shutter, ha.\n\nMaybe the bot should just say \"Mon-Sat, 8-5, but call ahead to make sure someone's in\"? That covers me a bit. Yeah - let's do that."
+    ],
+    [
+      "Birdie",
+      "Good, that's a sensible line for the bot to use. Now — when someone does commit to an order, like a custom table or a wardrobe, do you take a deposit upfront, or is it pay-on-completion? And is there any cancellation policy if they change their mind partway through?"
+    ],
+    [
+      "Marek Kowalski",
+      "Deposit - yeah, usually 30% upfront, that's the normal way I do it. Covers me for materials, especially oak, that stuff's not cheap.\n\nThough - I've waived it for regulars, people I've done work for before and trust. And then other times, if it's someone I don't know, some big job, I've asked for 50% 'cause I got burned once, fella pulled out halfway through and I was left with a load of custom-cut timber nobody else wanted. So there's no real - pattern, if I'm honest.\n\nCancellation policy - ha, we don't really have one written down. If someone pulls out I just... deal with it case by case, depends how far along I am, whether I can use the materials for something else. Basia keeps saying we need an actual contract for this stuff but I haven't got round to it.\n\nMaybe just say \"30% deposit required on custom orders\" for the bot? Keep it simple. Yeah, let's go with 30%."
+    ],
+    [
+      "Birdie",
+      "Makes sense, 30% as the standard line keeps it simple even if real life is messier. Now for the big scope question, Marek: do you want this to be a full booking/payment system where customers can actually pay deposits and book slots through the bot, or something simpler — like it just answers questions, gives your hours and rough prices, and reminds people to call or message you to sort the actual booking?"
+    ],
+    [
+      "Marek Kowalski",
+      "Oh, simpler, definitely - I don't want people paying deposits into some machine and then me having to sort it out with Basia after, that sounds like a nightmare. Just - answer the questions, give the hours, give the rough prices we talked about, and then say \"message Marek to sort the details\" or whatever. Keep the actual booking, the money side, all that - keep that with me and Basia.\n\nActually - hang on, would it be hard to add the payment bit later? Like not now, but maybe down the line if it works out? Don't build it now though. Just - simple for now. Yeah. Simple."
+    ],
+    [
+      "Birdie",
+      "Simple it is — that's a smart way to start, and yes, adding payments later down the line is very doable, the bot can be built so that's a natural next step rather than a rebuild. Good question. Now, where do customers actually message you right now — is it mostly Instagram, or do you also get enquiries through Facebook, WhatsApp, your website, phone calls?"
+    ],
+    [
+      "Marek Kowalski",
+      "Erm - mostly Instagram, that's the one Dawid keeps up, he's better at that than me. Some people just ring the shop phone too, old-school like. Facebook - I think we've got a page but I don't touch it, might be dead for all I know. Website, nah, we don't really have one, not a proper one anyway, just whatever's linked off Instagram I think.\n\nSo yeah - Instagram and phone calls mostly, that's where it's all happening."
+    ],
+    [
+      "Birdie",
+      "Good to know — Instagram and phone are the real hubs. One more thing before we get into the finer details: it'd really help me if I could see a few real examples of the messages you get — like screenshots of Instagram DMs or a few typical questions people ask. If you've got any, you can drop them in the 'uploads' folder next to this program and just tell me when you're done. If that's a hassle, you can also just paste a couple of example messages here instead. Either way is fine — or if you don't have anything handy, that's okay too, we can carry on without it."
+    ],
+    [
+      "Marek Kowalski",
+      "Oh - right, uploads folder. Let me think... honestly easier if I just tell you what people usually ask, I don't really go digging through Instagram on my phone, gives me a headache.\n\nIt's mostly like - \"hiya, how much for a table like the one in your last post\", or \"are you open Saturday\", or \"can you fix a chair leg, how much would that be roughly\". That sort of thing. Dawid might have better ones saved, he handles the actual account, I just see them over his shoulder half the time.\n\nActually - hang on, let me see if he's screenshotted anything... nah, don't worry about it, just go with what I gave you, that's the gist of it anyway."
+    ],
+    [
+      "Birdie",
+      "That's plenty to go on, thanks Marek. Quick one on the business itself — how long has Kowalski Woodcraft been running?"
+    ],
+    [
+      "Marek Kowalski",
+      "Ah - about eight years now, I think? Started it up meself in the unit, was just me at the start, took Dawid on maybe two years back when things picked up a bit. So yeah, eight-ish years. Feels longer some days, ha."
+    ],
+    [
+      "Birdie",
+      "Eight years, that's a solid run! Roughly how many enquiries would you say come in through Instagram and phone calls in a typical week — just a ballpark, like handful, dozen, more?"
+    ],
+    [
+      "Marek Kowalski",
+      "Ballpark... I dunno, maybe a dozen-ish a week? Between the Instagram messages and the phone ringing. Some weeks it's dead quiet, maybe five or six, other weeks - like if Dawid posts something that does well - it can be twenty odd, people asking daft questions half of them, \"do you do garden furniture\" and we don't even do that, ha.\n\nSo say... ten to fifteen a week average, that's probably closer to the truth. Don't hold me to it though."
+    ],
+    [
+      "Birdie",
+      "Good ballpark, that helps. What about when the bot gets asked something totally outside what it knows — like the garden furniture question, or something odd it can't answer — should it just say 'sorry, we don't do that, but here's how to reach Marek', or is there a specific way you'd want tricky/unusual questions handled?"
+    ],
+    [
+      "Marek Kowalski",
+      "Yeah, that - \"sorry, we don't do that\" or whatever's fine, just point 'em to message me direct if it's something weird. Don't want it guessing or making stuff up, that's worse than saying nothing.\n\nActually - maybe it should say \"not sure, but Marek can tell you\" rather than a flat \"no,\" 'cause sometimes we do end up doing odd jobs if I fancy it. Like someone asked about a garden bench once and I ended up doing it 'cause it was a slow week. So don't want it shutting people down too hard, just... pass it to me if it's not one of the normal things. Yeah, let's do that."
+    ],
+    [
+      "Birdie",
+      "Good call, keeps things flexible without the bot overpromising. Last couple of practical things: do you have a rough budget in mind for this project, and any timeline — like would you want this up and running in a few weeks, or no rush?"
+    ],
+    [
+      "Marek Kowalski",
+      "Budget - ah, tight, if I'm honest. We're not exactly rolling in it, it's just me and Dawid and Basia doing the books, no big marketing pot or anything, that's why we've never really done more than the Instagram thing he potters about with. So whatever the cheap end of \"proper\" is, that's probably us.\n\nTimeline - no massive rush, but also... I dunno, be nice to have it sorted before it gets busy again? Autumn's usually when people want tables done for Christmas and that, so maybe before then would be good.\n\nActually - no, thinking about it, sooner's probably better, get it bedded in before autumn hits so I'm not learning how the thing works while it's mental busy. So - few weeks, if that's doable? Not urgent-urgent, but - yeah, let's aim for that."
+    ],
+    [
+      "Birdie",
+      "Great, I think I've got a clear picture now, Marek. Let me run it back to you:\n\n**Business**: Kowalski Woodcraft, Unit 4B Riverside Trading Estate, running 8 years, just you and part-time apprentice Dawid (Tue/Thu/Sat).\n\n**Problem**: Inconsistent pricing answers (varies with your mood/stock), Dawid sometimes quotes prices he shouldn't, and the shop's often unstaffed so enquiries go unanswered.\n\n**Channels**: Instagram (Dawid manages it) and phone calls — no real website, Facebook is dormant.\n\n**Volume**: ~10-15 enquiries/week, spiking to 20+ after a popular post.\n\n**Hours**: Mon-Sat 8-5 officially, but bot should say 'call ahead to check someone's in.'\n\n**Pricing** (all as ranges, not firm quotes):\n- Dining tables: pine from £650, oak from £850, ash in between — bot to say 'get in touch for a quote' rather than commit to numbers\n- Shelving/wardrobes: £300-£900\n- Repairs: £40-£120, 'get in touch for a look'\n- Small items (chopping boards, stools): £35-£75\n\n**Policies**: 30% deposit standard line for custom orders (though in practice you vary it 0-50%); no formal cancellation policy yet, handled case-by-case.\n\n**Escalation**: Bot should never guess — for odd requests (like garden furniture) it should say 'not sure, but Marek can tell you' rather than a flat no, since you sometimes take on unusual jobs.\n\n**Scope**: Keep it simple for now — Q&A, hours, rough prices, then hand off to you directly for booking and payment. Adding payments later is possible down the line.\n\n**Budget**: Tight, no exact figure — aiming for the most affordable proper solution.\n\n**Timeline**: A few weeks, ideally live before autumn's Christmas rush.\n\nDoes all that sound right, or is there anything you'd like to change?"
+    ],
+    [
+      "Marek Kowalski",
+      "Yeah, that all sounds about right, actually - good summary.\n\nOne thing though, the dining tables bit - you've put \"get in touch for a quote\" with no numbers at all, but earlier I think I said maybe do \"from £650\" as a starting point? Let's just do that actually, \"dining tables from £650\" and then get in touch for the rest. Gives people something to go on at least.\n\nEverything else - yeah, that's about the size of it. Good."
+    ],
+    [
+      "Birdie",
+      "Perfect, got it updated — dining tables 'from £650' it is. Thanks for all the detail, Marek, this gives whoever builds it everything they need to get started. I'll pass this along now — next step is the build team will use this to put together your bot, aiming to have it ready well before autumn. Thanks again, and good luck with the Christmas rush!"
+    ]
+  ],
+  "brief": {
+    "contact_name": "Marek",
+    "business_name": "Kowalski Woodcraft",
+    "industry": "Woodworking/Carpentry - custom furniture and repairs",
+    "business_description": "Small woodworking business at Unit 4B, Riverside Trading Estate, running about 8 years. Started solo by Marek, took on apprentice Dawid about 2 years ago (works Tuesdays, Thursdays, Saturdays). Work is a mixed bag week to week depending on what comes in.",
+    "problem_to_solve": "Marek gets constant 'how much for a table' type questions and struggles to answer consistently since pricing depends on wood availability/mood; leads to days of back-and-forth over messages. Shop is sometimes unmanned (Marek at timber yard or measuring jobs) so calls/walk-ins go unanswered. Dawid isn't supposed to quote prices when covering but does anyway, causing conflicting quotes Marek has to walk back. Wants something to handle basic 'are you open / how much / how long' questions consistently.",
+    "target_audience": "Local customers wanting custom furniture, repairs, or small commissions",
+    "channels": [
+      "Instagram (primary, managed by Dawid)",
+      "Phone calls to the shop"
+    ],
+    "integrations": null,
+    "conversation_volume": "Roughly 10-15 enquiries per week across Instagram and phone combined (quiet weeks ~5-6, busy weeks after a popular Instagram post ~20+)",
+    "languages": null,
+    "success_criteria": "Stop the inconsistent/conflicting pricing info (Marek vs Dawid), reduce back-and-forth over days, cover basic questions when shop is unmanned",
+    "budget": "Tight/limited budget - no marketing spend historically, wants 'the cheap end of proper'; no exact figure given",
+    "timeline": "A few weeks - wants it bedded in before autumn (their busy season for Christmas table orders)",
+    "services_and_pricing": [
+      "Dining tables: quote as 'from £650' as a starting point (pine from £650, oak from £850, ash in between depending on current timber yard cost, has gone up to £1,100 for large extending oak tables) - bot should give the 'from £650' figure to give people something to go on, then direct them to get in touch for a firm quote",
+      "Shelving and wardrobes (bespoke): £300-£900 typically (small bookshelf ~£300, fitted wardrobe with doors ~£900, sometimes more for oddly-shaped rooms); Marek notes he underquoted one fitted wardrobe at £850 last year and it cost him a lot of time, so he's wary the top end may need to be higher going forward",
+      "Repairs: £40-£120 depending on the job/piece; Marek sometimes does repairs for free if he likes the piece or it's a quiet day (his wife/partner Basia disapproves, feels he's giving away labour); bot should say '£40-£120 depending on the job, get in touch for a look'",
+      "Small items/commissions (chopping boards, stools): £35-£75 depending on size/wood/finish - safe range to quote; excludes one-off £25 neighbour discount price"
+    ],
+    "faq_answers": [
+      "Hours: officially Monday-Saturday 8am-5pm, but shop is not always staffed (Marek often at timber yard or measuring jobs; Dawid only in Tue/Thu/Sat) - bot should say 'Mon-Sat, 8-5, but call ahead to make sure someone's in'",
+      "Common customer questions (from memory, no screenshots provided): 'How much for a table like the one in your last post?', 'Are you open Saturday?', 'Can you fix a chair leg, how much would that be roughly?'",
+      "They do NOT do garden furniture as standard - but occasionally take on odd/one-off jobs outside normal offerings if Marek fancies it (e.g. did a garden bench once during a slow week)"
+    ],
+    "business_policies": [
+      "Deposit: nominally 30% upfront on custom orders (to cover materials, especially oak). In practice inconsistently applied — waived for trusted regulars, raised to 50% for unknown customers on big jobs (after being burned once by a cancelled order leaving him with unwanted custom-cut timber). Bot should state the standard '30% deposit required on custom orders' line.",
+      "Cancellation policy: no formal written policy — handled case-by-case depending on how far along the job is and whether materials can be reused. Owner's wife Basia has been pushing for a real contract/policy but it hasn't been done yet."
+    ],
+    "escalation_rules": [
+      "Dawid is not supposed to quote prices to customers while covering the shop, but does so anyway, leading to Marek having to correct/undo quoted prices",
+      "Bot should not handle bookings or payments — after answering questions, it should direct customers to message Marek directly to sort out actual booking/order details",
+      "For requests outside normal services (e.g. garden furniture) or anything the bot doesn't recognize, it should NOT flatly refuse — instead say something like 'not sure, but Marek can tell you' and point them to contact Marek directly, since Marek sometimes takes on odd jobs outside the norm. Bot should never guess or make up an answer."
+    ],
+    "open_items": [
+      "What exactly Dawid's existing Instagram bot does, and whether it should be replaced or integrated with",
+      "Shelving/wardrobe top-end pricing may need revisiting - Marek suspects £900 is too low based on a recent underquoted job",
+      "No formal cancellation policy exists yet — deposit % is applied inconsistently in practice despite wanting bot to state a flat 30% rule",
+      "Exact budget figure not given - only described as 'tight' and 'cheap end of proper'"
+    ],
+    "additional_notes": [
+      "Apprentice Dawid set up some kind of Instagram bot/tool already on their page",
+      "Basia (Marek's wife or business partner) disapproves of him doing free repairs, feels it undervalues his labour",
+      "Basia has been pushing Marek to get a proper written contract/cancellation policy in place",
+      "Marek wants scope kept simple (Q&A + hours + rough prices + 'message Marek' handoff) for now, but wants to know if adding booking/payment later would be feasible/hard to bolt on - confirmed doable as a future add-on without rebuild",
+      "Facebook page exists but is unmaintained/possibly dead; no proper website",
+      "No screenshots/chat exports available; owner doesn't check Instagram directly, Dawid manages that account",
+      "Business running about 8 years, started solo by Marek, Dawid joined ~2 years ago as apprentice",
+      "Wants it live before autumn, their busy season for Christmas table orders"
+    ]
+  },
+  "analysis": null,
+  "completed": true,
+  "turns": 35
+}
