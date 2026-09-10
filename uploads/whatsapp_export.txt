@@ -1,31 +1,30 @@
-[Mon, 14:02] Tunde Bakare: Good afternoon sir, how much for a 2-piece suit in navy wool?
-[Mon, 14:20] Emmanuel Okafor: Good afternoon my friend. For navy wool 2-piece we go for 85,000 naira. Very good quality.
-[Mon, 14:21] Tunde Bakare: Ok great, and how long will it take?
-[Mon, 14:25] Emmanuel Okafor: Two weeks time, no problem.
-[Mon, 16:40] Emmanuel Okafor: Actually let me reconsider, the wool I have now is not the good one. If I bring the Italian one it will be 110,000. Better quality.
-[Mon, 16:41] Tunde Bakare: Oh ok. Which one should I go with?
-[Mon, 16:50] Emmanuel Okafor: The Italian one is better sir. Let's do that.
-[Mon, 16:51] Tunde Bakare: Alright, so 110,000 and two weeks?
-[Mon, 16:58] Emmanuel Okafor: Three weeks now, because I have to order the fabric.
-[Tue, 09:15] Tunde Bakare: Understood. Can I pay 30% deposit to start?
-[Tue, 09:30] Emmanuel Okafor: Yes that is fine, 30% is ok for you since you are referred by my customer.
-[Tue, 19:02] Emmanuel Okafor: Sorry, thinking about it, better you pay 50% since fabric is imported one. I don't want wahala.
-[Tue, 19:03] Tunde Bakare: Ok no problem, 50% it is.
-[Wed, 10:11] Ngozi Adeyemi: Good morning, I need an agbada for my brother's wedding, end of next month. How much and can you finish in time?
-[Wed, 10:45] Emmanuel Okafor: Good morning ma. Agbada full set with cap and trouser, we can do 65,000. Plenty time before the wedding so no wahala.
-[Wed, 11:02] Ngozi Adeyemi: Perfect, I'll send the fabric preference tomorrow.
-[Thu, 08:30] Emmanuel Okafor: Ah madam, I checked my book, that period is very tight, I have three weddings that same week. Let's rush it before end of month instead so I'm not under pressure.
-[Thu, 08:31] Ngozi Adeyemi: Ok that works too, I'll come this weekend to measure.
-[Fri, 15:20] Chidi (Junior Tailor): Boss the customer that came for shirt fitting, she is asking if we can also do skirt alteration same day
-[Fri, 15:45] Emmanuel Okafor: Let me check the schedule and I will tell you
-[Sat, 12:00] Chidi (Junior Tailor): Boss?
-[Sat, 18:30] Ime Umoh: Hi, do you do rush orders? I need a shirt in 3 days for an event.
-[Sat, 19:00] Emmanuel Okafor: Sorry sir, we don't do rush order less than one week, too much pressure on us.
-[Sat, 19:40] Emmanuel Okafor: Actually, if it's just a shirt, not full suit, we can try. Bring your fabric tomorrow.
-[Sun, 09:10] Ime Umoh: Great, so it's possible? How much extra for rush?
-[Sun, 09:35] Emmanuel Okafor: No extra charge, normal price 20,000.
-[Sun, 20:15] Emmanuel Okafor: Sorry sir, on more thought, rush job we usually add 5,000 for the stress on my boys. Hope you understand.
-[Mon, 09:00] Tunde Bakare: Good morning, just confirming — is my suit price 85,000 or 110,000? I saw both in our chat.
-[Mon, 09:50] Emmanuel Okafor: Let me look at it and confirm for you sir.
-[Tue, 17:00] Tunde Bakare: Any update on the price?
-[Wed, 08:00] Kelechi (Apprentice): Uncle is in market, he say he will message you today
+[Mon, Mar 3, 9:14 AM] Sarah K: Hi! I saw your dining table pics on FB, how much for something like the walnut one, seats 6?
+[Mon, Mar 3, 9:41 AM] Tomasz Wozniak: hey! that one was around $1800 but honestly walnut's gotten pricey lately, probably closer to $2100 now
+[Mon, Mar 3, 9:42 AM] Tomasz Wozniak: actually you know what, let me not do walnut, oak would be better value for you, like $1500
+[Mon, Mar 3, 10:15 AM] Sarah K: ok so which is it lol, walnut or oak, and what price
+[Mon, Mar 3, 10:20 AM] Tomasz Wozniak: fair question haha. let's say oak, $1500. that's solid
+[Mon, Mar 3, 3:02 PM] Tomasz Wozniak: actually thinking about it more, if you want the extra thick top it'd be $1650, but let's talk when you come by
+[Tue, Mar 4, 11:00 AM] Sarah K: How long would it take to build?
+[Tue, Mar 4, 11:30 AM] Tomasz Wozniak: 4-6 weeks usually
+[Tue, Mar 4, 11:31 AM] Tomasz Wozniak: though honestly I'm pretty backed up right now, might be more like 8
+[Tue, Mar 4, 11:32 AM] Tomasz Wozniak: no wait, Deshawn's back Thursday, we can probably still do 5-6
+[Wed, Mar 5, 8:10 AM] Marcus P: Hey do you guys do accent walls? Need one for a basement reno, about 200 sqft
+[Wed, Mar 5, 9:00 AM] Tomasz Wozniak: yep we do those! ballpark $15/sqft so around $3000
+[Wed, Mar 5, 2:45 PM] Tomasz Wozniak: hmm actually reclaimed wood prices went up on my end, might need to be $18/sqft, let me check with my supplier and get back to you
+[Fri, Mar 7, 4:30 PM] Marcus P: any update on that wall pricing?
+[Mon, Mar 10, 10:00 AM] Marcus P: hey just following up, still interested!
+[Wed, Mar 12, 6:15 PM] Tomasz Wozniak: sorry man things got hectic here, let me get back to you this week
+[Thu, Mar 20, 2:00 PM] Marcus P: ...it's been a couple weeks, are you still able to take this on?
+[Fri, Mar 4, 1:20 PM] Linda T: Do you require a deposit before starting?
+[Fri, Mar 4, 1:25 PM] Tomasz Wozniak: yeah normally 50% upfront
+[Fri, Mar 4, 1:26 PM] Tomasz Wozniak: but since you've ordered from me before, don't worry about it, just pay when it's done
+[Fri, Mar 4, 5:40 PM] Tomasz Wozniak: actually on second thought let's do 25% just so I can order materials, hope that's ok
+[Sat, Mar 15, 9:00 AM] Sarah K: So to confirm — oak table, $1650, ready in about 5-6 weeks?
+[Sat, Mar 15, 9:20 AM] Tomasz Wozniak: yes! that's the plan, locking that in
+[Sat, Mar 15, 9:45 AM] Tomasz Wozniak: well — unless you wanted the walnut, I actually got a great deal on some walnut this week, could still do that for close to the oak price if you want
+[Sat, Mar 15, 10:00 AM] Sarah K: Tomasz I need one final answer please 😂
+[Sat, Mar 15, 10:12 AM] Tomasz Wozniak: haha fair, ok — oak, $1650, 6 weeks. FINAL. deposit whenever you're ready
+[Sun, Mar 16, 7:00 PM] Priya N: Hi, what are your shop hours if I want to drop off a chair for repair?
+[Sun, Mar 16, 7:30 PM] Tomasz Wozniak: Mon-Fri 9-5 usually, Sat by appointment. but honestly just text me, I'm often there other times too
+[Mon, Mar 17, 8:00 AM] Priya N: great, and repair cost for a wobbly dining chair leg?
+[Mon, Mar 17, 8:10 AM] Tomasz Wozniak: $150 minimum flat rate for most repairs, that should cover it
