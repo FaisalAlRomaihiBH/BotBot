@@ -31,11 +31,15 @@ RUNS_DIR = ROOT / "parallel_runs"
 MAX_TURNS = 30  # hard stop so one interview can never run away
 
 _print_lock = threading.Lock()
+_log_file: Path | None = None  # set per run; dashboard.py tails it
 
 
 def log(msg: str) -> None:
     with _print_lock:
         print(msg, flush=True)
+        if _log_file:
+            with _log_file.open("a", encoding="utf-8") as f:
+                f.write(msg + "\n")
 
 
 # ---------------- persona ----------------
@@ -171,6 +175,9 @@ class ParallelPersonaRunner:
         stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         self.run_dir = RUNS_DIR / stamp
         self.run_dir.mkdir(parents=True, exist_ok=True)
+        global _log_file
+        _log_file = self.run_dir / "run.log"
+        (RUNS_DIR / "latest.txt").write_text(str(self.run_dir), encoding="utf-8")
 
     # ---------------- pipeline steps ----------------
     def generate_personas(self) -> list[Persona]:
