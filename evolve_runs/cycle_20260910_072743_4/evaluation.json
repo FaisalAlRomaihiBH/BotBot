@@ -1,0 +1,61 @@
+{
+  "fact_capture": 6,
+  "no_repeats": 8,
+  "evidence_use": 7,
+  "naturalness": 7,
+  "completeness": 5,
+  "efficiency": 5,
+  "findings": [
+    {
+      "problem": "Warranty/guarantee terms were never asked about at all. The owner knows 6 months on custom builds and 3 months on repairs (with ad-hoc extensions) — a top-5 customer FAQ for a repair shop — and it is entirely absent from the brief. Birdie moved straight from refunds to escalation.",
+      "excerpt": "Birdie: That's actually really helpful context, no need to apologize! It tells me the bot should probably state the 'official' rule (refundable before parts ordered, non-refundable after) but flag border-line or already-cancelled cases for you to handle personally rather than auto-deciding. Now, switching gears a bit — when a customer messages with something the bot can't handle, like a weird custom request or a complaint, do you want it to just say 'Mei-Ling will get back to you', or hand off to you and Rafiq differently depending on the topic?"
+    },
+    {
+      "problem": "Accepted payment methods were never captured (cash, PayNow, card with a 2.5% surcharge she sometimes forgets to apply). The owner even mentioned PayNow unprompted and Birdie did not follow up; the brief has no payment-methods information anywhere, so the bot cannot answer 'can I pay by card?'.",
+      "excerpt": "Mei-Ling Tan: Ooh, big question! Um... I think I'd want it to just answer questions and maybe send reminders? Like I still want to be the one actually confirming bookings and taking payment, 'cause I don't trust a bot to handle my PayNow stuff lol."
+    },
+    {
+      "problem": "Staff roster was never fully elicited — the Saturday part-time helper Josh (student, does tune-ups and tire changes) is missing entirely, so the brief implies only two people and no weekend coverage detail. Birdie echoed Rafiq's role but never asked 'anyone else on the team?'.",
+      "excerpt": "Mei-Ling Tan: Oh and my mechanic Rafiq handles most of the conversion stuff, he's the real expert there, I just do fittings and sales side of things!"
+    },
+    {
+      "problem": "The single most operationally dangerous fact — that posted hours are unreliable (opens late AND sometimes closes early on a whim) — was recorded but never resolved. Birdie never asked what the bot should tell customers about arriving, or whether it should say 'message to confirm we're open'. The brief also drops the 'closes early' half of the fact.",
+      "excerpt": "Mei-Ling Tan: \"do you guys open on Monday?\" — no we're closed Mondays, 10-7 the rest of the week... though sometimes I open late if I've got a fitting appointment or just feel like sleeping in lol"
+    },
+    {
+      "problem": "The owner flagged e-bike turnaround as her biggest stressor and a genuine unknown, and Birdie skipped it completely in the interview — it only appears in the brief because the summary listed it as an open item. No probing on what the bot should say in the meantime (e.g. quote 3-5 weeks, or always escalate).",
+      "excerpt": "Mei-Ling Tan: \"how long for e-bike conversion\" — this one stresses me out because honestly could be 2 weeks could be 5 weeks, my Taiwan supplier is so unreliable right now"
+    },
+    {
+      "problem": "The rentals uncertainty was under-probed and then mischaracterised in the brief as 'considering launching rentals soon', when the reality is she has promised 'next month' for a year and is genuinely unsure she wants to commit the storage space. Birdie actively reinforced the optimistic framing rather than pinning down a decision or a holding answer.",
+      "excerpt": "Birdie: Got it — build, convert, repair, with Rafiq as your conversion guru and you handling fittings and sales. Good to know rentals might be coming later too, we can keep that in mind."
+    },
+    {
+      "problem": "Service/FAQ elicitation was incomplete — Birdie never asked 'is that all the services / any other common questions?' and relied solely on the five examples the owner volunteered. Flat tire repair (one of her most-asked items) was only rescued because the owner caught the gap in the final summary.",
+      "excerpt": "Mei-Ling Tan: Oh wait, one thing — flat tire repair! I don't think I mentioned that one but I say S$15, sometimes S$20 for those. Can we add that in somewhere? That's like a super common one too, people always ask \"can you just fix my flat\" lol"
+    },
+    {
+      "problem": "Turn budget spent on low-yield background (business age, customer type, language mix) while core commerce facts (warranty, payment methods, staff coverage) went unasked; interview ran 39 entries, above the normal band.",
+      "excerpt": "Birdie: Six years, that's awesome — clearly doing something right! 😄 So who's your typical customer — are you mostly serving casual neighborhood riders, serious cycling enthusiasts, commuters looking to go electric, or a mix of all of that?"
+    },
+    {
+      "problem": "Every Birdie turn follows the same praise-echo-pivot template ('Got it/Perfect/Love that... Now...'), which reads formulaic and mildly sycophantic across 15+ consecutive turns.",
+      "excerpt": "Birdie: Love that, sounds like Spoke & Sprocket is a real neighborhood fixture. Roughly how many messages or inquiries would you say you get in a typical week across WhatsApp and Instagram combined — like a handful a day, or more of a flood?"
+    },
+    {
+      "problem": "The seasonal reliability risk (she gets overwhelmed and less reliable Jan-Mar) was surfaced only as a volume number; Birdie never asked how the bot should behave during the CNY crunch (e.g. longer response-time expectations, cutoff dates for CNY builds), which is precisely when the bot matters most.",
+      "excerpt": "Mei-Ling Tan: Ooh let me think... probably like 15-20 a week? Just kind of steady, few a day. Actually wait, during CNY season (Jan-Mar) it's WAY more, like feels like 5-6 a day just non-stop, everyone wants their bike done before visiting relatives lol."
+    }
+  ],
+  "top_improvement": "Add a mandatory pre-summary coverage checklist of standard commerce facts the interviewer must explicitly ask before wrapping up — warranty/guarantee terms per service, accepted payment methods and any surcharges, full staff roster with roles/coverage days, complete service+price list ('anything else you charge for?'), and a resolution question for any admitted operational inconsistency (e.g. 'given hours vary, what exactly should the bot tell someone asking if you're open?') — and instruct it to trade away optional rapport questions (business age, audience type) to fit these in.",
+  "schema_suggestions": [
+    "Add a dedicated `payment_methods` field (accepted methods, surcharges, deposit-collection mechanism) — currently there is no home for this and it was lost entirely.",
+    "Add a `warranty_and_guarantees` field (per-service coverage periods and exceptions) — no field exists, so even if asked it would have been crammed into business_policies prose.",
+    "Add a structured `hours` field (regular schedule + closed days + reliability caveat + what the bot should say when hours are uncertain); hours currently appear duplicated and unresolved across faq_answers and business_policies.",
+    "Add a `team` / `staff_roster` field (name, role, days available, escalation eligibility) instead of burying staff inside business_description.",
+    "Add a `bot_scope` field (answer-only vs booking vs payments, reminders) — this key scope decision was dumped into free-text additional_notes.",
+    "Add a `seasonality` field (peak periods, capacity impact, expected bot behaviour during peaks) — currently jammed into conversation_volume.",
+    "Split open_items into `decisions_needed_from_owner` (e.g. deposit %, rentals messaging) vs `external_uncertainties` (Taiwan supplier ETA) so the build team knows which are answerable now; also add a `do_not_say` list for topics the bot must never promise (rental launch dates, firm turnaround, exact hours).",
+    "Add a per-price `confidence/source` attribute so conflicting historical quotes (S$45 vs S$60, S$1,800 vs S$2,000, 30% vs 50%) are recorded as canonical-vs-legacy rather than narrated inside a single string."
+  ]
+}

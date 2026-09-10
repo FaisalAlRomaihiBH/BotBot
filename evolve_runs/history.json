@@ -2,18 +2,18 @@
   {
     "cycle": 1,
     "stamp": "20260910_075729",
-    "persona": "Mobile pet grooming services / Gary rambles constantly and goes off on tangents — he'll start answering a simple question and end up telling you about his footy team, his knee replacement, or a dog he groomed in 2019 named Baxter. He does eventually circle back to answer, but you have to wade through a lot of unrelated chat. He's friendly and well-meaning, just easily distracted.",
+    "persona": "Mobile pet grooming services / Gary rambles constantly and goes off on tangents \u2014 he'll start answering a simple question and end up telling you about his footy team, his knee replacement, or a dog he groomed in 2019 named Baxter. He does eventually circle back to answer, but you have to wade through a lot of unrelated chat. He's friendly and well-meaning, just easily distracted.",
     "score": 7.67,
     "completed": true,
     "improved": true,
     "reverted": false,
     "commit_before": "075a29b2c78cd02a81bd3d32d3c57a0bde8bff62",
-    "top_improvement": "Add a dedicated question (or checklist pass) explicitly covering booking/payment mechanics — e.g., 'Do you take deposits or require any payment before confirming a booking, and how is that currently handled?' — and a scoping question like 'Are you picturing a full booking/payment app, or something simpler like automated replies and calendar sync?' before wrapping up, since these are foundational to what the chatbot must actually do and were both silently skipped despite being known Gary uncertainties."
+    "top_improvement": "Add a dedicated question (or checklist pass) explicitly covering booking/payment mechanics \u2014 e.g., 'Do you take deposits or require any payment before confirming a booking, and how is that currently handled?' \u2014 and a scoping question like 'Are you picturing a full booking/payment app, or something simpler like automated replies and calendar sync?' before wrapping up, since these are foundational to what the chatbot must actually do and were both silently skipped despite being known Gary uncertainties."
   },
   {
     "cycle": 2,
     "stamp": "20260910_080956",
-    "persona": "Home-based catering and daily tiffin service / Chronically vague about numbers — Priya almost never gives a firm price, headcount, or time. She answers with ranges, 'depends,' 'roughly,' or 'let me think about it' and often contradicts her own earlier estimate. She's warm and eager to help, but customers have to push hard to pin down anything concrete, and even then she'll hedge at the last second.",
+    "persona": "Home-based catering and daily tiffin service / Chronically vague about numbers \u2014 Priya almost never gives a firm price, headcount, or time. She answers with ranges, 'depends,' 'roughly,' or 'let me think about it' and often contradicts her own earlier estimate. She's warm and eager to help, but customers have to push hard to pin down anything concrete, and even then she'll hedge at the last second.",
     "score": 6.17,
     "completed": true,
     "improved": true,
@@ -21,12 +21,12 @@
     "commit_before": "78389dd18f6ee148bf909907d6ff64e55ecb6f65",
     "top_improvement": "Systematically walk through EVERY service tier mentioned in the business (tiffin, party trays, full event catering, delivery) with an explicit price-range question for each, instead of asking broadly about 'tiffin pricing and delivery areas' and letting bigger-ticket items (event catering) fall through entirely.",
     "schema_suggestions": [
-      "Add a dedicated 'business_background' or 'business_context' field (location, licensing/permit status, years in operation, how the business has grown) — currently business_description is null with no mechanism forcing Birdie to ask basic background questions.",
-      "Add an explicit 'hours_of_operation' field to the schema — there is currently no slot for this at all, which is why it was never asked despite being fundamental to a customer-facing bot.",
-      "Add a 'staff_or_team' field to capture who does what (owner-operated vs. helpers, schedules) — currently this information has nowhere to live and gets dropped even when mentioned in passing (Anjali).",
+      "Add a dedicated 'business_background' or 'business_context' field (location, licensing/permit status, years in operation, how the business has grown) \u2014 currently business_description is null with no mechanism forcing Birdie to ask basic background questions.",
+      "Add an explicit 'hours_of_operation' field to the schema \u2014 there is currently no slot for this at all, which is why it was never asked despite being fundamental to a customer-facing bot.",
+      "Add a 'staff_or_team' field to capture who does what (owner-operated vs. helpers, schedules) \u2014 currently this information has nowhere to live and gets dropped even when mentioned in passing (Anjali).",
       "Add a 'services_and_pricing' completeness check/field that requires listing ALL service tiers with a range or 'unknown/varies' flag per tier, rather than a free-text list that can silently omit an entire tier (event catering was fully dropped).",
-      "Add a 'known_pain_points' or 'owner_concerns' field distinct from 'open_items' — currently pain points like undercharging, subscriber count uncertainty, and hiring anxiety have no home and were simply never elicited, likely because there's no schema slot prompting the interviewer to ask 'what's frustrating you about the business side of things.'",
-      "The 'additional_notes' and 'open_items' fields are being used as a catch-all for scope decisions and policy gaps (e.g., deposit policy, calendar tool) — consider a structured 'unresolved_decisions' field so these aren't mixed in with generic notes and follow-up reminders."
+      "Add a 'known_pain_points' or 'owner_concerns' field distinct from 'open_items' \u2014 currently pain points like undercharging, subscriber count uncertainty, and hiring anxiety have no home and were simply never elicited, likely because there's no schema slot prompting the interviewer to ask 'what's frustrating you about the business side of things.'",
+      "The 'additional_notes' and 'open_items' fields are being used as a catch-all for scope decisions and policy gaps (e.g., deposit policy, calendar tool) \u2014 consider a structured 'unresolved_decisions' field so these aren't mixed in with generic notes and follow-up reminders."
     ]
   },
   {
@@ -36,38 +36,38 @@
     "score": 7.33,
     "completed": true,
     "improved": false,
-    "top_improvement": "When systematically walking through each service's pricing (locks, keys, safes, appliances), explicitly include the business's core/headline service (here, emergency lockouts) in that same walkthrough rather than treating it only as an escalation-routing topic — the interviewer conflated 'route emergencies to the phone' with 'we don't need the price,' losing a critical FAQ answer.",
+    "top_improvement": "When systematically walking through each service's pricing (locks, keys, safes, appliances), explicitly include the business's core/headline service (here, emergency lockouts) in that same walkthrough rather than treating it only as an escalation-routing topic \u2014 the interviewer conflated 'route emergencies to the phone' with 'we don't need the price,' losing a critical FAQ answer.",
     "findings": [
-      "MAJOR OMISSION: Emergency lockout pricing (£65 call-out + £35 labour, cash preferred, card machine 'usually works') was never asked about. Birdie walked through lock changes, key cutting, safe opening, and appliance repair pricing in detail but skipped the flagship emergency service's price entirely — even though Derek's own escalation policy for lockouts was discussed at length ('Straight to the landline, every time'). The bot will have no price to quote for its single most time-critical service.",
-      "Cash-preferred / card-machine-unreliable detail was never surfaced, despite being directly relevant since Birdie explicitly ruled out online payments — this would have been a natural follow-up ('so how do people usually pay you?') that was missed.",
-      "Derek's stated uncertainty about raising the call-out fee to £75, and his confusion about VAT registration thresholds, were never surfaced. No open-ended question like 'anything else on your mind about pricing or the business?' was asked before closing, so these business-relevant, chatbot-relevant (pricing display) uncertainties were completely lost.",
+      "MAJOR OMISSION: Emergency lockout pricing (\u00a365 call-out + \u00a335 labour, cash preferred, card machine 'usually works') was never asked about. Birdie walked through lock changes, key cutting, safe opening, and appliance repair pricing in detail but skipped the flagship emergency service's price entirely \u2014 even though Derek's own escalation policy for lockouts was discussed at length ('Straight to the landline, every time'). The bot will have no price to quote for its single most time-critical service.",
+      "Cash-preferred / card-machine-unreliable detail was never surfaced, despite being directly relevant since Birdie explicitly ruled out online payments \u2014 this would have been a natural follow-up ('so how do people usually pay you?') that was missed.",
+      "Derek's stated uncertainty about raising the call-out fee to \u00a375, and his confusion about VAT registration thresholds, were never surfaced. No open-ended question like 'anything else on your mind about pricing or the business?' was asked before closing, so these business-relevant, chatbot-relevant (pricing display) uncertainties were completely lost.",
       "Age (61) and town/location context from the fact sheet were never asked about; minor, but could matter for tone/personalization and were freely available if asked.",
-      "Good save: Birdie initially mislabeled the business 'family-run' in the readback, and Derek corrected it ('don't go calling it family-run — it's just me'); the correction was accepted and the record fixed. This is a positive, not a finding against the brief's accuracy.",
-      "Interviewer respected Derek's refusal to share screenshots and to explain the 'Son' backstory without pushing — good adaptive behavior, appropriately not over-probed on sensitive/irrelevant ground.",
-      "Enquiry volume was left vague ('a handful most days, more Mondays') and flagged as an open item rather than pinned down further (e.g., 'would a rough weekly total work, even a guess?') — acceptable but a bit thin for a 'volume' field that could scale the whole chatbot spec."
+      "Good save: Birdie initially mislabeled the business 'family-run' in the readback, and Derek corrected it ('don't go calling it family-run \u2014 it's just me'); the correction was accepted and the record fixed. This is a positive, not a finding against the brief's accuracy.",
+      "Interviewer respected Derek's refusal to share screenshots and to explain the 'Son' backstory without pushing \u2014 good adaptive behavior, appropriately not over-probed on sensitive/irrelevant ground.",
+      "Enquiry volume was left vague ('a handful most days, more Mondays') and flagged as an open item rather than pinned down further (e.g., 'would a rough weekly total work, even a guess?') \u2014 acceptable but a bit thin for a 'volume' field that could scale the whole chatbot spec."
     ],
     "schema_suggestions": [
-      "Add a structured field for 'payment_methods_accepted' (cash/card/preferences) — this recurringly gets missed or would otherwise be dumped into business_policies/additional_notes, but is a distinct, reusable fact type for many small businesses.",
-      "Add a field like 'pending_business_decisions' or 'owner_uncertainties' to capture things the owner is actively unsure about (e.g., 'should I raise my fee', 'how does VAT affect me') — currently there is no home for this fact type at all, so it's simply never asked about or is at risk of being silently dropped rather than filed anywhere.",
-      "The 'additional_notes' field is being used as a catch-all for behaviorally important facts (e.g., 'customers can text any time but Derek doesn't respond quickly') that actually describe response-time expectations relevant to bot messaging — consider a dedicated 'response_time_expectations' or 'availability_caveats' field distinct from business_policies and hours."
+      "Add a structured field for 'payment_methods_accepted' (cash/card/preferences) \u2014 this recurringly gets missed or would otherwise be dumped into business_policies/additional_notes, but is a distinct, reusable fact type for many small businesses.",
+      "Add a field like 'pending_business_decisions' or 'owner_uncertainties' to capture things the owner is actively unsure about (e.g., 'should I raise my fee', 'how does VAT affect me') \u2014 currently there is no home for this fact type at all, so it's simply never asked about or is at risk of being silently dropped rather than filed anywhere.",
+      "The 'additional_notes' field is being used as a catch-all for behaviorally important facts (e.g., 'customers can text any time but Derek doesn't respond quickly') that actually describe response-time expectations relevant to bot messaging \u2014 consider a dedicated 'response_time_expectations' or 'availability_caveats' field distinct from business_policies and hours."
     ]
   },
   {
     "cycle": 4,
     "stamp": "20260910_070729",
-    "persona": "Custom furniture making and woodworking workshop / Chronically indecisive and self-contradicting — Marek will confidently state a price, timeline, or policy, then reverse himself minutes later ('actually, no, let's say...') without acknowledging the contradiction. He changes his mind about wood types, delivery dates, deposit amounts, and even whether he can take a job at all, sometimes within the same message thread. He's not being difficult on purpose — he's genuinely still deciding out loud — but customers often end a conversation more confused than when they started, and need written confirmation pinned down carefully because he'll happily 'update' it again later.",
+    "persona": "Custom furniture making and woodworking workshop / Chronically indecisive and self-contradicting \u2014 Marek will confidently state a price, timeline, or policy, then reverse himself minutes later ('actually, no, let's say...') without acknowledging the contradiction. He changes his mind about wood types, delivery dates, deposit amounts, and even whether he can take a job at all, sometimes within the same message thread. He's not being difficult on purpose \u2014 he's genuinely still deciding out loud \u2014 but customers often end a conversation more confused than when they started, and need written confirmation pinned down carefully because he'll happily 'update' it again later.",
     "score": 5.83,
     "completed": true,
     "improved": false,
-    "top_improvement": "Make turnaround/lead time and job capacity mandatory, non-skippable slots: whenever the owner names a question customers ask (here, literally 'are you open, how much, how long'), the prompt must force Birdie to convert each one into a covered requirement before summarising — and to probe variance ('what's the range you've actually quoted people?') rather than accepting only pricing detail.",
+    "top_improvement": "Make turnaround/lead time and job capacity mandatory, non-skippable slots: whenever the owner names a question customers ask (here, literally 'are you open, how much, how long'), the prompt must force Birdie to convert each one into a covered requirement before summarising \u2014 and to probe variance ('what's the range you've actually quoted people?') rather than accepting only pricing detail.",
     "findings": [
       {
         "problem": "LOST FACT (major): Lead time / turnaround (officially 4-6 weeks, but Marek has quoted 2 and 10 weeks in the same fortnight) was never asked about at all, despite Marek explicitly naming 'how long' as one of the three questions the bot must answer. The brief contains no lead_time information whatsoever.",
         "excerpt": "Marek Kowalski: So I guess... something that answers the basic \"are you open, how much, how long\" stuff without it being me at 9pm trying to remember what I told someone. That's the main thing. Maybe."
       },
       {
-        "problem": "Immediately after Marek flagged 'how long' as a core need, Birdie pivoted to pricing and never returned to turnaround at any point in 35 turns — the single most consequential omission in the interview.",
-        "excerpt": "Birdie: That makes total sense, Marek — pricing consistency is a real pain point. Let's dig into that a bit. For dining tables specifically, since that's your big one — even though it varies by wood, is there a rough price range you usually quote, like 'starts around £X for pine, up to £Y for oak or ash'?"
+        "problem": "Immediately after Marek flagged 'how long' as a core need, Birdie pivoted to pricing and never returned to turnaround at any point in 35 turns \u2014 the single most consequential omission in the interview.",
+        "excerpt": "Birdie: That makes total sense, Marek \u2014 pricing consistency is a real pain point. Let's dig into that a bit. For dining tables specifically, since that's your big one \u2014 even though it varies by wood, is there a rough price range you usually quote, like 'starts around \u00a3X for pine, up to \u00a3Y for oak or ash'?"
       },
       {
         "problem": "LOST FACT: Capacity constraint (unsure whether he can take more than 2 big furniture jobs a month alongside repairs) never surfaced, even though Marek opened the door with 'mixed bag week to week'. A bot that answers 'how long' or 'can you take this on' needs this.",
@@ -78,11 +78,11 @@
         "excerpt": "Marek Kowalski: We do custom furniture, mostly - dining tables are the big one, oak or pine usually, ash sometimes if the Halifax fella has good stock."
       },
       {
-        "problem": "LOST FACT: Basia's actual role — she does the bookkeeping and is the person who remembers what was agreed — is reduced in the brief to 'disapproves of free repairs' and 'wants a contract'. Her role as the record-keeper (and therefore the real escalation authority on agreed terms) is absent.",
+        "problem": "LOST FACT: Basia's actual role \u2014 she does the bookkeeping and is the person who remembers what was agreed \u2014 is reduced in the brief to 'disapproves of free repairs' and 'wants a contract'. Her role as the record-keeper (and therefore the real escalation authority on agreed terms) is absent.",
         "excerpt": "Marek Kowalski: Budget - ah, tight, if I'm honest. We're not exactly rolling in it, it's just me and Dawid and Basia doing the books, no big marketing pot or anything, that's why we've never really done more than the Instagram thing he potters about with."
       },
       {
-        "problem": "Marek's opening question about the existing Instagram 'thing' Dawid installed was never clarified, yet the brief asserts it is 'some kind of Instagram bot/tool' — an inference beyond what was said, then parked as an open item Birdie could easily have closed by asking.",
+        "problem": "Marek's opening question about the existing Instagram 'thing' Dawid installed was never clarified, yet the brief asserts it is 'some kind of Instagram bot/tool' \u2014 an inference beyond what was said, then parked as an open item Birdie could easily have closed by asking.",
         "excerpt": "Marek Kowalski: So look, I need something that can - actually, do you build the chatbot or do you just tell me what I need? Because Dawid, my apprentice, he already put some Instagram thing on our page, not sure if that counts."
       },
       {
@@ -90,52 +90,52 @@
         "excerpt": "Marek Kowalski: Just - answer the questions, give the hours, give the rough prices we talked about, and then say \"message Marek to sort the details\" or whatever. Keep the actual booking, the money side, all that - keep that with me and Basia."
       },
       {
-        "problem": "Bot tone/persona, name, and language coverage were never discussed (languages left null in brief) — standard requirements for an Instagram-facing bot representing a one-man craft brand.",
+        "problem": "Bot tone/persona, name, and language coverage were never discussed (languages left null in brief) \u2014 standard requirements for an Instagram-facing bot representing a one-man craft brand.",
         "excerpt": "Birdie: Great, I think I've got a clear picture now, Marek. Let me run it back to you:"
       },
       {
         "problem": "Efficiency: interview ran 35 turns, above the normal band, partly on low-value slots (years in business) and on splitting the four price ranges into four separate single-service questions that could have been one combined ask.",
-        "excerpt": "Birdie: Eight years, that's a solid run! Roughly how many enquiries would you say come in through Instagram and phone calls in a typical week — just a ballpark, like handful, dozen, more?"
+        "excerpt": "Birdie: Eight years, that's a solid run! Roughly how many enquiries would you say come in through Instagram and phone calls in a typical week \u2014 just a ballpark, like handful, dozen, more?"
       },
       {
-        "problem": "Birdie deflected the dining-table pricing ambiguity ('note that as something to nail down later') instead of resolving it in the moment; the contradiction only got fixed because Marek himself caught it in the final summary — the brief's services_and_pricing still carries both instructions confusingly.",
-        "excerpt": "Birdie: Good to know, and totally fair to be cautious there — we can note that as something to nail down later. Let's move to repairs then: when someone brings in an old chair or table to fix, do you usually charge a flat rate, or is it always 'depends on the job'?"
+        "problem": "Birdie deflected the dining-table pricing ambiguity ('note that as something to nail down later') instead of resolving it in the moment; the contradiction only got fixed because Marek himself caught it in the final summary \u2014 the brief's services_and_pricing still carries both instructions confusingly.",
+        "excerpt": "Birdie: Good to know, and totally fair to be cautious there \u2014 we can note that as something to nail down later. Let's move to repairs then: when someone brings in an old chair or table to fix, do you usually charge a flat rate, or is it always 'depends on the job'?"
       },
       {
         "problem": "Birdie made a delivery commitment on the build team's behalf ('aiming to have it ready well before autumn'), which is outside a requirements-gatherer's remit and mirrors exactly the over-promising problem Marek complained about with Dawid.",
-        "excerpt": "Birdie: Thanks for all the detail, Marek, this gives whoever builds it everything they need to get started. I'll pass this along now — next step is the build team will use this to put together your bot, aiming to have it ready well before autumn."
+        "excerpt": "Birdie: Thanks for all the detail, Marek, this gives whoever builds it everything they need to get started. I'll pass this along now \u2014 next step is the build team will use this to put together your bot, aiming to have it ready well before autumn."
       },
       {
-        "problem": "Evidence request was made once, softly, and abandoned when Marek waffled — no attempt to ask Dawid (who runs the account) to supply DM screenshots, so the brief has zero real customer-message evidence.",
+        "problem": "Evidence request was made once, softly, and abandoned when Marek waffled \u2014 no attempt to ask Dawid (who runs the account) to supply DM screenshots, so the brief has zero real customer-message evidence.",
         "excerpt": "Marek Kowalski: Actually - hang on, let me see if he's screenshotted anything... nah, don't worry about it, just go with what I gave you, that's the gist of it anyway."
       }
     ],
     "schema_suggestions": [
-      "Add a dedicated `lead_time_and_turnaround` field (official quoted range + observed variance) — currently there is nowhere in the schema for delivery timeframes, which is a top-3 customer question for any made-to-order business.",
+      "Add a dedicated `lead_time_and_turnaround` field (official quoted range + observed variance) \u2014 currently there is nowhere in the schema for delivery timeframes, which is a top-3 customer question for any made-to-order business.",
       "Add a `capacity_constraints` field (max concurrent/monthly jobs, staffed hours) so the bot can be told when to stop encouraging new large enquiries.",
-      "Add a `staff_and_authority` structured field (who is present when, who may quote prices, who holds records) — currently Dawid's quoting problem is crammed into `escalation_rules` and Basia's role is scattered across `additional_notes`.",
-      "Add an `escalation_contacts` field (phone, IG handle, hours, fallback person) — the brief tells the bot to 'message Marek directly' with no contact route recorded.",
-      "Add an `existing_tools_and_systems` field (current bots, page/website status, who administers them) — right now the mystery Instagram tool and the dormant Facebook page are dumped in `additional_notes`/`open_items`.",
+      "Add a `staff_and_authority` structured field (who is present when, who may quote prices, who holds records) \u2014 currently Dawid's quoting problem is crammed into `escalation_rules` and Basia's role is scattered across `additional_notes`.",
+      "Add an `escalation_contacts` field (phone, IG handle, hours, fallback person) \u2014 the brief tells the bot to 'message Marek directly' with no contact route recorded.",
+      "Add an `existing_tools_and_systems` field (current bots, page/website status, who administers them) \u2014 right now the mystery Instagram tool and the dormant Facebook page are dumped in `additional_notes`/`open_items`.",
       "Add an `owner_uncertain_or_volatile_facts` field for things the owner genuinely cannot commit to (deposit %, delivery guarantees, expansion plans), so the build team knows which stated rules are unstable rather than burying them in `open_items`.",
-      "Add a `bot_persona_and_tone` field plus explicit `languages` prompting — neither was elicited and tone is undefined for a brand-voice-sensitive Instagram deployment.",
+      "Add a `bot_persona_and_tone` field plus explicit `languages` prompting \u2014 neither was elicited and tone is undefined for a brand-voice-sensitive Instagram deployment.",
       "Give the interviewer a capability to record verbatim customer-message examples in a structured `example_enquiries` field (currently paraphrased examples are wedged into `faq_answers`)."
     ]
   },
   {
     "cycle": 5,
     "stamp": "20260910_071643",
-    "persona": "Custom tailoring & clothing alterations / Fatuma constantly code-switches between English and Swahili (with bits of Sheng slang thrown in), often mid-sentence, and doesn't translate for customers who don't follow. She'll answer a question partly in English then finish the thought in Swahili, or use Swahili filler words/exclamations that leave non-Swahili speakers guessing. She's warm, fast-typing, and assumes everyone understands — occasionally she'll catch herself and half-translate, but often just moves on. This makes pinning down exact details tricky for customers who need her to slow down and clarify in one language.",
+    "persona": "Custom tailoring & clothing alterations / Fatuma constantly code-switches between English and Swahili (with bits of Sheng slang thrown in), often mid-sentence, and doesn't translate for customers who don't follow. She'll answer a question partly in English then finish the thought in Swahili, or use Swahili filler words/exclamations that leave non-Swahili speakers guessing. She's warm, fast-typing, and assumes everyone understands \u2014 occasionally she'll catch herself and half-translate, but often just moves on. This makes pinning down exact details tricky for customers who need her to slow down and clarify in one language.",
     "score": 5.83,
     "completed": true,
     "improved": false,
-    "top_improvement": "Make the owner's own pasted/uploaded recurring customer questions a mandatory coverage checklist: for every question the owner supplies (dress price, hemming, order status, suits, delivery, fabric supply), the interviewer must obtain and confirm a concrete answer before summarizing, and must never assert numbers extracted from uploads as settled — always present them as 'is this right?' verification questions.",
+    "top_improvement": "Make the owner's own pasted/uploaded recurring customer questions a mandatory coverage checklist: for every question the owner supplies (dress price, hemming, order status, suits, delivery, fabric supply), the interviewer must obtain and confirm a concrete answer before summarizing, and must never assert numbers extracted from uploads as settled \u2014 always present them as 'is this right?' verification questions.",
     "findings": [
       {
-        "problem": "Custom dress pricing (KES 3,500–9,000, varies by fabric/design) was never asked about or captured, even though the owner named it as one of the two most frequent questions and pasted it verbatim as a recurring FAQ. The brief's services_and_pricing list has no custom dress line at all.",
+        "problem": "Custom dress pricing (KES 3,500\u20139,000, varies by fabric/design) was never asked about or captured, even though the owner named it as one of the two most frequent questions and pasted it verbatim as a recurring FAQ. The brief's services_and_pricing list has no custom dress line at all.",
         "excerpt": "Fatuma Njeri: Changamoto kubwa ni watu wananiuliza bei za kila kitu mara kwa mara, especially hemming na hizo dresses za custom - wananichoka na simu, asubuhi mpaka jioni \"Fatuma bei ya hii, Fatuma bei ya ile\"."
       },
       {
-        "problem": "Fabric policy (customer may supply own fabric, or shop sources it at a 10–15% markup) was never asked about, despite the owner explicitly pasting it as a daily recurring customer question. It appears nowhere in faq_answers, services_and_pricing or business_policies — only as raw quoted text in additional_notes.",
+        "problem": "Fabric policy (customer may supply own fabric, or shop sources it at a 10\u201315% markup) was never asked about, despite the owner explicitly pasting it as a daily recurring customer question. It appears nowhere in faq_answers, services_and_pricing or business_policies \u2014 only as raw quoted text in additional_notes.",
         "excerpt": "Fatuma Njeri: - \"Mna delivery ya boda ama nikuje pick mwenyewe?\"\n- \"Naeza leta fabric yangu au mnauza fabric?\""
       },
       {
@@ -143,19 +143,19 @@
         "excerpt": "Fatuma Njeri: Nikiwa honest, sitaki bot ianze kupokea pesa moja kwa moja, deposit ni kitu delicate especially kwa bridal - naogopa mtu ata-pay halafu kuna confusion, au mtu anataka refund na sisi tuko na policy ya non-refundable"
       },
       {
-        "problem": "The late-pickup policy (items uncollected after 30 days may be resold to recover costs) was never elicited — a high-risk policy a customer-facing bot would need to state. Birdie ended policy questioning after the payment question.",
-        "excerpt": "Birdie: Hiyo ni maamuzi mazuri, Fatuma, especially kwa bridal deposits — bora salama. Sasa niambie, wateja wako ni watu wa aina gani zaidi"
+        "problem": "The late-pickup policy (items uncollected after 30 days may be resold to recover costs) was never elicited \u2014 a high-risk policy a customer-facing bot would need to state. Birdie ended policy questioning after the payment question.",
+        "excerpt": "Birdie: Hiyo ni maamuzi mazuri, Fatuma, especially kwa bridal deposits \u2014 bora salama. Sasa niambie, wateja wako ni watu wa aina gani zaidi"
       },
       {
         "problem": "Order-status tracking was named as a top pain point ('umefika wapi na dress yangu') and the owner tracks orders in a paper notebook, yet Birdie never resolved how the bot could answer status questions with no digital record. The brief lists the problem but has no requirement or open item for it.",
-        "excerpt": "Fatuma Njeri: Aki hapana, sina hizo app za kisasa 😅 ni notebook tu ya kawaida, kitabu changu cha kuandika orders - jina la mteja, order gani, deposit ngapi, na deadline."
+        "excerpt": "Fatuma Njeri: Aki hapana, sina hizo app za kisasa \ud83d\ude05 ni notebook tu ya kawaida, kitabu changu cha kuandika orders - jina la mteja, order gani, deposit ngapi, na deadline."
       },
       {
         "problem": "Birdie fabricated/mis-extracted facts from the supposed uploaded chats and asserted them as confirmed (750 KES/set at 15+ sets), forcing the owner to correct the interviewer rather than the interviewer verifying first.",
-        "excerpt": "Birdie: Kwa mfano naona jinsi mnavyoshughulikia bei za uniform bulk (750 KES/set ukiwa na 15+) na deposit ya 50% kwa bridal gowns na fittings tatu — hizo ni clear na tutaingiza kwenye bot moja kwa moja."
+        "excerpt": "Birdie: Kwa mfano naona jinsi mnavyoshughulikia bei za uniform bulk (750 KES/set ukiwa na 15+) na deposit ya 50% kwa bridal gowns na fittings tatu \u2014 hizo ni clear na tutaingiza kwenye bot moja kwa moja."
       },
       {
-        "problem": "The summary injected invented pricing/policy (fabric-tiered hemming 300/400, same-day before 4pm) that the owner had never said, requiring a full correction round — a trust-damaging error late in the interview.",
+        "problem": "The summary injected invented pricing/policy (fabric-tiered hemming 300/400, same-day before 4pm) that the owner had never said, requiring a full correction round \u2014 a trust-damaging error late in the interview.",
         "excerpt": "Birdie: - Hemming: 300 KES fabric ya kawaida, 400 KES fabric nzito (denim); same-day ikiletwa kabla 4pm"
       },
       {
@@ -164,10 +164,10 @@
       },
       {
         "problem": "A turn was spent on low-value history ('how many years in business') which the owner could not answer and which became a useless open item, while high-value unasked items (custom dress price, fabric markup, late-pickup rule) were left uncovered.",
-        "excerpt": "Birdie: Sasa nataka kujua kidogo kuhusu historia ya biashara yako — Fatuma's Fine Stitches imekuwa ikifanya kazi kwa muda gani, na je wewe, Joseph, na Amina ndio team nzima au kuna wafanyakazi wengine pia?"
+        "excerpt": "Birdie: Sasa nataka kujua kidogo kuhusu historia ya biashara yako \u2014 Fatuma's Fine Stitches imekuwa ikifanya kazi kwa muda gani, na je wewe, Joseph, na Amina ndio team nzima au kuna wafanyakazi wengine pia?"
       },
       {
-        "problem": "Equipment/operational constraints surfaced by the owner (overlocker replacement vs monthly repair, possible third tailor for December) were recorded only as budget colour; the capacity implication for December bookings — which directly affects the bot's booking/flagging logic — was never probed.",
+        "problem": "Equipment/operational constraints surfaced by the owner (overlocker replacement vs monthly repair, possible third tailor for December) were recorded only as budget colour; the capacity implication for December bookings \u2014 which directly affects the bot's booking/flagging logic \u2014 was never probed.",
         "excerpt": "Fatuma Njeri: naeza kukuambia I'm juggling kama nita-replace hiyo overlocker (45,000 inagharimu) ama niendelee kuirepair kila mwezi (2,000), na pia nafikiria kama tunahitaji tailor wa tatu kwa December au Amina na Joseph wafanye overtime tu."
       }
     ],
@@ -183,11 +183,11 @@
   {
     "cycle": 6,
     "stamp": "20260910_071728",
-    "persona": "Custom furniture building and upholstery restoration / Chronically indecisive and flip-flops constantly — Mari will confidently state a price, timeline, or opinion, then reverse herself minutes later without acknowledging the contradiction. She second-guesses her own quotes, changes her mind about scheduling, materials, and even whether she wants a job, often mid-conversation. She's enthusiastic and creative, treating every decision as still 'up for discussion' even after she's already agreed to it, which leaves customers unsure what was actually decided.",
+    "persona": "Custom furniture building and upholstery restoration / Chronically indecisive and flip-flops constantly \u2014 Mari will confidently state a price, timeline, or opinion, then reverse herself minutes later without acknowledging the contradiction. She second-guesses her own quotes, changes her mind about scheduling, materials, and even whether she wants a job, often mid-conversation. She's enthusiastic and creative, treating every decision as still 'up for discussion' even after she's already agreed to it, which leaves customers unsure what was actually decided.",
     "score": 6.33,
     "completed": true,
     "improved": false,
-    "top_improvement": "Add a mandatory service-and-price inventory sweep before wrap-up ('list every service you offer and the rough price range for each — anything besides chairs and tables?'), paired with a hard no-invention rule: never state a fact (channel, payment method, language, hours nuance) that the owner did not say or that isn't in a named uploaded file, and mark any file-derived fact for explicit confirmation in the readback.",
+    "top_improvement": "Add a mandatory service-and-price inventory sweep before wrap-up ('list every service you offer and the rough price range for each \u2014 anything besides chairs and tables?'), paired with a hard no-invention rule: never state a fact (channel, payment method, language, hours nuance) that the owner did not say or that isn't in a named uploaded file, and mark any file-derived fact for explicit confirmation in the readback.",
     "findings": [
       {
         "problem": "Entire service lines were never elicited and are absent from the brief: upholstery restoration of couches/ottomans, headboards/shelving, and small refinishing jobs ($80-150), plus armchair full reupholster ($250-400). Birdie only ever captured 'chairs' and 'tables' because those happened to appear in the uploaded samples, and never asked 'what services do you offer?'",
@@ -195,22 +195,22 @@
       },
       {
         "problem": "Birdie invented a WhatsApp channel that Mari never mentioned, asserted it twice, and only removed it because Mari caught it in the readback.",
-        "excerpt": "Birdie: Ha, totally fair — and honestly a couple weeks for a simple FAQ + reminder bot connected across four channels is a bit tight, especially getting Instagram/Messenger/WhatsApp all wired up properly, so it might take a little longer than that to do it right"
+        "excerpt": "Birdie: Ha, totally fair \u2014 and honestly a couple weeks for a simple FAQ + reminder bot connected across four channels is a bit tight, especially getting Instagram/Messenger/WhatsApp all wired up properly, so it might take a little longer than that to do it right"
       },
       {
-        "problem": "The brief lists languages 'English, Spanish (occasional greetings, bilingual customer base)' and target audience 'bilingual English/Spanish community' — this was NEVER asked or stated anywhere in the interview. Pure fabrication, and it wasn't even surfaced in the readback for Mari to correct.",
-        "excerpt": "Birdie: - **Business**: Fuentes Custom Woodworks & Upholstery, Albuquerque, ~6 years running, just you and Tomás (weekend help, a bit unreliable lately).\n- **Problem**: Constant repetitive texts about pricing/timing across 4+ channels (text, IG DM, FB Messenger, phone, WhatsApp), ~20-30/week, spiking after Instagram posts."
+        "problem": "The brief lists languages 'English, Spanish (occasional greetings, bilingual customer base)' and target audience 'bilingual English/Spanish community' \u2014 this was NEVER asked or stated anywhere in the interview. Pure fabrication, and it wasn't even surfaced in the readback for Mari to correct.",
+        "excerpt": "Birdie: - **Business**: Fuentes Custom Woodworks & Upholstery, Albuquerque, ~6 years running, just you and Tom\u00e1s (weekend help, a bit unreliable lately).\n- **Problem**: Constant repetitive texts about pricing/timing across 4+ channels (text, IG DM, FB Messenger, phone, WhatsApp), ~20-30/week, spiking after Instagram posts."
       },
       {
         "problem": "Payment methods (cash/Venmo/check, and Mari's repeated ambivalence about checks) were never asked about in the interview, yet appear in the readback and brief as confirmed facts with an invented nuance ('preferred', 'discouraged'). Mari's actual stated position ('doesn't really do checks anymore') was never verified.",
-        "excerpt": "Birdie: - **Payments**: Cash or Venmo (preferred), checks discouraged. Official deposit policy for the bot: 30% upfront, always — your quiet exceptions stay off-bot."
+        "excerpt": "Birdie: - **Payments**: Cash or Venmo (preferred), checks discouraged. Official deposit policy for the bot: 30% upfront, always \u2014 your quiet exceptions stay off-bot."
       },
       {
-        "problem": "The brief's hours FAQ adds 'early closures for events like estate sales' — estate sales are never mentioned by Mari anywhere in the transcript. Another unverified invention layered onto a genuine fact.",
+        "problem": "The brief's hours FAQ adds 'early closures for events like estate sales' \u2014 estate sales are never mentioned by Mari anywhere in the transcript. Another unverified invention layered onto a genuine fact.",
         "excerpt": "Birdie: - **Hours**: Tues-Sat, 9-5 (varies sometimes)."
       },
       {
-        "problem": "Hours volatility — the single most operationally important fact for a bot (Mari changes hours constantly, closes early, sometimes opens Sundays) — was never probed, even though 'are you open Sunday?' was named by Mari as one of her most frequent inquiries. The bot has no instruction for hours questions beyond a static Tues-Sat 9-5.",
+        "problem": "Hours volatility \u2014 the single most operationally important fact for a bot (Mari changes hours constantly, closes early, sometimes opens Sundays) \u2014 was never probed, even though 'are you open Sunday?' was named by Mari as one of her most frequent inquiries. The bot has no instruction for hours questions beyond a static Tues-Sat 9-5.",
         "excerpt": "Marisol \"Mari\" Fuentes: Like someone will text \"hey how much to redo my dining chairs, I have 6 of them\" and another one's like \"can you build me a table by Christmas?\" and then there's always the classic \"are you open Sunday?\" lol. That kind of thing, pretty much nonstop."
       },
       {
@@ -218,34 +218,95 @@
         "excerpt": "Marisol \"Mari\" Fuentes: Like I have that one table already in the queue and it's kind of fun. But then I look at my backlog and I'm like \"why do I do this to myself,\" you know?"
       },
       {
-        "problem": "Fabric suppliers/swatch stock (three suppliers, rotating favorite) was never explored even though Mari herself tied pricing to fabric grade — so the bot can't answer 'what fabrics can I choose from?', a predictable upholstery FAQ. Wood suppliers (reclaimed yard vs big-box) were likewise never asked about despite custom pricing being 'depending on wood'.",
-        "excerpt": "Marisol \"Mari\" Fuentes: Oh also — quick thing, the $50/$65 chair pricing, that's close but I think I've actually been saying more like $45-70 depending on fabric, so maybe round it out a little wider just in case?"
+        "problem": "Fabric suppliers/swatch stock (three suppliers, rotating favorite) was never explored even though Mari herself tied pricing to fabric grade \u2014 so the bot can't answer 'what fabrics can I choose from?', a predictable upholstery FAQ. Wood suppliers (reclaimed yard vs big-box) were likewise never asked about despite custom pricing being 'depending on wood'.",
+        "excerpt": "Marisol \"Mari\" Fuentes: Oh also \u2014 quick thing, the $50/$65 chair pricing, that's close but I think I've actually been saying more like $45-70 depending on fabric, so maybe round it out a little wider just in case?"
       },
       {
         "problem": "Birdie pushed Mari to give a 'final answer' on a genuine unresolved business-strategy question (whether to keep doing custom builds at all vs focusing on upholstery) instead of exploring it; the deeper dilemma is only partially reflected as a build 'open item' rather than as an owner decision needing resolution before launch.",
-        "excerpt": "Marisol \"Mari\" Fuentes: Actually wait, no — maybe safer to just pause it for now since I've got so much upholstery stuff piling up? Ugh. Okay okay, final answer: limited custom orders, ask me directly. Let's go with that. For now. 😅"
+        "excerpt": "Marisol \"Mari\" Fuentes: Actually wait, no \u2014 maybe safer to just pause it for now since I've got so much upholstery stuff piling up? Ugh. Okay okay, final answer: limited custom orders, ask me directly. Let's go with that. For now. \ud83d\ude05"
       },
       {
-        "problem": "The brief's open_items contains a stale, already-resolved item (pricing Q&A vs scheduling scope), contradicting the scope decision later recorded in additional_notes — the brief was not reconciled against the interview's own conclusions.",
-        "excerpt": "Marisol \"Mari\" Fuentes: Okay let's go simple for now — questions, reminders, maybe a calendar peek — but NOT handling deposits or payments through it, that stays with me. Yeah. I think. 😅"
+        "problem": "The brief's open_items contains a stale, already-resolved item (pricing Q&A vs scheduling scope), contradicting the scope decision later recorded in additional_notes \u2014 the brief was not reconciled against the interview's own conclusions.",
+        "excerpt": "Marisol \"Mari\" Fuentes: Okay let's go simple for now \u2014 questions, reminders, maybe a calendar peek \u2014 but NOT handling deposits or payments through it, that stays with me. Yeah. I think. \ud83d\ude05"
       },
       {
         "problem": "Mari twice asked for Birdie's recommendation and got deflected rather than guided; for an indecisive owner this left her steering the scope by gut feeling, which produced several flip-flops later in the interview.",
-        "excerpt": "Marisol \"Mari\" Fuentes: Ugh, I don't know, what do you think makes more sense??\nBirdie: That's such a common headache, Mari — totally get it. We can figure out the right mix of pricing vs. scheduling once we know more, so no need to decide right this second."
+        "excerpt": "Marisol \"Mari\" Fuentes: Ugh, I don't know, what do you think makes more sense??\nBirdie: That's such a common headache, Mari \u2014 totally get it. We can figure out the right mix of pricing vs. scheduling once we know more, so no need to decide right this second."
       },
       {
-        "problem": "Mari flagged that her uploads may not have gone through, and Birdie never confirmed what was actually received or listed the files back — yet the brief then treats file-derived details (hours, payments) as settled facts, making provenance untraceable.",
-        "excerpt": "Marisol \"Mari\" Fuentes: Oh wait, actually — let me just tell you instead 'cause I'm not 100% sure those uploaded right."
+        "problem": "Mari flagged that her uploads may not have gone through, and Birdie never confirmed what was actually received or listed the files back \u2014 yet the brief then treats file-derived details (hours, payments) as settled facts, making provenance untraceable.",
+        "excerpt": "Marisol \"Mari\" Fuentes: Oh wait, actually \u2014 let me just tell you instead 'cause I'm not 100% sure those uploaded right."
       }
     ],
     "schema_suggestions": [
       "Add a structured `hours_and_availability` field (regular hours + known variability/exception patterns + what the bot should say when hours are uncertain), instead of burying hours inside `faq_answers` as a static string.",
-      "Add a `current_capacity_backlog` field (jobs in queue by type, typical lead time, who works when) — capacity drives every turnaround answer but currently has nowhere to live.",
-      "Add a `suppliers_and_materials` field (fabric swatch suppliers, wood sources, material options customers can choose from) — needed for materials FAQs and has no home in the current schema.",
+      "Add a `current_capacity_backlog` field (jobs in queue by type, typical lead time, who works when) \u2014 capacity drives every turnaround answer but currently has nowhere to live.",
+      "Add a `suppliers_and_materials` field (fabric swatch suppliers, wood sources, material options customers can choose from) \u2014 needed for materials FAQs and has no home in the current schema.",
       "Add a per-fact `confidence`/`source` attribute (owner-stated, inferred from uploaded evidence, assumed) so unverified items like languages, WhatsApp, and payment methods cannot silently enter the brief as confirmed.",
-      "Split `open_items` into `owner_decisions_pending` (real business questions like 'keep offering custom builds?') vs `build_scope_questions`, and require resolved items to be removed — currently resolved and unresolved items are mixed.",
+      "Split `open_items` into `owner_decisions_pending` (real business questions like 'keep offering custom builds?') vs `build_scope_questions`, and require resolved items to be removed \u2014 currently resolved and unresolved items are mixed.",
       "Add a `known_inconsistencies` field for facts the owner states differently over time (deposit waivers, delivery, checks), instead of cramming this into prose inside `business_policies`.",
       "Give the interviewer an upload-manifest capability: echo back the exact filenames/message count actually ingested so the owner can confirm the evidence set before it is used to assert facts."
+    ]
+  },
+  {
+    "cycle": 7,
+    "stamp": "20260910_072743",
+    "persona": "Custom bicycle building, e-bike conversions, and bike repair / Chronically indecisive and self-contradicting \u2014 Mei-Ling will confidently state a price, policy, or timeline, then reverse herself minutes later without acknowledging the change. She often blames it on 'still thinking it over' or 'actually, wait,' and customers frequently get two or three different answers to the same question in one conversation. She's enthusiastic and not trying to deceive anyone \u2014 she genuinely keeps changing her mind \u2014 but it makes pinning her down maddening.",
+    "score": 6.33,
+    "completed": true,
+    "improved": false,
+    "top_improvement": "Add a mandatory pre-summary coverage checklist of standard commerce facts the interviewer must explicitly ask before wrapping up \u2014 warranty/guarantee terms per service, accepted payment methods and any surcharges, full staff roster with roles/coverage days, complete service+price list ('anything else you charge for?'), and a resolution question for any admitted operational inconsistency (e.g. 'given hours vary, what exactly should the bot tell someone asking if you're open?') \u2014 and instruct it to trade away optional rapport questions (business age, audience type) to fit these in.",
+    "findings": [
+      {
+        "problem": "Warranty/guarantee terms were never asked about at all. The owner knows 6 months on custom builds and 3 months on repairs (with ad-hoc extensions) \u2014 a top-5 customer FAQ for a repair shop \u2014 and it is entirely absent from the brief. Birdie moved straight from refunds to escalation.",
+        "excerpt": "Birdie: That's actually really helpful context, no need to apologize! It tells me the bot should probably state the 'official' rule (refundable before parts ordered, non-refundable after) but flag border-line or already-cancelled cases for you to handle personally rather than auto-deciding. Now, switching gears a bit \u2014 when a customer messages with something the bot can't handle, like a weird custom request or a complaint, do you want it to just say 'Mei-Ling will get back to you', or hand off to you and Rafiq differently depending on the topic?"
+      },
+      {
+        "problem": "Accepted payment methods were never captured (cash, PayNow, card with a 2.5% surcharge she sometimes forgets to apply). The owner even mentioned PayNow unprompted and Birdie did not follow up; the brief has no payment-methods information anywhere, so the bot cannot answer 'can I pay by card?'.",
+        "excerpt": "Mei-Ling Tan: Ooh, big question! Um... I think I'd want it to just answer questions and maybe send reminders? Like I still want to be the one actually confirming bookings and taking payment, 'cause I don't trust a bot to handle my PayNow stuff lol."
+      },
+      {
+        "problem": "Staff roster was never fully elicited \u2014 the Saturday part-time helper Josh (student, does tune-ups and tire changes) is missing entirely, so the brief implies only two people and no weekend coverage detail. Birdie echoed Rafiq's role but never asked 'anyone else on the team?'.",
+        "excerpt": "Mei-Ling Tan: Oh and my mechanic Rafiq handles most of the conversion stuff, he's the real expert there, I just do fittings and sales side of things!"
+      },
+      {
+        "problem": "The single most operationally dangerous fact \u2014 that posted hours are unreliable (opens late AND sometimes closes early on a whim) \u2014 was recorded but never resolved. Birdie never asked what the bot should tell customers about arriving, or whether it should say 'message to confirm we're open'. The brief also drops the 'closes early' half of the fact.",
+        "excerpt": "Mei-Ling Tan: \"do you guys open on Monday?\" \u2014 no we're closed Mondays, 10-7 the rest of the week... though sometimes I open late if I've got a fitting appointment or just feel like sleeping in lol"
+      },
+      {
+        "problem": "The owner flagged e-bike turnaround as her biggest stressor and a genuine unknown, and Birdie skipped it completely in the interview \u2014 it only appears in the brief because the summary listed it as an open item. No probing on what the bot should say in the meantime (e.g. quote 3-5 weeks, or always escalate).",
+        "excerpt": "Mei-Ling Tan: \"how long for e-bike conversion\" \u2014 this one stresses me out because honestly could be 2 weeks could be 5 weeks, my Taiwan supplier is so unreliable right now"
+      },
+      {
+        "problem": "The rentals uncertainty was under-probed and then mischaracterised in the brief as 'considering launching rentals soon', when the reality is she has promised 'next month' for a year and is genuinely unsure she wants to commit the storage space. Birdie actively reinforced the optimistic framing rather than pinning down a decision or a holding answer.",
+        "excerpt": "Birdie: Got it \u2014 build, convert, repair, with Rafiq as your conversion guru and you handling fittings and sales. Good to know rentals might be coming later too, we can keep that in mind."
+      },
+      {
+        "problem": "Service/FAQ elicitation was incomplete \u2014 Birdie never asked 'is that all the services / any other common questions?' and relied solely on the five examples the owner volunteered. Flat tire repair (one of her most-asked items) was only rescued because the owner caught the gap in the final summary.",
+        "excerpt": "Mei-Ling Tan: Oh wait, one thing \u2014 flat tire repair! I don't think I mentioned that one but I say S$15, sometimes S$20 for those. Can we add that in somewhere? That's like a super common one too, people always ask \"can you just fix my flat\" lol"
+      },
+      {
+        "problem": "Turn budget spent on low-yield background (business age, customer type, language mix) while core commerce facts (warranty, payment methods, staff coverage) went unasked; interview ran 39 entries, above the normal band.",
+        "excerpt": "Birdie: Six years, that's awesome \u2014 clearly doing something right! \ud83d\ude04 So who's your typical customer \u2014 are you mostly serving casual neighborhood riders, serious cycling enthusiasts, commuters looking to go electric, or a mix of all of that?"
+      },
+      {
+        "problem": "Every Birdie turn follows the same praise-echo-pivot template ('Got it/Perfect/Love that... Now...'), which reads formulaic and mildly sycophantic across 15+ consecutive turns.",
+        "excerpt": "Birdie: Love that, sounds like Spoke & Sprocket is a real neighborhood fixture. Roughly how many messages or inquiries would you say you get in a typical week across WhatsApp and Instagram combined \u2014 like a handful a day, or more of a flood?"
+      },
+      {
+        "problem": "The seasonal reliability risk (she gets overwhelmed and less reliable Jan-Mar) was surfaced only as a volume number; Birdie never asked how the bot should behave during the CNY crunch (e.g. longer response-time expectations, cutoff dates for CNY builds), which is precisely when the bot matters most.",
+        "excerpt": "Mei-Ling Tan: Ooh let me think... probably like 15-20 a week? Just kind of steady, few a day. Actually wait, during CNY season (Jan-Mar) it's WAY more, like feels like 5-6 a day just non-stop, everyone wants their bike done before visiting relatives lol."
+      }
+    ],
+    "schema_suggestions": [
+      "Add a dedicated `payment_methods` field (accepted methods, surcharges, deposit-collection mechanism) \u2014 currently there is no home for this and it was lost entirely.",
+      "Add a `warranty_and_guarantees` field (per-service coverage periods and exceptions) \u2014 no field exists, so even if asked it would have been crammed into business_policies prose.",
+      "Add a structured `hours` field (regular schedule + closed days + reliability caveat + what the bot should say when hours are uncertain); hours currently appear duplicated and unresolved across faq_answers and business_policies.",
+      "Add a `team` / `staff_roster` field (name, role, days available, escalation eligibility) instead of burying staff inside business_description.",
+      "Add a `bot_scope` field (answer-only vs booking vs payments, reminders) \u2014 this key scope decision was dumped into free-text additional_notes.",
+      "Add a `seasonality` field (peak periods, capacity impact, expected bot behaviour during peaks) \u2014 currently jammed into conversation_volume.",
+      "Split open_items into `decisions_needed_from_owner` (e.g. deposit %, rentals messaging) vs `external_uncertainties` (Taiwan supplier ETA) so the build team knows which are answerable now; also add a `do_not_say` list for topics the bot must never promise (rental launch dates, firm turnaround, exact hours).",
+      "Add a per-price `confidence/source` attribute so conflicting historical quotes (S$45 vs S$60, S$1,800 vs S$2,000, 30% vs 50%) are recorded as canonical-vs-legacy rather than narrated inside a single string."
     ]
   }
 ]
