@@ -1,32 +1,34 @@
-[14/03, 09:12] Sarah M: Hi Greg! Interested in a dining table, seats 6. What would that run me?
-[14/03, 09:40] Greg Wojcik: Hi Sarah. For 6 seater in rimu probably around $2400
-[14/03, 09:41] Greg Wojcik: Oak would be more like $2800
-[14/03, 11:15] Greg Wojcik: Actually thinking about it, rimu prices went up. Call it $2600
-[14/03, 11:16] Sarah M: Ok! So is $2600 the final quote for rimu?
-[14/03, 14:02] Greg Wojcik: Yeah let's say that. Might be $2500 if I use the Rotorua supplier
-[14/03, 14:03] Sarah M: Right, and timeline?
-[14/03, 14:20] Greg Wojcik: 6 weeks easy
-[14/03, 18:47] Greg Wojcik: actually just remembered I've got 2 decks booked in before that, more like 9 weeks sorry
-[15/03, 08:03] Sarah M: 9 weeks it is then, can you confirm deposit amount?
-[15/03, 08:30] Greg Wojcik: 30% to start
-[15/03, 08:31] Greg Wojcik: oh wait I think I told the last guy 50%, let me check my notes
-[15/03, 16:10] Greg Wojcik: yep 30% is right, sorry
-[17/03, 10:05] Tom R: Hey do you still do kitchen cabinetry? Need a full reno
-[17/03, 10:44] Greg Wojcik: honestly probably not taking on new cabinetry jobs at the moment, too much on
-[17/03, 10:45] Greg Wojcik: what's the kitchen size though
-[17/03, 11:02] Tom R: Medium, maybe 10 cabinets total
-[17/03, 15:30] Greg Wojcik: yeah actually I could probably squeeze it in, ballpark $8000-9000 but I'd need to see photos
-[17/03, 15:31] Tom R: Great, sent some photos above
-[17/03, 15:31] Greg Wojcik: got them, let me have a proper look tonight and get back to you
-[22/03, 09:00] Tom R: Hi Greg, any update on the quote?
-[02/04, 13:00] Sarah M: Hi Greg just checking in, are we still on track for the table? Also do you deliver in Hamilton?
-[02/04, 13:40] Greg Wojcik: yep on track. delivery is $50 flat within Hamilton
-[02/04, 13:41] Greg Wojcik: actually you're not far from my mother in law, I'll probably just drop it for free when I'm out that way
-[10/04, 09:15] Priya K: Hi, I have an antique chair that needs a leg repaired, what's your hourly rate?
-[10/04, 09:50] Greg Wojcik: $80/hr for repair work
-[10/04, 09:51] Greg Wojcik: could be $90 depending how fiddly it is, old joints are unpredictable
-[10/04, 10:02] Priya K: Roughly how many hours would this take?
-[10/04, 14:15] Greg Wojcik: hard to say without seeing it, could be 2 hours could be 5
-[10/04, 14:16] Priya K: Ok can I bring it by tomorrow?
-[10/04, 14:16] Greg Wojcik: yep workshop's open till 4
-[11/04, 15:50] Priya K: Just dropped it off with Tomasz, thanks!
+[14/03, 09:12] Callum Reid: Morning! Yeah happy to quote you for a dining table, oak you said?
+[14/03, 09:15] Customer (Mara): Yes, 6-seater, oak if possible
+[14/03, 09:20] Callum Reid: Right so oak's been about £900 for that size but honestly I might need to bump it to £1000, timber's gone up
+[14/03, 09:21] Callum Reid: Actually no let's just say £900, I've got some oak in stock already from before the price hike
+[14/03, 09:22] Customer (Mara): Ok great, £900 it is?
+[14/03, 09:23] Callum Reid: ...yeah let's go with that. Unless I run out of the stock I've got, then it'd be more. But should be fine
+[14/03, 09:24] Customer (Mara): Right, and how long would it take?
+[14/03, 09:26] Callum Reid: 6-8 weeks normally
+[14/03, 09:27] Callum Reid: Actually thinking about it I've got two big jobs ahead of you so probably more like 10
+[14/03, 09:28] Callum Reid: But Jess starts back Wednesdays now so maybe that speeds things up, could be 8 again
+[14/03, 09:29] Customer (Mara): So... 8 or 10?
+[14/03, 09:31] Callum Reid: Let's say 8, I'll push to get it done
+[16/03, 11:03] Customer (Mara): Hi again, just to confirm - deposit is 50%?
+[16/03, 14:47] Callum Reid: Yep 50% upfront, rest on delivery
+[16/03, 14:48] Callum Reid: Actually for you maybe just do a smaller deposit, £200? You seem sound
+[16/03, 14:49] Callum Reid: No wait let's keep it consistent, 50% like everyone, sorry
+[02/04, 10:15] Customer (Greg): Hey mate, do you do commercial fit-outs? Need shelving for a cafe
+[02/04, 10:40] Callum Reid: Yeah could probably manage that
+[02/04, 10:41] Callum Reid: Actually hang on, my workshop's pretty small for a full fit-out, might not have the space to store the panels while I work
+[02/04, 10:42] Callum Reid: Let me think about it and get back to you
+[09/04, 18:02] Customer (Greg): Any update on the cafe shelving?
+[09/04, 18:55] Callum Reid: Sorry been mad busy, let me check my workshop space this week and I'll message you
+[22/04, 09:00] Customer (Greg): Hi Callum, following up again on the shelving job
+[22/04, 09:00] Callum Reid: 👍
+[03/05, 13:20] Customer (Priti): Hi, do you deliver? I'm about 20 miles out
+[03/05, 13:45] Callum Reid: Yeah free delivery, no charge
+[03/05, 13:46] Callum Reid: Oh wait actually anything past 15 miles is £40, forgot you're a bit further out
+[03/05, 13:47] Callum Reid: Although if I'm already going that way for another delivery I might not charge you, depends on the week
+[10/05, 16:10] Customer (Priti): Following up - is my table still on for early June?
+[10/05, 16:44] Callum Reid: Should be yeah
+[10/05, 16:45] Callum Reid: Actually might slip to mid-June, staining takes longer than I plan for every time
+[10/05, 16:46] Callum Reid: I'll let you know closer to the time
+[27/05, 08:30] Customer (Priti): Any update on timing?
+[27/05, 08:31] Callum Reid: let me check the workshop schedule and get back to you today
