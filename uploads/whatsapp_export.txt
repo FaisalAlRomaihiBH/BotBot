@@ -1,43 +1,56 @@
-[09:12, 3/11] Customer (Alan): Hi, do you do wheel truing as a walk-in or do I need to book?
-[09:40, 3/11] Gerald: walk in mate anytime, just come down
-[11:03, 3/11] Gerald: actually thinking of stopping walk ins for that, too many people just turning up
-[11:04, 3/11] Alan: so should I book or not?
-[11:50, 3/11] Gerald: nah walk in is fine honestly, ignore that
-[14:22, 3/11] Customer (Priya): How much for a full tune-up on a road bike?
-[14:30, 3/11] Gerald: £45 usually
-[14:31, 3/11] Priya: great, can I book Thursday?
-[15:02, 3/11] Gerald: thursday's tight, maybe say £55 if you want it prioritised
-[15:03, 3/11] Priya: wait, why more if I book earlier?
-[15:10, 3/11] Gerald: good point, let's just say £45 don't worry about it
-[09:15, 4/11] Customer (Marcus): Interested in a custom steel frame build, what's the starting price roughly?
-[09:45, 4/11] Gerald: around 1200 for the basics
-[10:20, 4/11] Gerald: actually depends on the frame supplier's current rates, could be more like 900 if I go with the cheaper Italian batch
-[10:21, 4/11] Marcus: ok so 900-1200?
-[10:44, 4/11] Gerald: yeah could even be 1500 if you want the nicer lugs, I'll have to check
-[10:45, 4/11] Marcus: let me know when you know!
-[--- no reply ---]
-[16:02, 5/11] Customer (Sadia): What are your opening hours on Saturdays?
-[16:30, 4/11] Gerald: 9 to 5 Saturday
-[16:45, 4/11] Gerald: oh wait no I sometimes shut at 1 on Saturdays now, changed it
-[16:46, 4/11] Sadia: which is it??
-[17:00, 4/11] Gerald: 9-5, ignore the other thing, unless football's on then I shut early
-[08:30, 6/11] Customer (Tom): Hi, do you take deposits for custom builds?
-[09:00, 6/11] Gerald: yeah 30% upfront normally
-[09:40, 6/11] Gerald: actually for you I'll say 50%, just to be safe
-[09:41, 6/11] Tom: why the change?
-[09:55, 6/11] Gerald: no reason, let's do 30%, sorry
-[10:10, 6/11] Customer (Eva): Do you charge extra for card payments?
-[10:40, 6/11] Gerald: think it's 2%
-[10:41, 6/11] Gerald: or 3%, honestly not sure, never checked properly
-[10:42, 6/11] Eva: could you find out?
-[10:43, 6/11] Gerald: yeah I'll check and let you know
-[--- no reply ---]
-[13:15, 7/11] Customer (Rob): How long for a standard tune-up turnaround?
-[13:30, 7/11] Gerald: 3-5 days usually
-[13:45, 7/11] Gerald: could be a week if Colin's not in
-[13:46, 7/11] Rob: who's Colin?
-[13:50, 7/11] Gerald: my Thursday Friday guy, basically runs the place now
-[13:51, 7/11] Rob: didn't know you had staff
-[13:52, 7/11] Gerald: yeah forgot to mention him, he's good
-[15:00, 8/11] Customer (Marcus): Any update on that frame pricing?
-[--- no reply ---]
+[Mon 09:14] Hi, do you do same-day puncture repairs?
+[Mon 09:20] Colin: Yeah easy, bring it in, done by lunch
+[Mon 09:21] Colin: actually hang on if Ruth's not in today it might be end of day, she does the quick stuff
+[Mon 09:22] Colin: no you know what bring it in, I'll sort it, lunch time
+[Mon 09:45] Great, I'll drop it at 10
+[Mon 09:46] Colin: perfect
+
+[Wed 14:02] Hi Colin, how much for a full service on a hybrid bike?
+[Wed 14:30] Colin: full service is £90
+[Wed 14:31] Colin: or £110 if it needs new cables, which yours probably will tbh
+[Wed 14:33] Colin: actually let's just say £100 flat, easier for both of us
+[Wed 14:34] Colin: unless it's really grimy then more, we'll see when it's in
+[Wed 15:10] Ok... so roughly £90-110?
+[Wed 15:40] Colin: yeah basically
+
+[Thu 11:05] Do you build custom frames? Looking for a steel touring frame
+[Thu 16:20] Colin: I do! Love that stuff honestly
+[Thu 16:21] Colin: price wise... I'd say £1200 to start
+[Thu 16:22] Colin: though last one I did took me way longer than quoted so maybe more like £1400
+[Thu 16:23] Colin: I genuinely don't know honestly, let me think on it properly and get back to you
+[Fri 09:00] Any update on the frame pricing?
+[no reply]
+
+[Sat 10:15] Hi, can I book a drop off for Tuesday morning for a tune-up?
+[Sat 10:40] Colin: Tuesday's good, come at 9:30
+[Sat 10:41] Colin: actually Tuesday I might have someone else's bike booked in that slot, better make it Wednesday
+[Sat 10:42] Colin: no wait Tuesday's fine, I mixed it up with last week
+[Sat 10:50] So... Tuesday 9:30?
+[Sat 11:15] Colin: yes Tuesday 9:30 locked in
+
+[Sun 19:00] What time do you open tomorrow?
+[Mon 08:55] Colin: 9:30! sorry just saw this
+
+[Tue 09:32] I'm here for the 9:30 drop off
+[Tue 09:50] Colin: sorry running behind, be there in ten
+
+[Tue 16:00] Hey any chance my bike's ready today, was told 2-3 days
+[Tue 16:45] Colin: ooh let me check where it's at, back to you shortly
+[no further reply that day]
+
+[Thu 10:00] Still no word on my bike from Tuesday drop off, what's going on?
+[Thu 12:15] Colin: so sorry, it's actually ready, my bad, come whenever
+
+[Fri 13:00] Do you take card payments?
+[Fri 13:20] Colin: not yet, cash or bank transfer
+[Fri 13:21] Colin: actually I keep meaning to get the card machine sorted, might have it by next month
+[Fri 13:22] Colin: honestly don't hold your breath though
+
+[Sat 15:00] Wheel truing - how much and how long?
+[Sat 15:30] Colin: £15, takes like 20 mins while you wait
+[Sat 15:31] Colin: unless it's badly buckled then I'd rather keep it overnight
+[Sat 15:32] Colin: bring it Saturday, I'll have a look and tell you then honestly
+
+[Sun 20:00] Hi, do you sell tubes/tyres in shop?
+[Mon 09:40] Colin: yeah got a small rack
+[Mon 09:41] Colin: honestly thinking of getting rid of it though, barely worth it, we'll see
