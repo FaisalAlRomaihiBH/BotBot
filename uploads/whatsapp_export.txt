@@ -1,28 +1,28 @@
-[09:12, 3/14] Hannah R: Hi! Interested in the subscription box, what's the current price?
-[09:20, 3/14] Marcus - Crumb & Co: Hey Hannah! It's £14/week for 2 loaves, great value 😊
-[09:41, 3/14] Hannah R: Perfect, and can I pause anytime?
-[09:44, 3/14] Marcus - Crumb & Co: Yep just give us 48 hrs notice and you're sorted
-[11:02, 3/15] Marcus - Crumb & Co: Actually Hannah been thinking about it, might bump the subscription to £16 to cover flour costs, will confirm this week
-[11:05, 3/15] Hannah R: Oh — should I hold off signing up then?
-[11:07, 3/15] Marcus - Crumb & Co: No no you're grand at £14, that's locked in for you
-[16:30, 3/16] Tom B: Do you deliver to BS7?
-[16:45, 3/16] Marcus - Crumb & Co: Should be fine, Josh covers most of Bristol
-[09:15, 3/17] Tom B: Great, can I get delivery this Thursday then?
-[09:50, 3/17] Marcus - Crumb & Co: Actually hang on, Josh only does BS1-BS6 at the minute, let me check if BS7 is doable and get back to you
-[14:00, 3/19] Tom B: Any update?
-[10:02, 3/22] Tom B: Hi Marcus, following up on the BS7 delivery question
-[08:44, 3/18] Sarah K: Hi, do you do a nut-free option? My son has an allergy
-[08:50, 3/18] Marcus - Crumb & Co: Ah so sorry, our kitchen isn't nut-free at all, we handle almonds for the babka, can't guarantee cross contamination won't happen
-[08:52, 3/18] Sarah K: Understood, thank you for being upfront
-[19:10, 3/20] Priya (staff): Marcus did you decide on the Wed/Fri/Sun switch? People are asking
-[19:30, 3/20] Marcus - Crumb & Co: Let's keep Tues/Thurs/Sat for now, less disruption
-[07:15, 3/21] Marcus - Crumb & Co: Actually you know what, Wed/Fri/Sun might work better for the market stall idea, let me sit with it over the weekend
-[10:00, 3/24] Fiona M: Hi, wondering if babka is available year-round or seasonal?
-[10:20, 3/24] Marcus - Crumb & Co: Year round! It's one of our best sellers
-[15:40, 3/26] Marcus - Crumb & Co: Fiona actually reconsidering the babka, might make it Christmas-only, still deciding, will update the menu once I know
-[16:00, 3/26] Fiona M: Haha no worries, let me know
-[11:30, 3/28] Dev Studio - Katie: Hi Marcus, following up on the website quote — did you decide on budget range?
-[12:00, 3/28] Marcus - Crumb & Co: Thinking £800-£1000 should cover it
-[09:05, 3/29] Marcus - Crumb & Co: Actually Katie could we talk £2000, want to add online ordering too, sorry for going back and forth
-[09:10, 3/29] Dev Studio - Katie: No problem, just let us know when you're sure and we'll send a proper quote
-[09:11, 3/29] Marcus - Crumb & Co: Will do! 👍
+[Mon, Mar 3, 9:14 AM] Jenna R: Hi! I'm interested in a custom steel frame. What's the price range and how long would it take?
+[Mon, Mar 3, 11:02 AM] Tomek - Koło Cycles: Hi Jenna! Depends on tubing but usually $1800 to $2400. Timeline maybe 6 weeks total
+[Mon, Mar 3, 11:03 AM] Tomek - Koło Cycles: We can definitely fit you in before spring, no problem
+[Mon, Mar 3, 2:45 PM] Jenna R: Great, that works for my budget! Should I come in to start the design?
+[Mon, Mar 3, 6:30 PM] Tomek - Koło Cycles: Actually thinking about it, we are pretty backed up right now, maybe more like 10-12 weeks. Let me check my calendar
+[Tue, Mar 4, 1:15 PM] Jenna R: Oh — that's different from what you said yesterday. Which is it?
+[Tue, Mar 4, 4:02 PM] Tomek - Koło Cycles: I said 10-12 from the start haha, the 6 weeks was just for the design part
+[Wed, Mar 5, 10:30 AM] Jenna R: Ok. And the price — is paint included in that $1800-2400?
+[Wed, Mar 5, 5:47 PM] Tomek - Koło Cycles: Paint is extra, maybe $200-300 depending on color
+[Thu, Mar 6, 9:00 AM] Tomek - Koło Cycles: Actually you know what for you I'll just throw in basic paint, no charge
+[Mon, Mar 10, 8:12 AM] Carlos M: Hey do you guys do same day brake repairs?
+[Mon, Mar 10, 12:40 PM] Tomek - Koło Cycles: Yes if Ola is in, she does Sat/Sun mostly
+[Mon, Mar 10, 12:41 PM] Tomek - Koło Cycles: Actually she also comes in sometimes Wed, let me check her schedule and get back to you
+[Wed, Mar 12, 3:20 PM] Carlos M: Any update? I was hoping to bring it in tomorrow
+[Fri, Mar 14, 11:05 AM] Sarah T: Hi, what's the current price for a basic tune-up?
+[Fri, Mar 14, 11:47 AM] Tomek - Koło Cycles: $65
+[Fri, Mar 14, 11:48 AM] Sarah T: Oh I thought it was $55 based on your website
+[Fri, Mar 14, 12:10 PM] Tomek - Koło Cycles: Yeah we haven't raised prices, still $55, sorry typo
+[Fri, Mar 14, 12:11 PM] Tomek - Koło Cycles: Wait actually I think DeShawn already updated the register to $65 last month, let me check
+[Fri, Mar 14, 12:11 PM] Tomek - Koło Cycles: I'll just charge you $55 don't worry about it
+[Tue, Mar 18, 2:30 PM] Jenna R: Hi again — putting down the deposit today, just confirming it's refundable if I change my mind?
+[Tue, Mar 18, 3:15 PM] Tomek - Koło Cycles: Once we order the frame from Italy it's non-refundable, that's the policy
+[Tue, Mar 18, 3:16 PM] Tomek - Koło Cycles: But honestly if you change your mind in like the first two weeks just tell me, I'll sort it out
+[Wed, Mar 19, 9:00 AM] Jenna R: Ok good to know. Also — when does the tubing shipment actually arrive? You mentioned delays before
+[Wed, Mar 19, 4:55 PM] Tomek - Koło Cycles: Should be 3 weeks
+[Thu, Mar 20, 10:20 AM] Tomek - Koło Cycles: Actually just talked to my supplier again, sounds more like 6 weeks now, these guys keep changing the story on me lol
+[Fri, Mar 21, 1:00 PM] Jenna R: Haha ok. I'll just wait to hear from you
+[Sat, Mar 22, 5:40 PM] Carlos M: Still never heard back about the brake repair scheduling, just fixed it myself lol all good
