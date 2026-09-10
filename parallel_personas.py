@@ -314,7 +314,10 @@ Rewrite the prompt to fix the problems found. STRICT rules:
 - Keep everything that clearly works; keep the existing tone and structure.
 - The result MUST still contain the literal placeholders {{analysis}} and
   {{format_instructions}} exactly once each.
-- Aim to stay near the current size ({cur} characters); never exceed 9000.
+- Aim to stay near the current size ({cur} characters); never exceed 9000,
+  and treat 8000 as the working budget — when the current prompt is already
+  near it, every rule you add must be paid for by condensing or cutting
+  elsewhere.
 - Output ONLY the complete new prompt text. No commentary, no code fences.
 
 === CURRENT PROMPT ===
@@ -327,13 +330,31 @@ Rewrite the prompt to fix the problems found. STRICT rules:
 {top}
 """
 
-    def __init__(self, llm):
+    def __init__(self, llm, run_dir: Path | None = None):
         self.llm = llm
         self.prompt_file = RequirementsBot.PROMPT_FILE
+        self.run_dir = run_dir
+
+    @staticmethod
+    def _violation(new: str, current: str) -> str | None:
+        """Which guardrail a candidate rewrite breaks, or None if it's fine."""
+        if new.count("{analysis}") != 1 or new.count("{format_instructions}") != 1:
+            return ("it must contain the literal placeholders {analysis} and "
+                    "{format_instructions} exactly once each")
+        if len(new) < 500:
+            return "it is far too short — output the COMPLETE prompt, not commentary"
+        if len(new) > 9000:
+            return (f"it is {len(new)} characters, over the 9000 hard limit — "
+                    "condense: merge overlapping rules and cut the least valuable "
+                    "ones instead of only adding new text")
+        if new == current.strip():
+            return "it is identical to the current prompt"
+        return None
 
     def improve(self, records: list[dict]) -> str | None:
         """Rewrite the prompt from the run's findings. Returns a description
-        of the change, or None if there was nothing to fix / guardrails hit."""
+        of the change, or None if there was nothing to fix / guardrails hit.
+        A rejected attempt is retried with the violated rule quoted back."""
         findings, tops = [], []
         for r in records:
             if not r["evaluation"]:
@@ -347,21 +368,26 @@ Rewrite the prompt to fix the problems found. STRICT rules:
             return None
 
         current = self.prompt_file.read_text(encoding="utf-8")
-        reply = self.llm.invoke(self.IMPROVE_PROMPT.format(
+        base_prompt = self.IMPROVE_PROMPT.format(
             cur=len(current), prompt=current,
-            findings="\n".join(findings), top="\n".join(tops)))
-        new = _blocks_to_text(reply.content).strip()
-        if new.startswith("```"):
-            new = new.strip("`").lstrip("text").strip()
-        # ---- guardrails ----
-        if new.count("{analysis}") != 1 or new.count("{format_instructions}") != 1:
-            return None  # would break the template
-        if len(new) < 500 or len(new) > 9000:
-            return None  # gutted, bloated, or commentary instead of a prompt
-        if new == current.strip():
-            return None
-        self.prompt_file.write_text(new + "\n", encoding="utf-8")
-        return f"prompt updated ({len(current)} -> {len(new)} chars)"
+            findings="\n".join(findings), top="\n".join(tops))
+        feedback = ""
+        for attempt in range(1, 4):
+            reply = self.llm.invoke(base_prompt + feedback)
+            new = _blocks_to_text(reply.content).strip()
+            if new.startswith("```"):
+                new = new.strip("`").lstrip("text").strip()
+            why = self._violation(new, current)
+            if why is None:
+                self.prompt_file.write_text(new + "\n", encoding="utf-8")
+                return f"prompt updated ({len(current)} -> {len(new)} chars, attempt {attempt})"
+            log(f"    improve attempt {attempt} rejected: {why}")
+            if self.run_dir:
+                (self.run_dir / f"rejected_rewrite_{attempt}.txt").write_text(
+                    new, encoding="utf-8")
+            feedback = (f"\n\n=== YOUR PREVIOUS ATTEMPT WAS REJECTED ===\n"
+                        f"Reason: {why}.\nProduce a corrected complete prompt.")
+        return None
 
 
 def _git(*args) -> str:
@@ -373,7 +399,7 @@ def _git(*args) -> str:
 def improve_and_push(runner: "ParallelPersonaRunner", records: list[dict],
                      summary: dict) -> None:
     log("=== improving the prompt from this run's findings...")
-    improver = PromptImprover(runner.judge_llm)
+    improver = PromptImprover(runner.judge_llm, run_dir=runner.run_dir)
     change = improver.improve(records)
     log(f"    {change or 'no change (nothing to fix, or guardrails rejected the rewrite)'}")
     if change:
