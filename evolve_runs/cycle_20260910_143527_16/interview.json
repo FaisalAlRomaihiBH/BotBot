@@ -1,0 +1,228 @@
+{
+  "transcript": [
+    [
+      "Birdie",
+      "Hi! I help businesses figure out exactly what they need from a chatbot. Before we start — what's your name?"
+    ],
+    [
+      "Rosalind 'Roz' Fennimore",
+      "Oh, hello dear! I'm Rosalind, but honestly nobody's called me that since my mother, God rest her, used to holler it up the stairs when I was a girl dawdling over my homework instead of doing my chores. Everyone just calls me Roz — even the postman, and I only met him properly last spring when he brought that parcel of lace that got left out in the rain, terrible business that was, I had to explain to the bride it'd need reordering. Anyway! Roz Fennimore, I run Stitch in Time down on Mill Lane, been there donkey's years now. What was it you needed, love?"
+    ],
+    [
+      "Birdie",
+      "Lovely to meet you, Roz! Stitch in Time sounds like it has some history behind it. Just so I understand — what exactly does the shop do? Is it mainly dressmaking, alterations, bridal wear, or a bit of everything?"
+    ],
+    [
+      "Rosalind 'Roz' Fennimore",
+      "Oh, bit of everything really, though if you'd asked me thirty years ago when I first took over the lease I'd have said it was mostly hems and buttons, quick little jobs, in and out the door in five minutes. But it's grown, love, the way these things do — now I'd say the bread and butter is alterations, trousers, skirts, jackets, that sort of thing, taking things in, letting things out, you'd be amazed how many people buy a size wrong online and then just live with it not fitting till someone tells them \"oh just pop down to Roz's.\" Zips too, I do a lot of zips, coats especially this time of year.\n\nBut the real heart of it, the bit that keeps me up at night and also keeps the lights on, is the bridal work. Wedding dresses. Bodices, hems, bustles, the lot. I don't design dresses from scratch, mind, I'm not that sort of dressmaker, I leave that to cleverer women than me — but if you've got a dress and it needs fitting to you properly, that's my specialty, that's what I trained for years ago under a woman called Marjorie who terrified the life out of me but taught me everything.\n\nSo — a bit of everything, like I said, but if I'm honest, alterations pay the everyday bills and weddings are the thing I actually love, even when they nearly kill me every June. Does that answer what you were asking, dear?"
+    ],
+    [
+      "Birdie",
+      "That's a lovely bit of history, Roz — sounds like the shop's grown up around you! So, what's the main thing making you want a chatbot? Is it about handling all the questions people ask, freeing up your time, catching bookings you might be missing — what's the itch you're trying to scratch?"
+    ],
+    [
+      "Rosalind 'Roz' Fennimore",
+      "Oh now that's the question, isn't it. See, it's funny you ask because just this morning — well, not this morning, Thursday I think it was, my days do blur — I had the phone going while I had a mouth full of pins, literally in my mouth, fitting Mrs. Patterson's daughter for her sister's wedding, and I couldn't get to it, and by the time I called back the poor girl had already booked somewhere else entirely for what turned out to be a simple hem, twelve pounds, would've taken me ten minutes. And that happens more than you'd think, love — people ring, or they pop their head in when I've got Effie's little cousin's christening gown pinned to the mannequin and can't exactly stop, and I lose them.\n\nAnd it's not just missed bookings, it's the appointment book too, if I'm honest with myself — it's this poor battered thing, corners all curled, and I write everything in pencil because I'm forever rubbing things out and moving them, and come June with the wedding season I genuinely cannot always tell you off the top of my head whether I've got room for another dress or whether I've double-booked myself into an early grave. My knee's not what it used to be either, love, so days where I'm just endlessly on the phone explaining \"no dear, hems are twelve pounds, no dear, wedding dresses need three weeks minimum\" — it wears me out before I've even threaded a needle.\n\nSo if I'm honest, the itch is — stop losing people who just want a straight answer about price or turnaround when I can't get to the phone, and maybe, maybe, help me not double-book myself silly in June. That's the real answer, dear, sorry for the scenic route to get there."
+    ],
+    [
+      "Birdie",
+      "That makes a lot of sense, Roz — sounds exhausting trying to do it all with pins in your mouth! Quick check: is that £12 for a hem and the three-week minimum for wedding dresses your standard prices, or do they vary quite a bit job to job? And while we're on it — how do people currently try to reach you? Just phone, or do they also text, message on Facebook, WhatsApp, that sort of thing?"
+    ],
+    [
+      "Rosalind 'Roz' Fennimore",
+      "Oh, good questions, both of them, let me have a think — well, the twelve pounds for a hem, that's pretty much set in stone, trousers or a skirt, doesn't matter, twelve pounds is twelve pounds, I don't fuss about it unless it's something mad like six layers of curtain-weight fabric, which has happened, don't ask. Sleeve shortening on a jacket's eighteen. Zips wander about a bit, fifteen to twenty depending what I'm dealing with — a coat zip's a different beast to a little dress zip, you understand. And the wedding dresses, now that really does vary, love, I can't pin that one down to a single number, could be a hundred and twenty, could be a hundred and eighty, depends entirely on what state the bodice's in, whether there's beading, whether the bustle's fighting me. Three weeks is the floor, mind, the absolute minimum, I won't go under that even for a lovely bride crying at me, and honestly in the summer season I'm begging people to book two months ahead if they can.\n\nAs for how people get hold of me — oh, mostly just the phone, dear, it rings and rings, that's the main one. A few younger ones message the shop's Facebook page, which I'll be honest I'm not always brilliant at checking, sometimes Effie has a look on her Saturdays and tells me \"Auntie Roz, you've had three messages since Tuesday,\" and I go quite pale. Nobody really does WhatsApp with me, no, though I suppose they might if I gave the number out more. Mostly it's just people ringing or popping their head round the door, which, as we've established, doesn't always go brilliantly when my mouth's full of pins!"
+    ],
+    [
+      "Birdie",
+      "That's really clear, thank you Roz. Now, turnaround-wise for the everyday stuff — hems, sleeves, zips — roughly how long do people usually wait to get those back, a day or two, a week?"
+    ],
+    [
+      "Rosalind 'Roz' Fennimore",
+      "Oh, standard stuff, hems and sleeves and the zips — I tell everyone five to seven working days, and I do try and stick to that, love, though there's been the odd week where the Bernina's had one of her moods — that's my sewing machine, 1987 she is, older than some of my customers' marriages, bless her, and when she plays up I do sometimes wonder if I should just bite the bullet and buy a new one, but then I think of all the years she's given me and I feel guilty even considering it, silly really, it's a machine not a dog.\n\nAnyway — five to seven working days, that's the honest answer, dear. Now if someone's desperate, say they've a do on Saturday and it's Thursday already, I can sometimes do a rush job, forty-eight hours, but I do charge extra for that, fifty percent on top, and even then only if I'm not drowning in wedding dresses that week, which come June I usually am. I go back and forth on whether I should just have a proper fixed rush fee written down somewhere instead of deciding on the spot every time, but I never quite get round to deciding. So — five to seven days normal, forty-eight hours if you're desperate and I'm not swamped. That's about the size of it!"
+    ],
+    [
+      "Birdie",
+      "Ha, bless the Bernina, sounds like a real trooper! Let's talk money for a second, Roz — how do customers usually pay you? Cash, card, bank transfer — and is that always straightforward, or do you sometimes have bother getting paid?"
+    ],
+    [
+      "Rosalind 'Roz' Fennimore",
+      "Oh, payment, yes — well, it's cash or card, that's it really, right there at the counter when they come to collect, I don't do any of this online business, no deposits, no tap-your-phone-before-you've-even-seen-the-dress nonsense, I know some shops do that now but it's never been my way. Bank transfer, no, I wouldn't know where to start with that, Effie keeps saying \"Auntie Roz, get a little card machine that does it all,\" and I have the card machine, that bit's fine, but the transfer business, no.\n\nNow is it always straightforward — oh, love, I wish I could say yes. It's the book, you see, the appointment book, it's not just dates and times scribbled in there, I try and jot down a little tick if someone's paid, but half the time I'm doing that with a pin between my teeth and Mrs. So-and-so chatting at me about her daughter's fiancé, and I honestly do lose track now and then — I've rung people up going \"did you pay me for that skirt, dear?\" and felt like an absolute fool when they say \"Roz, you cashed me up a fortnight ago, don't you remember.\" So the actual paying, cash or card, that's never bother, people are decent about it. It's my own memory that's the bother, if I'm honest with myself!"
+    ],
+    [
+      "Birdie",
+      "Good to know, Roz — sounds like it's really the tracking that trips you up, not the paying itself. For the wedding dresses, given they're pricier and take weeks — do you ever take a deposit upfront, or is it all paid when the bride collects the dress?"
+    ],
+    [
+      "Rosalind 'Roz' Fennimore",
+      "Oh, no, love, same as everything else really — no deposit, nothing upfront, it all gets paid when the bride comes to collect, cash or card same as I said. Which now you say it out loud like that, doesn't sound the wisest way to run things, does it — a dress that's taken me three weeks and cost me in special-order lace, and I've not seen a penny till the very end. Marjorie, the woman who trained me, she always said \"take a deposit, Rosalind, always take a deposit,\" and I nodded along at the time like a good girl and then just... never did it. I think it's because in the early days it was mostly local women, people I half knew from the church fete or whatnot, so it felt rude somehow, like I didn't trust them.\n\nI will say, touch wood, I've only been properly burned once — lovely dress, beading and everything, and the bride called it off, the wedding I mean, poor thing, and I was left with a dress nobody wanted and no money for my trouble. Effie still brings that one up when I'm dithering about deposits, \"see, Auntie Roz, that's why.\" So it's not that I don't think about it, dear, I do, quite often actually — I just never quite got round to changing how I do things. Story of my life, that, if I'm honest!"
+    ],
+    [
+      "Birdie",
+      "That's a hard lesson to learn, Roz, I'm sorry that happened. We can note that down as something you're still weighing up. Let's shift gears a moment — what are your shop hours and days, and is it just you running things day-to-day, or does anyone else help out besides Effie on Saturdays?"
+    ],
+    [
+      "Rosalind 'Roz' Fennimore",
+      "Oh, hours — right, yes. Tuesday to Saturday, half past nine in the morning till five, and then Sunday and Monday I'm shut, though \"shut\" is a funny word for Monday really because that's not me putting my feet up with a cup of tea, oh no, Monday's paperwork day, which I dread more than anything, receipts everywhere, and it's also the dog's vet day, would you believe, Mr. Biscuit — yes that really is his name, my late husband named him and I never had the heart to change it — he's getting on a bit himself now, hip trouble, so Mondays are him and me at the vet's and then me and a pile of invoices at the kitchen table, not glamorous, love, not glamorous at all.\n\nAnd is it just me — well, yes, day to day it is just me, on my feet, mouth full of pins, bad knee and all, holding the whole shop together with thread and stubbornness. Effie, my niece, she comes in Saturdays, ten till two, bless her, she's a good little pinner and she does the pressing lovely, saves my shoulders no end, but she's got her college work in the week so I can't really ask more of her than the Saturday mornings. So really it's a one-woman show most of the week with a bit of Saturday backup, which is exactly why the phone ringing off the hook while I'm elbow-deep in a bustle is such a nightmare, if I'm honest — there's nobody else to catch it, it's just me, love, just me and my bad knee and my temperamental old Bernina."
+    ],
+    [
+      "Birdie",
+      "Thank you, Roz, that's a full picture now. If the chatbot can't answer something — say, someone wants to argue about a price, or something tricky comes up outside your hours — who or what number should it point them to? And is there anything for when you're totally unreachable, like an out-of-hours message?"
+    ],
+    [
+      "Rosalind 'Roz' Fennimore",
+      "Oh, that's a sensible thing to think about, love, because heaven knows there isn't a proper system for it now — if someone rings out of hours it just rings and rings into the void, or they get that answerphone message I recorded about four years ago that I keep meaning to update, my voice sounds about twelve years younger on it, Effie laughs every time she hears it.\n\nBut if you're asking who it should point people to — well, it's just me, isn't it, there's no manager to escalate to, no head office, no \"let me put you through to my supervisor,\" it's Roz or nothing! So I suppose if someone wanted to argue about a price, or had something a bit tricky and unusual — a torn heirloom veil, say, or someone wanting six bridesmaids done by Friday — I'd want it to just say something like \"Roz will need to speak to you about this one herself, she'll ring you back\" and then actually leave me their name and number where I'll see it, because that's half the trouble now, people leave a message on the Facebook and it vanishes into the ether and Effie only checks on Saturdays.\n\nThe shop number's the only number there is, dear, same one for everything, ringing on the counter right next to my pin cushion. There's no separate emergency line or anything grand like that — I'm not exactly running a call centre. So I suppose the honest answer is: if the chatbot's stuck, just take their details and tell them Roz will call back, because at the end of the day it always comes back round to me, doesn't it, one way or another!"
+    ],
+    [
+      "Birdie",
+      "That's really helpful, Roz — 'Roz will call you back' is a perfectly good answer for the tricky stuff! Now, thinking about where the bot should actually live — should it answer the shop phone itself, live as a chat on Facebook, or maybe on a website if you had one? And do you need it in just English, or any other languages?"
+    ],
+    [
+      "Rosalind 'Roz' Fennimore",
+      "Oh, now that's a proper poser, isn't it, because if you'd asked me even five years ago I'd have said \"website? what website, love, I've got a sign above the door and that's plenty,\" but the world's moved on and even Mrs. Patterson's daughter, the pinny one from before, she looked at me like I had two heads when I said we didn't have one. Effie's been on at me for ages, \"Auntie Roz, you need a proper website,\" and I keep saying yes, yes, one day, and then a wedding dress with beading turns up and website business goes right out of my head again.\n\nBut if I'm honest about where the actual problem is — it's the phone, dear, that's where I'm bleeding customers, that's the one ringing while my mouth's full of pins and nobody catching it. The Facebook messages are a nuisance too because they just sit there till Saturday when Effie has a look, so something answering on there properly would stop that \"you've had three messages since Tuesday\" business. A website I don't even have yet, so I suppose if it lived there too that'd be lovely for later, but the phone's the fire that needs putting out first, if you follow me.\n\nAs for languages — ooh, now I hadn't thought of that at all. Round here it's mostly English, dear, I'll be honest, most of my ladies are local, church fete crowd as I said, though I did have a lovely Polish bride last spring, her mother did all the talking for her mind, so I couldn't tell you if I've ever really needed anything but English. I wouldn't say no to it helping in another language if it's not too much bother, but it's not something that's ever properly bitten me the way the missed calls have."
+    ],
+    [
+      "Birdie",
+      "That's really useful, Roz — phone first, Facebook second, website maybe down the line. Roughly how many calls or messages would you say come in on a normal week — even a rough guess is fine?"
+    ],
+    [
+      "Rosalind 'Roz' Fennimore",
+      "Oh, heavens, put a number on it — that's a hard one, love, because it really does depend which week you catch me in. Like, take a normal March week, nothing special going on, I'd say maybe... fifteen, twenty calls? Something like that, a mix of \"how much for a hem\" and \"are you open Thursday\" and the odd wrong number, I get a surprising amount of those too, someone looking for a taxi firm apparently used to have my number years back, still happens now and again, don't ask me why.\n\nBut then June comes round, wedding season, and honestly, love, it could double, easily — I've had days where the phone's gone six, seven times before I've even had my tea, and that's on top of whoever's popped their head round the door in person, which I don't even count in that, if I'm honest, because that's a whole different sort of chaos. And the Facebook messages, maybe another five or six a week bubbling away that Effie finds Saturday mornings, sometimes fewer, sometimes she's found eight and gone quite wide-eyed at me.\n\nSo — rough guess, proper rough, mind — fifteen to twenty calls a week normal time of year, easily thirty-plus in peak season, and a handful of Facebook messages on top of that most weeks. Does that give you enough to work with, dear, or do you want me to try and be less vague about it, because I can try, I just warn you now I might not succeed!"
+    ],
+    [
+      "Birdie",
+      "That's plenty to go on, Roz, thank you — very helpful numbers. One more on policies: what happens if someone doesn't come back to collect their finished item, or if they cancel a booking last minute — do you have any rule about that, even an unofficial one?"
+    ],
+    [
+      "Rosalind 'Roz' Fennimore",
+      "Oh, cancellations — yes, I do have a policy, sort of, though \"policy\" makes it sound ever so much grander than it actually is. I ask for twenty-four hours' notice if you can't make a fitting, that's what I tell everyone when they book in, but do I actually enforce it? Not really, love, if I'm honest with myself. Someone rings up ten minutes before saying \"Roz, ever so sorry, the car's broken down\" or \"the baby's been sick,\" well, what am I going to do, refuse to see them again? I'm not that sort of woman. What I do instead — and Effie teases me something rotten about this — is if it's the same person doing it again and again, no notice, no nothing, just not turning up, I have a little word. Very gentle, mind, nothing dramatic, just a \"now, dear, I do try and keep that slot for you, it does help me ever so much if you can ring ahead,\" that sort of thing. Usually does the trick, people feel a bit sheepish and buck their ideas up.\n\nAs for people not coming back to collect the finished item — now that's a different kettle of fish and I'll be honest, love, I don't think I've ever properly worked out what to do about that one either. I've got a rail at the back with two or three things hanging on it right now that have been ready for collection since before Easter, a bridesmaid dress and I think a pair of trousers, and I just sort of... wait, and occasionally ring and leave a message, and otherwise they hang there looking at me reproachfully. I don't charge storage or anything like that, never even crossed my mind to, though now you say it maybe it should. So the honest answer, dear, is: cancellations, I ask for twenty-four hours but don't really chase it up unless it's a repeat offender, and uncollected items, I haven't really got a proper rule at all, I just sort of hope for the best!"
+    ],
+    [
+      "Birdie",
+      "That's really honest, thank you Roz — sounds like it's more 'hope for the best' than a strict rule, which is fair enough for a one-woman shop! Now, thinking about the bot itself: would you want something simple that just answers questions and takes messages for you, or would you like it to actually manage bookings and check your calendar too — the fuller, more complex option?"
+    ],
+    [
+      "Rosalind 'Roz' Fennimore",
+      "Oh, now that's the big question, isn't it, and I have gone round and round on this one in my own head, lying awake some nights when my knee's playing up and I can't sleep anyway. Because part of me thinks, oh just keep it simple, love, just have it answer \"hems are twelve pounds\" and \"no we're not open Sundays\" and take a name and number if it's something tricky — that alone would save my sanity most weeks, honestly.\n\nBut then the other part of me, the part that's had one too many Junes where I've double-booked a bustle fitting on top of Mrs. Patterson's daughter's sleeve shortening because I was scribbling in pencil with a pin in my mouth — that part thinks, well, if it could actually see what slots I've got free and stop people booking into a day I haven't got room for, that would solve the thing that actually keeps me up at night, not just the phone ringing but the whole mess of the book itself.\n\nI suppose if I'm honest, dear, and you're asking me to actually choose rather than dither — I think I'd want to start simple, answering the questions and taking the messages properly so I stop losing people like that poor girl who booked her hem elsewhere, because that feels like the bit that's actually bleeding me customers right now. The full calendar business, checking what's free and what's not, that sounds marvellous but also sounds like the sort of thing that could go wrong in ways I don't understand yet, and Lord knows I've got enough going wrong with just the Bernina. So — simple first, and maybe if it doesn't put me off the whole idea entirely, grow into the cleverer version later. Does that sound like a cop-out answer, love? It might be a cop-out answer."
+    ],
+    [
+      "Birdie",
+      "Not a cop-out at all, Roz — that's exactly the sensible way to go about it, start simple and grow later. Two quick last things: first, do you have any real examples of customer messages or texts — even just a few — you could paste in or describe? Seeing real questions people ask really helps me get the wording right. And separately, what sort of tone would you like the bot to have — warm and chatty like you, brisk and businesslike, or something else — and is there a name you'd fancy giving it?"
+    ],
+    [
+      "Rosalind 'Roz' Fennimore",
+      "Oh, examples — yes, actually, funny you ask, because I could probably recite you a dozen of them in my sleep, they're that repetitive. There's always the \"how much to take up a pair of trousers\" one, worded about six different ways, sometimes it's \"can you shorten jeans\" like that's a different thing entirely, bless them. There's \"do you do Sunday appointments\" which — no, love, we've covered that, we're not open Sundays, but people do ask, especially brides who work office jobs and can only come look at things on a weekend. There's the wedding one, always some version of \"hi, my wedding's in [insert some date that's usually far too soon] and I need alterations, do you have space\" — that one comes in a real panic sometimes, capital letters and everything, poor things. And then there's the classic \"are you the same Roz who did my cousin's dress in 2019\" sort of message, people love that, they do like knowing you're not brand new and untested. Oh, and \"can you do a rush job, I need it by Saturday\" — that one I get more than you'd think, especially around prom season now, would you believe, not just weddings anymore. I don't have them written down anywhere proper, mind, they're just sort of rattling round my head from memory, but if it'd help I could try and jot a few down properly this week, actual wording, if Effie helps me dig through the Facebook ones Saturday.\n\nAs for tone — oh, warm, dear, definitely warm, none of this brisk clipped business-speak, I couldn't bear that, it'd feel like it wasn't even my shop anymore if it started talking like a bank. I want people to feel like they've popped their head round the door and I've looked up from my pins and said hello properly, even if it is just a machine doing the talking. Doesn't need to ramble on quite like I do, mind, Effie says I could \"learn a thing or two from the bot\" about getting to the point, cheeky article — but warm, yes, definitely warm.\n\nAnd a name — ooh now, I do fancy that, actually. I was thinking maybe something like \"Marjorie\" after the woman who trained me, bit of a nod to her, seeing as she's the reason any of this exists at all. Or Effie suggested \"Pins\" which made me laugh out loud in the shop, quite proud of that one actually. I go back and forth, but I think... yes, let's say Marjorie, dear, if that's not too soft and sentimental for you. She'd have hated computers, mind, so there's a nice bit of mischief in it too."
+    ],
+    [
+      "Birdie",
+      "Marjorie's a lovely choice, Roz — I can tell it means something. Those examples are great, thank you — very real. If you or Effie do manage to dig out a few actual message screenshots from Facebook this week, you're welcome to pop them in the folder named 'uploads' next to this program and just tell me when it's done — seeing the real wording can help me sharpen things further. No pressure if it's too much bother though. For now, is there anything else on your mind about pricing or the business before I pull together everything we've covered into a summary for you?"
+    ],
+    [
+      "Rosalind 'Roz' Fennimore",
+      "Oh, uploads folder, lovely, yes — well, that's assuming Effie remembers to actually do it and doesn't just say she will and then get distracted by her college work, but let's be optimistic, dear, I'll have a word with her Saturday, put the fear of God in her nicely.\n\nNow, is there anything else on my mind — oh, funny you ask, because I've just this second remembered, sitting here typing away to you, that I never actually mentioned the suit alterations, did I! Jacket and trousers together, the pair of them as a little package, that's forty-five pounds, I do quite a lot of those actually, especially round prom season now and the odd wedding guest who's borrowed his brother's suit and it's hanging off him like a tent. I don't know how that slipped my mind entirely, we've been at this a good while now though, love, so I suppose it's not shocking my brain's gone a bit porridge-y.\n\nOther than that — oh, I keep coming back to the Bernina, if I'm honest, it's been on my mind all week, she made a funny clunking noise Tuesday and I had a little moment of panic mid-hem, thought \"here we go, she's finally done for,\" but she rallied, bless her, always does. I do wonder sometimes if all this lovely modern chatbot business you're setting up for me is going to look a bit silly sat next to a sewing machine older than the internet, but there we are, mismatched as I am, it seems to work!\n\nBut price-wise, business-wise, no, I think that's everything rattling round in my head, dear — you go on and pull it all together, I trust you've got the shape of me by now, God help you."
+    ],
+    [
+      "Birdie",
+      "Ha, I think 'mismatched as I am, it seems to work' should go on the shop sign, Roz! Quick one before I wrap up — for that suit alteration at £45, roughly how many days does that usually take, same 5-7 days as the other alterations, or different?"
+    ],
+    [
+      "Rosalind 'Roz' Fennimore",
+      "Oh, same as the others, love, five to seven working days — it doesn't get special treatment just because it's a jacket and trousers together, though I will say sometimes if a chap's desperate and it's for a wedding this Saturday and he's only just tried the suit on Thursday — which happens more than you'd think, men are terrible for leaving it late, bless them — then it's the same rush job rules as anything else, forty-eight hours if I can manage it, fifty percent on top. But normally, no, nothing different about it, five to seven days, in with all the rest of the queue. There, that's a nice short answer for you for once, dear, don't get used to it!"
+    ],
+    [
+      "Birdie",
+      "Perfect, thank you Roz — I think that's everything! Let me read it all back to you so you can check I've got it right:\n\n**The shop:** Stitch in Time, Mill Lane. Roz runs it solo day-to-day; niece Effie helps Saturdays 10-2. Open Tuesday-Saturday 9:30-5, closed Sunday and Monday.\n\n**Services & pricing:**\n- Hem (trousers/skirt): £12 flat, 5-7 working days\n- Jacket sleeve shortening: £18, 5-7 working days\n- Zip replacement: £15-£20, 5-7 working days\n- Suit alteration (jacket + trousers): £45, 5-7 working days\n- Rush job (any of the above): 48 hours, +50% surcharge, only if Roz has capacity\n- Bridal alterations/fitting: £120-£180 depending on complexity, minimum 3 weeks (hard floor), recommend booking 2 months ahead in summer\n\n**Payment:** Cash or card at collection only — no deposits, no online payment, no bank transfer.\n\n**Policies:**\n- Cancellations: 24 hours' notice requested but not strictly enforced; repeat offenders get a gentle word\n- Uncollected items: no formal policy currently (open item — you're still deciding)\n- Bridal deposits: none currently taken, though you know it's a risk (open item — still deciding)\n- Rush fee: decided case-by-case for now (open item — still deciding whether to fix a set rate)\n\n**Handoff:** For anything tricky (price arguments, unusual requests, or after-hours), the bot tells the customer Roz will call them back personally, and takes their name and number. Same shop phone number for everything — no separate line.\n\n**Channels:** Phone is the top priority, then Facebook Messenger; website is a maybe for later.\n\n**Volume:** Roughly 15-20 calls/week normally, 30+ in June peak, plus 5-8 Facebook messages/week.\n\n**Language:** English only for now.\n\n**Scope:** Starting simple — answering questions and taking messages/callback details — not a full booking/calendar system for now.\n\n**Tone & name:** Warm and welcoming, like popping your head round the shop door; bot will be called 'Marjorie', after your trainer.\n\nDoes all that sound right, Roz, or is there anything you'd like me to fix?"
+    ],
+    [
+      "Rosalind 'Roz' Fennimore",
+      "Oh, that's ever so thorough, dear, you have been listening, haven't you — bless you. Let me just... yes, hang on, let me read it proper, not just skim it like I do with Effie's college forms...\n\nNo, that's all spot on, that is, you've got me down to a tee, right down to the porridge-y bits about the Bernina and the rush fee dithering. Only one thing jumps out at me, and isn't it typical, we've been at this ages and I've done it again — I never mentioned the waist alterations, taking in or letting out a waistband, that's sixteen pounds, same five to seven days as the rest. I don't know how that one keeps slipping my mind, it's not even an unusual job, I do them all the time, ladies who've had a baby or lost a bit of weight or just bought the wrong size again, bless them. Suppose it's not glamorous enough to stick in my head the way the wedding dresses do.\n\nBut other than that little gap, dear, no, that's me down on paper properly, warts and all — well, Bernina and all. You've done a grand job pulling that lot together, I'm quite touched, actually, might go a bit misty-eyed if I think about it too long. Marjorie's going to do us proud, I can feel it."
+    ],
+    [
+      "Birdie",
+      "Got it — waist alterations added at £16, same 5-7 day turnaround as the rest. That really does look complete now, Roz, warts, Bernina, and all! Thank you so much for being so open and thorough with me — this has been a lovely chat. I'll pass all of this along so the build team has everything they need to get started. No dates or promises from me, but you're in good hands from here. Give Mr. Biscuit a pat from me!"
+    ]
+  ],
+  "brief": {
+    "contact_name": "Roz Fennimore",
+    "business_name": "Stitch in Time",
+    "industry": "Alterations & bridal dressmaking",
+    "business_description": "Located on Mill Lane; been running for many years (Roz took over the lease decades ago). Two main service lines: everyday alterations (hems, trousers, skirts, jackets, zips, suits, waistbands) and bridal alterations/fitting (bodices, hems, bustles) — Roz doesn't design dresses from scratch, only fits/alters existing ones. Trained under a woman named Marjorie. Roz works solo day-to-day, on her feet, often mid-fitting so can't get to the phone. Niece Effie helps Saturdays 10am-2pm (pinning and pressing) but is in college during the week so can't help more. Open Tuesday-Saturday 9:30am-5pm; closed Sunday and Monday (Monday is paperwork day plus the dog's vet day — dog's name is Mr. Biscuit, has hip trouble).",
+    "problem_to_solve": "Missing bookings/inquiries when Roz can't get to the phone (mid-fitting, etc.) — customers give up and book elsewhere even for quick, simple jobs. Also struggles with an old paper appointment book (pencil, corners curled) that makes it hard to track availability, especially during busy June wedding season, risking double-booking.",
+    "target_audience": "Mostly local customers ('church fete crowd'); occasional non-English-speaking customers (e.g., a Polish bride whose mother translated) but rare.",
+    "channels": [
+      "Phone (main channel, top priority — this is where most inquiries are currently lost)",
+      "Facebook Messenger (shop page, secondary priority — currently only checked Saturdays by niece Effie)",
+      "Website (doesn't exist yet, but Roz is open to the bot living there eventually if she gets one built)",
+      "In-person walk-ins"
+    ],
+    "integrations": null,
+    "conversation_volume": "Roughly 15-20 calls/week in normal season; 30+ calls/week in peak (June) wedding season; plus ~5-8 Facebook messages/week found by Effie on Saturdays. Occasional wrong-number calls (old taxi firm number mix-up).",
+    "languages": [
+      "English (primary/only language needed so far)",
+      "Open to additional languages if easy, but not a proven need"
+    ],
+    "success_criteria": "Stop losing customers to missed calls/messages when Roz is mid-fitting; reduce the 'lost' feeling of Facebook messages sitting unanswered until Saturday.",
+    "budget": null,
+    "timeline": null,
+    "services_and_pricing": [
+      "Hem (trousers or skirt) - £12 flat, standard (exception: unusual heavy fabric like curtain-weight, priced differently); turnaround 5-7 working days standard, 48hr rush possible for +50% surcharge if not swamped",
+      "Sleeve shortening (jacket) - £18; turnaround 5-7 working days standard, 48hr rush possible for +50% surcharge if not swamped",
+      "Zip replacement - £15-£20 depending on garment (coat zip vs dress zip); turnaround 5-7 working days standard, 48hr rush possible for +50% surcharge if not swamped",
+      "Suit alteration (jacket and trousers as a pair) - £45; turnaround 5-7 working days standard, same 48hr rush option for +50% surcharge if Roz has capacity",
+      "Waist alteration (taking in/letting out waistband) - £16; turnaround 5-7 working days standard, same 48hr rush option for +50% surcharge if Roz has capacity",
+      "Bridal alterations/fitting (bodices, hems, bustles, beading etc.) - £120-£180 range depending on complexity/condition of dress; minimum 3 weeks turnaround (hard floor), recommends booking 2 months ahead in summer season"
+    ],
+    "faq_answers": [
+      "How much for a hem? — £12 flat (trousers or skirt); exceptions for unusual heavy fabric",
+      "How much for sleeve shortening on a jacket? — £18",
+      "How much for a zip? — £15-£20 depending on garment type",
+      "How much for a suit alteration (jacket + trousers)? — £45 for the pair",
+      "How much for taking in/letting out a waistband? — £16",
+      "How long for a wedding dress alteration? — minimum 3 weeks, recommend booking 2 months ahead in summer",
+      "How long for standard alterations (hems, sleeves, zips, suits, waistbands)? — 5-7 working days normal; rush 48hr possible for +50% if Roz has capacity",
+      "What are the shop hours? — Tuesday-Saturday 9:30am-5pm; closed Sunday and Monday",
+      "Can you shorten jeans? — treated same as trouser hem, £12",
+      "Do you do Sunday appointments? — No, shop is closed Sundays (and Mondays)",
+      "My wedding is coming up soon, do you have space? — Common panicked inquiry; answer depends on current bridal workload, but minimum 3 weeks needed, recommend booking 2 months ahead in summer",
+      "Are you the same Roz who did my cousin's dress a few years back? — Yes, confirms continuity/reputation (exact wording/answer to be confirmed by Roz)",
+      "Can you do a rush job by [soon date]? — Rush turnaround possible (48hrs) for +50% surcharge if Roz has capacity; applies to all alterations, common request especially around prom season as well as weddings"
+    ],
+    "business_policies": [
+      "Rush job policy: 48-hour turnaround available for standard alterations (including suits and waistbands) at +50% surcharge, only if Roz isn't swamped (especially not during June bridal season) — Roz decides on the spot each time, has considered fixing a set rush fee but hasn't decided",
+      "Payment methods: cash or card only, paid at collection (no online payment, no deposits currently, no bank transfer). Payment collection itself is reliable; Roz's own record-keeping of who's paid (tracked via ticks in the paper appointment book) is the unreliable part, not the customers.",
+      "No deposit taken on bridal work currently — full payment only on collection. Roz has been advised (by her trainer Marjorie and her niece Effie) to take deposits, especially after being burned once when a wedding was called off and she was left unpaid for a beaded dress. She acknowledges the risk but hasn't changed her policy.",
+      "Cancellation policy: asks for 24 hours' notice for fittings, but doesn't strictly enforce it for one-off cases (understanding of emergencies); only addresses it informally with a gentle word if someone is a repeat no-show/no-notice offender.",
+      "Uncollected items: no formal policy at all — currently has items on a rail uncollected since before Easter (a bridesmaid dress, a pair of trousers). She just waits and occasionally calls, no storage fee charged, hasn't decided if she wants one."
+    ],
+    "escalation_rules": [
+      "No staff hierarchy — Roz is the sole decision-maker for everything (pricing disputes, unusual requests like a torn heirloom veil or rush group orders). For anything tricky or an argument about price, the bot should say Roz will need to speak to them herself and will call back, then capture the customer's name and number.",
+      "Only one contact number exists (the shop phone, same for everything) — no separate emergency or manager line.",
+      "Out-of-hours currently just rings out or hits a four-year-old answerphone message Roz hasn't updated; no current out-of-hours capture system in place."
+    ],
+    "open_items": [
+      "Roz is undecided whether to formalize a fixed rush fee/policy instead of deciding case-by-case — genuinely unresolved on her end",
+      "Roz is aware she probably should take deposits on bridal work (per Marjorie's advice and past bad experience) but hasn't decided whether to change this policy",
+      "Roz has no policy for uncollected items and is unsure whether she wants one (e.g. storage fee) — genuinely undecided",
+      "Exact wording/answer for 'are you the same Roz who did my cousin's dress' style reputation questions not yet finalized"
+    ],
+    "additional_notes": [
+      "Mentioned a bride's lace order got ruined in rain and needed reordering — example of the kind of work they do.",
+      "Bridal season (June) is especially busy/stressful for Roz.",
+      "Roz has knee trouble, affects her stamina for being on her feet/on the phone all day.",
+      "Currently uses a paper appointment book in pencil — no digital system.",
+      "Sewing machine ('the Bernina') is from 1987 and occasionally unreliable — can affect turnaround times; had a scare with clunking noise recently but 'rallied'.",
+      "Roz has a card machine but no bank transfer capability; niece Effie has suggested better tools before.",
+      "Once was left with an unpaid, unwanted beaded wedding dress after a bride called off her wedding — no deposit was taken.",
+      "Roz's dog Mr. Biscuit has hip trouble and goes to the vet on Mondays.",
+      "Current out-of-hours answerphone message is 4 years old and outdated.",
+      "Roz doesn't currently have a website; niece Effie has been encouraging her to get one.",
+      "Scope decision: start with a simple bot (answers questions, takes messages/callback details) rather than full booking/calendar system; may consider the fuller calendar-aware version later once comfortable.",
+      "Rush requests now also come from prom season, not just weddings.",
+      "Bot persona: warm, chatty, welcoming tone — like popping your head round the shop door and being greeted personally; should be more concise than Roz herself. Bot name: 'Marjorie', named after Roz's trainer, as a nod to her (Effie's alternative suggestion was 'Pins').",
+      "Suit alterations (jacket + trousers as a pair) especially popular for prom season and wedding guests borrowing suits.",
+      "Waist alterations (taking in/letting out) very common — ladies after weight change or wrong-size purchases; easy to forget but frequent job."
+    ]
+  },
+  "analysis": null,
+  "completed": true,
+  "turns": 35
+}

@@ -986,5 +986,61 @@
       "Add a `compliance_and_licensing` field (license type, jurisdiction, required disclosures) so cottage-food/legal constraints have a home instead of being inferred from an open_item.",
       "Give the interviewer a capability to flag and re-ask ambiguous quantitative/scheduling answers before readback, rather than resolving ambiguity by assumption inside the summary."
     ]
+  },
+  {
+    "cycle": 16,
+    "stamp": "20260910_143527",
+    "persona": "Clothing alterations, tailoring, and wedding dress fitting (small high-street shop) / Chronic rambler — Roz almost never gives a short answer. Ask her about hemming prices and she'll start with a story about the woman who came in last Tuesday with a coat button, detour into her knee replacement recovery, mention the weather affecting foot traffic, and then, somewhere in paragraph three, actually answer the question. She's warm, well-meaning, and clearly very experienced, but customers have to mentally dig through anecdotes to extract the actual price, date, or policy. She sometimes forgets she was asked something at all and has to be re-prompted. She's not doing it to avoid the question — she genuinely thinks in stories and finds it rude to just blurt out facts without context.",
+    "score": 7.0,
+    "completed": true,
+    "improved": false,
+    "top_improvement": "Add an explicit 'operational dependencies' probe to the prompt: for every service with a quoted turnaround, ask what could make it longer (materials/stock, special orders, equipment, seasonal capacity) and pin vague seasonality to actual months — this alone would have captured the missing special-order lace/beading +1-2 week lead time and the Apr–Sept peak window, both of which the bot must know to quote customers accurately.",
+    "findings": [
+      {
+        "problem": "Whole fact category lost: materials/stock and special-order lead times (basic threads and zips in stock; specialty lace/beading must be special-ordered, adding 1-2 weeks). Roz handed Birdie the cue 'special-order lace' and it was never probed, so the brief has no supply-chain information at all — even though it directly changes the turnaround the bot would quote brides.",
+        "excerpt": "Rosalind 'Roz' Fennimore: Oh, no, love, same as everything else really — no deposit, nothing upfront, it all gets paid when the bride comes to collect, cash or card same as I said. Which now you say it out loud like that, doesn't sound the wisest way to run things, does it — a dress that's taken me three weeks and cost me in special-order lace, and I've not seen a penny till the very end."
+      },
+      {
+        "problem": "The very first evidence cue in the interview — a lace order ruined and needing reordering (i.e. a delay/reorder scenario) — was never followed up, and ended up in the brief mischaracterised as 'an example of the kind of work they do' rather than as a materials/lead-time risk.",
+        "excerpt": "Rosalind 'Roz' Fennimore: Everyone just calls me Roz — even the postman, and I only met him properly last spring when he brought that parcel of lace that got left out in the rain, terrible business that was, I had to explain to the bride it'd need reordering."
+      },
+      {
+        "problem": "Peak bridal season was never pinned down to actual months (Apr–Sept per the owner's reality). Birdie let 'summer season'/'June' stand, so the brief tells the bot to 'recommend booking 2 months ahead in summer' with no defined date range — unusable as a rule.",
+        "excerpt": "Rosalind 'Roz' Fennimore: Three weeks is the floor, mind, the absolute minimum, I won't go under that even for a lovely bride crying at me, and honestly in the summer season I'm begging people to book two months ahead if they can."
+      },
+      {
+        "problem": "Redundant question: Roz had explicitly said 'no deposits' one turn earlier, and Birdie asked again whether she takes a deposit on bridal work, spending a full exchange re-confirming a stated fact.",
+        "excerpt": "Rosalind 'Roz' Fennimore: Oh, payment, yes — well, it's cash or card, that's it really, right there at the counter when they come to collect, I don't do any of this online business, no deposits, no tap-your-phone-before-you've-even-seen-the-dress nonsense, I know some shops do that now but it's never been my way.\nBirdie: For the wedding dresses, given they're pricier and take weeks — do you ever take a deposit upfront, or is it all paid when the bride collects the dress?"
+      },
+      {
+        "problem": "No concrete contact details were ever captured. The escalation rule is 'take their number and Roz will call back' and the shop phone is the primary channel, yet the brief contains no phone number, no Facebook page name, and no email — the build team cannot wire up the handoff.",
+        "excerpt": "Rosalind 'Roz' Fennimore: The shop number's the only number there is, dear, same one for everything, ringing on the counter right next to my pin cushion. There's no separate emergency line or anything grand like that — I'm not exactly running a call centre."
+      },
+      {
+        "problem": "Budget and timeline were never asked at any point, leaving both fields null; Birdie used the final pre-summary turn on a minor turnaround confirmation instead.",
+        "excerpt": "Birdie: Ha, I think 'mismatched as I am, it seems to work' should go on the shop sign, Roz! Quick one before I wrap up — for that suit alteration at £45, roughly how many days does that usually take, same 5-7 days as the other alterations, or different?"
+      },
+      {
+        "problem": "No systematic service-catalogue sweep: two of the seven priced services (suit package £45, waist alteration £16) only surfaced by the owner's own late recall — the second one after the summary had already been read back. Anything she didn't spontaneously remember would simply have been lost.",
+        "excerpt": "Rosalind 'Roz' Fennimore: Only one thing jumps out at me, and isn't it typical, we've been at this ages and I've done it again — I never mentioned the waist alterations, taking in or letting out a waistband, that's sixteen pounds, same five to seven days as the rest."
+      },
+      {
+        "problem": "Formulaic praise-then-pivot opener repeated on nearly every turn ('That's really helpful/useful/clear, Roz — ...'), which reads as scripted rather than conversational across a long interview.",
+        "excerpt": "Birdie: That's really useful, Roz — phone first, Facebook second, website maybe down the line. Roughly how many calls or messages would you say come in on a normal week — even a rough guess is fine?"
+      },
+      {
+        "problem": "The Bernina's reliability was noted as colour but never converted into an operational rule (what the bot should say if turnaround slips because the machine is down), despite Roz raising it three separate times as a live worry.",
+        "excerpt": "Rosalind 'Roz' Fennimore: though there's been the odd week where the Bernina's had one of her moods — that's my sewing machine, 1987 she is, older than some of my customers' marriages, bless her, and when she plays up I do sometimes wonder if I should just bite the bullet and buy a new one"
+      }
+    ],
+    "schema_suggestions": [
+      "Add a `contact_details` object (phone, Facebook page/handle, email, website URL, address) — the brief currently records that 'only one number exists' without ever recording the number, making the callback escalation unbuildable.",
+      "Add a `bot_persona` field (name, tone, verbosity guidance). Bot name 'Marjorie' and the warm tone requirement are buried in free-text additional_notes despite being direct build inputs.",
+      "Add a `scope_and_phasing` field (phase 1 vs later capabilities). The explicit 'start simple, add calendar later' decision is currently crammed into additional_notes.",
+      "Add a `supply_and_lead_times` / `operational_constraints` field for stocked vs special-order materials, equipment reliability, and capacity ceilings — these change quoted turnarounds and currently have no home.",
+      "Add a `seasonality` field with explicit date ranges and peak-season behaviour changes (volume, availability, rush-job suspension), rather than leaving 'June is busy' scattered across notes.",
+      "Add a `current_tools_and_records` field (paper appointment book, card machine, 4-year-old answerphone, no calendar software) — integration-relevant facts are currently split between `integrations: null` and additional_notes.",
+      "Give the interviewer a capability/step to request and record the owner's actual contact and channel identifiers before wrap-up, not just narrative descriptions of them."
+    ]
   }
 ]
