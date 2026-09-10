@@ -551,30 +551,6 @@
   },
   {
     "cycle": 11,
-    "stamp": "20260910_084631",
-    "persona": "Locksmith services and small appliance repair / Deeply suspicious of technology and anything 'in writing.' Derek answers WhatsApp messages reluctantly, often replying hours or days late, and constantly questions why people don't just phone or come in person. He refuses to confirm prices or bookings over text ('could be anyone reading this'), asks who's asking and why, distrusts links/photos sent to him, and frequently tells customers to call the shop landline instead. When he does answer, he's blunt and short, sometimes typing in fragments, and occasionally goes silent mid-conversation if he decides the topic should be discussed 'properly' on the phone.",
-    "score": 7.33,
-    "completed": true,
-    "improved": false,
-    "top_improvement": "When systematically walking through each service's pricing (locks, keys, safes, appliances), explicitly include the business's core/headline service (here, emergency lockouts) in that same walkthrough rather than treating it only as an escalation-routing topic — the interviewer conflated 'route emergencies to the phone' with 'we don't need the price,' losing a critical FAQ answer.",
-    "findings": [
-      "MAJOR OMISSION: Emergency lockout pricing (£65 call-out + £35 labour, cash preferred, card machine 'usually works') was never asked about. Birdie walked through lock changes, key cutting, safe opening, and appliance repair pricing in detail but skipped the flagship emergency service's price entirely — even though Derek's own escalation policy for lockouts was discussed at length ('Straight to the landline, every time'). The bot will have no price to quote for its single most time-critical service.",
-      "Cash-preferred / card-machine-unreliable detail was never surfaced, despite being directly relevant since Birdie explicitly ruled out online payments — this would have been a natural follow-up ('so how do people usually pay you?') that was missed.",
-      "Derek's stated uncertainty about raising the call-out fee to £75, and his confusion about VAT registration thresholds, were never surfaced. No open-ended question like 'anything else on your mind about pricing or the business?' was asked before closing, so these business-relevant, chatbot-relevant (pricing display) uncertainties were completely lost.",
-      "Age (61) and town/location context from the fact sheet were never asked about; minor, but could matter for tone/personalization and were freely available if asked.",
-      "Good save: Birdie initially mislabeled the business 'family-run' in the readback, and Derek corrected it ('don't go calling it family-run — it's just me'); the correction was accepted and the record fixed. This is a positive, not a finding against the brief's accuracy.",
-      "Interviewer respected Derek's refusal to share screenshots and to explain the 'Son' backstory without pushing — good adaptive behavior, appropriately not over-probed on sensitive/irrelevant ground.",
-      "Enquiry volume was left vague ('a handful most days, more Mondays') and flagged as an open item rather than pinned down further (e.g., 'would a rough weekly total work, even a guess?') — acceptable but a bit thin for a 'volume' field that could scale the whole chatbot spec."
-    ],
-    "schema_suggestions": [
-      "Add a structured field for 'payment_methods_accepted' (cash/card/preferences) — this recurringly gets missed or would otherwise be dumped into business_policies/additional_notes, but is a distinct, reusable fact type for many small businesses.",
-      "Add a field like 'pending_business_decisions' or 'owner_uncertainties' to capture things the owner is actively unsure about (e.g., 'should I raise my fee', 'how does VAT affect me') — currently there is no home for this fact type at all, so it's simply never asked about or is at risk of being silently dropped rather than filed anywhere.",
-      "The 'additional_notes' field is being used as a catch-all for behaviorally important facts (e.g., 'customers can text any time but Derek doesn't respond quickly') that actually describe response-time expectations relevant to bot messaging — consider a dedicated 'response_time_expectations' or 'availability_caveats' field distinct from business_policies and hours."
-    ],
-    "improve_done": true
-  },
-  {
-    "cycle": 12,
     "stamp": "20260910_083846",
     "persona": "Plant nursery and residential landscaping services / Nomsa constantly code-switches between English and isiZulu (and sometimes Afrikaans) mid-sentence, often translating herself a beat later or not at all, assuming the customer will follow along. She's warm, chatty, and clearly competent, but her messages jump between languages in a way that makes it hard to pin down specifics — a price or date might get stated first in isiZulu and then only loosely restated in English. She occasionally realizes she's done this and adds a laughing emoji or a quick 'sorry, in English -' but often just carries on. She's not evasive, just genuinely a bilingual thinker typing as she talks.",
     "score": 7.5,
@@ -632,6 +608,30 @@
       "Add a `current_tools_and_records` field (notebook + WhatsApp, no spreadsheet/CRM, no website) — this operational reality is currently dumped in `additional_notes` and duplicated there and in open_items.",
       "Add a `business_profile` field (founded year, size/growth stage) — the interviewer has no slot prompting for company history, so the 2014 roadside-stall origin was never asked about.",
       "Add a `quote_terms` field (validity period, what triggers a re-quote) — the schema has deposit and refund coverage but no home for quote lifetime, which is likely why it was never asked."
+    ],
+    "improve_done": true
+  },
+  {
+    "cycle": 12,
+    "stamp": "20260910_084631",
+    "persona": "Locksmith services and small appliance repair / Deeply suspicious of technology and anything 'in writing.' Derek answers WhatsApp messages reluctantly, often replying hours or days late, and constantly questions why people don't just phone or come in person. He refuses to confirm prices or bookings over text ('could be anyone reading this'), asks who's asking and why, distrusts links/photos sent to him, and frequently tells customers to call the shop landline instead. When he does answer, he's blunt and short, sometimes typing in fragments, and occasionally goes silent mid-conversation if he decides the topic should be discussed 'properly' on the phone.",
+    "score": 7.33,
+    "completed": true,
+    "improved": false,
+    "top_improvement": "When systematically walking through each service's pricing (locks, keys, safes, appliances), explicitly include the business's core/headline service (here, emergency lockouts) in that same walkthrough rather than treating it only as an escalation-routing topic — the interviewer conflated 'route emergencies to the phone' with 'we don't need the price,' losing a critical FAQ answer.",
+    "findings": [
+      "MAJOR OMISSION: Emergency lockout pricing (£65 call-out + £35 labour, cash preferred, card machine 'usually works') was never asked about. Birdie walked through lock changes, key cutting, safe opening, and appliance repair pricing in detail but skipped the flagship emergency service's price entirely — even though Derek's own escalation policy for lockouts was discussed at length ('Straight to the landline, every time'). The bot will have no price to quote for its single most time-critical service.",
+      "Cash-preferred / card-machine-unreliable detail was never surfaced, despite being directly relevant since Birdie explicitly ruled out online payments — this would have been a natural follow-up ('so how do people usually pay you?') that was missed.",
+      "Derek's stated uncertainty about raising the call-out fee to £75, and his confusion about VAT registration thresholds, were never surfaced. No open-ended question like 'anything else on your mind about pricing or the business?' was asked before closing, so these business-relevant, chatbot-relevant (pricing display) uncertainties were completely lost.",
+      "Age (61) and town/location context from the fact sheet were never asked about; minor, but could matter for tone/personalization and were freely available if asked.",
+      "Good save: Birdie initially mislabeled the business 'family-run' in the readback, and Derek corrected it ('don't go calling it family-run — it's just me'); the correction was accepted and the record fixed. This is a positive, not a finding against the brief's accuracy.",
+      "Interviewer respected Derek's refusal to share screenshots and to explain the 'Son' backstory without pushing — good adaptive behavior, appropriately not over-probed on sensitive/irrelevant ground.",
+      "Enquiry volume was left vague ('a handful most days, more Mondays') and flagged as an open item rather than pinned down further (e.g., 'would a rough weekly total work, even a guess?') — acceptable but a bit thin for a 'volume' field that could scale the whole chatbot spec."
+    ],
+    "schema_suggestions": [
+      "Add a structured field for 'payment_methods_accepted' (cash/card/preferences) — this recurringly gets missed or would otherwise be dumped into business_policies/additional_notes, but is a distinct, reusable fact type for many small businesses.",
+      "Add a field like 'pending_business_decisions' or 'owner_uncertainties' to capture things the owner is actively unsure about (e.g., 'should I raise my fee', 'how does VAT affect me') — currently there is no home for this fact type at all, so it's simply never asked about or is at risk of being silently dropped rather than filed anywhere.",
+      "The 'additional_notes' field is being used as a catch-all for behaviorally important facts (e.g., 'customers can text any time but Derek doesn't respond quickly') that actually describe response-time expectations relevant to bot messaging — consider a dedicated 'response_time_expectations' or 'availability_caveats' field distinct from business_policies and hours."
     ],
     "improve_done": true
   },
@@ -694,5 +694,63 @@
       "Give `open_items` structured subfields (decision, owner, blocking impact on bot copy) and prompt the interviewer to sweep for unresolved decisions at wrap-up — the outdoor-warranty indecision was voiced but never landed in open_items."
     ],
     "improve_done": true
+  },
+  {
+    "cycle": 14,
+    "stamp": "20260910_140959",
+    "persona": "Mobile car detailing / auto spa services / Chronic question-deflector — Tunde almost never answers a question directly. Instead he responds with a counter-question ('why you dey ask?', 'which kind car be that?', 'you go do am when?'), turning every inquiry into an interrogation of the customer's situation before circling back — if he circles back at all. He's enthusiastic, sociable, and clearly knows his business well, but customers often have to answer three or four of his questions before he gives up a straight price or time, and sometimes the conversation just ends in a pile of unanswered questions on both sides.",
+    "score": 6.0,
+    "completed": true,
+    "improved": false,
+    "top_improvement": "Add a mandatory pre-wrap checklist that the interviewer must cover before recapping: (a) the concrete problem/pain points the bot must relieve and desired outcomes, (b) physical location and service-area coverage, (c) target customers, (d) timeline — and, crucially, instruct the interviewer to treat the owner's own qualifying questions (car type, dirt level, wash frequency) as bot conversation-flow requirements to capture rather than tangents to shut down.",
+    "findings": [
+      {
+        "problem": "Location / service area never captured. The business is in Lagos and is mobile-only, so coverage area (which parts of Lagos, travel limits) is critical for a booking bot — yet 'Lagos' does not appear anywhere in the brief, and Birdie never asked where they operate even after Tunde volunteered Lagos-specific constraints.",
+        "excerpt": "Tunde Balogun: Hmm, that one na serious question o. But make I ask you this — this bot wey fit \"sync with calendar\" — you don see how Lagos traffic and water wahala fit mess up any fixed schedule before? Because if bot just dey book slot anyhow without knowing say Emeka don dey stuck for Third Mainland Bridge, na wahala for me and the customer."
+      },
+      {
+        "problem": "problem_to_solve and target_audience are both null — Birdie never once asked what pain the chatbot is meant to relieve (Blessing overloaded on calls, missed messages, slow delay notifications) or who the customers are. The only opening was a vague catch-all at the very end.",
+        "excerpt": "Birdie: That's very useful, thank you Tunde — that nuance about capacity depending on service mix is important, noted well. I think I've got a solid picture now. Before I wrap up and read everything back to you — anything else on your mind about pricing or the business that we haven't touched on?"
+      },
+      {
+        "problem": "Lost fact: Tunde's core quoting philosophy — he wants to know car type, location, how dirty the car is, and how often it's washed before quoting a 'correct' price. He signalled this three separate times and Birdie actively shut it down instead of turning it into a bot pre-quote qualification flow; the brief only lists car type/location/service/time as booking details.",
+        "excerpt": "Tunde Balogun: Because pricing no dey just \"one size fit all\" — na exterior wash you dey think of, or full inside-and-outside job? Person car dey dirty like say na from building site e come, or na just small dust from Lagos road? All these things dey affect wetin I go quote person o.\nBirdie: Ha, no be for me to book o 😄 — na so I go take fill your form well, so the bot go fit answer customers correctly instead of just guessing. Make we no confuse ourselves — first, just give me the names of all the different services una offer, no price yet, just the list"
+      },
+      {
+        "problem": "Lost facts: operational pain points (rising generator/water-pump fuel cost, unreliable water access at client compounds). Tunde flagged water problems twice as affecting job duration, but Birdie never asked about business challenges at all, so fuel cost never surfaced and water access is only implicit inside a service-duration string.",
+        "excerpt": "Tunde Balogun: But straight to your money question — normally we dey charge ₦8,000 for basic exterior wash. Time-wise sef, e no dey take too long if water dey available — maybe 30-45 minutes. But if water no dey flow well for that compound, na different story entirely 😄."
+      },
+      {
+        "problem": "Lost fact: business has operated since 2019 (business age/track record). Birdie jumped straight from name to operating model and never asked how long ShineRight has been running.",
+        "excerpt": "Birdie: Ha Tunde, no be say you be guinea pig o 😄 — but I no go lie to you, every business dey different, so I no go assume I sabi your own until you tell me. That's exactly why I dey ask plenty questions instead of just guessing. So make we start: ShineRight Mobile Detailing — since na 'mobile', una dey go meet customers where dem dey, or you get one fixed location wey people sef dey come to?"
+      },
+      {
+        "problem": "Severe inefficiency: 57 turns (double the norm). A large chunk was one-service-per-turn price collection after Tunde had already listed all five services and shown he answers in full paragraphs; these could have been asked in one or two batched turns.",
+        "excerpt": "Birdie: Got it, ₦15,000, 1-1.5 hours. Now — engine bay cleaning — price and how long?"
+      },
+      {
+        "problem": "Leading the client instead of eliciting: Birdie invented and pushed the persona name, and Tunde simply accepted it — the 'requirement' in the brief is Birdie's own suggestion, not the owner's preference (he explicitly said he'd be fine with no persona).",
+        "excerpt": "Birdie: Fair enough — since you don leave the door open, one simple option: the bot fit just answer as 'ShineRight Assistant' — friendly but no extra fancy character, keeps things simple."
+      },
+      {
+        "problem": "budget, timeline, success_criteria and faq_answers all left null; no question was ever asked about when he wants this live, what he'd spend, or what 'working' would look like — the interview closed as complete regardless.",
+        "excerpt": "Birdie: Ah, thank you Tunde, this was a pleasure! 🙌 I've got everything written down clean — your services, prices, policies, the Blessing handoff, all of it. Once you send Blessing's contact details, I'll add that in too. This all goes to the build team next, who'll take it from here. No wahala, we go dey in touch!"
+      },
+      {
+        "problem": "Repetitive capability-deflection pattern: three times Birdie answered a substantive feasibility question with essentially 'I can't promise, that's for the build team', which reads evasive and left the biggest real requirement (running-late notifications) parked as an open item rather than probed for what Tunde actually wants the bot to say/do when techs are delayed.",
+        "excerpt": "Birdie: Ha, that one na real Lagos wahala true true 😄 — I no fit promise you say the bot go sabi 'sensing' Third Mainland traffic by itself, that kind thing na something the build team go need to look into separately, I'm just here to note down wetin you need."
+      }
+    ],
+    "schema_suggestions": [
+      "Add a `location_and_service_area` field (city/country plus coverage radius or serviced districts) — for a mobile business this was captured nowhere and got silently dropped.",
+      "Add a structured `operating_hours` field (plus exceptions/holiday policy); hours are currently buried in the free-text business_description where a builder may miss them.",
+      "Add a `team_roster` field (name, role, customer-facing yes/no) — staff roles are crammed into business_description.",
+      "Add a `pain_points` / `operational_constraints` field distinct from problem_to_solve, to hold things like unreliable water access, fuel costs, traffic delays and capacity limits (currently capacity sits in additional_notes).",
+      "Add a `bot_scope_and_handoff` field for the book-vs-collect-details decision and human handoff design — this key decision is currently a bullet in additional_notes.",
+      "Add a `bot_persona_and_tone` field so persona/name is a first-class requirement rather than an additional_note.",
+      "Add a `qualification_questions` / `pre_quote_data_to_collect` field so owner-specific quoting logic (car type, condition, frequency) becomes a captured bot flow requirement.",
+      "Add a `future_roadmap` field (planned expansions, loyalty program) so speculative-but-relevant plans aren't mixed with actionable open items.",
+      "Give the interviewer a capability/knowledge module for answering basic feasibility questions (updatable knowledge base, integrations, real-time notifications) so it stops deflecting every technical question to 'the build team'."
+    ]
   }
 ]

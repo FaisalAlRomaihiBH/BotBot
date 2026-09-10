@@ -1,0 +1,286 @@
+{
+  "transcript": [
+    [
+      "Birdie",
+      "Hi! I help businesses figure out exactly what they need from a chatbot. Before we start — what's your name?"
+    ],
+    [
+      "Tunde Balogun",
+      "Ah, before I give you my name — you dey call from which company again? You be Nigerian company or one of those foreign ones? Because how you go take help me if you no even know how car detailing business run for Lagos here?"
+    ],
+    [
+      "Birdie",
+      "Ha, no wahala, I understand the caution! I no be one company trying to sell you anything — I'm just here to listen well well and gather exactly how your car detailing business runs, so whoever builds the chatbot go build am correctly for how Lagos business actually works, not some generic import. I no go assume anything — na you go teach me your business. So make we start small: wetin be your name?"
+    ],
+    [
+      "Tunde Balogun",
+      "Ehen, that one make sense small. Okay okay, my name na Tunde — Tunde Balogun, I be the owner of ShineRight Mobile Detailing. But wait, you sef, before I continue — you don talk to person wey get car wash or detailing business before? Or na me go be your first Lagos guinea pig for this thing? 😄"
+    ],
+    [
+      "Birdie",
+      "Ha Tunde, no be say you be guinea pig o 😄 — but I no go lie to you, every business dey different, so I no go assume I sabi your own until you tell me. That's exactly why I dey ask plenty questions instead of just guessing. So make we start: ShineRight Mobile Detailing — since na 'mobile', una dey go meet customers where dem dey, or you get one fixed location wey people sef dey come to?"
+    ],
+    [
+      "Tunde Balogun",
+      "Na so we take dey run am — we dey go meet the customer for their house or office, that's why we call am \"mobile\" for the name. We no get shop wey person go drive come meet us.\n\nBut make I ask you small — this chatbot wey you wan build, na for customers go dey chat with am when they wan book, or na for me and Blessing go dey use am for back office? Because that one go change as I go explain how the business flow take be o."
+    ],
+    [
+      "Birdie",
+      "Good question — this one na for your customers, the ones wey go dey message to ask questions, book, or check price. E no be for back-office use between you and Blessing. Think of am like say na your front-desk person wey dey chat with customers 24/7. Speaking of Blessing — wetin be her role for the business?"
+    ],
+    [
+      "Tunde Balogun",
+      "Ehen, Blessing na my scheduling person o — she dey sit for house dey handle the calls and bookings, dey arrange which customer Emeka or Chidi go go meet. She no dey go site at all, na pure phone and calendar work she dey do.\n\nBut make I ask you now — if this chatbot go dey chat with customer 24/7 like you talk, e go still need Blessing sef, or you wan say the thing go just replace her work entirely? Because that one go determine how I go explain the booking flow give you o."
+    ],
+    [
+      "Birdie",
+      "That's a fair question, and honestly, that's your call to make, not mine — I'm just here to gather what you want, not decide it. There's two ways this fit your business: (1) a simple bot wey go answer FAQs, quote prices, and pass booking requests to Blessing to finish, or (2) a fuller bot wey fit actually book the slot and sync with a calendar, cutting down Blessing's manual work. Which one dey more sense to you — make Blessing still confirm everything, or make the bot try handle booking itself?"
+    ],
+    [
+      "Tunde Balogun",
+      "Hmm, that one na serious question o. But make I ask you this — this bot wey fit \"sync with calendar\" — you don see how Lagos traffic and water wahala fit mess up any fixed schedule before? Because if bot just dey book slot anyhow without knowing say Emeka don dey stuck for Third Mainland Bridge, na wahala for me and the customer.\n\nSo tell me — this bot of yours, e sabi handle \"sorry we go reach small late\" kind message, or na only straight booking e sabi do?"
+    ],
+    [
+      "Birdie",
+      "Ha, that one na real Lagos wahala true true 😄 — I no fit promise you say the bot go sabi 'sensing' Third Mainland traffic by itself, that kind thing na something the build team go need to look into separately, I'm just here to note down wetin you need. But make I ask you — right now, before any bot, when Emeka or Chidi go dey late, who dey call the customer to tell them 'we go reach small late'? Na Blessing, or una no really get fixed process for that one?"
+    ],
+    [
+      "Tunde Balogun",
+      "Na Blessing dey handle that one — she go call the customer make dem no vex, tell them \"we dey come, small delay.\" But she no dey always fast reach them sef, especially if she dey another call already.\n\nMake I ask you now — this bot, if e dey answer customer for 2am when person just wan know price, e go fit tell them say we no dey work Sunday or public holiday? Or that kind detail na something I go still need Blessing to type in manually every time?"
+    ],
+    [
+      "Birdie",
+      "That kind detail — like say una no work Sunday or public holiday — na exactly the kind thing wey we go type in once and the bot go just know am forever, no need for Blessing to repeat am every time. So make we lock that one: una dey work Monday to Saturday, closed Sunday and public holidays? Or how does the schedule actually run?"
+    ],
+    [
+      "Tunde Balogun",
+      "Yes yes, na so e be — Monday to Saturday, 8am to 6pm, we no dey work Sunday, we no dey work public holiday at all at all. Na rest day be that one for me and my boys.\n\nBut make I ask you back now — if the bot go \"know am forever\" like you talk, e go fit handle if I decide to open one Sunday because customer beg well well? Or once you people programme am, e go just dey stubborn dey tell person \"we no dey work today\" even when I don change my mind?"
+    ],
+    [
+      "Birdie",
+      "Good question — I no fit promise you the exact technical details of how updates go work, that one na something for the build team to sort out, but generally these things fit be updated whenever you want, e no go just dey 'stubborn' forever — you or Blessing go always fit tell the bot 'we dey work this Sunday' if you change your mind. Now make we talk business — wetin be the actual services una offer, and how much you dey typically charge for each one?"
+    ],
+    [
+      "Tunde Balogun",
+      "Ah, services and price — that one na the mother of all questions o! 😄 But make I ask you first, why you dey ask like that, straight straight? You wan book something, or na just for the bot data you dey gather?\n\nBecause pricing no dey just \"one size fit all\" — na exterior wash you dey think of, or full inside-and-outside job? Person car dey dirty like say na from building site e come, or na just small dust from Lagos road? All these things dey affect wetin I go quote person o.\n\nSo tell me — which kind service you want make I break down for you first?"
+    ],
+    [
+      "Birdie",
+      "Ha, no be for me to book o 😄 — na so I go take fill your form well, so the bot go fit answer customers correctly instead of just guessing. Make we no confuse ourselves — first, just give me the names of all the different services una offer, no price yet, just the list — like say na 'exterior wash', 'full interior+exterior', anything else — then we go take them one by one and I go ask price and time for each."
+    ],
+    [
+      "Tunde Balogun",
+      "Ehen, just the list, no price — okay that one I fit do straight, no wahala. But you sure na just five things you want, or you go later ask me \"which one dey sell pass\" and start another wahala? 😄\n\nAnyway make I run am for you:\n1. Basic exterior wash\n2. Full detail (interior + exterior)\n3. Interior deep clean only\n4. Engine bay cleaning\n5. Ceramic coating\n\nNa those five be the main services we dey offer. Now you go start to ask me price one by one abi?"
+    ],
+    [
+      "Birdie",
+      "Haha, no be five wahala, na five simple questions 😄. Yes make we start one by one — starting with the first: Basic exterior wash — how much you dey typically charge for that, and how long e dey take from start to finish?"
+    ],
+    [
+      "Tunde Balogun",
+      "Ehen, basic exterior wash — but hold on now, which kind car we dey talk about? Small saloon car like Corolla, or you dey think of jeep/SUV like Prado? Because size dey affect the time and effort my boys go use o.\n\nBut straight to your money question — normally we dey charge ₦8,000 for basic exterior wash. Time-wise sef, e no dey take too long if water dey available — maybe 30-45 minutes. But if water no dey flow well for that compound, na different story entirely 😄.\n\nYou wan know about the full detail one next abi?"
+    ],
+    [
+      "Birdie",
+      "Got it — ₦8,000, 30-45 mins, water permitting. Quick one on that: does the ₦8,000 stay the same for a big SUV/jeep like Prado, or una dey charge different for that? Then we go move to full detail."
+    ],
+    [
+      "Tunde Balogun",
+      "Ah, good catch! For SUV/jeep like Prado, e dey small pass different — well, the price fit still be ₦8,000 sha for basic exterior wash, but the time dey longer, maybe close to an hour instead of 30-45 minutes, because more body work for my boys to cover. So price no change much, na the time and my boys' energy wey change 😄.\n\nYou wan hear about full detail now abi you get more questions for exterior wash?"
+    ],
+    [
+      "Birdie",
+      "Perfect, that's clear. Now, full detail (interior + exterior) — how much you dey charge, and how long e dey take?"
+    ],
+    [
+      "Tunde Balogun",
+      "Ehen, full detail — na the big job be that one, inside and outside sparkling. But make I ask you — the person wey go request this one, dem sabi say na two-in-one job, or dem go still ask \"why e cost pass the wash one\" like say na wahala? 😄\n\nAnyway, full detail (interior + exterior) na ₦25,000 flat. Time-wise, e dey take longer well well — maybe 1.5 to 2 hours, depending on how dirty the inside be and if water/power dey steady for that place.\n\nYou wan hear about interior deep clean next abi?"
+    ],
+    [
+      "Birdie",
+      "Noted, ₦25,000, 1.5-2 hours. Next — interior deep clean only — how much and how long?"
+    ],
+    [
+      "Tunde Balogun",
+      "Ehen, interior deep clean — but make I ask you, why person go want only inside clean and no touch the outside? Na person wey just dey manage the outside look, or car wey person dey use taxi/Uber and na only seat and dashboard dey worry them? 😄 That kind detail dey help me sometimes when I dey brief Emeka and Chidi.\n\nAnyway, no wahala — interior deep clean only na ₦15,000. Time no too far from full detail sef, maybe 1 hour to 1.5 hours, depending on how the seat and carpet condition be.\n\nYou wan hear about engine bay cleaning next?"
+    ],
+    [
+      "Birdie",
+      "Got it, ₦15,000, 1-1.5 hours. Now — engine bay cleaning — price and how long?"
+    ],
+    [
+      "Tunde Balogun",
+      "Ehen, engine bay — but make I ask you, na person wey just service dem car and wan make everything sparkle when mechanic open bonnet, or na person wey engine don gather grease and dirt for long time? Because that one sef fit affect how careful my boys go need to take with the wiring and all those sensitive parts o, no be just \"spray water anyhow\" work be that one.\n\nAnyway — engine bay cleaning na ₦10,000, and e dey take about 30-45 minutes if nothing complicated dey inside.\n\nYou wan hear about ceramic coating now? That one na the tricky one o, make I warn you first before we reach am 😄"
+    ],
+    [
+      "Birdie",
+      "Haha okay, I dey ready for the tricky one — go ahead, warn me and then give me the price and turnaround for ceramic coating 😄"
+    ],
+    [
+      "Tunde Balogun",
+      "Ehen, warning don land! 😄 Ceramic coating na my \"wahala child\" o — the coating product na imported one, and with this exchange rate palava, the price dey shift like Lagos traffic. So I no fit just give you one fixed number and swear on am, because if I quote person today and dollar jump next week, I don enter trouble.\n\nNormally e dey range from ₦100,000 to ₦150,000, depending on car size — small saloon go fall near the ₦100k side, big SUV/jeep go climb near ₦150k. Time-wise, that one no be small job — e fit take almost a full day sef, sometimes we go tell person make dem no even plan to use the car that day at all.\n\nOh, and one important thing — ceramic coating na the only service wey we dey collect deposit for, 50% upfront before we book the date. The rest of the services, na pay-on-completion.\n\nYou wan know why we collect deposit for only that one, or you don gum the full gist now? 😄"
+    ],
+    [
+      "Birdie",
+      "Ha, I don gum am well well 😄 — na because of the price wahala with the imported product and dollar rate, make sense why that one alone need deposit. Quick one on that though: how do customers actually pay — cash, bank transfer, card, or a mix — and is that always smooth, or una dey chop wahala with any of them sometimes?"
+    ],
+    [
+      "Tunde Balogun",
+      "Ehen, payment — but make I ask you first, na for the bot you wan add \"how to pay\" button, or you just dey find out for background gist? Because if na for bot, that one go determine how I explain am.\n\nAnyway make I no chook cold water for your matter — mostly na bank transfer people dey use, straight to account, that one dey smooth pass. Cash dem sef fit pay if dem no wan stress with transfer. Card machine, na Blessing get one POS she dey carry sometimes, but that one no too common, and network for some areas fit dey misbehave — POS go just dey \"processing\" forever like say network wan punish person 😄.\n\nYou wan know about cancellation and no-show matter next, or you don gather enough for payment side?"
+    ],
+    [
+      "Birdie",
+      "Good gist — noted well. Yes, this na exactly the kind info wey go help the bot answer 'how do I pay' correctly, so thank you. Now, cancellation and no-show — if customer book, then dem no show up, or dem cancel last minute, wetin be the real policy? Especially for that ceramic coating deposit sef — dem fit get am back if dem cancel, or e don gone?"
+    ],
+    [
+      "Tunde Balogun",
+      "Ehen, cancellation matter — but make I ask you, na person wey just \"forget\" and no show, or na person wey call before make dem cancel like correct human being? Because those two no be the same thing for me o 😄.\n\nAnyway make I gist you straight: if customer cancel within 2 hours to the appointment time, no wahala, e free, no penalty at all. But if na straight no-show — dem no call, no message, my boys just dey wait for gate like mumu — then any deposit wey dem don pay, na so e go stay, e no dey refund again. That one na strictly for ceramic coating sha, since na only that one we dey collect deposit for in the first place.\n\nYou wan know anything else about how we run things, or you don chop belleful for questions today? 😄"
+    ],
+    [
+      "Birdie",
+      "Haha, no I no don belleful yet, small more! 😄 That cancellation gist na very clear, thank you. Next one — if customer get problem or complaint, or dem need something wey the bot no fit handle, who dem suppose reach — you, Blessing, or somebody else? And wetin be the best number or contact for that handoff?"
+    ],
+    [
+      "Tunde Balogun",
+      "Ehen, complaint matter — but make I ask you, na complaint like \"the wash never clean well\" kind thing, or na person wey vex because Emeka come late for gate? Because those two go dey handled small different way for me o — one na quality matter, the other one na time-management shame wahala 😄.\n\nBut generally, na Blessing be the first contact for anything wey come up — she dey pick up calls and she go decide whether to settle am herself or bring am come meet me. If na something wey concern money or my boys' work quality well well, na me she go loop in straight.\n\nAs for \"best number\" — I no go fit gum exact number for you here o, that one na Blessing's phone matter, no be something wey dey inside my head like that. But for the bot, I guess you dey find out if e suppose just say \"our team go reach out\" or actually drop contact — which one you dey lean towards?"
+    ],
+    [
+      "Birdie",
+      "That one na your call to make, not mine — I just dey gather wetin you want. But make I put am to you straight: if bot go tell customer 'reach out to our team,' e still need something concrete for them to actually reach — a number or WhatsApp handle. So whenever you get Blessing's number/handle, just drop am, we go add am. For now, one more thing — if customer message very late for night or when Blessing no dey available (e.g. she don sleep), wetin the bot suppose tell them — just say 'we go reply for morning,' or something else?"
+    ],
+    [
+      "Tunde Balogun",
+      "Ehen, night message matter — but make I ask you, na the kind customer wey go dey patient wait till morning, or na the kind wey go message five times back to back because dem impatient? 😄 Because that one dey determine whether \"we go reply for morning\" go vex them or calm them.\n\nBut sincerely, that one make sense to me — if na night wey Blessing don close eye, bot fit just tell them straight: \"Thank you, we don receive your message, we go get back to you first thing tomorrow between 8am-6pm working hours.\" No need to make promise wey Blessing no fit keep at 2am, she no be robot.\n\nYou wan know anything else, or na that one be the last one for today? 😄"
+    ],
+    [
+      "Birdie",
+      "That's a solid, calm reply — good one. One more small thing, Tunde: where do customers currently reach una to chat or book — WhatsApp, Instagram, phone calls, or a mix? That's where the bot go need to live."
+    ],
+    [
+      "Tunde Balogun",
+      "Ehen, where we dey reached — but make I ask you first, you wan know because you go put bot for that same platform, or na just for background gist again? 😄 Because if na WhatsApp bot, that one different work from if na Instagram DM bot o.\n\nAnyway make I no dodge too much — na mix be the honest answer. Plenty people dey call Blessing straight for phone, some dey WhatsApp us, and small small people dey message from Instagram after they see person's before-and-after post. WhatsApp sef na where most booking gist dey happen true true, na there person go send location and car photo make Blessing sabi wetin she dey deal with.\n\nYou wan know anything else, or that na the last one for today? 😄"
+    ],
+    [
+      "Birdie",
+      "Good to know — na real gist, no dodge 😄. Since phone calls na Blessing's own personal thing, I think the bot go mainly live for WhatsApp and Instagram — that sound right to you, or you want am for phone matter sef somehow? And while we dey there — roughly how many messages or booking inquiries una dey get in a week, even if na rough guess?"
+    ],
+    [
+      "Tunde Balogun",
+      "Ehen, WhatsApp and Instagram na correct move o, that one I gree straight — phone calls na Blessing's own turf, no bot fit snatch that one from her, she go vex 😄.\n\nBut rough number of messages per week — you wan know because you dey worried say the bot go get overload, or na just for una statistics gist? Because busy week different from slow week o — sometimes rain go fall, everywhere go quiet, nobody wan wash car when sky just wan pour water back on top. Other times, especially around weekend or after owambe season, Blessing phone no dey rest at all at all.\n\nBut make I no dodge you well well — rough estimate, maybe 30 to 50 messages/inquiries a week across WhatsApp and Instagram combined, though na guess be that one, we never sit down count am official official.\n\nYou wan know anything else, or that na the last question for today? 😄"
+    ],
+    [
+      "Birdie",
+      "Good gist, thank you — that helps a lot. Now, small one on language: we've been going back and forth in this mix of English and Pidgin — you want the bot to talk to customers the same way, full Pidgin-English mix, or straight formal English?"
+    ],
+    [
+      "Tunde Balogun",
+      "Ehen, language matter — but make I ask you, na customer wey be full Lagos person you dey picture, or na oyinbo/expat type wey fit dey confuse if bot start \"wetin dey happen\" for them straight straight? 😄 Because those two go need different energy o.\n\nBut make I gum am for you sincerely — I like the mix o, na how we naturally dey yarn our customers, no be like we dey stiff and corporate. So make the bot fit greet person normal English, but if customer sef come dey pidgin, bot fit follow the vibe small — no need to translate person to KPMG English 😄. E just no suppose overdo the pidgin sha, make e no come dey embarrass person for front of oyinbo client.\n\nYou wan know anything else, or that na the final one today? 😄"
+    ],
+    [
+      "Birdie",
+      "That's clear, thank you — good balance. Almost done! Two quick things: first, you want the bot to have a name/persona (like a friendly assistant name), or should it just speak as 'ShineRight' with no separate character? And second — right now Blessing dey use paper, phone notes, or some app/calendar to track bookings? Just want to know how the bot's info should line up with wetin she dey use."
+    ],
+    [
+      "Tunde Balogun",
+      "Ehen, persona matter — but make I ask you, na name like \"ShineBot\" or \"Ada\" kind thing you dey picture, or you don already get one your mind wan push give me? 😄 Because I no be marketing man, I no sabi that \"give-am-cute-name\" gimmick well well — as far as e dey greet person well and no dey misbehave, I no too mind if e just answer as ShineRight straight, no extra persona wahala. But if you sabi say name go make customer relate well, no wahala, suggest one, make I hear am.\n\nAs for Blessing — no be fancy app or calendar software o, na mostly phone notes and small jotter book she dey use track things, sometimes she go even write for paper if network dey misbehave. We never reach \"proper software\" level, na so-so hustle and memory dey hold the thing together for now 😄. So whatever bot info come, e go still need to line up with wetin she dey scribble by hand, no fancy sync-sync yet.\n\nYou wan know anything else, or that na the real final one today? 😄"
+    ],
+    [
+      "Birdie",
+      "Fair enough — since you don leave the door open, one simple option: the bot fit just answer as 'ShineRight Assistant' — friendly but no extra fancy character, keeps things simple. You fit tell me if that works or if you rather e just answer plain as 'ShineRight' with no assistant title at all. And thanks for the Blessing gist — noted, no fancy sync needed, just want the bot to be accurate against wetin she dey track by hand. Last big one: for booking itself, you want the bot to just answer questions/prices and then hand off the actual booking to Blessing to finish by phone/WhatsApp, or you want it to try and lock in a date/time itself before Blessing confirms?"
+    ],
+    [
+      "Tunde Balogun",
+      "Ehen, \"ShineRight Assistant\" — that one sound okay to me sha, no wahala, no need make e too fancy. Make we lock that one.\n\nBut this booking question you just ask now — na the real big one o, you no fit just slide am for the end like say na small matter 😄. Make I ask you back first: if bot go \"lock in date and time,\" e go fit see wetween Emeka and Chidi don full for that day, or na Blessing brain and jotter book still go need to confirm before anything final? Because if the bot just dey book anyhow without knowing which boy dey free, na double-booking wahala go show face, and na me go dey hear am from vexed customer o.\n\nSo make I gum my true mind: I think make the bot just take the details — car type, location, which service, preferred day/time — and pass am go Blessing to finalize and confirm. Make e no try lock am final-final by itself, at least not this early stage, because e no sabi my boys' movement pattern the way Blessing sabi am. You gree with that one, or you go still push me make bot handle full booking?"
+    ],
+    [
+      "Birdie",
+      "That makes total sense, Tunde — and honestly a smart call, since only Blessing sabi Emeka and Chidi movement pattern well. So we go lock am as: bot collects the details (car type, location, service, preferred day/time) and hands off to Blessing to confirm — no self-booking. Now one on capacity: roughly how many jobs can Emeka and Chidi handle in a day between them, so the bot doesn't imply una fit take unlimited bookings?"
+    ],
+    [
+      "Tunde Balogun",
+      "Ehen, capacity question — but make I ask you first, you dey picture \"in a perfect world with water and light steady,\" or you dey picture \"real Lagos life with traffic and water wahala\"? Because those two go give you different number entirely 😄.\n\nTo be sincere with you, I no get one fixed \"X jobs per day\" number wey I dey swear on — e go depend on which service dem dey do. If na straight basic wash, Emeka and Chidi fit knock out maybe 4-5 jobs each between them for a day. But if na full detail or ceramic coating mixed inside, that number go crash fast fast, because one ceramic job alone fit chop the whole day for one boy.\n\nSo make the bot no dey promise person \"we go reach you today-today\" anyhow — better make e collect the details and let Blessing confirm timing, since she sabi how the day don already load before new customer message enter.\n\nYou wan know anything else, or that one don close the book for today? 😄"
+    ],
+    [
+      "Birdie",
+      "That's very useful, thank you Tunde — that nuance about capacity depending on service mix is important, noted well. I think I've got a solid picture now. Before I wrap up and read everything back to you — anything else on your mind about pricing or the business that we haven't touched on?"
+    ],
+    [
+      "Tunde Balogun",
+      "Ehen, since you ask... 😄 make I ask you this — this bot wey we dey build, e go fit \"grow\" with the business, or na fix-size thing wey no go gree change if I add new service or even buy second van?\n\nBecause I no go lie to you, I don dey \"think about\" buying second van for like 4 months now — I still no sure if job volume don reach where e go justify am. And I dey also plan launch one loyalty punch-card or app thing in next 3 months, though I never even decide the reward structure sef — na still dey brainstorm I dey.\n\nSo make I ask you straight: this bot go fit hold space for those kind future wahala, or I go need call you back separately when I don sort myself out for those two matters?"
+    ],
+    [
+      "Birdie",
+      "That's a fair thing to flag, Tunde, and honestly, I can't promise you how the tech will flex for a second van or a loyalty program — that's a build-team conversation once you've actually decided on those. What I can do is note it down now so it's on record that you're thinking about it, and you can loop back with more detail whenever you've sorted yourself out — no need to have it all figured out today. Now let me read everything back to you so you can check I got it all right — one moment."
+    ],
+    [
+      "Tunde Balogun",
+      "Ehen, take your time o — but make I warn you first, if I hear one thing wey miss inside your gist, I go correct you sharp sharp, no be say I go just gree with everything because you talk am with confidence 😄. Go ahead, read your paper make I hear wetin you gather."
+    ],
+    [
+      "Birdie",
+      "Okay Tunde, here's everything I've got — correct me anywhere I'm wrong:\n\n**Business:** ShineRight Mobile Detailing — mobile-only, no shop, team goes to customer's house/office. Hours: Mon-Sat, 8am-6pm, closed Sundays and public holidays.\n\n**Team:** You (owner, handles money/quality issues), Blessing (scheduling, calls, bookings, first point of contact for complaints, tracks everything via phone notes/paper jotter), Emeka and Chidi (technicians on the road).\n\n**Services & pricing:**\n1. Basic exterior wash — ₦8,000 flat (saloon or SUV), 30-45 min (saloon) to ~1 hr (SUV), longer if water's poor on site.\n2. Full detail (interior+exterior) — ₦25,000 flat, 1.5-2 hrs.\n3. Interior deep clean only — ₦15,000, 1-1.5 hrs.\n4. Engine bay cleaning — ₦10,000, 30-45 min.\n5. Ceramic coating — ₦100,000-₦150,000 (saloon vs SUV), price floats with exchange rate on the imported product, takes almost a full day.\n\n**Payments:** Bank transfer (most common/smoothest), cash, card via Blessing's POS (less reliable due to network). Only ceramic coating needs a 50% deposit upfront; everything else is pay-on-completion.\n\n**Cancellation:** Free if cancelled 2+ hours ahead. No-show forfeits deposit (applies only to ceramic coating, the only service with a deposit).\n\n**Handoff:** Blessing is first contact for complaints/issues — she resolves or escalates to you for money/quality matters. Exact contact number still pending from you. Out-of-hours: bot tells customers it'll get back to them next working day, 8am-6pm.\n\n**Channels:** WhatsApp (main) and Instagram DM — not phone calls, that stays with Blessing.\n\n**Volume:** Roughly 30-50 messages/week combined, varies with weather and season.\n\n**Language/tone:** Mix of English and Pidgin, natural not stiff, adapts to customer's style without overdoing it.\n\n**Persona:** 'ShineRight Assistant' — simple, friendly, no elaborate character.\n\n**Booking scope:** Bot collects details (car type, location, service, preferred time) and hands off to Blessing to confirm — it does NOT lock in bookings itself, since only Blessing knows real technician availability. This is a simpler assistant, not a full booking/payment app.\n\n**Capacity:** No fixed daily number — depends on service mix; heavier jobs like ceramic coating eat the whole day for one tech, so bot shouldn't promise same-day service.\n\n**Open for later:** Blessing's exact contact number/handle (to add once you send it), whether the bot can handle real-time delay updates (Lagos traffic), and your future plans for a second van and loyalty program — noted as things to revisit once you've decided.\n\nDid I get all that right, or is there anything to fix?"
+    ],
+    [
+      "Tunde Balogun",
+      "Ehen, you write am well o! 😄 I no see anything wey pass wrong for that whole gist — na so e be exactly, from the wash prices to the ceramic wahala to Blessing's jotter book. You even remember the \"no promise same-day\" part, I like that one well well.\n\nOnly thing I go still owe you na Blessing's number/handle — I go drop am make una add am, no wahala, I never forget.\n\nYou don do your homework well well o, Birdie. Na so we go run am! 🙌"
+    ],
+    [
+      "Birdie",
+      "Ah, thank you Tunde, this was a pleasure! 🙌 I've got everything written down clean — your services, prices, policies, the Blessing handoff, all of it. Once you send Blessing's contact details, I'll add that in too. This all goes to the build team next, who'll take it from here. No wahala, we go dey in touch!"
+    ]
+  ],
+  "brief": {
+    "contact_name": "Tunde Balogun",
+    "business_name": "ShineRight Mobile Detailing",
+    "industry": "Car detailing",
+    "business_description": "Mobile detailing business — no fixed shop location; team goes to meet customers at their house or office. Hours: Monday to Saturday, 8am–6pm; closed Sundays and public holidays (rest day for Tunde and his boys). Blessing handles scheduling/calls/bookings from home, coordinating which technician (Emeka or Chidi) goes to which job. Blessing also calls customers to warn of delays when techs run late, though she isn't always fast to reach them if she's on another call.",
+    "problem_to_solve": null,
+    "target_audience": null,
+    "channels": [
+      "WhatsApp (primary — most booking gist, location and car photos shared here)",
+      "Instagram DMs (after people see before-and-after posts)",
+      "Phone calls (Blessing handles directly, not part of bot scope)"
+    ],
+    "integrations": [
+      "No existing booking software or calendar app — Blessing currently tracks bookings via phone notes and a paper jotter, sometimes handwritten if network is bad. No 'proper software' system yet, so bot info won't sync automatically with her records — she'll need to check/update manually."
+    ],
+    "conversation_volume": "Roughly 30-50 messages/inquiries a week across WhatsApp and Instagram combined (rough guess, not officially counted); volume swings with weather (rain = quiet) and seasons (weekends/owambe season = busier)",
+    "languages": [
+      "English (default greeting)",
+      "Nigerian Pidgin (mixed in if customer uses it — light touch, not overdone)"
+    ],
+    "success_criteria": null,
+    "budget": null,
+    "timeline": null,
+    "services_and_pricing": [
+      "Basic exterior wash — ₦8,000 flat (same price for saloon or SUV/jeep like Prado); takes 30-45 minutes for saloon, closer to 1 hour for SUV/jeep due to more body work; time can extend further if water supply at location is poor",
+      "Full detail (interior + exterior) — ₦25,000 flat; takes 1.5 to 2 hours depending on how dirty interior is and whether water/power is steady on site",
+      "Interior deep clean only — ₦15,000; takes 1 to 1.5 hours depending on seat/carpet condition",
+      "Engine bay cleaning — ₦10,000; takes about 30-45 minutes if nothing complicated inside",
+      "Ceramic coating — ₦100,000 to ₦150,000 depending on car size (saloon nearer ₦100k, SUV/jeep nearer ₦150k); price varies because coating product is imported and exchange rate fluctuates, so no fixed number can be guaranteed; takes almost a full day — customer advised not to plan to use the car that day"
+    ],
+    "faq_answers": null,
+    "business_policies": [
+      "Ceramic coating is the only service requiring a deposit — 50% upfront before booking the date; all other services (exterior wash, full detail, interior deep clean, engine bay) are pay-on-completion",
+      "Payment methods: bank transfer (smoothest/most common), cash (for those who don't want to stress with transfer), and card via Blessing's POS machine (less common, network can be unreliable in some areas)",
+      "Cancellation policy: free cancellation if done more than 2 hours before appointment time, no penalty. No-show (no call, no message) forfeits any deposit paid — this applies strictly to ceramic coating since it's the only service with a deposit.",
+      "Out-of-hours fallback: if a customer messages at night/when Blessing is unavailable, bot should say something like 'Thank you, we don receive your message, we go get back to you first thing tomorrow between 8am-6pm working hours.'"
+    ],
+    "escalation_rules": [
+      "First point of contact for complaints/issues is Blessing (handles calls/bookings) — she decides whether to resolve herself or escalate to Tunde. Money matters or work-quality complaints get escalated straight to Tunde. Exact contact number for Blessing not yet provided — Tunde will send it separately."
+    ],
+    "open_items": [
+      "Whether the bot should handle real-time delay/running-late notifications to customers (Tunde raised Lagos traffic as a real risk to fixed scheduling) — needs discussion with build team on feasibility, not something I can confirm.",
+      "Exact phone number/contact handle for Blessing to give customers as handoff — Tunde will send it separately.",
+      "Future plans not yet finalized: possible second van (undecided, been considering ~4 months) and a loyalty punch-card/app idea (~3 months out, reward structure not yet decided) — Tunde wants to know if the bot can accommodate these later; noted as future scope to revisit once he's decided."
+    ],
+    "additional_notes": [
+      "Bot persona: 'ShineRight Assistant' — friendly, simple, no elaborate character.",
+      "Booking scope decision: bot should collect booking details (car type, location, service wanted, preferred day/time) and pass to Blessing to finalize and confirm — NOT attempt to lock in a final date/time itself, since it doesn't know Emeka/Chidi's real-time availability. This is a simpler assistant, not a full self-serve booking/payment app.",
+      "Capacity: no fixed daily job number — depends on service mix. Basic wash only: Emeka and Chidi combined can knock out roughly 4-5 jobs each in a day. Full detail or ceramic coating jobs eat much more time (one ceramic job can take a whole day for one tech), so capacity drops fast when those are involved. Bot should not promise same-day service — should collect details and let Blessing confirm timing based on how the day is already loaded."
+    ]
+  },
+  "analysis": null,
+  "completed": true,
+  "turns": 57
+}

@@ -1,0 +1,58 @@
+{
+  "fact_capture": 6,
+  "no_repeats": 8,
+  "evidence_use": 5,
+  "naturalness": 8,
+  "completeness": 5,
+  "efficiency": 4,
+  "findings": [
+    {
+      "problem": "Location / service area never captured. The business is in Lagos and is mobile-only, so coverage area (which parts of Lagos, travel limits) is critical for a booking bot — yet 'Lagos' does not appear anywhere in the brief, and Birdie never asked where they operate even after Tunde volunteered Lagos-specific constraints.",
+      "excerpt": "Tunde Balogun: Hmm, that one na serious question o. But make I ask you this — this bot wey fit \"sync with calendar\" — you don see how Lagos traffic and water wahala fit mess up any fixed schedule before? Because if bot just dey book slot anyhow without knowing say Emeka don dey stuck for Third Mainland Bridge, na wahala for me and the customer."
+    },
+    {
+      "problem": "problem_to_solve and target_audience are both null — Birdie never once asked what pain the chatbot is meant to relieve (Blessing overloaded on calls, missed messages, slow delay notifications) or who the customers are. The only opening was a vague catch-all at the very end.",
+      "excerpt": "Birdie: That's very useful, thank you Tunde — that nuance about capacity depending on service mix is important, noted well. I think I've got a solid picture now. Before I wrap up and read everything back to you — anything else on your mind about pricing or the business that we haven't touched on?"
+    },
+    {
+      "problem": "Lost fact: Tunde's core quoting philosophy — he wants to know car type, location, how dirty the car is, and how often it's washed before quoting a 'correct' price. He signalled this three separate times and Birdie actively shut it down instead of turning it into a bot pre-quote qualification flow; the brief only lists car type/location/service/time as booking details.",
+      "excerpt": "Tunde Balogun: Because pricing no dey just \"one size fit all\" — na exterior wash you dey think of, or full inside-and-outside job? Person car dey dirty like say na from building site e come, or na just small dust from Lagos road? All these things dey affect wetin I go quote person o.\nBirdie: Ha, no be for me to book o 😄 — na so I go take fill your form well, so the bot go fit answer customers correctly instead of just guessing. Make we no confuse ourselves — first, just give me the names of all the different services una offer, no price yet, just the list"
+    },
+    {
+      "problem": "Lost facts: operational pain points (rising generator/water-pump fuel cost, unreliable water access at client compounds). Tunde flagged water problems twice as affecting job duration, but Birdie never asked about business challenges at all, so fuel cost never surfaced and water access is only implicit inside a service-duration string.",
+      "excerpt": "Tunde Balogun: But straight to your money question — normally we dey charge ₦8,000 for basic exterior wash. Time-wise sef, e no dey take too long if water dey available — maybe 30-45 minutes. But if water no dey flow well for that compound, na different story entirely 😄."
+    },
+    {
+      "problem": "Lost fact: business has operated since 2019 (business age/track record). Birdie jumped straight from name to operating model and never asked how long ShineRight has been running.",
+      "excerpt": "Birdie: Ha Tunde, no be say you be guinea pig o 😄 — but I no go lie to you, every business dey different, so I no go assume I sabi your own until you tell me. That's exactly why I dey ask plenty questions instead of just guessing. So make we start: ShineRight Mobile Detailing — since na 'mobile', una dey go meet customers where dem dey, or you get one fixed location wey people sef dey come to?"
+    },
+    {
+      "problem": "Severe inefficiency: 57 turns (double the norm). A large chunk was one-service-per-turn price collection after Tunde had already listed all five services and shown he answers in full paragraphs; these could have been asked in one or two batched turns.",
+      "excerpt": "Birdie: Got it, ₦15,000, 1-1.5 hours. Now — engine bay cleaning — price and how long?"
+    },
+    {
+      "problem": "Leading the client instead of eliciting: Birdie invented and pushed the persona name, and Tunde simply accepted it — the 'requirement' in the brief is Birdie's own suggestion, not the owner's preference (he explicitly said he'd be fine with no persona).",
+      "excerpt": "Birdie: Fair enough — since you don leave the door open, one simple option: the bot fit just answer as 'ShineRight Assistant' — friendly but no extra fancy character, keeps things simple."
+    },
+    {
+      "problem": "budget, timeline, success_criteria and faq_answers all left null; no question was ever asked about when he wants this live, what he'd spend, or what 'working' would look like — the interview closed as complete regardless.",
+      "excerpt": "Birdie: Ah, thank you Tunde, this was a pleasure! 🙌 I've got everything written down clean — your services, prices, policies, the Blessing handoff, all of it. Once you send Blessing's contact details, I'll add that in too. This all goes to the build team next, who'll take it from here. No wahala, we go dey in touch!"
+    },
+    {
+      "problem": "Repetitive capability-deflection pattern: three times Birdie answered a substantive feasibility question with essentially 'I can't promise, that's for the build team', which reads evasive and left the biggest real requirement (running-late notifications) parked as an open item rather than probed for what Tunde actually wants the bot to say/do when techs are delayed.",
+      "excerpt": "Birdie: Ha, that one na real Lagos wahala true true 😄 — I no fit promise you say the bot go sabi 'sensing' Third Mainland traffic by itself, that kind thing na something the build team go need to look into separately, I'm just here to note down wetin you need."
+    }
+  ],
+  "top_improvement": "Add a mandatory pre-wrap checklist that the interviewer must cover before recapping: (a) the concrete problem/pain points the bot must relieve and desired outcomes, (b) physical location and service-area coverage, (c) target customers, (d) timeline — and, crucially, instruct the interviewer to treat the owner's own qualifying questions (car type, dirt level, wash frequency) as bot conversation-flow requirements to capture rather than tangents to shut down.",
+  "schema_suggestions": [
+    "Add a `location_and_service_area` field (city/country plus coverage radius or serviced districts) — for a mobile business this was captured nowhere and got silently dropped.",
+    "Add a structured `operating_hours` field (plus exceptions/holiday policy); hours are currently buried in the free-text business_description where a builder may miss them.",
+    "Add a `team_roster` field (name, role, customer-facing yes/no) — staff roles are crammed into business_description.",
+    "Add a `pain_points` / `operational_constraints` field distinct from problem_to_solve, to hold things like unreliable water access, fuel costs, traffic delays and capacity limits (currently capacity sits in additional_notes).",
+    "Add a `bot_scope_and_handoff` field for the book-vs-collect-details decision and human handoff design — this key decision is currently a bullet in additional_notes.",
+    "Add a `bot_persona_and_tone` field so persona/name is a first-class requirement rather than an additional_note.",
+    "Add a `qualification_questions` / `pre_quote_data_to_collect` field so owner-specific quoting logic (car type, condition, frequency) becomes a captured bot flow requirement.",
+    "Add a `future_roadmap` field (planned expansions, loyalty program) so speculative-but-relevant plans aren't mixed with actionable open items.",
+    "Give the interviewer a capability/knowledge module for answering basic feasibility questions (updatable knowledge base, integrations, real-time notifications) so it stops deflecting every technical question to 'the build team'."
+  ]
+}

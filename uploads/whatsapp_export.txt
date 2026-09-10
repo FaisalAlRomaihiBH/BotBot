@@ -1,28 +1,48 @@
-[Mon 09:12] Dave H: Hi Nora, my rear derailleur's been skipping gears, can you take a look this week?
-[Mon 09:47] Nora: Oh no, skipping is annoying, could be the hanger's bent or cable's stretched or worse the derailleur itself is toast, hard to say without seeing it
-[Mon 09:48] Nora: I could maybe do Wednesday? But what if it's actually the hanger AND the cable, then it might run over the hour I'd normally block out
-[Mon 09:50] Dave H: That's fine, just book me in whenever works
-[Mon 10:15] Nora: Ok!! Let's tentatively say Wednesday 2pm but I'll confirm morning-of in case weather turns, forecast looks a bit grim honestly
-[Tue 18:03] Priya M: Hiya, do you do e-bike battery checks? Mine won't hold charge
-[Tue 19:40] Nora: Ooh e-bikes make me a bit nervous if I'm honest, especially battery stuff, what if there's a fire risk and I'm not insured properly for that
-[Tue 19:41] Nora: I can look but I might just tell you to go to the manufacturer, I don't want to make it worse
-[Tue 19:42] Priya M: Fair enough, can you at least diagnose it?
-[Tue 19:55] Nora: I'll check what my insurance actually covers and get back to you, sorry, this has been on my list forever
-[Wed 08:01] Nora: Morning Dave! Weather's not as bad as I feared, still on for 2pm x
-[Wed 14:05] Dave H: Great, all sorted, thanks!
-[Wed 14:20] Nora: Turned out to be the hanger AND the cable, sorry, so it ran a bit long, hope that's ok, only charged you the usual £45 though
-[Thu 11:30] Sam K: Hi, interested in a custom build, drop bar commuter, budget around £700
-[Thu 15:02] Nora: Oh exciting! Though I should say, parts availability has been dodgy lately, what if the groupset I want is out of stock, could push it past 6 weeks
-[Thu 15:03] Nora: Also worried £700 might not stretch as far as it used to, prices have crept up on me
-[Thu 15:10] Sam K: Ok, what would you estimate roughly?
-[Thu 15:40] Nora: Maybe £650-750 depending? I'll put together a proper quote tonight, don't want to promise wrong numbers
-[Fri 09:00] Sam K: Hey, any update on that quote?
-[Fri 09:00] Nora: Sorry!! Got a bit anxious about the numbers and didn't want to send something wrong, let me finish it today
-[Sat 16:45] Jamie (staff): Nora the card reader's playing up again, declined two customers today
-[Sat 16:50] Nora: Oh god, take cash or bank transfer, sorry, I keep meaning to replace it but what if the new one is worse
-[Sun 12:00] Emma T: Do you do puncture repairs on Sundays?
-[Sun 14:20] Nora: I'm not technically open Sundays but if it's urgent I could maybe swing by, though I do worry about work-life balance, my partner gets annoyed
-[Sun 14:22] Emma T: No worries, I'll wait till Tuesday
-[Sun 14:23] Nora: Are you sure? I don't want you stuck without a bike, but also Tuesday is definitely safer for me schedule-wise
-[Mon 10:00] Sam K: Still waiting on that custom build quote when you get a chance :)
-[Mon 10:30] Nora: Yes! Sorry, it's basically done, just double checking the fork price because what if it changed since I last looked, will send tonight for real
+[Mon Mar 3, 9:12am] Ngozi: Hi, how much for full detail on a Toyota Camry?
+[Mon Mar 3, 9:20am] Tunde: Camry which year na?
+[Mon Mar 3, 9:21am] Ngozi: 2016
+[Mon Mar 3, 9:25am] Tunde: Ehen. And where you dey stay, Lekki or Mainland?
+[Mon Mar 3, 9:26am] Ngozi: Lekki Phase 1
+[Mon Mar 3, 9:30am] Tunde: Ok good. When last you wash the car sef?
+[Mon Mar 3, 9:31am] Ngozi: Lol why does that matter, just tell me the price
+[Mon Mar 3, 9:40am] Tunde: I dey ask because if e too dirty e go take extra time, that's why I dey find out first. So when last?
+[Mon Mar 3, 9:41am] Ngozi: Maybe 2 weeks ago
+[Mon Mar 3, 9:50am] Tunde: Ok that one straightforward. Full detail na 25k for that kind car.
+[Mon Mar 3, 9:51am] Ngozi: Great, can I book for Saturday?
+[Mon Mar 3, 9:55am] Tunde: Saturday you go dey house the whole time or you go comot?
+[Mon Mar 3, 9:56am] Ngozi: I'll be around
+[Mon Mar 3, 10:02am] Tunde: Perfect, Blessing go call you to fix time.
+
+[Wed Mar 5, 2:14pm] Kingsley: do you guys do ceramic coating? how much
+[Wed Mar 5, 2:30pm] Tunde: Which car and how big?
+[Wed Mar 5, 2:31pm] Kingsley: Range Rover Sport
+[Wed Mar 5, 2:40pm] Tunde: Ah that one big o. Why you want ceramic, na for resale or you just like the shine?
+[Wed Mar 5, 2:41pm] Kingsley: I just want it protected, does the price matter why I want it?
+[Wed Mar 5, 2:50pm] Tunde: Lol no wahala. For that size e fit reach 150k, but let me check the coating stock price this week, dollar don move again.
+[Wed Mar 5, 2:51pm] Kingsley: ok please let me know
+[Fri Mar 7, 5:00pm] Kingsley: any update on the price?
+
+[Sat Mar 8, 11:02am] Amaka: Good morning, do you work on Sundays for emergencies?
+[Sat Mar 8, 11:10am] Tunde: Which kind emergency you dey talk about?
+[Sat Mar 8, 11:11am] Amaka: My car got really muddy from a trip, need it clean before Monday
+[Sat Mar 8, 11:15am] Tunde: Muddy how, like off-road mud or just dust?
+[Sat Mar 8, 11:16am] Amaka: Actual mud, thick
+[Sat Mar 8, 11:20am] Tunde: Hmm that one na proper job. But you go still dey around this weekend or you dey travel again?
+[Sat Mar 8, 11:21am] Amaka: I'll be home, can someone come tomorrow or not
+[Sat Mar 8, 11:30am] Tunde: We dey close Sunday normally but why you no book Friday self before you travel?
+[Sat Mar 8, 11:31am] Amaka: I didn't know I'd need this, can you help or not
+[Sat Mar 8, 11:45am] Tunde: Let me ask Emeka if he fit come, I go tell you.
+
+[Tue Mar 11, 8:03am] Ngozi: Hi, following up — did Blessing ever confirm my Saturday slot? Nobody called
+[Tue Mar 11, 8:40am] Tunde: You get the slot already or not?
+[Tue Mar 11, 8:41am] Ngozi: That's what I'm asking you!
+[Tue Mar 11, 9:15am] Tunde: Ok make I check with Blessing, she dey handle that side.
+
+[Thu Mar 13, 3:00pm] Oba: hey do you guys clean engine bays alone, not full car
+[Thu Mar 13, 3:20pm] Tunde: You want am alone why, engine giving problem?
+[Thu Mar 13, 3:21pm] Oba: no just want it clean before I sell the car
+[Thu Mar 13, 3:30pm] Tunde: Ah selling, ok. When you dey sell am, this week?
+[Thu Mar 13, 3:31pm] Oba: yes this weekend, can you just tell me the price
+[Thu Mar 13, 3:45pm] Tunde: Engine bay clean na 10k. You dey Mainland or Island so I know who go come?
+[Thu Mar 13, 3:46pm] Oba: Ikeja
+[Thu Mar 13, 4:00pm] Tunde: Ok Chidi dey your side, I go link you both.
