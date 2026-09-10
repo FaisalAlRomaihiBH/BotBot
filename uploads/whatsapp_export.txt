@@ -1,40 +1,40 @@
-[14/03, 09:12] Dave R: Hi, how much for a full service on a road bike?
-[14/03, 09:40] Bax Cycle Works: Full strip down and rebuild is £120, that's everything done
-[14/03, 09:41] Bax Cycle Works: bearings, cables, the lot
-[14/03, 11:15] Dave R: Great, and how long would that take?
-[14/03, 11:50] Bax Cycle Works: Two days usually
-[15/03, 08:03] Dave R: Perfect I'll drop it Monday then
-[15/03, 08:20] Bax Cycle Works: Oh we're not open Mondays mate
-[15/03, 08:21] Dave R: You said 9-5:30 Tue-Sat on your Facebook
-[15/03, 08:33] Bax Cycle Works: yeah that's right
-[15/03, 08:34] Bax Cycle Works: drop it Tuesday then
-[20/03, 13:02] Sarah T: Hi! Interested in a custom steel frame, what's the starting price?
-[20/03, 13:45] Bax Cycle Works: Starting around £1400 depending on geometry and tubing
-[20/03, 13:46] Bax Cycle Works: I'll need 50% deposit to start
-[22/03, 10:11] Sarah T: Ok sending the deposit today then, is £700 right?
-[22/03, 16:30] Bax Cycle Works: Oh I don't really do deposits mate, bad practice, pay when it's done
-[22/03, 16:44] Sarah T: ...you asked for 50% two days ago?
-[22/03, 17:02] Bax Cycle Works: did I? nah I don't usually
-[25/03, 09:30] Sarah T: Ok well how much roughly for the whole build then, all in?
-[25/03, 12:15] Bax Cycle Works: Realistically looking at £1800 for what you want
-[25/03, 12:16] Bax Cycle Works: powder coat included
-[25/03, 15:00] Sarah T: That's £400 more than you first said
-[25/03, 15:20] Bax Cycle Works: things change mate, tubing prices
-[02/04, 11:00] Liam K: Hey, do you do wheel truing while I wait?
-[02/04, 11:40] Bax Cycle Works: Yeah quick job, £25, pop in anytime
-[02/04, 14:10] Liam K: Cool, coming by Thursday around 2
-[02/04, 14:30] Bax Cycle Works: let me check the book and confirm
-[05/04, 09:00] Liam K: Hey just confirming Thursday 2pm still ok?
-[07/04, 18:22] Liam K: Hello? Did you check?
-[10/04, 09:14] Priya N: Hi, how long does powder coating usually take once you send it off?
-[10/04, 10:02] Bax Cycle Works: About a week, my mate's quick
-[16/04, 08:45] Priya N: It's been a week and a half, any update?
-[16/04, 19:40] Bax Cycle Works: he's normally 3 weeks this time of year honestly
-[16/04, 19:41] Bax Cycle Works: forgot to say
-[18/04, 10:00] Priya N: So is it one week or three weeks generally?
-[18/04, 12:15] Bax Cycle Works: depends what he's got on
-[24/04, 13:00] Tom H: Any space on the custom frame waitlist? Roughly how many ahead of me?
-[24/04, 13:50] Bax Cycle Works: think you'd be 3rd, maybe 4th
-[24/04, 13:51] Bax Cycle Works: I'll double check the list and get back to you
-[01/05, 09:30] Tom H: Hi Bax, any update on where I am on the list?
-[01/05, 09:31] Tom H: Just want to plan roughly when to budget for it
+[03/11, 10:14am] Sarah (customer): Hi! I want a small neon sign for my cafe, says 'Good Vibes Only' in cursive, about 50cm wide. How much would that be?
+[03/11, 10:22am] Kofi: Hiya! For that size flex neon I'd say around £180
+[03/11, 10:23am] Kofi: actually maybe £200, cursive script takes a bit more wire bending than block letters
+[03/11, 11:40am] Sarah: Ok great, £200 works. How long would it take?
+[03/11, 11:52am] Kofi: 2-3 weeks usually
+[03/11, 11:53am] Kofi: hmm actually I've got a backlog right now, might be more like 4 weeks, let me check my order book and get back to you
+[03/12, 9:03am] Sarah: Any update on the timeline?
+[03/13, 2:15pm] Sarah: Hi Kofi, just following up
+[03/15, 6:47pm] Kofi: sorry been mad busy! yeah 4 weeks should be fine
+[03/15, 6:49pm] Kofi: actually you know what let's say 3, I can bump you up since it's a small piece
+[03/16, 8:02am] Sarah: Perfect, 3 weeks then. Do you need a deposit?
+[03/16, 8:15am] Kofi: yep 50% upfront, so £100, I'll send bank details
+[03/16, 8:16am] Kofi: wait actually with the cursive extra work maybe it should be £220 total so deposit would be £110
+[03/16, 9:30am] Sarah: haha ok, £220 total is fine, sending £110 now
+---
+[03/18, 1:20pm] James: Hi, looking for a wedding backdrop sign hire for June, 'Mr & Mrs Whitfield', roughly 1.2m wide. What's the cost?
+[03/18, 3:44pm] Kofi: for hire that'd be about £120 for the weekend
+[03/18, 3:45pm] Kofi: including delivery if you're in London
+[03/19, 10:10am] James: Great, and what if the venue is in Kent?
+[03/19, 10:33am] Kofi: that'd be +£40 for delivery outside zones 1-3
+[03/19, 10:34am] Kofi: actually thinking about it Kent is quite far, might need to be +£60, let me work out the mileage properly and confirm
+[03/22, 4:15pm] James: Hey, any update on the delivery cost?
+[03/26, 11:02am] James: Kofi? Trying to lock in a date, need to know the total
+[03/29, 3:30pm] Kofi: so sorry mate this week's been chaos, let me sit down and sort the quote properly tonight
+---
+[04/02, 9:15am] Priya: Hi, do you do repairs on existing neon signs? Mine's flickering
+[04/02, 9:50am] Kofi: yep we do repairs, £45 callout plus parts
+[04/02, 9:51am] Kofi: could be a transformer issue, those run about £30, so maybe £75 total
+[04/02, 10:02am] Priya: Ok when could someone come out?
+[04/02, 10:20am] Kofi: Tunde does installs/repairs, he's in Thu Fri Sat, so I'd say Thursday
+[04/02, 10:21am] Kofi: actually he's got a shopfront job Thursday, more likely Saturday
+[04/03, 8:44am] Priya: Saturday works for me, what time?
+[04/03, 6:30pm] Kofi: I'll check with Tunde and confirm time tomorrow
+---
+[04/05, 11:00am] New customer (Ben): Hi, interested in a real glass-bend piece for my studio, art installation, roughly 80cm. What's the starting price these days?
+[04/05, 2:12pm] Kofi: glass-bend starts from £450 normally
+[04/05, 2:13pm] Kofi: honestly though I've been going back and forth on whether that should be £500 now, gas prices have gone up, I genuinely haven't decided
+[04/05, 2:14pm] Kofi: let's say £450 for you since you asked now, I'll sort the pricing update later
+[04/06, 9:00am] Ben: Sounds good, how long for glass-bend pieces?
+[04/06, 9:40am] Kofi: 4-6 weeks typically but honestly my queue's a bit unpredictable right now, I'd rather not promise an exact date until I sit down with my calendar properly
