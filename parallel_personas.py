@@ -195,8 +195,9 @@ class ParallelPersonaRunner:
             persona.whatsapp_export, encoding="utf-8")
         bot = RequirementsBot(uploads_dir=uploads)
         transcript = [("Bot", RequirementsBot.GREETING)]
+        tag = f"[{idx:03d} {persona.industry[:30]}]"
 
-        for _ in range(MAX_TURNS):
+        for turn_no in range(1, MAX_TURNS + 1):
             convo = "\n".join(f"{who}: {msg}" for who, msg in transcript)
             reply = self.persona_llm.invoke(PERSONA_TURN_PROMPT.format(
                 owner_name=persona.owner_name, business_name=persona.business_name,
@@ -208,6 +209,10 @@ class ParallelPersonaRunner:
             messages, turn = bot.send(owner_msg)
             for msg in messages:
                 transcript.append(("Bot", msg))
+            log(f"{tag} turn {turn_no}/{MAX_TURNS}: owner {len(owner_msg.split())}w"
+                f" -> bot {len(messages[-1].split())}w"
+                + (" [analyzed files]" if len(messages) > 1 else "")
+                + (" [COMPLETE]" if bot.complete else ""))
             if bot.complete:
                 break
 
@@ -467,8 +472,9 @@ if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     ap = argparse.ArgumentParser()
     ap.add_argument("--count", type=int, default=5, help="number of interviews")
-    ap.add_argument("--concurrency", type=int, default=5,
-                    help="how many run at the same time")
+    ap.add_argument("--concurrency", type=int, default=None,
+                    help="how many run at the same time "
+                         "(default: all at once, capped at 25)")
     ap.add_argument("--no-improve", action="store_true",
                     help="only measure; don't rewrite the prompt or push")
     ap.add_argument("--persona-model", default="claude-sonnet-5",
@@ -478,6 +484,9 @@ if __name__ == "__main__":
     ap.add_argument("--fix-model", default="claude-opus-5",
                     help="model for the headless code-fix agent (claude -p)")
     args = ap.parse_args()
+    if args.concurrency is None:
+        args.concurrency = min(args.count, 25)  # API rate limits, not Python,
+                                                # are the ceiling past ~25
     runner = ParallelPersonaRunner(args.count, args.concurrency,
                                    persona_model=args.persona_model,
                                    judge_model=args.judge_model)

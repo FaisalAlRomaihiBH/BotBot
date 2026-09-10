@@ -16,9 +16,8 @@ from typing import Optional
 
 from dotenv import load_dotenv
 from langchain_anthropic import ChatAnthropic
-from langchain_core.messages import HumanMessage
+from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from langchain_core.output_parsers import PydanticOutputParser
-from langchain_core.prompts import ChatPromptTemplate
 
 from models import BusinessRequirements, ConversationAnalysis, InterviewTurn
 
@@ -211,17 +210,27 @@ class RequirementsBot:
         return bot
 
     # ---------------- internals ----------------
-    def _build_chain(self):
-        """Read the prompt file FRESH so prompt edits take effect on the very
+    def _build_messages(self, question: str) -> list:
+        """Build the turn's messages with Anthropic prompt-cache breakpoints:
+        one on the system prompt and one on the last history message, so each
+        turn only pays full input price for what's new since the previous
+        turn. The prompt file is read FRESH so edits take effect on the very
         next turn, not on the next process restart."""
-        prompt = ChatPromptTemplate.from_messages(
-            [
-                ("system", self.PROMPT_FILE.read_text(encoding="utf-8")),
-                ("placeholder", "{chat_history}"),
-                ("human", "{query}"),
-            ]
-        ).partial(format_instructions=self.parser.get_format_instructions())
-        return prompt | self.llm
+        system_text = (self.PROMPT_FILE.read_text(encoding="utf-8")
+                       .replace("{analysis}", self.analysis_text)
+                       .replace("{format_instructions}",
+                                self.parser.get_format_instructions()))
+        cached = {"cache_control": {"type": "ephemeral"}}
+        messages = [SystemMessage(
+            content=[{"type": "text", "text": system_text, **cached}])]
+        for i, (role, text) in enumerate(self.chat_history):
+            # Moving breakpoint: cache the whole conversation prefix.
+            content = ([{"type": "text", "text": text, **cached}]
+                       if i == len(self.chat_history) - 1 else text)
+            cls = HumanMessage if role == "human" else AIMessage
+            messages.append(cls(content=content))
+        messages.append(HumanMessage(content=question))
+        return messages
 
     def _ask(self, question: str, record_as: Optional[str] = None) -> InterviewTurn:
         """One model turn, appended to history. Retries because the model
@@ -229,11 +238,7 @@ class RequirementsBot:
         response); one bad turn must not kill the interview."""
         last_error = None
         for _ in range(3):
-            reply = self._build_chain().invoke({
-                "query": question,
-                "chat_history": self.chat_history,
-                "analysis": self.analysis_text,
-            })
+            reply = self.llm.invoke(self._build_messages(question))
             output = _blocks_to_text(reply.content)
             try:
                 turn = self.parser.parse(output)
