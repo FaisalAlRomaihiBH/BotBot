@@ -163,7 +163,10 @@ class ParallelPersonaRunner:
         from langchain_anthropic import ChatAnthropic
         self.persona_llm = ChatAnthropic(model=persona_model, max_tokens=8000,
                                          max_retries=6)
-        self.judge_llm = ChatAnthropic(model=judge_model, max_tokens=8000,
+        # Judge/improver budget must cover extended thinking PLUS a full
+        # ~8000-char prompt rewrite — 8000 tokens proved too tight (the
+        # improver's text came back truncated after long thinking).
+        self.judge_llm = ChatAnthropic(model=judge_model, max_tokens=16000,
                                        max_retries=6)
         stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         self.run_dir = RUNS_DIR / stamp
