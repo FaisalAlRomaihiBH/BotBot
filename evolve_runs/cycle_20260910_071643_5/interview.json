@@ -1,0 +1,235 @@
+{
+  "transcript": [
+    [
+      "Birdie",
+      "Hi! I help businesses figure out exactly what they need from a chatbot. Before we start — what's your name?"
+    ],
+    [
+      "Fatuma Njeri",
+      "Eh, hi hi! Mimi ni Fatuma, owner wa Fatuma's Fine Stitches hapa Eastleigh. Karibu sana! Unafanya nini exactly na hii chatbot yenu, ni ya kunisaidia na nini haswa?"
+    ],
+    [
+      "Birdie",
+      "Karibu Fatuma! Nafurahi kukutana nawe. Kazi yangu ni kukuuliza maswali kidogo kuhusu biashara yako ili tuweze kujenga chatbot itakayokusaidia — kwa mfano kujibu wateja haraka, kuwasaidia ku-book appointments, au kujibu maswali ya bei bila wewe kukaa pale simu muda wote. Kwanza niambie — ni changamoto gani kubwa unayopitia na wateja wako sasa hivi? Kwa mfano, ni maswali mengi ya bei, au ni order tracking, au ni nini hasa kinakusumbua?"
+    ],
+    [
+      "Fatuma Njeri",
+      "Ehe, sawa sawa! Changamoto kubwa ni watu wananiuliza bei za kila kitu mara kwa mara, especially hemming na hizo dresses za custom - wananichoka na simu, asubuhi mpaka jioni \"Fatuma bei ya hii, Fatuma bei ya ile\". Halafu kuna hao wanaotaka ku-track order yao, \"je dress yangu iko wapi\", nikiwa busy na sindano sijui kutumia simu kila wakati mtu ananiuliza! Pia watu wengi wananiuliza kama tuna delivery ya boda-boda, sijawahi price out hiyo lakini wanauliza sana, kila siku kabisa. So unaweza fikiria... it's mostly pricing questions na hiyo delivery confusion inayonisumbua zaidi, sio?"
+    ],
+    [
+      "Birdie",
+      "Aki Fatuma, naelewa hiyo stress ya simu kulia ovyo wakati uko busy na sindano! Sawa, tutalitatua hilo. Kwanza niambie — wateja wako wanawasiliana nawe zaidi kupitia njia gani? Kwa mfano WhatsApp, simu ya kawaida, Instagram, au Facebook?"
+    ],
+    [
+      "Fatuma Njeri",
+      "Ah, mostly WhatsApp bana, hiyo ndio inaenda mbio kupita zote. Watu wanani-text picha za design wanataka, \"Fatuma nataka hii style\", halafu wananipigia simu ya kawaida pia kama ni haraka haraka. Instagram tuko pale but si sana, ni kama for show tu, watu wana-DM occasionally lakini WhatsApp ndio bomba kuu. Facebook sina active sana, sijaweka effort huko."
+    ],
+    [
+      "Birdie",
+      "Sawa, WhatsApp ndio kitovu basically. Fatuma, kabla tuendelee — je unaweza ku-share mazungumzo halisi ya WhatsApp na wateja (chat exports au screenshots)? Ukiweka hizo files kwenye folder inaitwa 'uploads' karibu na hii program, halafu uniambie ukimaliza, itanisaidia sana kuona jinsi wateja wako wanavyouliza maswali. Kama huna uhakika wa ku-upload, unaweza tu ku-paste hapa maswali machache ya kawaida wanayokuuliza."
+    ],
+    [
+      "Fatuma Njeri",
+      "Sawa sawa, nimeshaweka already kwenye hiyo uploads folder, chukua uangalie! Kama haiko clear vizuri niambie nitume tena.\n\nLakini let me pia paste hapa common ones za kawaida wanavyouliza:\n- \"Fatuma bei ya kushona dress ni ngapi?\"\n- \"Hemming ya trouser ni how much?\"\n- \"Umefika wapi na dress yangu, itakuwa ready lini?\"\n- \"Mnauza suti pia? Bei ni ngapi na inachukua muda gani?\"\n- \"Mna delivery ya boda ama nikuje pick mwenyewe?\"\n- \"Naeza leta fabric yangu au mnauza fabric?\"\n\nHizo ndio zinarudi rudi kila siku, especially bei na hiyo ya delivery inaniua kabisa! 😅"
+    ],
+    [
+      "Birdie",
+      "Asante Fatuma! Nimepokea files kwenye uploads na pia hizo maswali ulizo-paste. Nipe dakika kidogo nikaziangalie vizuri ili nikupe maswali sahihi zaidi baadaye."
+    ],
+    [
+      "Birdie",
+      "Fatuma, nimepitia hizo chat zako na zimenifundisha mengi mazuri! Kwa mfano naona jinsi mnavyoshughulikia bei za uniform bulk (750 KES/set ukiwa na 15+) na deposit ya 50% kwa bridal gowns na fittings tatu — hizo ni clear na tutaingiza kwenye bot moja kwa moja.\n\nLakini kuna kitu kimoja nataka nikuulize: niliona mazungumzo na David O ambaye alikuwa anauliza kama kutakuwa na muda wa kumtengenezea suti kwa harusi ya Oct 5th. Ulimjibu utaangalia na Joseph kwa sababu alikuwa busy, lakini hakuna aliyemfuatilia baadaye hata baada ya kukumbushwa mara mbili (na hata 'Hello?' yake haikujibiwa). Ukipata request ya suti na deadline kama hiyo tena, unataka bot ifanye nini — kwa mfano imwambie moja kwa moja 'itachukua wiki mbili, tutakujibu ndani ya siku moja' au bado inahitaji kuangalia na Joseph kila wakati?"
+    ],
+    [
+      "Fatuma Njeri",
+      "Aki David O, pole kabisa kwa hiyo, naskia vibaya sana - hiyo haikuwa fair kwake, kumwacha hivyo bila jibu ni mbaya kwa business. Sawa, kwa hizo suti deadline requests, bot inaweza kumwambia straight \"suti inachukua 2-3 weeks kutoka leo, tutakupa confirmation ndani ya siku moja if tunaweza fit ratiba\" - hivyo hajaachwa hanging. Lakini bado inabidi bot i-flag kwangu au kwa Joseph directly, sio kujibu tu na kuishia hapo, kwa sababu si kila wakati tuko na nafasi especially December inakuja karibu na rush.\n\nKidogo tu ya correction - hiyo uniform bulk discount ni kwa 10+ sets, si 15+, na bei ni KES 800/set sio 750. Otherwise sawa kabisa on the deposit na fittings tatu za bridal!"
+    ],
+    [
+      "Birdie",
+      "Nashukuru kwa hiyo correction, Fatuma. Kuna kitu kimoja kinanichanganya kidogo — ulisema bulk discount inafanya kazi kwa 10+ sets na bei ni KES 800/set, lakini mapema tulikuwa na 800 KES/set kama bei ya kawaida (non-bulk). Je, bei ya kawaida (chini ya 10 sets) ni tofauti na hiyo 800, au 800 ndio bei moja inayotumika kila wakati bila kujali quantity?"
+    ],
+    [
+      "Fatuma Njeri",
+      "Ah sawa, poa umeuliza! Bei ya kawaida ya uniform ni KES 800/set - hiyo ndio standard price bila kujali quantity. Sasa ukiwa na order ya 10+ sets, ndipo tunapunguza kidogo kutoka hapo 800, kama discount ya bulk. Sijaweka exact percentage bado, but the point ni 800 ni base price, na 10+ inakupa deal nzuri zaidi chini ya hiyo. Nitakuja na hiyo exact discount figure baadaye nikimaliza kukokotoa vizuri na Amina."
+    ],
+    [
+      "Birdie",
+      "Poa, tutaacha hiyo exact discount kama open item mpaka umalize na Amina. Sasa niambie kidogo kuhusu masaa ya kazi — mnafungua saa ngapi na kufunga saa ngapi kila siku, na je mnafanya kazi siku zote za wiki au kuna siku za kupumzika?"
+    ],
+    [
+      "Fatuma Njeri",
+      "Sawa, tunafungua Mon-Sat 8am mpaka 6pm, straight kabisa. Jumapili tumefunga kabisa, hiyo ndio siku ya kupumzika na kuenda church - hakuna kazi Sunday, wateja wakiuliza wasubiri Monday tu 😊"
+    ],
+    [
+      "Birdie",
+      "Poa sana, hiyo saa za kazi ni clear. Sasa nataka kujua kidogo kuhusu historia ya biashara yako — Fatuma's Fine Stitches imekuwa ikifanya kazi kwa muda gani, na je wewe, Joseph, na Amina ndio team nzima au kuna wafanyakazi wengine pia?"
+    ],
+    [
+      "Fatuma Njeri",
+      "Ehe sawa, kuhusu history sina exact years za kukuambia sasa hivi, sikumbuki details za \"tumeanza mwaka gani\" - sina hiyo kwa uhakika kabisa, itabidi nikuangalie records za zamani kama ni muhimu sana. Lakini team, hatuko wawili tu na Joseph na Amina - kuna pia Brian, ni apprentice wetu, anasaidia especially na kazi ndogo ndogo na kujifunza. So ni mimi, Amina (tailor), Joseph (tailor), na Brian (apprentice) - team ya four kwa jumla. Ni ndogo lakini tunashikana vizuri, kila mtu ana role yake."
+    ],
+    [
+      "Birdie",
+      "Poa, team ndogo lakini imara! Sasa nataka kukuuliza kitu muhimu kuhusu chatbot yenyewe: unataka iwe simple — kama ku-reply maswali ya bei na masaa, na ku-remind wateja kuhusu appointments — au unataka iende mbali zaidi, kama kuwezesha wateja ku-book na kulipa deposit (mfano hiyo 50% ya bridal) moja kwa moja kupitia bot bila wewe kuingilia?"
+    ],
+    [
+      "Fatuma Njeri",
+      "Ah hiyo ni swali muhimu kabisa! Nikiwa honest, sitaki bot ianze kupokea pesa moja kwa moja, deposit ni kitu delicate especially kwa bridal - naogopa mtu ata-pay halafu kuna confusion, au mtu anataka refund na sisi tuko na policy ya non-refundable, itakuwa mess kama bot inahandle hiyo peke yake bila mimi kuona.\n\nSo nataka iwe kama katikati - simple responses kwa bei, masaa, na hizo FAQs za kawaida, ndio, hiyo poa kabisa bot ifanye peke yake. Lakini kwa booking, inaweza kuchukua details za mteja (jina, order gani, deadline, kama ni bridal au custom), halafu i-flag kwangu directly kwa confirmation - sio kukamilisha booking na kupokea pesa bila mimi kuangalia kwanza. Especially na hiyo December rush inakuja, sitaki bot iahidi mtu slot ambayo hatuna, halafu tunaingia shida kama ile ya David O tena.\n\nKwa deposit payment, labda baadaye tukiona bot inafanya vizuri na iko reliable, tunaweza fikiria kuongeza hiyo feature - lakini kwa sasa, bado nataka kuwa na mkono kwenye hiyo part, sivyo?"
+    ],
+    [
+      "Birdie",
+      "Hiyo ni maamuzi mazuri, Fatuma, especially kwa bridal deposits — bora salama. Sasa niambie, wateja wako ni watu wa aina gani zaidi — kwa mfano ni mama/baba wa shule wanaotaka uniform, watu wa harusi, wafanyakazi wa makampuni wanaotaka suti, au ni mchanganyiko wa wote?"
+    ],
+    [
+      "Fatuma Njeri",
+      "Ni mchanganyiko kabisa, hakuna one type tu! Tuna hao wazazi wanakuja start of term wakitaka uniform za watoto, bulk order - hao ni wengi especially January na May. Halafu kuna watu wa harusi, either bride mwenyewe au family, wanataka gowns na suits kwa ajili ya groom na groomsmen. Pia kuna wafanyakazi wa ofisi, wanataka suti ya kazi au kurekebisha ile waliyonunua ikawa haifiti vizuri - hizo alterations ndio zinakuja daily kabisa, hemming na kupunguza/kuongeza waist. Na kuna wale wanataka custom dresses tu, kama for events, church, ama kitu cha kawaida wanataka designed specially. So it's mixed bag kabisa, lakini alterations na uniform ndio zinaleta traffic ya kila siku, wakati suits na bridal ni zaidi seasonal, especially December na wakati wa harusi."
+    ],
+    [
+      "Birdie",
+      "Asante kwa hiyo picture kamili ya wateja wako, Fatuma. Sasa nataka kujua — ukiwa unafikiria hii bot ikifanya kazi vizuri baada ya miezi michache, itakuwa imekufanyia nini hasa? Kwa mfano, ni saa ngapi za simu zitakuwa zimeokolewa kwa wiki, au ni kupunguza hizo missed follow-ups kama ya David O, au ni nini kingine kitakuonyesha 'hii bot inafanya kazi'?"
+    ],
+    [
+      "Fatuma Njeri",
+      "Eeh, hiyo ni swali poa sana, umenifanya nifikiri! Kwa kweli nikiona bot inafanya kazi vizuri, ni hizi vitu:\n\n1) Simu na WhatsApp messages za \"bei ni ngapi\" zipungue sana - kama bot inaweza kujibu 80% ya hizo bila mimi kuingilia, that alone itanipa breathing room ya kutosha, sitakuwa nasumbuliwa kila five minutes wakati nashona.\n\n2) Hakuna tena David O stories! Kila request ya booking iwe im-flagged na kujibiwa within siku moja, hakuna mtu ana-hang bila jibu tena, hiyo inaniumiza sana kufikiria business tunapoteza kwa sababu ya kuchelewa tu kujibu.\n\n3) Hiyo delivery confusion ipungue - hata kama sijaweka boda-boda system bado, angalau bot iwaambie wateja clearly \"pickup only kwa sasa\" badala ya mimi kujibu hiyo swali mara kumi kila siku.\n\n4) Na kwa December rush inakuja, nataka bot ishughulikie hizo initial inquiries zote za suti na uniform bulk bila mimi kukaa na simu masaa, ili niwache muda wangu kwa Amina na Joseph kupanga kazi vizuri, sio kupoteza time kwenye simu.\n\nKwa ufupi - less phone stress, no missed follow-ups, na mimi na team tunaweza focus kwenye sindano badala ya kujibu maswali yale yale kila siku. Hiyo ndio itanionyesha \"aki hii bot ina-worth it\" 😊"
+    ],
+    [
+      "Birdie",
+      "Hiyo ni goals nzuri sana, Fatuma, na zina maana kabisa. Sasa swali la mwisho la biashara — una bajeti fulani akilini kwa hii project, na kama kuna timeline unayotaka bot iwe tayari, kwa mfano kabla ya December rush?"
+    ],
+    [
+      "Fatuma Njeri",
+      "Ehe, hiyo ya bajeti inanifanya nifikirie sana kabisa 😅. Kwa kweli sina exact figure nimeweka pembeni, cash flow ni tight kidogo mpaka high season ianze - naeza kukuambia I'm juggling kama nita-replace hiyo overlocker (45,000 inagharimu) ama niendelee kuirepair kila mwezi (2,000), na pia nafikiria kama tunahitaji tailor wa tatu kwa December au Amina na Joseph wafanye overtime tu. So bot budget itabidi iwe reasonable, sio kitu kikubwa sana sasa hivi, tuseme something affordable ambayo haitanivunja kabla December ifike.\n\nKwa timeline, naomba iwe ready kabla December rush ianze - hiyo ndio priority yangu kabisa. Tukiweza kuwa na basic version (bei, masaa, FAQs, flagging ya bookings) ikifanya kazi by mid-November, hiyo itakuwa perfect. Sina haraka ya kuwa na kila feature siku moja, but ile core stuff ya kupunguza simu stress - hiyo inabidi iwe imara kabla wateja wanaanza kunisumbua na maswali ya uniform na suti kwa msimu.\n\nAki nategemea sana hii itafanya kazi, poa sana umeniuliza hivi! 🙏"
+    ],
+    [
+      "Birdie",
+      "Nimeandika hiyo yote, Fatuma, tutalenga kuwa reasonable na kuwa tayari kabla ya mid-November. Swali la mwisho kabla ya kufunga hii sehemu — kwa sasa unatumia kitu chochote kama Google Calendar, booking app, ama spreadsheet ya kufuatilia orders na appointments? Au ni vitabu/notisi tu za mkono?"
+    ],
+    [
+      "Fatuma Njeri",
+      "Aki hapana, sina hizo app za kisasa 😅 ni notebook tu ya kawaida, kitabu changu cha kuandika orders - jina la mteja, order gani, deposit ngapi, na deadline. Iko pale dukani, kila siku naandika kwa mkono. Wakati mwingine naandika pia kwa WhatsApp mwenyewe kama reminder note, lakini si system yoyote official, ni vile tu nimezoea. Ndio maana mambo mengine yanaweza kupotea kama nikisahau kuangalia kitabu - hiyo notebook si perfect, especially December ikifika na orders zinaongezeka mara mbili tatu. Kama bot inaweza kunisaidia kutrack hizo details vizuri zaidi kuliko kitabu changu, that would be sio mbaya kabisa!"
+    ],
+    [
+      "Birdie",
+      "Sawa Fatuma, nafikiri nimepata picture nzuri ya kila kitu! Hebu niki-summarize haraka ili uhakikishe nimepata sahihi:\n\n**Biashara**: Fatuma's Fine Stitches, Eastleigh — uniform, suti, alterations, na bridal gowns. Team: wewe, Amina (tailor - bulk/uniform), Joseph (tailor - suti), na Brian (apprentice). Wazi Mon-Sat 8am-6pm, Sunday closed.\n\n**Tatizo kuu**: Simu na WhatsApp zinajaa maswali ya bei kila siku, order status, na delivery confusion — zinakusumbua wakati unashona.\n\n**Njia za mawasiliano**: WhatsApp (kuu), simu, Instagram (kidogo), Facebook (haitumiki).\n\n**Bei**:\n- Uniform: 800 KES/set standard; discount kwa 10+ sets (exact rate bado unakokotoa na Amina)\n- Hemming: 300 KES fabric ya kawaida, 400 KES fabric nzito (denim); same-day ikiletwa kabla 4pm\n- Bridal gowns: kuanzia 15,000 KES (inatofautiana na fabric), deposit 50% non-refundable, fittings tatu\n- Suti: Joseph anahandle, turnaround 2-3 weeks, bei bado haijawekwa fully\n\n**Delivery**: Hamna kwa sasa, ni pickup only — boda-boda ni wazo la baadaye, bado haijawekewa bei/timeline.\n\n**Booking na payment**: Bot ita-collect details za booking (jina, order type, deadline) na ku-flag kwako directly kwa confirmation — HAITAPOKEA pesa/deposit moja kwa moja, hiyo bado ni wewe mwenyewe. Suti requests za deadline zita-jibiwa na holding message ('2-3 weeks, tutakujibu ndani ya siku moja') kisha zita-flagiwa kwako/Joseph.\n\n**Malengo ya mafanikio**: Punguza simu za bei kwa 80%, hakuna tena 'David O stories' za kuachwa bila jibu, delivery FAQ ijibiwe wazi, na uwe na muda zaidi wa kufanya kazi December.\n\n**Timeline**: Basic version (bei, masaa, FAQs, booking flagging) iwe tayari mid-November.\n\n**Bajeti**: Bado hujaweka exact figure, lakini unataka kitu 'affordable' kwa sababu cash flow ni tight kwa sasa.\n\n**Open items** (tutafuatilia baadaye): bei halisi ya bulk discount ya uniform, delivery ya boda-boda (bei/coverage), miaka ngapi umefanya biashara, na exact budget.\n\nJe hii yote ni sahihi, au kuna kitu unataka kubadilisha au kuongeza?"
+    ],
+    [
+      "Fatuma Njeri",
+      "Aki hebu tusimame kidogo, kuna makosa mawili hapo kwenye bei! 😅\n\n**Hemming**: Sikuwahi sema 300 kwa fabric ya kawaida na 400 kwa denim, wala hiyo \"same-day ukileta kabla 4pm\" - hiyo sijawahi taja kabisa, sina hiyo policy! Hemming ni KES 300-500 tu, range ya kawaida. Pia kuna waist taking in/out, hiyo ni KES 500-800.\n\n**Suti**: Sio \"bei bado haijawekwa\" - tuko na range clear, KES 12,000-20,000, inachukua wiki 2-3. Joseph ndiye anahandle hizo mostly, sawa on that part.\n\nOtherwise, everything else uko sahihi kabisa - team, hours, booking flow, goals, timeline, open items. Poa sana umepata picture nzuri! 🙏"
+    ],
+    [
+      "Birdie",
+      "Ahh sawa, asante kwa hiyo correction muhimu Fatuma! Nimerekebisha: Hemming ni KES 300-500 (bila fabric split wala same-day promise), waist alterations ni KES 500-800, na suti ni KES 12,000-20,000 kwa wiki 2-3, Joseph akihandle mostly.\n\nEverything else — team, hours, booking flow, malengo, timeline, open items — inabaki sawa kama nilivyokuandikia. Je, hii summary iliyorekebishwa sasa ni sahihi kabisa, tuweze kusonga mbele?"
+    ],
+    [
+      "Fatuma Njeri",
+      "Ndio, hiyo sasa ni sahihi kabisa! 🙌 Umenielewa vizuri, tuko poa kuendelea. Nashukuru kwa uvumilivu wako na maswali yako mazuri, umenifanya nifikiri mambo mengi ambayo sikuwa nimeyapanga vizuri kichwani. Sasa niambie, hatua inayofuata ni nini - unaanza kujenga hiyo bot, ama kuna kingine unahitaji kwangu kabla?"
+    ],
+    [
+      "Birdie",
+      "Asante sana Fatuma kwa muda wako na uwazi wako — umenipa picha nzuri kabisa ya biashara yako! Sasa nitachukua hii yote na kuipeleka kwa timu ya kujenga bot, watakutengenezea plan na quote inayofaa bajeti yako kabla ya December rush. Watawasiliana nawe hivi karibuni kuhusu hatua zinazofuata, ikiwa ni pamoja na hizo open items kama bei ya delivery na bulk discount. Uendelee vizuri na sindano yako, tutaongea tena hivi karibuni! 🙏"
+    ]
+  ],
+  "brief": {
+    "contact_name": "Fatuma",
+    "business_name": "Fatuma's Fine Stitches",
+    "industry": "Tailoring / Fashion (custom stitching)",
+    "business_description": "Located in Eastleigh, Nairobi. Tailoring business offering uniforms, custom suits, alterations, and bridal gowns. Team of four: Fatuma (owner), Amina (tailor, handles bulk/uniform work), Joseph (tailor, handles suits), and Brian (apprentice, helps with smaller jobs and learning). Open Mon-Sat 8am-6pm; closed Sundays. Exact years in business unknown to owner (would need to check old records).",
+    "problem_to_solve": "Owner is overwhelmed by constant repetitive customer calls/messages asking about pricing (especially hemming and custom dresses) and order status updates ('where is my dress'), which distract her while sewing. Customers also frequently ask about boda-boda delivery, which she has never priced out.",
+    "target_audience": "Mixed customer base: parents needing school uniforms in bulk (especially peak in January and May term starts), wedding parties (brides, grooms, groomsmen needing gowns/suits — seasonal, especially December), office workers needing suits or alterations (daily traffic, e.g. hemming, waist adjustments), and individuals wanting custom-designed dresses for events/church/occasions. Alterations and uniforms drive daily traffic; suits and bridal are more seasonal.",
+    "channels": [
+      "WhatsApp (primary)",
+      "Phone calls",
+      "Instagram DM (occasional, low priority)",
+      "Facebook (inactive)"
+    ],
+    "integrations": [
+      "None currently — orders/appointments tracked manually in a paper notebook (customer name, order type, deposit amount, deadline); no calendar or booking app in use"
+    ],
+    "conversation_volume": "High — customers ask pricing questions 'asubuhi mpaka jioni' (morning to evening) and delivery questions 'kila siku' (every day).",
+    "languages": [
+      "Swahili",
+      "English"
+    ],
+    "success_criteria": "1) Bot answers ~80% of 'how much' pricing questions without owner's involvement, reducing constant interruptions while sewing. 2) No more unanswered/missed booking follow-ups like the David O incident — every booking request flagged and responded to within one day. 3) Delivery confusion reduced — bot clearly tells customers 'pickup only for now' instead of owner repeating this answer many times a day. 4) During busy periods (e.g. December rush), bot handles initial inquiries for suits and bulk uniforms so owner/Amina/Joseph can focus on actual work rather than phones.",
+    "budget": "No exact figure set — owner describes cash flow as tight until high season starts (juggling other priorities like an overlocker machine repair/replacement, 45,000 KES to replace vs 2,000 KES/month to keep repairing, and possibly hiring a third tailor for December). Wants something 'reasonable' and 'affordable' that won't strain finances before December.",
+    "timeline": "Wants a basic version (pricing, hours, FAQs, booking-request flagging) live and stable by mid-November, ahead of the December wedding/suit rush.",
+    "services_and_pricing": [
+      "School uniforms: standard price KES 800/set regardless of quantity; bulk discount applies at 10+ sets (exact discounted rate not yet finalized — owner still calculating with Amina)",
+      "Alterations - hemming: KES 300-500 range (owner corrected earlier fabric-tiered figures — no fixed cotton/denim split confirmed by owner)",
+      "Alterations - waist taking in/out: KES 500-800",
+      "Bridal/wedding gowns: starting at 15,000 KES, varies by fabric; requires 50% deposit upfront; three fittings required",
+      "Custom suits: KES 12,000-20,000, turnaround 2-3 weeks; handled mostly by Joseph (suit specialist)"
+    ],
+    "faq_answers": [
+      "Do you offer delivery? Not currently — business is considering starting boda-boda delivery soon, but cost/timeline/coverage area not yet decided",
+      "Bulk uniform pricing: discount kicks in at 10+ sets off the 800 KES/set base price; exact discounted rate still being finalized",
+      "Business hours: Monday-Saturday 8am-6pm; closed Sundays"
+    ],
+    "business_policies": [
+      "Bridal gowns: 50% deposit required upfront, three fittings required; deposit is non-refundable",
+      "Bulk uniform orders: customers must bring measurements in person on a specified day (e.g. Monday)",
+      "Suit deadline requests: bot should tell customer upfront 'suti inachukua 2-3 weeks kutoka leo, tutakupa confirmation ndani ya siku moja' rather than leaving them hanging, but must still flag the request to Fatuma/Joseph directly for real confirmation — owner emphasized this after the David O incident where no one followed up",
+      "Closed Sundays — customers asking on Sunday should be told to wait until Monday",
+      "Owner does NOT want the bot to accept or process payments/deposits directly (especially bridal deposits) — too risky for confusion/refund disputes; bot should only collect booking details (name, order type, deadline, bridal vs custom) and flag to Fatuma for manual confirmation. This may be revisited later if the bot proves reliable."
+    ],
+    "escalation_rules": [
+      "Deadline-sensitive custom suit requests must be flagged directly to Fatuma or Joseph for confirmation — bot gives an initial holding message but cannot promise a final yes without checking capacity, especially during busy periods like December rush",
+      "Bulk/uniform pricing and order changes are referred to Amina (handles bulk/uniform work)",
+      "All booking requests (bridal, custom suits, etc.) are collected by the bot (name, order type, deadline) then flagged to Fatuma for manual confirmation — bot does not finalize bookings or take payment"
+    ],
+    "open_items": [
+      "Boda-boda delivery has never been priced out — needs to be decided before bot can quote it (cost, timeline, coverage area e.g. Kilimani)",
+      "Exact bulk discount rate for 10+ uniform sets not yet finalized — owner still calculating with Amina",
+      "Exact number of years the business has been operating is unknown to the owner — would need to check old records",
+      "Owner is open to adding deposit/payment handling to the bot in the future once it proves reliable — not part of initial scope",
+      "No firm budget figure set — owner is still weighing other cash priorities (overlocker repair/replacement, possible third tailor hire) and wants something 'affordable'",
+      "Discrepancy noted: earlier chat log analysis showed staff quoting fabric-tiered hemming prices (300/400 KES) with same-day service if dropped off before 4pm, but owner denies having this policy and instead states a general 300-500 KES range with no same-day guarantee — needs clarification with staff on actual practice vs. official policy"
+    ],
+    "additional_notes": [
+      "Common recurring customer questions shared by owner: 'Bei ya kushona dress ni ngapi?', 'Hemming ya trouser ni how much?', 'Umefika wapi na dress yangu, itakuwa ready lini?', 'Mnauza suti pia? Bei ni ngapi na inachukua muda gani?', 'Mna delivery ya boda ama nikuje pick mwenyewe?', 'Naeza leta fabric yangu au mnauza fabric?'",
+      "Owner expressed regret over how David O's suit deadline request was mishandled — feels it was unfair to the customer and bad for business.",
+      "Scope decision: bot should handle simple FAQ/pricing/hours responses fully automatically, but only collect (not confirm/finalize) booking details for suits, bridal, and other custom orders, then hand off to Fatuma for human confirmation.",
+      "Seasonal demand pattern: uniform bulk orders peak January and May (school term starts); bridal/suits peak around December (wedding season).",
+      "Owner is also weighing unrelated equipment costs (overlocker machine) against bot budget — indicates overall tight cash flow until high season.",
+      "Order tracking is currently manual (paper notebook + occasional WhatsApp self-reminders); things can get lost, especially during December when order volume doubles/triples — owner would welcome the bot helping track these details better."
+    ]
+  },
+  "analysis": {
+    "inquiry_categories": [
+      "Bulk/custom uniform orders (pricing, quantities, discounts) - appears twice in thread (initial 15-set order + revision to 20 sets) - roughly 33% of inquiries",
+      "Custom garment for special event with deadline (e.g., wedding suit) - timeline/capacity question - roughly 17% of inquiries",
+      "Alteration/repair pricing and turnaround (e.g., hemming trousers) - roughly 17% of inquiries",
+      "Delivery/logistics inquiry (does business deliver, cost, area coverage) - roughly 17% of inquiries",
+      "Bridal/wedding gown inquiry (availability, pricing, process) - roughly 17% of inquiries"
+    ],
+    "resolved_patterns": [
+      "Bulk uniform pricing: Staff quotes standard rate (800 KES/set) then offers bulk discount for 15+ units (750 KES/set), calculates total (e.g., 11,250 KES for 15 sets), gives 2-week turnaround, and instructs customer to bring measurements on a specific day (Monday).",
+      "Alteration pricing: Staff gives tiered pricing based on fabric type - 300 KES for standard/cotton hemming, 400 KES for thick material like denim - and offers same-day service if item is dropped off before closing (4pm).",
+      "Bridal gown inquiry: Staff confirms service is offered, states deposit requirement (50% upfront), number of fittings required (three), and starting price (15,000 KES, varies by fabric)."
+    ],
+    "knowledge_gaps": [
+      "Suit-for-event turnaround/capacity: When David O asked if there was enough time for an Oct 5th wedding suit, staff said she'd 'check with Joseph' (the suit specialist) since he was busy, but never followed up despite two customer reminders (5 days and 8 days later, including an unanswered 'Hello?'). The actual scheduling/capacity decision process and how staff should handle deadline-sensitive requests is not shown - needs owner input on how to set expectations or handle overloaded specialists.",
+      "Revised bulk order pricing after quantity change: When Grace K asked to increase her uniform order from 15 to 20 sets, staff said price would 'change slightly' and needed to confirm with Amina (who handles the work), but the confirmation was delayed by over 3 days due to Amina's illness, and even after reopening the conversation, the actual new price/timeline was never delivered in the visible chat. Unclear how pricing scales for different bulk tiers beyond the 15-unit example, and what the backup process is when key staff are unavailable.",
+      "Delivery service specifics: Staff explicitly stated they don't currently offer delivery but are 'planning to start with boda (motorcycle) soon' - no cost, timeline, or coverage area (e.g., whether Kilimani would be included) was known or given. This is an explicit open item requiring owner decision.",
+      "Language handling / bilingual consistency: Staff communicates in a Swahili/English mix (Sheng-inflected) by default, and at least one customer had to explicitly request English. Unclear if the business has a policy on default language per customer or how a chatbot should determine which language to use."
+    ],
+    "facts_learned": [
+      "Business name: Fatuma Fine Stitches (a tailoring business)",
+      "Primary communication channel: WhatsApp",
+      "Staff communicate in a mix of Swahili and English (code-switching), sometimes requiring clarification requests from customers",
+      "Services offered: school uniform tailoring (including bulk orders), custom suits, alterations/hemming, wedding/bridal gowns",
+      "Uniform pricing: 800 KES per set standard; 750 KES per set for bulk orders of 15+",
+      "Hemming pricing: 300 KES for standard/cotton fabric; 400 KES for thick fabric like denim",
+      "Wedding gown pricing starts at 15,000 KES, varies by fabric choice",
+      "Wedding gown process requires 50% deposit upfront and three fittings",
+      "Typical uniform order turnaround: approximately 2 weeks",
+      "Alterations (hemming) can be completed same-day if dropped off before ~4pm closing time",
+      "Business closes around 4pm ('saa kumi' referenced as closing time)",
+      "Staff roles: Joseph handles suit-making; Amina handles bulk/uniform work",
+      "No delivery service currently offered; business is considering starting motorcycle (boda) delivery in the future, but cost/timeline undetermined",
+      "Customers are asked to bring measurements in-person on specified days (e.g., Monday) for bulk uniform orders"
+    ]
+  },
+  "completed": true,
+  "turns": 32
+}

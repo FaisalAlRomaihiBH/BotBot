@@ -120,5 +120,64 @@
       "Add a `bot_persona_and_tone` field plus explicit `languages` prompting — neither was elicited and tone is undefined for a brand-voice-sensitive Instagram deployment.",
       "Give the interviewer a capability to record verbatim customer-message examples in a structured `example_enquiries` field (currently paraphrased examples are wedged into `faq_answers`)."
     ]
+  },
+  {
+    "cycle": 5,
+    "stamp": "20260910_071643",
+    "persona": "Custom tailoring & clothing alterations / Fatuma constantly code-switches between English and Swahili (with bits of Sheng slang thrown in), often mid-sentence, and doesn't translate for customers who don't follow. She'll answer a question partly in English then finish the thought in Swahili, or use Swahili filler words/exclamations that leave non-Swahili speakers guessing. She's warm, fast-typing, and assumes everyone understands — occasionally she'll catch herself and half-translate, but often just moves on. This makes pinning down exact details tricky for customers who need her to slow down and clarify in one language.",
+    "score": 5.83,
+    "completed": true,
+    "improved": false,
+    "top_improvement": "Make the owner's own pasted/uploaded recurring customer questions a mandatory coverage checklist: for every question the owner supplies (dress price, hemming, order status, suits, delivery, fabric supply), the interviewer must obtain and confirm a concrete answer before summarizing, and must never assert numbers extracted from uploads as settled — always present them as 'is this right?' verification questions.",
+    "findings": [
+      {
+        "problem": "Custom dress pricing (KES 3,500–9,000, varies by fabric/design) was never asked about or captured, even though the owner named it as one of the two most frequent questions and pasted it verbatim as a recurring FAQ. The brief's services_and_pricing list has no custom dress line at all.",
+        "excerpt": "Fatuma Njeri: Changamoto kubwa ni watu wananiuliza bei za kila kitu mara kwa mara, especially hemming na hizo dresses za custom - wananichoka na simu, asubuhi mpaka jioni \"Fatuma bei ya hii, Fatuma bei ya ile\"."
+      },
+      {
+        "problem": "Fabric policy (customer may supply own fabric, or shop sources it at a 10–15% markup) was never asked about, despite the owner explicitly pasting it as a daily recurring customer question. It appears nowhere in faq_answers, services_and_pricing or business_policies — only as raw quoted text in additional_notes.",
+        "excerpt": "Fatuma Njeri: - \"Mna delivery ya boda ama nikuje pick mwenyewe?\"\n- \"Naeza leta fabric yangu au mnauza fabric?\""
+      },
+      {
+        "problem": "Payment/deposit policy captured only partially: the brief records the 50% bridal deposit but misses that 50% upfront applies to ALL custom orders with balance on collection, and that walk-in alterations are paid on collection only. Birdie discussed deposits purely as a bot-capability question and never asked what the actual policy is.",
+        "excerpt": "Fatuma Njeri: Nikiwa honest, sitaki bot ianze kupokea pesa moja kwa moja, deposit ni kitu delicate especially kwa bridal - naogopa mtu ata-pay halafu kuna confusion, au mtu anataka refund na sisi tuko na policy ya non-refundable"
+      },
+      {
+        "problem": "The late-pickup policy (items uncollected after 30 days may be resold to recover costs) was never elicited — a high-risk policy a customer-facing bot would need to state. Birdie ended policy questioning after the payment question.",
+        "excerpt": "Birdie: Hiyo ni maamuzi mazuri, Fatuma, especially kwa bridal deposits — bora salama. Sasa niambie, wateja wako ni watu wa aina gani zaidi"
+      },
+      {
+        "problem": "Order-status tracking was named as a top pain point ('umefika wapi na dress yangu') and the owner tracks orders in a paper notebook, yet Birdie never resolved how the bot could answer status questions with no digital record. The brief lists the problem but has no requirement or open item for it.",
+        "excerpt": "Fatuma Njeri: Aki hapana, sina hizo app za kisasa 😅 ni notebook tu ya kawaida, kitabu changu cha kuandika orders - jina la mteja, order gani, deposit ngapi, na deadline."
+      },
+      {
+        "problem": "Birdie fabricated/mis-extracted facts from the supposed uploaded chats and asserted them as confirmed (750 KES/set at 15+ sets), forcing the owner to correct the interviewer rather than the interviewer verifying first.",
+        "excerpt": "Birdie: Kwa mfano naona jinsi mnavyoshughulikia bei za uniform bulk (750 KES/set ukiwa na 15+) na deposit ya 50% kwa bridal gowns na fittings tatu — hizo ni clear na tutaingiza kwenye bot moja kwa moja."
+      },
+      {
+        "problem": "The summary injected invented pricing/policy (fabric-tiered hemming 300/400, same-day before 4pm) that the owner had never said, requiring a full correction round — a trust-damaging error late in the interview.",
+        "excerpt": "Birdie: - Hemming: 300 KES fabric ya kawaida, 400 KES fabric nzito (denim); same-day ikiletwa kabla 4pm"
+      },
+      {
+        "problem": "The final brief still contains a policy that was never stated or confirmed anywhere in the transcript ('Bulk uniform orders: customers must bring measurements in person on a specified day (e.g. Monday)') and an invented delivery coverage area ('e.g. Kilimani'), plus an unconfirmed escalation rule routing bulk pricing to Amina. Unverified inferences leaked into the deliverable as facts.",
+        "excerpt": "Fatuma Njeri: Kidogo tu ya correction - hiyo uniform bulk discount ni kwa 10+ sets, si 15+, na bei ni KES 800/set sio 750. Otherwise sawa kabisa on the deposit na fittings tatu za bridal!"
+      },
+      {
+        "problem": "A turn was spent on low-value history ('how many years in business') which the owner could not answer and which became a useless open item, while high-value unasked items (custom dress price, fabric markup, late-pickup rule) were left uncovered.",
+        "excerpt": "Birdie: Sasa nataka kujua kidogo kuhusu historia ya biashara yako — Fatuma's Fine Stitches imekuwa ikifanya kazi kwa muda gani, na je wewe, Joseph, na Amina ndio team nzima au kuna wafanyakazi wengine pia?"
+      },
+      {
+        "problem": "Equipment/operational constraints surfaced by the owner (overlocker replacement vs monthly repair, possible third tailor for December) were recorded only as budget colour; the capacity implication for December bookings — which directly affects the bot's booking/flagging logic — was never probed.",
+        "excerpt": "Fatuma Njeri: naeza kukuambia I'm juggling kama nita-replace hiyo overlocker (45,000 inagharimu) ama niendelee kuirepair kila mwezi (2,000), na pia nafikiria kama tunahitaji tailor wa tatu kwa December au Amina na Joseph wafanye overtime tu."
+      }
+    ],
+    "schema_suggestions": [
+      "Add a per-FAQ coverage structure that pairs each customer question the owner supplies with a required 'confirmed answer' slot and an explicit 'unanswered' status, so pasted questions like the fabric-supply one cannot end up only as quoted text in additional_notes.",
+      "Add a 'fact_provenance / confirmation_status' flag on each captured fact (owner-stated vs inferred-from-uploads vs unverified), so hallucinated items like the 'measurements on Monday' bulk policy and 'Kilimani' coverage area cannot enter the brief as confirmed facts.",
+      "Add a dedicated 'payment_and_deposit_terms' field (deposit %, when balance is due, which service types, refundability, payment-on-collection rules) separate from generic business_policies, which currently captures only the bridal case.",
+      "Add an 'operational_constraints / capacity' field (staff count and roles, equipment limits, seasonal capacity, pending hiring or equipment decisions) so items like the overlocker and possible third tailor are stored as capacity signals rather than buried in budget text and additional_notes.",
+      "Add a 'seasonality / demand_peaks' field; peak periods (Jan/May uniforms, December weddings) are currently smeared across target_audience and additional_notes.",
+      "Add a 'data_sources_for_dynamic_answers' field (e.g. order status: paper notebook only) so the brief records what the bot cannot answer without a new system, instead of listing 'integrations: none' with no consequence noted."
+    ]
   }
 ]
