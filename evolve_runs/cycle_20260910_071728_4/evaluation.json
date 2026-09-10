@@ -1,0 +1,68 @@
+{
+  "fact_capture": 4,
+  "no_repeats": 8,
+  "evidence_use": 6,
+  "naturalness": 8,
+  "completeness": 5,
+  "efficiency": 7,
+  "findings": [
+    {
+      "problem": "Entire service lines were never elicited and are absent from the brief: upholstery restoration of couches/ottomans, headboards/shelving, and small refinishing jobs ($80-150), plus armchair full reupholster ($250-400). Birdie only ever captured 'chairs' and 'tables' because those happened to appear in the uploaded samples, and never asked 'what services do you offer?'",
+      "excerpt": "Birdie: - **Services & pricing**: Reupholstery $45-70/chair (fabric-dependent); custom 6-seat tables from $600+ (wood-dependent).\nMarisol \"Mari\" Fuentes: Ooh nice, that's a lot to read back, ha! Okay let me look... pretty much all right actually!"
+    },
+    {
+      "problem": "Birdie invented a WhatsApp channel that Mari never mentioned, asserted it twice, and only removed it because Mari caught it in the readback.",
+      "excerpt": "Birdie: Ha, totally fair — and honestly a couple weeks for a simple FAQ + reminder bot connected across four channels is a bit tight, especially getting Instagram/Messenger/WhatsApp all wired up properly, so it might take a little longer than that to do it right"
+    },
+    {
+      "problem": "The brief lists languages 'English, Spanish (occasional greetings, bilingual customer base)' and target audience 'bilingual English/Spanish community' — this was NEVER asked or stated anywhere in the interview. Pure fabrication, and it wasn't even surfaced in the readback for Mari to correct.",
+      "excerpt": "Birdie: - **Business**: Fuentes Custom Woodworks & Upholstery, Albuquerque, ~6 years running, just you and Tomás (weekend help, a bit unreliable lately).\n- **Problem**: Constant repetitive texts about pricing/timing across 4+ channels (text, IG DM, FB Messenger, phone, WhatsApp), ~20-30/week, spiking after Instagram posts."
+    },
+    {
+      "problem": "Payment methods (cash/Venmo/check, and Mari's repeated ambivalence about checks) were never asked about in the interview, yet appear in the readback and brief as confirmed facts with an invented nuance ('preferred', 'discouraged'). Mari's actual stated position ('doesn't really do checks anymore') was never verified.",
+      "excerpt": "Birdie: - **Payments**: Cash or Venmo (preferred), checks discouraged. Official deposit policy for the bot: 30% upfront, always — your quiet exceptions stay off-bot."
+    },
+    {
+      "problem": "The brief's hours FAQ adds 'early closures for events like estate sales' — estate sales are never mentioned by Mari anywhere in the transcript. Another unverified invention layered onto a genuine fact.",
+      "excerpt": "Birdie: - **Hours**: Tues-Sat, 9-5 (varies sometimes)."
+    },
+    {
+      "problem": "Hours volatility — the single most operationally important fact for a bot (Mari changes hours constantly, closes early, sometimes opens Sundays) — was never probed, even though 'are you open Sunday?' was named by Mari as one of her most frequent inquiries. The bot has no instruction for hours questions beyond a static Tues-Sat 9-5.",
+      "excerpt": "Marisol \"Mari\" Fuentes: Like someone will text \"hey how much to redo my dining chairs, I have 6 of them\" and another one's like \"can you build me a table by Christmas?\" and then there's always the classic \"are you open Sunday?\" lol. That kind of thing, pretty much nonstop."
+    },
+    {
+      "problem": "Mari explicitly referenced her backlog as the reason she might stop taking custom orders, but Birdie never asked how big it is (4 upholstery jobs + 1 custom table). Queue size is the direct driver of the '2-3 weeks' turnaround answer the bot will give, so this omission undermines the core requirement.",
+      "excerpt": "Marisol \"Mari\" Fuentes: Like I have that one table already in the queue and it's kind of fun. But then I look at my backlog and I'm like \"why do I do this to myself,\" you know?"
+    },
+    {
+      "problem": "Fabric suppliers/swatch stock (three suppliers, rotating favorite) was never explored even though Mari herself tied pricing to fabric grade — so the bot can't answer 'what fabrics can I choose from?', a predictable upholstery FAQ. Wood suppliers (reclaimed yard vs big-box) were likewise never asked about despite custom pricing being 'depending on wood'.",
+      "excerpt": "Marisol \"Mari\" Fuentes: Oh also — quick thing, the $50/$65 chair pricing, that's close but I think I've actually been saying more like $45-70 depending on fabric, so maybe round it out a little wider just in case?"
+    },
+    {
+      "problem": "Birdie pushed Mari to give a 'final answer' on a genuine unresolved business-strategy question (whether to keep doing custom builds at all vs focusing on upholstery) instead of exploring it; the deeper dilemma is only partially reflected as a build 'open item' rather than as an owner decision needing resolution before launch.",
+      "excerpt": "Marisol \"Mari\" Fuentes: Actually wait, no — maybe safer to just pause it for now since I've got so much upholstery stuff piling up? Ugh. Okay okay, final answer: limited custom orders, ask me directly. Let's go with that. For now. 😅"
+    },
+    {
+      "problem": "The brief's open_items contains a stale, already-resolved item (pricing Q&A vs scheduling scope), contradicting the scope decision later recorded in additional_notes — the brief was not reconciled against the interview's own conclusions.",
+      "excerpt": "Marisol \"Mari\" Fuentes: Okay let's go simple for now — questions, reminders, maybe a calendar peek — but NOT handling deposits or payments through it, that stays with me. Yeah. I think. 😅"
+    },
+    {
+      "problem": "Mari twice asked for Birdie's recommendation and got deflected rather than guided; for an indecisive owner this left her steering the scope by gut feeling, which produced several flip-flops later in the interview.",
+      "excerpt": "Marisol \"Mari\" Fuentes: Ugh, I don't know, what do you think makes more sense??\nBirdie: That's such a common headache, Mari — totally get it. We can figure out the right mix of pricing vs. scheduling once we know more, so no need to decide right this second."
+    },
+    {
+      "problem": "Mari flagged that her uploads may not have gone through, and Birdie never confirmed what was actually received or listed the files back — yet the brief then treats file-derived details (hours, payments) as settled facts, making provenance untraceable.",
+      "excerpt": "Marisol \"Mari\" Fuentes: Oh wait, actually — let me just tell you instead 'cause I'm not 100% sure those uploaded right."
+    }
+  ],
+  "top_improvement": "Add a mandatory service-and-price inventory sweep before wrap-up ('list every service you offer and the rough price range for each — anything besides chairs and tables?'), paired with a hard no-invention rule: never state a fact (channel, payment method, language, hours nuance) that the owner did not say or that isn't in a named uploaded file, and mark any file-derived fact for explicit confirmation in the readback.",
+  "schema_suggestions": [
+    "Add a structured `hours_and_availability` field (regular hours + known variability/exception patterns + what the bot should say when hours are uncertain), instead of burying hours inside `faq_answers` as a static string.",
+    "Add a `current_capacity_backlog` field (jobs in queue by type, typical lead time, who works when) — capacity drives every turnaround answer but currently has nowhere to live.",
+    "Add a `suppliers_and_materials` field (fabric swatch suppliers, wood sources, material options customers can choose from) — needed for materials FAQs and has no home in the current schema.",
+    "Add a per-fact `confidence`/`source` attribute (owner-stated, inferred from uploaded evidence, assumed) so unverified items like languages, WhatsApp, and payment methods cannot silently enter the brief as confirmed.",
+    "Split `open_items` into `owner_decisions_pending` (real business questions like 'keep offering custom builds?') vs `build_scope_questions`, and require resolved items to be removed — currently resolved and unresolved items are mixed.",
+    "Add a `known_inconsistencies` field for facts the owner states differently over time (deposit waivers, delivery, checks), instead of cramming this into prose inside `business_policies`.",
+    "Give the interviewer an upload-manifest capability: echo back the exact filenames/message count actually ingested so the owner can confirm the evidence set before it is used to assert facts."
+  ]
+}

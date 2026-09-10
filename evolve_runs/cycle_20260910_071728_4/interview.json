@@ -1,0 +1,234 @@
+{
+  "transcript": [
+    [
+      "Birdie",
+      "Hi! I help businesses figure out exactly what they need from a chatbot. Before we start — what's your name?"
+    ],
+    [
+      "Marisol \"Mari\" Fuentes",
+      "Hi! I'm Mari, from Fuentes Custom Woodworks & Upholstery here in Albuquerque. Nice to meet you! So... are we talking about building me a chatbot? Ooh, I've kind of gone back and forth on whether I even need one, but let's see what you've got 😄"
+    ],
+    [
+      "Birdie",
+      "Nice to meet you too, Mari! Yes, that's exactly what we're doing — figuring out together whether a chatbot makes sense for Fuentes Custom Woodworks & Upholstery, and if so, what it should actually do. Let's start simple: what's the main problem or headache you're hoping a chatbot could help with in your business?"
+    ],
+    [
+      "Marisol \"Mari\" Fuentes",
+      "Ooh okay, good question. Honestly? People are always texting me asking \"how much for X\" and \"when can you get to my chair\" and I never know what to tell them 'cause it depends on the day, ha. So maybe something that just answers pricing questions so I'm not repeating myself fifty times? But then again, part of me thinks pricing is too \"it depends\" for a bot to handle... maybe it should just do scheduling stuff instead? Ugh, I don't know, what do you think makes more sense??"
+    ],
+    [
+      "Birdie",
+      "That's such a common headache, Mari — totally get it. We can figure out the right mix of pricing vs. scheduling once we know more, so no need to decide right this second. Quick question first: when customers reach out to you, is it mostly by text, or do they also call, email, or message you through Facebook/Instagram?"
+    ],
+    [
+      "Marisol \"Mari\" Fuentes",
+      "Oh it's everywhere, honestly — texts mostly, but also Instagram DMs 'cause I post my finished pieces there, and some people still call the shop phone believe it or not. Oh and Facebook Messenger too, forgot about that one. Ha, so yeah, kind of a mess trying to keep track of it all across like four places at once 😅"
+    ],
+    [
+      "Birdie",
+      "Wow, four different places — no wonder it feels like a lot! That actually really helps me understand the shape of this. Before we go further, it'd help a ton if I could see a few real examples of customer messages — like screenshots or exports from your texts, IG, or Messenger. If you can, just drop a few files into the 'uploads' folder next to this program and let me know when you're done. If that's a hassle, you could also just paste a couple of example messages right here in the chat instead. Want to give either a try?"
+    ],
+    [
+      "Marisol \"Mari\" Fuentes",
+      "Oh gosh, digging through my phone for screenshots sounds like a whole project, ha. Okay I added a few to the uploads folder though! Should be like three or four texts and a DM in there.\n\nOh wait, actually — let me just tell you instead 'cause I'm not 100% sure those uploaded right. Like someone will text \"hey how much to redo my dining chairs, I have 6 of them\" and another one's like \"can you build me a table by Christmas?\" and then there's always the classic \"are you open Sunday?\" lol. That kind of thing, pretty much nonstop."
+    ],
+    [
+      "Birdie",
+      "Got it, thanks Mari! Give me just a moment to look over what you uploaded (and I've also noted the examples you typed out) — I'll be right back with more questions."
+    ],
+    [
+      "Birdie",
+      "Okay, I went through what you shared — super helpful! Looks like your reupholstery pricing is actually pretty consistent (about $50/chair for standard fabric, $65/chair for the nicer stuff), and your hours are generally Tuesday–Saturday, 9 to 5. That's great, easy stuff for a bot to just know.\n\nOne thing that jumped out, though: turnaround time seems to shift a lot. Like with one customer, Dana, you first said 'a week,' then 'two weeks,' then 'three weeks if Tomás doesn't come in.' Totally get that it depends on stuff — but how do you actually want the bot to answer when someone asks 'how long will my chairs take?' Should it give a rough range, ask a follow-up, or just say you'll confirm personally?"
+    ],
+    [
+      "Marisol \"Mari\" Fuentes",
+      "Oh man, Dana, ha, yeah she got like three different answers out of me, poor thing. Um... okay honestly? I think the bot should just say \"usually 2-3 weeks\" 'cause that sounds safe? But then again what if someone's chairs are simple and I could do it faster, then I'm stuck saying three weeks for no reason...\n\nOkay okay, let's do this — it should give a range, like \"2-3 weeks depending on the queue,\" and then if they push for exact dates it just says I'll confirm personally. Yeah. Wait, actually, maybe it should just always say \"I'll confirm with Mari directly\" so I don't get locked into anything? Ugh, I keep going back and forth, sorry! Let's just go with the range thing for now, that feels right. 😅\n\nOh also — quick thing, the $50/$65 chair pricing, that's close but I think I've actually been saying more like $45-70 depending on fabric, so maybe round it out a little wider just in case?"
+    ],
+    [
+      "Birdie",
+      "Good call widening that range, Mari — better to have room than to box yourself in. Got it noted: $45-$70/chair depending on fabric.\n\nNext thing I noticed: delivery. With one customer, Carlos, you first said 'I can deliver,' then said your truck was being weird and maybe he should pick up, then said you'd 'think about it' — and it never got resolved. So, what's the real policy: do you deliver finished pieces, is it pickup-only, or does it depend on something specific (distance, size of item, etc.)?"
+    ],
+    [
+      "Marisol \"Mari\" Fuentes",
+      "Oh man, Carlos, ha, yeah that poor guy never got a straight answer out of me. Okay so... truth is I genuinely don't know?? Like sometimes I'm feeling generous and I'll toss a table in the truck if it's on my way, but other times I'm like nope, come get it, I'm not your delivery service, ha.\n\nMaybe it should depend on distance? Like if you're close by I'll drop it off, but if you're way out in like Rio Rancho or something, pickup only? That feels fair. Or — ooh, or maybe just say \"delivery may be available depending on schedule, please ask Mari\" so I'm not locked in either way? Yeah let's do that one actually, keeps it flexible. Sorry, I know that's wishy-washy, it's just genuinely a coin flip for me most days 😅"
+    ],
+    [
+      "Birdie",
+      "No worries at all, that's super helpful to know honestly — better the bot stays flexible than promises something you can't always deliver on (pun intended 😄).\n\nNext one: custom furniture orders, like tables. I saw with one customer you quoted '$600 and up depending on wood' but then said you 'might not take custom orders for a while' and wanted to sleep on it. Where do you stand now — are you currently taking custom orders, or should the bot say something like 'custom orders currently paused, ask Mari'?"
+    ],
+    [
+      "Marisol \"Mari\" Fuentes",
+      "Ohh, custom orders, the eternal question, ha. Okay so... I think I DO still want to take them? Like I have that one table already in the queue and it's kind of fun. But then I look at my backlog and I'm like \"why do I do this to myself,\" you know?\n\nLet's just say the bot tells people \"currently accepting limited custom orders, ask Mari for timeline\" — that way I'm not fully closed but I'm also not promising the moon. Actually wait, no — maybe safer to just pause it for now since I've got so much upholstery stuff piling up? Ugh. Okay okay, final answer: limited custom orders, ask me directly. Let's go with that. For now. 😅"
+    ],
+    [
+      "Birdie",
+      "Got it, limited custom orders it is — locked in for now. Next up: order status check-ins. I saw with Dana, when she asked how her chairs were coming along, you gave kind of an uncertain answer and then didn't respond to her follow-up a week later. How would you like the bot to handle 'what's the status of my order' questions — should it give a generic 'still in progress' type answer, or always flag it for you to check and reply personally?"
+    ],
+    [
+      "Marisol \"Mari\" Fuentes",
+      "Ooh yeah, that's a good one 'cause I definitely left Dana hanging, oops. Okay I think the bot should just say something like \"still in the queue, Mari will confirm your exact status soon\" — keeps it honest without me having to make up a fake update, ha. But then it HAS to actually remind me to check in, 'cause otherwise I'll just forget again like I did with her. So yeah — generic answer plus a nudge to me. That feels right... I think. Yeah let's go with that 😅"
+    ],
+    [
+      "Birdie",
+      "That's a smart combo — honest with the customer, but also covers you so nothing falls through the cracks like it did with Dana.\n\nNow, about deposits: your standard rule is 30% upfront, but I saw with one customer, Frank, you waived it entirely and just said 'pay at the end, it's fine.' What actually determines when you waive the deposit — is it about how well you know the customer, the size of the job, or is it more just a gut feeling in the moment?"
+    ],
+    [
+      "Marisol \"Mari\" Fuentes",
+      "Ohh Frank, yeah, I felt bad 'cause he's a repeat customer so I was like eh, don't worry about it. But honestly? It's mostly just a gut feeling in the moment, ha, there's no real system. Like if I trust someone or if the job's small I'll skip it, but then other times I'll double it if I'm nervous about the wood cost upfront...\n\nOkay for the bot, let's just keep it simple — \"30% deposit required for most jobs\" and if people push back or it's a repeat customer thing, that's on me to sort out personally. Yeah, let's say it's always 30% upfront, official policy, and I'll be the one who quietly waives it when I feel like it 😅 Don't put the waiving part in the bot, that's just... vibes, ha."
+    ],
+    [
+      "Birdie",
+      "Got it — 30% upfront is the official line the bot will always give, and the quiet exceptions stay just between you and your customers. Makes sense.\n\nNow a bigger-picture question: do you want this to be a full booking-and-payment app where customers can actually schedule drop-offs and pay deposits through the bot, or something simpler — like it just answers questions, sends reminders, and maybe syncs with a calendar, while you still handle the actual booking and payment yourself?"
+    ],
+    [
+      "Marisol \"Mari\" Fuentes",
+      "Oh gosh, the big question, ha. Um... okay honestly, my gut says keep it simple? Like I don't trust a bot to actually take people's money and get it right, that sounds like a nightmare waiting to happen. So just answering questions and maybe reminding me stuff, and I still handle booking and payment myself.\n\nBut then also... a tiny part of me is like, ooh wouldn't it be nice if people could just pick a day off a calendar instead of texting me eight times? So maybe it could show my availability at least, even if it doesn't take the actual payment?\n\nOkay let's go simple for now — questions, reminders, maybe a calendar peek — but NOT handling deposits or payments through it, that stays with me. Yeah. I think. 😅"
+    ],
+    [
+      "Birdie",
+      "Perfect, that's a clear and sensible scope — simple, informative, keeps money stuff in your hands. Noted!\n\nNow, roughly how many customer messages or inquiries would you say you get in a typical week, across all those channels combined?"
+    ],
+    [
+      "Marisol \"Mari\" Fuentes",
+      "Ooh, let's see... maybe like 20-ish a week? Between texts and DMs and all that. But some weeks it's way more, like if I post a new piece on Instagram I'll get a flood of \"how much\" messages all at once. And other weeks it's dead quiet, like maybe 10. So... 20? Let's say 20, that feels about average. Actually no, probably more like 25-30 with everything combined, I keep forgetting about the Messenger ones. Ha, sorry — let's just say \"around 20-30 a week\" and call it good 😅"
+    ],
+    [
+      "Birdie",
+      "That's helpful, thanks. Last couple of big-picture ones: what would make this chatbot feel like a real win for you — like, if it's working great in three months, what's different? Is it less time spent answering the same texts, fewer customers slipping through the cracks, something else?"
+    ],
+    [
+      "Marisol \"Mari\" Fuentes",
+      "Ooh I like this question. Honestly? If in three months I'm not answering \"how much for a chair\" fifty times a day, that alone would feel like a miracle, ha. But also — if nobody else falls through the cracks like Dana did, that'd be huge too, 'cause I feel awful when that happens.\n\nSo I guess... less repetitive typing for me, plus nothing forgotten. If it does both those things I'd call it a win. Actually, maybe the \"nothing forgotten\" part matters more? Like I can live with typing the same answer a bunch, but losing track of people feels worse. Yeah — let's say that's the real win. Fewer things slipping through the cracks. 😅"
+    ],
+    [
+      "Birdie",
+      "That makes total sense — 'nothing forgotten' is a great north star for this. Two more practical questions: first, how long has Fuentes Custom Woodworks & Upholstery been running, and is it just you and Tomás, or is there more of a team?"
+    ],
+    [
+      "Marisol \"Mari\" Fuentes",
+      "Yeah it's just me and Tomás — he helps out weekends, when he actually shows up, ha, no shade to him but he's a little unreliable lately. And it's just been the two of us this whole time, no other team. We've been going about 6 years now! Started out of my garage-workshop here in Albuquerque and honestly never left, ha, still renting the same setup."
+    ],
+    [
+      "Birdie",
+      "Love the garage-workshop origin story! Okay, almost done — do you have a rough budget or timeline in mind for getting this chatbot up and running, or is that still totally open?"
+    ],
+    [
+      "Marisol \"Mari\" Fuentes",
+      "Ooh, budget, ha, honestly haven't thought about it that much? I guess I'd want something not too spendy since it's just lil' ol' me and Tomás, not some big shop. Maybe like... under $100 a month? That feels reasonable? Timeline-wise I'd love it sooner than later 'cause the texts are piling up, so maybe a couple weeks?\n\nBut then again, if it's gonna do this whole \"nothing forgotten\" thing right, maybe it's worth spending more and taking a bit longer to get it right? Ugh, okay — let's just say small budget, quick timeline, but I'm open if you tell me that's not realistic 😅"
+    ],
+    [
+      "Birdie",
+      "Ha, totally fair — and honestly a couple weeks for a simple FAQ + reminder bot connected across four channels is a bit tight, especially getting Instagram/Messenger/WhatsApp all wired up properly, so it might take a little longer than that to do it right, but your budget of ~$100/month sounds very reasonable for this scope. I'll flag that timeline as something to revisit once we scope the actual build.\n\nOkay, I think I've got a full picture! Let me read it all back to you:\n\n- **Business**: Fuentes Custom Woodworks & Upholstery, Albuquerque, ~6 years running, just you and Tomás (weekend help, a bit unreliable lately).\n- **Problem**: Constant repetitive texts about pricing/timing across 4+ channels (text, IG DM, FB Messenger, phone, WhatsApp), ~20-30/week, spiking after Instagram posts.\n- **Services & pricing**: Reupholstery $45-70/chair (fabric-dependent); custom 6-seat tables from $600+ (wood-dependent).\n- **Hours**: Tues-Sat, 9-5 (varies sometimes).\n- **Payments**: Cash or Venmo (preferred), checks discouraged. Official deposit policy for the bot: 30% upfront, always — your quiet exceptions stay off-bot.\n- **Bot's answers on tricky topics**: Turnaround = '2-3 weeks depending on queue,' exact dates deferred to you. Delivery = 'may be available depending on schedule, ask Mari.' Custom orders = 'limited orders currently accepted, ask Mari for timeline.' Order status = generic 'still in queue' reply + auto-reminder nudge to you so nobody gets forgotten like Dana did.\n- **Scope**: Simple bot — FAQs, reminders/nudges to you, and a calendar view for availability — NOT handling bookings or payments/deposits directly.\n- **Success looks like**: Nothing falling through the cracks (top priority), plus less repetitive typing for you.\n- **Budget/timeline**: ~$100/month, ideally a couple weeks (flagged as possibly tight for this scope).\n\nDoes all that sound right, or is there anything you'd like to tweak?"
+    ],
+    [
+      "Marisol \"Mari\" Fuentes",
+      "Ooh nice, that's a lot to read back, ha! Okay let me look... pretty much all right actually! Just two little things —\n\nI don't think I ever said WhatsApp? Might be mixing that up with something, it's just texts, IG DM, Messenger, and phone calls for me.\n\nAnd the table thing — it's not really \"6-seat tables from $600+,\" that was just the one lady asking about her 6 dining chairs, that's a different job. Custom tables in general start around $600 and go up depending on the wood, no seat-count thing to it.\n\nEverything else sounds about right though! 😊"
+    ],
+    [
+      "Birdie",
+      "Perfect, thank you Mari — got both those corrections in: channels are just text, Instagram DM, Messenger, and phone calls (no WhatsApp), and custom tables just start around $600 depending on wood, no seat-count tie-in. Everything's locked in now. Thanks so much for walking through all this with me — I'll pass this along so we can get your chatbot scoped and built. You'll hear from us soon about next steps!"
+    ]
+  ],
+  "brief": {
+    "contact_name": "Mari",
+    "business_name": "Fuentes Custom Woodworks & Upholstery",
+    "industry": "Custom woodworking and upholstery",
+    "business_description": "Located in Albuquerque, NM, running for about 6 years. Started out of a garage-workshop and still operates from the same rented setup. Team is just Mari and Tomás, who helps out on weekends (described as 'a little unreliable lately' about showing up); no other staff.",
+    "problem_to_solve": "Customers frequently text asking 'how much for X' and 'when can you get to my chair' — Mari repeats herself constantly and pricing varies by job so it's hard to give quick answers.",
+    "target_audience": "Local Albuquerque-area customers needing furniture reupholstery or custom furniture, contacting via social media/text/phone; bilingual English/Spanish community.",
+    "channels": [
+      "SMS/text",
+      "Instagram DM",
+      "Facebook Messenger",
+      "Phone calls"
+    ],
+    "integrations": [
+      "Calendar (for showing availability only, not booking/payment)"
+    ],
+    "conversation_volume": "Approximately 20-30 customer messages/inquiries per week across all channels combined, with spikes after Instagram posts and quieter weeks around 10.",
+    "languages": [
+      "English",
+      "Spanish (occasional greetings, bilingual customer base)"
+    ],
+    "success_criteria": "Primary win: fewer customers falling through the cracks (like Dana's unanswered follow-up) — nothing forgotten. Secondary win: less repetitive typing/answering the same pricing questions over and over.",
+    "budget": "Around $100/month or less — Mari says this is a small operation and wants to keep costs low, though she's open to spending more if needed to get the 'nothing forgotten' reliability right.",
+    "timeline": "Ideally a couple of weeks, though flagged as possibly tight for this scope; Mari is open to it taking longer if that means getting the reminder/follow-up system right.",
+    "services_and_pricing": [
+      "Reupholstery: $45-$70/chair depending on fabric grade",
+      "Custom furniture (e.g., tables): starts around $600, varies by wood type — general starting price, not tied to a specific seat count"
+    ],
+    "faq_answers": [
+      "Business hours: Tuesday–Saturday, 9 AM–5 PM (can vary, e.g. early closures for events like estate sales)",
+      "Payment methods accepted: cash or Venmo (preferred); personal checks accepted but discouraged",
+      "Turnaround time: bot should answer 'usually 2-3 weeks depending on the queue' as a default range; if customer pushes for an exact date, bot should say Mari will confirm personally.",
+      "Delivery: bot should say 'delivery may be available depending on schedule, please ask Mari' rather than committing either way.",
+      "Custom furniture orders: bot should say 'currently accepting limited custom orders, ask Mari directly for timeline.'",
+      "Order status check-ins: bot should say 'still in the queue, Mari will confirm your exact status soon' as a generic holding answer."
+    ],
+    "business_policies": [
+      "Official bot-facing deposit policy: 30% of total price due upfront for all jobs, stated as a firm rule with no exceptions mentioned. In actual practice, Mari sometimes waives or adjusts this on a case-by-case 'gut feeling' basis (e.g., waived entirely for a repeat customer, Frank) — but this discretionary waiving is intentionally NOT to be reflected in the bot's messaging; it stays 'quiet' and handled by Mari personally."
+    ],
+    "escalation_rules": [
+      "If customer asks for an exact turnaround date (not just a range), bot should hand off and say Mari will confirm personally.",
+      "If customer asks about delivery, bot should not commit either way — say it depends on schedule and to ask Mari directly.",
+      "If customer asks about custom furniture orders, bot should say limited orders are being accepted and to ask Mari directly for timeline.",
+      "If customer asks for order status, bot gives generic 'still in queue' reply AND must trigger a reminder/nudge to Mari to personally follow up (to avoid repeating the situation where she left Dana hanging for weeks).",
+      "If a customer pushes back on the 30% deposit or requests special deposit terms (e.g., repeat customers), bot should hand off to Mari to decide personally."
+    ],
+    "open_items": [
+      "Mari is unsure whether the chatbot should focus on pricing Q&A (tricky since prices vary case by case) or scheduling — needs to decide overall scope.",
+      "Mari went back and forth on turnaround-time messaging (fixed range vs. always deferring to her personally) before settling on the range approach — flag for follow-up in case she wants to revisit.",
+      "Delivery policy is genuinely inconsistent/unresolved in practice ('a coin flip for me most days') — Mari chose a flexible non-committal bot response for now, but actual delivery decisions still made ad hoc by her.",
+      "Custom order acceptance flip-flopped (limited orders vs. full pause) before settling on 'limited orders, ask Mari' — Mari seems genuinely torn given her backlog, may want to revisit.",
+      "Budget vs. timeline tension: Mari wants low cost (~$100/mo) and fast delivery (a couple weeks), but also said she's open to spending more / taking longer for reliability — needs to decide priority if trade-offs come up during build."
+    ],
+    "additional_notes": [
+      "Mari currently juggles customer inquiries across four channels: texts, Instagram DMs, Facebook Messenger, and phone calls — feels chaotic to track.",
+      "Example customer inquiries Mari shared: 'How much to redo my dining chairs, I have 6 of them?', 'Can you build me a table by Christmas?', 'Are you open Sunday?' — she says these come in nonstop.",
+      "Owner has a delivery truck but it's currently unreliable ('being weird lately').",
+      "Mari acknowledges she tends to forget to follow up with customers (e.g., left Dana hanging on a status update) — wants the bot to help nudge her so this doesn't happen again.",
+      "Scope decision: Mari wants a SIMPLE bot — answering FAQs, sending her reminders/nudges, and showing calendar availability for drop-offs — but explicitly does NOT want it handling actual booking or payment/deposits. She does not trust a bot to handle money correctly."
+    ]
+  },
+  "analysis": {
+    "inquiry_categories": [
+      "Reupholstery quotes (e.g., dining chairs) - ~25% - customers ask cost to reupholster furniture, often with fabric grade options",
+      "Turnaround time / timeline questions - ~20% - customers ask how long a job will take",
+      "Drop-off/pickup logistics and store hours - ~15% - customers ask when/where to bring items",
+      "Delivery vs. pickup of finished items - ~10% - customers ask if the business delivers or if they must pick up",
+      "Custom furniture inquiries (e.g., tables) - ~10% - customers ask about commissioning new furniture and pricing",
+      "Order status follow-ups - ~15% - customers check in on the progress of an existing order",
+      "Payment method questions - ~5% - customers ask what payment types are accepted",
+      "Deposit / payment terms - ~5% - customers ask about deposit percentage and timing of payment"
+    ],
+    "resolved_patterns": [
+      "Reupholstery pricing: staff quotes ~$50/chair for standard fabric or ~$65/chair for 'good fabric' (e.g., 2 chairs = $100 standard or $130 premium) — this is a fairly consistent, learnable pricing rule.",
+      "Business hours: staff states Tues–Sat, 9–5 as standard operating hours for drop-off.",
+      "Payment methods: staff states cash or Venmo is preferred; checks are technically accepted but discouraged ('I really don't love it, let's just do Venmo').",
+      "Deposit policy (general case): staff states 30% deposit is required upfront for most customers."
+    ],
+    "knowledge_gaps": [
+      "Turnaround time estimates are inconsistent and dependent on internal factors: for Dana's chairs, staff first said 'a week,' then revised to 'two weeks,' then 'three weeks if Tomás doesn't come in.' No clear rule for how turnaround time is determined — need to ask owner how lead time is actually calculated and communicated.",
+      "Delivery vs. pickup policy is unresolved: Carlos asked whether the business delivers, staff said 'I can deliver' then immediately reversed ('my truck is being weird... might be better if you pick up'), then said 'let me think about it and get back to you' — and never followed up even after Carlos's reminder a week later. Need to clarify actual delivery policy/logistics.",
+      "Custom table order acceptance is undecided: staff gave a rough price range ($600+ depending on wood) but then said she 'might not take custom table orders for a while' and would 'sleep on it,' with no resolution shown afterward. Need to ask if custom orders are currently being accepted and under what conditions.",
+      "Order status update process is unclear: when Dana followed up on her chairs, staff gave an uncertain answer ('might redo it... or it might look fine, let me look again tomorrow') and did not respond to Dana's second follow-up a week later. Need to ask how the business wants to handle status update requests and communication cadence.",
+      "Deposit policy exceptions are inconsistent: standard deposit is stated as 30% upfront, but for Frank staff waived the deposit entirely ('don't worry about deposit, just pay at the end, it's fine') with no explained criteria. Need to ask what determines when deposits are required vs. waived.",
+      "Custom furniture pricing depends on unspecified variables: the $600 starting price for a 6-seat table was qualified as 'depending on wood,' but no information is given about wood types, cost tiers, or how final price is determined. Need pricing breakdown by material."
+    ],
+    "facts_learned": [
+      "Business is run by a person named Mari Fuentes, a furniture/upholstery craftsperson.",
+      "There appears to be at least one other person involved in production work, referred to as 'Tomás,' whose availability affects turnaround time.",
+      "Services offered include chair/furniture reupholstery and custom furniture building (e.g., dining tables).",
+      "Reupholstery pricing: approximately $50 per chair (standard fabric) or $65 per chair (premium/'good' fabric).",
+      "Custom 6-seat dining table pricing starts around $600, varying by wood type.",
+      "Standard business hours are Tuesday through Saturday, 9 AM to 5 PM, though hours can vary (e.g., early closures for events like estate sales).",
+      "Accepted payment methods are cash and Venmo (preferred); personal checks are accepted but discouraged.",
+      "Standard deposit policy is 30% of the total price paid upfront, though this is sometimes waived at staff's discretion.",
+      "Business communicates with customers via WhatsApp.",
+      "Communication style is informal/conversational, with occasional use of Spanish greetings (e.g., 'Hola!'), suggesting a bilingual English/Spanish-speaking customer base or owner.",
+      "The business owner has access to a delivery truck, but it is currently unreliable ('being weird lately')."
+    ]
+  },
+  "completed": true,
+  "turns": 32
+}
