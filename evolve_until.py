@@ -41,9 +41,7 @@ Return ONLY JSON, no other text, in exactly this shape:
 {{"interviews": [{{"cycle": <n>, "issue": "<ONE short simple sentence: the
 single biggest problem in that interview>"}}],
 "fix": "<ONE short simple sentence: what was improved this hour, or empty
-string if nothing>",
-"attention": ["<up to 3 short simple sentences: things that need a human
-decision>"]}}
+string if nothing>"}}
 
 Keep every sentence under 20 words. No jargon, no field names, no quotes from
 transcripts.
@@ -64,16 +62,12 @@ def summarize_batch(batch, improved_desc) -> dict:
                         "issue": (h.get("top_improvement") or "")[:160]}
                        for h in batch],
         "fix": improved_desc or "",
-        "attention": [s[:160] for h in batch
-                      for s in h.get("schema_suggestions", [])][:3],
     }
     try:
         raw = "\n\n".join(
             f"Cycle {h['cycle']} — {h['persona']} — score {h['score']}/10\n"
             + "\n".join(f"- {f['problem'] if isinstance(f, dict) else f}"
                          for f in h.get("findings", []))
-            + (f"\nNeeds human decision: {'; '.join(h.get('schema_suggestions', []))}"
-               if h.get("schema_suggestions") else "")
             for h in batch)
         reply = evolve.strong_llm.invoke(SUMMARY_PROMPT.format(
             batch=raw, fix=improved_desc or "(no prompt change this hour)"))
@@ -87,7 +81,6 @@ def summarize_batch(batch, improved_desc) -> dict:
                             "issue": issues.get(h["cycle"]) or "(no summary)"}
                            for h in batch],
             "fix": out.get("fix", ""),
-            "attention": [a for a in out.get("attention", []) if a][:3],
         }
     except Exception as e:
         print(f">>> summary model failed ({type(e).__name__}) — using fallback text")
@@ -136,11 +129,6 @@ def write_pdf(path, batch, improved_desc, old_prompt, new_prompt):
     story.append(b(s["fix"] if s["fix"]
                    else "Nothing this hour — the problems found are queued for the next fix."))
 
-    if s["attention"]:
-        story.append(Paragraph("Needs your decision", h2))
-        for a in s["attention"]:
-            story.append(b(a))
-
     story.append(Spacer(1, 10))
     story.append(Paragraph(
         "Full details (transcripts, findings, prompt changes) are in the "
@@ -163,7 +151,10 @@ def improve_pass(history) -> str | None:
         return None
     print(f">>> improve pass: {len(batch)} new interview(s)...")
     findings = "\n\n".join(
-        f"[{h['persona']}]\n" + "\n".join(evolve.fmt_finding(f) for f in h.get("findings", []))
+        f"[{h['persona']}]\n"
+        + "\n".join(evolve.fmt_finding(f) for f in h.get("findings", []))
+        + "".join(f"\n- (structural suggestion — mitigate via prompt wording "
+                  f"where possible) {s}" for s in h.get("schema_suggestions", []))
         for h in batch)
     tops = "\n".join(f"- {h['top_improvement']}" for h in batch)
     old_prompt = evolve.PROMPT_FILE.read_text(encoding="utf-8")
