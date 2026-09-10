@@ -1,36 +1,30 @@
-[08/12, 10:14 am] Ravi Cycles: Hi yes tell me
-[08/12, 10:15 am] Customer - Ananya: Hi, how much for a basic tune up on a hybrid bike?
-[08/12, 10:16 am] Ravi Cycles: 600 rupees only madam, chain and brakes we will check
-[08/12, 10:16 am] Ravi Cycles: gears also included
-[08/12, 11:40 am] Customer - Ananya: Great, can I drop it tomorrow?
-[08/12, 11:42 am] Ravi Cycles: yes yes tomorrow fine, ready by evening
-[09/12, 6:45 pm] Customer - Ananya: Hi just checking, is it ready?
-[09/12, 6:50 pm] Ravi Cycles: give me 2-3 days madam, brakes need new pads
-[09/12, 6:50 pm] Customer - Ananya: oh okay, and the price stays 600?
-[09/12, 6:52 pm] Ravi Cycles: no no with pads it will be 950, I told you tune up is 800-900 range
-[09/12, 6:53 pm] Customer - Ananya: you said 600 yesterday
-[09/12, 6:53 pm] Ravi Cycles: haha yes that is without parts madam, all good
-[11/12, 2:30 pm] Customer - Farhan: Hey do you guys build custom bikes? Want a single speed built up
-[11/12, 2:45 pm] Ravi Cycles: yes sir we love custom builds, starting 25k depending on parts
-[13/12, 4:00 pm] Customer - Farhan: cool, sent you the frame specs on email, can we start this week?
-[13/12, 4:20 pm] Ravi Cycles: actually sir we are not really taking custom projects right now, too much repair work pending
-[13/12, 4:21 pm] Customer - Farhan: wait, two days ago you said you loved custom builds
-[13/12, 4:22 pm] Ravi Cycles: yes we do! just timing is tight, maybe after new year
-[15/12, 9:00 am] Customer - Priya M: Hi, do you service e-bike batteries? What's the cost
-[15/12, 9:10 am] Ravi Cycles: yes we do, 500 rupees standard check
-[15/12, 9:11 am] Customer - Priya M: perfect, when can I bring it
-[15/12, 9:12 am] Ravi Cycles: let me check with my mechanic and confirm
-[16/12, 5:00 pm] Customer - Priya M: any update?
-[18/12, 8:00 pm] Customer - Priya M: hello?
-[20/12, 1:15 pm] Customer - Vikram: What's your warranty on repairs?
-[20/12, 1:20 pm] Ravi Cycles: 30 days warranty sir no problem
-[22/12, 3:00 pm] Customer - Vikram: got it thanks, one more thing my wheel needs truing, can that be done today?
-[22/12, 3:05 pm] Ravi Cycles: today is tricky, Suresh does wheel truing and he comes weekends only
-[22/12, 3:06 pm] Customer - Vikram: okay so Saturday?
-[22/12, 3:10 pm] Ravi Cycles: yes Saturday should be fine, will confirm
-[24/12, 11:00 am] Customer - Ananya: hi, is the 30 day warranty from when I picked up the bike?
-[24/12, 11:30 am] Ravi Cycles: warranty is 15 days madam, after that parts wear is normal
-[24/12, 11:31 am] Customer - Ananya: you told someone else 30 days
-[24/12, 11:33 am] Ravi Cycles: haha depends on the repair madam, brakes 15 days, tune up 30 days
-[26/12, 6:00 pm] Customer - Farhan: hey any update on the custom build? new year is close
-[26/12, 6:45 pm] Ravi Cycles: yes sir let's do it! send specs again I think I lost the email
+[03/11, 9:14am] Chidi Customer: Good morning sir, how much for a two-piece suit in navy wool?
+[03/11, 9:20am] Tunde Bakare: Good morning! For that one we're looking at ₦65,000 with the fabric included
+[03/11, 9:22am] Tunde Bakare: Actually let me reconsider, wool prices moved last week, more like ₦72,000
+[03/11, 9:23am] Tunde Bakare: Or you know what, let's just say ₦68,000 final, I don't want to stress you
+[03/11, 9:30am] Chidi Customer: Okay so ₦68,000, noted. And how long will it take?
+[03/11, 9:33am] Tunde Bakare: Two weeks max
+[03/11, 9:34am] Tunde Bakare: Actually for you since it's just one, maybe I can rush it in one week
+[03/11, 9:35am] Tunde Bakare: Let's say 10 days to be safe, my guys are also handling wedding orders this month
+[03/11, 9:40am] Chidi Customer: Alright, 10 days it is. Do I need to pay deposit?
+[03/11, 9:42am] Tunde Bakare: Yes 50% upfront please
+[03/11, 9:43am] Tunde Bakare: Actually for a first suit let's do 30% so you're comfortable, I'll trust you for the rest
+[03/12, 11:02am] Ngozi Customer: Hi, do you do school uniforms in bulk?
+[03/12, 11:15am] Tunde Bakare: We haven't done school uniforms before but let me check with Emeka if we can take it on, I'll get back to you
+[03/13, 4:00pm] Ngozi Customer: Any update?
+[03/14, 8:45pm] Ngozi Customer: Hello?
+[03/17, 2:10pm] Femi Customer: Good afternoon, I need hemming on 3 trousers, how much and how fast?
+[03/17, 2:20pm] Tunde Bakare: ₦2,500 each so ₦7,500 total, ready by Friday
+[03/17, 2:35pm] Tunde Bakare: Wait actually Friday might be tight with the wedding orders coming in, let's say Monday
+[03/17, 2:36pm] Tunde Bakare: Or Saturday morning if I push Kingsley to do it early
+[03/17, 2:40pm] Femi Customer: So Saturday or Monday? Which one
+[03/17, 2:44pm] Tunde Bakare: Let's lock Saturday, I'll message you if anything changes
+[03/19, 5:00pm] Chidi Customer: Hi Tunde, is my suit still on track for the 10 days we agreed?
+[03/19, 5:40pm] Tunde Bakare: Should be fine, maybe one or two extra days sha because of a fabric delay from Balogun
+[03/19, 5:41pm] Tunde Bakare: Actually let me confirm with Emeka and message you tonight
+[03/22, 10:00am] Chidi Customer: Tunde? It's past the 10 days now
+[03/25, 1:15pm] Amaka Customer: Hi, I'm getting married in June, can you do 15 matching agbadas for the groomsmen?
+[03/25, 1:30pm] Tunde Bakare: Yes we can do that, for bulk like this I'll say ₦18,000 per head
+[03/25, 1:33pm] Tunde Bakare: Thinking about it, since it's 15 pieces and premium fabric for a wedding, let's make it ₦22,000 per head, that's more realistic
+[03/25, 1:40pm] Amaka Customer: Okay which price should I budget for, the 18 or the 22?
+[03/25, 1:50pm] Tunde Bakare: Go with 20,000 average, we'll settle exact figure closer to the time
