@@ -1,6 +1,9 @@
 # tests/test_evolve.py — offline tests for the whole evolve system.
 # Run:  python -m pytest tests -v
 import json
+from types import SimpleNamespace
+
+import pytest
 
 import evolve
 import evolve_until
@@ -134,8 +137,10 @@ def test_improve_pass_batches_and_writes_pdf(sandbox):
     improve_call = next(t for k, t in sandbox["llm"].calls if k == "improve")
     assert improve_call.count("Never asked about payment methods") == 2
     assert "    | Test Owner: cash only" in improve_call
-    # pointer advanced -> second pass has nothing to do
-    assert json.loads((sandbox["runs"] / "improve_pointer.json").read_text()) == {"done": 2}
+    # entries flagged done (persisted) -> second pass has nothing to do
+    assert all(h["improve_done"] for h in history)
+    assert all(h["improve_done"] for h in json.loads(
+        (sandbox["runs"] / "history.json").read_text()))
     assert evolve_until.improve_pass(history) is None
 
 
@@ -153,3 +158,52 @@ def test_improve_pass_survives_guardrail_rejection(sandbox):
     evolve.run_cycle(1, history, improve=False)
     pdf = evolve_until.improve_pass(history)  # still writes the report
     assert pdf is not None
+
+
+def test_merge_histories_unions_renumbers_and_keeps_done_flags():
+    ours = [{"cycle": 1, "stamp": "20260910_0700", "persona": "a", "score": 5.0},
+            {"cycle": 2, "stamp": "20260910_0900", "persona": "c", "score": 7.0}]
+    theirs = [{"cycle": 1, "stamp": "20260910_0700", "persona": "a", "score": 5.0,
+               "improve_done": True},
+              {"cycle": 2, "stamp": "20260910_0800", "persona": "b", "score": 6.0}]
+    merged = evolve.merge_histories(ours, theirs)
+    assert [e["stamp"] for e in merged] == ["20260910_0700", "20260910_0800", "20260910_0900"]
+    assert [e["cycle"] for e in merged] == [1, 2, 3]
+    assert merged[0]["improve_done"] is True  # a done flag from either side sticks
+
+
+def test_improve_pass_migrates_legacy_pointer(sandbox):
+    history = []
+    evolve.run_cycle(1, history, improve=False)
+    evolve.run_cycle(2, history, improve=False)
+    pointer = sandbox["runs"] / "improve_pointer.json"
+    pointer.write_text(json.dumps({"done": 1}))
+    evolve_until.improve_pass(history)
+    assert not pointer.exists()
+    # entry 1 was skipped as already-done; entry 2 got improved
+    improve_call = next(t for k, t in sandbox["llm"].calls if k == "improve")
+    assert improve_call.count("Never asked about payment methods") == 1
+
+
+def test_invoke_parsed_retries_malformed_output(sandbox):
+    llm = sandbox["llm"]
+    good = fakes.persona_json()
+
+    class Flaky:
+        n = 0
+        def invoke(self, text):
+            Flaky.n += 1
+            content = "not json {{{" if Flaky.n == 1 else good
+            return SimpleNamespace(content=content)
+
+    p = evolve.invoke_parsed(Flaky(), "whatever", evolve.persona_parser)
+    assert p.owner_name == "Test Owner" and Flaky.n == 2
+
+
+def test_crashed_cycle_writes_error_log(sandbox, monkeypatch):
+    monkeypatch.setattr(evolve, "run_interview",
+                        lambda persona: (_ for _ in ()).throw(RuntimeError("boom")))
+    with pytest.raises(RuntimeError):
+        evolve.run_cycle(1, [], improve=False)
+    run_dir = next(d for d in sandbox["runs"].iterdir() if d.name.startswith("cycle_"))
+    assert "RuntimeError: boom" in (run_dir / "error.log").read_text()
