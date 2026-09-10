@@ -1,32 +1,33 @@
-[03/11, 09:14] Tomasz Wiśniewski: Dzień dobry! Yes we build dining tables, oak is our specialty
-[03/11, 09:15] Tomasz Wiśniewski: For a 6-person table, let's say around 4500 PLN
-[03/11, 09:41] Customer - Kasia: Great, and how long would it take?
-[03/11, 09:52] Tomasz Wiśniewski: Hmm, 5 weeks should be fine
-[03/11, 09:53] Tomasz Wiśniewski: Actually wait, we have two staircases in queue right now, maybe more like 7 weeks. Let's say 7.
-[03/11, 10:10] Customer - Kasia: Ok, and the price - is 4500 with delivery?
-[03/11, 10:22] Tomasz Wiśniewski: No no delivery is separate. Actually — you know what, for you let's just include it, call it 4800 all in
-[03/11, 10:45] Customer - Kasia: So 4800 total including delivery?
-[03/11, 11:03] Tomasz Wiśniewski: Tentatively yes. Let me check diesel prices this week and confirm properly
-[03/12, 14:00] Customer - Marek: Hi, do you install staircases outside Poznań? I'm about 130km away
-[03/12, 14:30] Tomasz Wiśniewski: Should be fine, we've done further
-[03/12, 14:31] Tomasz Wiśniewski: Actually my van has been giving me trouble lately, honestly not sure, let me think about it
-[03/12, 18:02] Tomasz Wiśniewski: Ok thinking about it more — yes we can, I'll just rent a bigger van if needed. Deposit would be 30%
-[03/13, 08:15] Tomasz Wiśniewski: Sorry, meant 50% for out-of-town jobs, forgot we changed that
-[03/13, 08:16] Customer - Marek: Right, so 50%?
-[03/13, 09:00] Tomasz Wiśniewski: Let's say... tentatively yes, 50
-[03/14, 11:20] Customer - Halina: Hi! Do you do walnut cabinets? What's the price difference vs oak?
-[03/14, 11:50] Tomasz Wiśniewski: Yes walnut is beautiful, maybe 30% more expensive
-[03/14, 11:51] Tomasz Wiśniewski: Actually could be more like 35-40%, walnut prices went up recently, let me check with my supplier and get back to you
-[03/17, 16:03] Customer - Halina: Any update on the walnut price?
-[03/21, 10:00] Customer - Halina: Hello? Just checking in on this
-[03/25, 13:30] Customer - Halina: I'll assume this isn't happening, thanks anyway
-[03/18, 09:00] Customer - Piotr: What are your workshop hours if I want to visit and see wood samples?
-[03/18, 09:15] Tomasz Wiśniewski: Mon-Fri 9 to 5, Saturday mornings too
-[03/18, 09:16] Tomasz Wiśniewski: Well actually Saturdays Bartek isn't always here so maybe come weekday to be safe
-[03/19, 15:00] Customer - Kasia: Following up on my table - is it still 4800 with delivery, and 7 weeks?
-[03/19, 16:40] Tomasz Wiśniewski: Yes! 7 weeks... actually since it's already March, realistically call it 8. And price still 4800, I won't change it again I promise
-[03/26, 12:00] Customer - Nowy Klient: Do you do stain color matching to an existing floor?
-[03/26, 12:40] Tomasz Wiśniewski: Yes we can try, hard to quote exact price until we see the sample though
-[03/26, 12:41] Tomasz Wiśniewski: I'll take a look and give you a proper number by Friday
-[04/02, 10:00] Customer - Nowy Klient: Hi, following up, did you get a chance to look at the stain sample?
-[04/09, 08:00] Customer - Nowy Klient: Still interested if you're able to quote
+[Mon, 8:14 AM] Sarah M: Hi! Do you do e-bike tune-ups? Mine's making a grinding noise near the pedals
+[Mon, 8:47 AM] Tommy - Gearhead Cycles: yea we can look at it, e-bikes are like $90 for a full check
+[Mon, 9:02 AM] Tommy - Gearhead Cycles: actually thinking about it probably more like $120, e-bikes take longer with the motor housing
+[Mon, 9:03 AM] Sarah M: oh ok, which is it lol
+[Mon, 9:20 AM] Tommy - Gearhead Cycles: honestly depends what's wrong with it, bring it by and Radek can take a look, he's here weekends
+[Mon, 9:21 AM] Sarah M: is Radek experienced with e-bikes?
+[Mon, 9:41 AM] Tommy - Gearhead Cycles: he's learning haha but I'll be around too
+[Tue, 11:03 AM] James P: Hey, quick q - do you still offer loaner bikes if my repair takes more than a day?
+[Tue, 11:15 AM] Tommy - Gearhead Cycles: yeah for sure, we got a couple loaners in the back
+[Tue, 2:30 PM] Tommy - Gearhead Cycles: actually you know what, we stopped doing that, had two go missing last year. sorry man
+[Tue, 2:31 PM] James P: Haha ok, good to know either way
+[Wed, 10:00 AM] Priya K: What's the cost for a standard tune up + new brake pads?
+[Wed, 10:22 AM] Tommy - Gearhead Cycles: tune up is 65, pads are like 15-20 extra depending on the pads
+[Wed, 10:23 AM] Priya K: great, and how long would that take?
+[Wed, 10:24 AM] Tommy - Gearhead Cycles: 2-3 days easy
+[Wed, 4:12 PM] Tommy - Gearhead Cycles: oh wait sorry meant to say could be more like a week, my parts guy is backed up right now
+[Wed, 4:13 PM] Priya K: a week?? ok, kind of need it sooner if possible
+[Wed, 4:20 PM] Tommy - Gearhead Cycles: let me check what I can do and get back to you
+[Fri, 9:00 AM] Priya K: hey just following up, any update?
+[Fri, 9:00 AM] Priya K: hello?
+[Mon, 1:15 PM] Priya K: hi Tommy, still there? need to know if you can fit me in this week
+[Tue, 3:44 PM] Devon R: Hi, dropping off a flat tire fix today, how much and when ready?
+[Tue, 4:01 PM] Tommy - Gearhead Cycles: $20, ready tomorrow no problem
+[Tue, 4:02 PM] Devon R: perfect thank you
+[Wed, 5:50 PM] Devon R: hey just checking, is it ready?
+[Wed, 6:10 PM] Tommy - Gearhead Cycles: oh sorry got busy, should be end of day tomorrow now
+[Thu, 6:30 PM] Devon R: was it finished?
+[Fri, 8:15 AM] Tommy - Gearhead Cycles: yes! all set, sorry for the delay, come by anytime before 6
+[Sat, 12:00 PM] Linda F: Do you take card? Coming by later to pay for the overhaul you did
+[Sat, 12:40 PM] Tommy - Gearhead Cycles: oh no our machine's been busted since march lol, e-transfer or cash only for now
+[Sat, 12:41 PM] Linda F: got it, and remind me what the total was? you said $150 last week but Denise told me $180 on the phone
+[Sat, 1:15 PM] Tommy - Gearhead Cycles: yeah sorry there was some confusion, let's just say $165 and call it even
+[Sat, 1:16 PM] Linda F: works for me, thanks Tommy
