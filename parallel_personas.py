@@ -351,10 +351,12 @@ Rewrite the prompt to fix the problems found. STRICT rules:
 - Keep everything that clearly works; keep the existing tone and structure.
 - The result MUST still contain the literal placeholders {{analysis}} and
   {{format_instructions}} exactly once each.
-- Aim to stay near the current size ({cur} characters); never exceed 9000,
-  and treat 8000 as the working budget — when the current prompt is already
-  near it, every rule you add must be paid for by condensing or cutting
-  elsewhere.
+- HARD LENGTH BUDGET: the finished prompt must be UNDER 8500 characters
+  (current: {cur}). Work in two passes: FIRST condense the current prompt —
+  merge overlapping rules, cut the weakest or most over-specific ones —
+  THEN spend the space you freed on the most valuable new rules. If the
+  findings suggest more rules than fit, keep only the highest-impact ones;
+  an over-budget rewrite is discarded entirely, which helps nobody.
 - Output ONLY the complete new prompt text. No commentary, no code fences.
 
 === CURRENT PROMPT ===
@@ -403,6 +405,10 @@ Rewrite the prompt to fix the problems found. STRICT rules:
                 findings.append(f"- {f['problem']}" + (f"\n{excerpt}" if excerpt else ""))
         if not findings:
             return None
+        # A big run yields hundreds of findings; past ~80 the improver drowns
+        # and bloats. The per-interview top_improvements already summarize.
+        if len(findings) > 80:
+            findings = findings[:80]
 
         current = self.prompt_file.read_text(encoding="utf-8")
         base_prompt = self.IMPROVE_PROMPT.format(
