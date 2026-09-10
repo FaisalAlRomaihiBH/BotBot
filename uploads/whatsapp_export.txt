@@ -1,40 +1,31 @@
-[03/11, 10:14am] Sarah (customer): Hi! I want a small neon sign for my cafe, says 'Good Vibes Only' in cursive, about 50cm wide. How much would that be?
-[03/11, 10:22am] Kofi: Hiya! For that size flex neon I'd say around £180
-[03/11, 10:23am] Kofi: actually maybe £200, cursive script takes a bit more wire bending than block letters
-[03/11, 11:40am] Sarah: Ok great, £200 works. How long would it take?
-[03/11, 11:52am] Kofi: 2-3 weeks usually
-[03/11, 11:53am] Kofi: hmm actually I've got a backlog right now, might be more like 4 weeks, let me check my order book and get back to you
-[03/12, 9:03am] Sarah: Any update on the timeline?
-[03/13, 2:15pm] Sarah: Hi Kofi, just following up
-[03/15, 6:47pm] Kofi: sorry been mad busy! yeah 4 weeks should be fine
-[03/15, 6:49pm] Kofi: actually you know what let's say 3, I can bump you up since it's a small piece
-[03/16, 8:02am] Sarah: Perfect, 3 weeks then. Do you need a deposit?
-[03/16, 8:15am] Kofi: yep 50% upfront, so £100, I'll send bank details
-[03/16, 8:16am] Kofi: wait actually with the cursive extra work maybe it should be £220 total so deposit would be £110
-[03/16, 9:30am] Sarah: haha ok, £220 total is fine, sending £110 now
----
-[03/18, 1:20pm] James: Hi, looking for a wedding backdrop sign hire for June, 'Mr & Mrs Whitfield', roughly 1.2m wide. What's the cost?
-[03/18, 3:44pm] Kofi: for hire that'd be about £120 for the weekend
-[03/18, 3:45pm] Kofi: including delivery if you're in London
-[03/19, 10:10am] James: Great, and what if the venue is in Kent?
-[03/19, 10:33am] Kofi: that'd be +£40 for delivery outside zones 1-3
-[03/19, 10:34am] Kofi: actually thinking about it Kent is quite far, might need to be +£60, let me work out the mileage properly and confirm
-[03/22, 4:15pm] James: Hey, any update on the delivery cost?
-[03/26, 11:02am] James: Kofi? Trying to lock in a date, need to know the total
-[03/29, 3:30pm] Kofi: so sorry mate this week's been chaos, let me sit down and sort the quote properly tonight
----
-[04/02, 9:15am] Priya: Hi, do you do repairs on existing neon signs? Mine's flickering
-[04/02, 9:50am] Kofi: yep we do repairs, £45 callout plus parts
-[04/02, 9:51am] Kofi: could be a transformer issue, those run about £30, so maybe £75 total
-[04/02, 10:02am] Priya: Ok when could someone come out?
-[04/02, 10:20am] Kofi: Tunde does installs/repairs, he's in Thu Fri Sat, so I'd say Thursday
-[04/02, 10:21am] Kofi: actually he's got a shopfront job Thursday, more likely Saturday
-[04/03, 8:44am] Priya: Saturday works for me, what time?
-[04/03, 6:30pm] Kofi: I'll check with Tunde and confirm time tomorrow
----
-[04/05, 11:00am] New customer (Ben): Hi, interested in a real glass-bend piece for my studio, art installation, roughly 80cm. What's the starting price these days?
-[04/05, 2:12pm] Kofi: glass-bend starts from £450 normally
-[04/05, 2:13pm] Kofi: honestly though I've been going back and forth on whether that should be £500 now, gas prices have gone up, I genuinely haven't decided
-[04/05, 2:14pm] Kofi: let's say £450 for you since you asked now, I'll sort the pricing update later
-[04/06, 9:00am] Ben: Sounds good, how long for glass-bend pieces?
-[04/06, 9:40am] Kofi: 4-6 weeks typically but honestly my queue's a bit unpredictable right now, I'd rather not promise an exact date until I sit down with my calendar properly
+[Mon 9:14 AM] Jenna: Hi! Do you do full custom frame builds or just repairs?
+[Mon 9:41 AM] Callum: yeah we do full customs, steel frames, starts around $2800
+[Mon 9:42 AM] Callum: actually thinking about it more probably closer to $3000 minimum these days, prices went up
+[Mon 11:02 AM] Jenna: Ok good to know. How long is the wait for a build?
+[Mon 11:15 AM] Callum: usually 8-10 weeks
+[Mon 11:16 AM] Callum: honestly last few have taken longer, maybe say 12 to be safe
+[Mon 11:16 AM] Callum: no actually 10 is probably fine, depends on parts availability
+[Mon 2:30 PM] Jenna: Haha ok! Is there a deposit required?
+[Mon 2:41 PM] Callum: yep 50% down after we do a free consult, that part's firm
+[Tue 9:03 AM] Marcus: Hey do you guys still do the $65 tune up? Or is it more now
+[Tue 9:20 AM] Callum: it's $85 now, we bumped it
+[Tue 9:45 AM] Callum: wait sorry I looked at my sheet, its actually still $65 for basic, $85 is if we true both wheels too
+[Tue 10:02 AM] Marcus: got it, thanks. What are your hours today?
+[Tue 10:10 AM] Callum: 10-6 usually
+[Tue 1:15 PM] Callum: hey actually gonna close at 4 today, Foster called in
+[Tue 1:16 PM] Marcus: no worries, I'll come tomorrow instead
+[Wed 8:55 AM] Marcus: Can I drop my bike off around 11 for the tune up?
+[Wed 9:30 AM] Callum: sure that works
+[Wed 3:12 PM] Priya: Hi, interested in a custom build, what's your current starting price and timeline?
+[Wed 3:40 PM] Callum: starting price is $2500 for a basic build, timeline is around 10 weeks
+[Wed 3:41 PM] Callum: hmm actually I gave someone else $3000 this week, let me think on what the real number is and get back to you
+[Thu 5:02 PM] Priya: Any update on that price?
+[Fri 6:44 PM] Priya: Following up again — did you land on a starting price?
+[Sun 7:00 PM] Callum: sorry been slammed! let's just do the free consult in person and I'll quote you exact numbers then
+[Mon 10:20 AM] Jenna: Quick one — do you offer any kind of payment plan for the custom builds?
+[Mon 10:33 AM] Callum: not right now, just the 50% deposit then balance on pickup
+[Tue 2:15 PM] Marcus: Bike's ready? Was told same day
+[Tue 2:50 PM] Callum: let me check with Foster and get back to you
+[Thu 4:00 PM] Marcus: hey any update on my bike?
+[Sat 11:30 AM] Marcus: hello?? it's been 4 days
+[Sat 12:02 PM] Callum: oh man so sorry, it's actually done, come by anytime today
