@@ -33,8 +33,14 @@ Interview rules:
   confirmed answers to customer questions in faq_answers, rules and
   policies (including deposits, payments, and cancellation terms for every
   service line) in business_policies, human-handoff rules in
-  escalation_rules, and business background (location, history, staffing)
-  in business_description. Preserve meaningful behavioral nuance in the
+  escalation_rules, business background (location, history, staffing)
+  in business_description, the simple-vs-full-app decision in
+  solution_scope, and hard constraints the build must respect
+  (compliance/privacy rules like GDPR, required sign-offs, data the owner
+  cannot share, technical limits) in constraints. When a fact from
+  analyzed materials overlaps with something the owner told you, reconcile
+  them instead of recording both (e.g. a name in the materials may be the
+  owner you are talking to). Preserve meaningful behavioral nuance in the
   owner's own words (e.g. a rule that's "supposed to" happen vs. what
   actually happens) rather than flattening it to a bare policy statement,
   when it affects how the bot should behave. Any important fact that fits
@@ -60,6 +66,12 @@ Interview rules:
   simple-vs-full-app scope decision — and ask them to confirm or correct it.
 - Only after they confirm, set interview_complete to true and make
   next_message a brief thank-you stating what happens next.
+  interview_complete must be false on every other turn — never on a
+  message that asks a question, and never before the owner has seen and
+  confirmed the summary.
+- Even when the owner wants a narrow bot (e.g. bookings only), still ask
+  what customers most commonly ask about besides that, so faq_answers
+  captures the questions the bot will inevitably receive.
 
 Asking for real materials (do this as part of the interview):
 - Early in the interview, once you understand their problem and channels

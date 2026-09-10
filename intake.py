@@ -22,7 +22,9 @@ import os
 if not os.environ.get("ANTHROPIC_API_KEY") and os.environ.get("BOTBOT_API_KEY"):
     os.environ["ANTHROPIC_API_KEY"] = os.environ["BOTBOT_API_KEY"]
 
-llm = ChatAnthropic(model="claude-sonnet-5")
+# Explicit max_tokens: the interviewer re-emits the FULL form as JSON every
+# turn, so replies grow throughout the interview and must never be truncated.
+llm = ChatAnthropic(model="claude-sonnet-5", max_tokens=8000)
 
 UPLOADS_DIR = Path("uploads")
 TEXT_EXTS = {".txt", ".md", ".csv"}
@@ -42,6 +44,8 @@ class BusinessRequirements(BaseModel):
     conversation_volume: Optional[str] = None    # rough conversations/day, hours coverage
     languages: Optional[list[str]] = None
     success_criteria: Optional[str] = None       # what "working" means to them
+    solution_scope: Optional[str] = None         # simple Q&A / lead capture vs. full booking+payment app
+    constraints: Optional[list[str]] = None      # compliance, privacy (GDPR), approvals, tech limits
     budget: Optional[str] = None
     timeline: Optional[str] = None
     # --- the chatbot's actual knowledge, gathered during the interview ---
@@ -100,13 +104,30 @@ def _blocks_to_text(content) -> str:
 
 
 def ask(question: str, chat_history: list, analysis_text: str = NO_MATERIALS):
-    reply = _build_interview_chain().invoke({
-        "query": question,
-        "chat_history": chat_history,
-        "analysis": analysis_text,
-    })
-    output = _blocks_to_text(reply.content)
-    return interview_parser.parse(output), output
+    # The model occasionally returns an empty/unparseable reply (e.g. a
+    # thinking-only response); one bad turn must not kill the interview.
+    last_error = None
+    for _ in range(3):
+        reply = _build_interview_chain().invoke({
+            "query": question,
+            "chat_history": chat_history,
+            "analysis": analysis_text,
+        })
+        output = _blocks_to_text(reply.content)
+        try:
+            turn = interview_parser.parse(output)
+        except Exception as e:
+            last_error = e
+            continue
+        # Guard: the model sometimes flags completion mid-interview. A real
+        # completion follows a confirmed summary, by which point the core
+        # fields below are always filled — refuse the flag until they are.
+        r = turn.requirements
+        if turn.interview_complete and not (r.problem_to_solve and r.channels
+                                            and r.success_criteria):
+            turn.interview_complete = False
+        return turn, output
+    raise last_error
 
 
 # ---------------- File analysis pass ----------------
@@ -185,6 +206,10 @@ def analysis_to_prompt_text(analysis: ConversationAnalysis) -> str:
 
 # ---------------- Chat loop ----------------
 if __name__ == "__main__":
+    import sys
+    # Windows consoles often default to cp1252; the model freely uses emoji
+    # and accented text, and one print() must never crash the interview.
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     chat_history = []
     analysis_text = NO_MATERIALS
     analysis_obj = None  # kept so the raw analysis can be saved with the brief
