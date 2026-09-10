@@ -1,30 +1,28 @@
-[Mon, Mar 3, 9:14 AM] Dana R: Hi! Do you do e-bike battery/motor conversions? Want to convert my old Trek.
-[Mon, Mar 3, 9:41 AM] Jesse - Two Wheels Good: yes! we do those now, pretty new service. probably around $600 for a basic hub motor kit install
-[Mon, Mar 3, 11:02 AM] Dana R: Great, and how long would that take?
-[Mon, Mar 3, 11:20 AM] Jesse - Two Wheels Good: honestly could do it same week, we're not too slammed right now
-[Mon, Mar 3, 4:55 PM] Jesse - Two Wheels Good: actually thinking about it more, the conversions are more like $900 once you factor in the battery mount, I quoted someone wrong earlier
-[Tue, Mar 4, 8:30 AM] Dana R: Oh okay - so $900? Just want to confirm before I bring it in
-[Tue, Mar 4, 1:15 PM] Jesse - Two Wheels Good: yeah let's say 900, that feels right
-[Wed, Mar 5, 10:00 AM] Marcus T: What are your hours today? Want to drop off a bike for a tune up
-[Wed, Mar 5, 10:03 AM] Jesse - Two Wheels Good: open till 6 today!
-[Wed, Mar 5, 2:40 PM] Jesse - Two Wheels Good: actually gonna close at 4, Reyes had to leave early, sorry
-[Wed, Mar 5, 2:41 PM] Marcus T: got it, can I still get a tune up done, whats the price
-[Wed, Mar 5, 2:50 PM] Jesse - Two Wheels Good: tune up is $85 flat
-[Wed, Mar 5, 5:12 PM] Jesse - Two Wheels Good: oh wait sorry meant to say if it needs new cables/housing that pushes it to more like $110, but basic is $65
-[Wed, Mar 5, 5:13 PM] Marcus T: lol ok which one is it
-[Wed, Mar 5, 5:20 PM] Jesse - Two Wheels Good: let me actually look at the bike first, bring it by tomorrow
-[Thu, Mar 6, 9:00 AM] Priya N: Hi, I emailed about a custom frame build back in January, any update on pricing?
-[Thu, Mar 6, 9:45 AM] Jesse - Two Wheels Good: hey! yeah custom builds start at 1800 depending on tubing
-[Thu, Mar 6, 12:30 PM] Priya N: Perfect, when could you start?
-[Thu, Mar 6, 1:10 PM] Jesse - Two Wheels Good: let me check my build schedule and get back to you
-[Mon, Mar 17, 3:00 PM] Priya N: Hey just following up on the custom frame timeline!
-[Mon, Mar 17, 3:00 PM] Priya N: haven't heard back in a bit
-[Fri, Mar 21, 8:15 AM] Danny K: What time do you guys open on Saturdays?
-[Fri, Mar 21, 8:40 AM] Jesse - Two Wheels Good: 10am, but honestly might do 9 this weekend if I'm in early working on a frame
-[Fri, Mar 21, 8:41 AM] Danny K: ok so should I come at 9 or 10
-[Fri, Mar 21, 9:15 AM] Jesse - Two Wheels Good: 10 is safer
-[Sat, Mar 22, 10:20 AM] Danny K: here now, dropping off a flat repair, how much and when ready
-[Sat, Mar 22, 10:35 AM] Jesse - Two Wheels Good: flats are $15, should be done today
-[Sat, Mar 22, 4:50 PM] Jesse - Two Wheels Good: actually gonna hold onto it till Tuesday, found a slow leak in the other tube too, that'll be a bit more, maybe $25 total
-[Sun, Mar 23, 7:00 PM] Dana R: hey just checking, still on for $900 for the conversion? bringing the trek in this week
-[Sun, Mar 23, 7:40 PM] Jesse - Two Wheels Good: yep! or actually — thinking $750 might be fairer since it's a lighter bike, let's finalize when you bring it in
+[09:12, 3/14] Hannah R: Hi! Interested in the subscription box, what's the current price?
+[09:20, 3/14] Marcus - Crumb & Co: Hey Hannah! It's £14/week for 2 loaves, great value 😊
+[09:41, 3/14] Hannah R: Perfect, and can I pause anytime?
+[09:44, 3/14] Marcus - Crumb & Co: Yep just give us 48 hrs notice and you're sorted
+[11:02, 3/15] Marcus - Crumb & Co: Actually Hannah been thinking about it, might bump the subscription to £16 to cover flour costs, will confirm this week
+[11:05, 3/15] Hannah R: Oh — should I hold off signing up then?
+[11:07, 3/15] Marcus - Crumb & Co: No no you're grand at £14, that's locked in for you
+[16:30, 3/16] Tom B: Do you deliver to BS7?
+[16:45, 3/16] Marcus - Crumb & Co: Should be fine, Josh covers most of Bristol
+[09:15, 3/17] Tom B: Great, can I get delivery this Thursday then?
+[09:50, 3/17] Marcus - Crumb & Co: Actually hang on, Josh only does BS1-BS6 at the minute, let me check if BS7 is doable and get back to you
+[14:00, 3/19] Tom B: Any update?
+[10:02, 3/22] Tom B: Hi Marcus, following up on the BS7 delivery question
+[08:44, 3/18] Sarah K: Hi, do you do a nut-free option? My son has an allergy
+[08:50, 3/18] Marcus - Crumb & Co: Ah so sorry, our kitchen isn't nut-free at all, we handle almonds for the babka, can't guarantee cross contamination won't happen
+[08:52, 3/18] Sarah K: Understood, thank you for being upfront
+[19:10, 3/20] Priya (staff): Marcus did you decide on the Wed/Fri/Sun switch? People are asking
+[19:30, 3/20] Marcus - Crumb & Co: Let's keep Tues/Thurs/Sat for now, less disruption
+[07:15, 3/21] Marcus - Crumb & Co: Actually you know what, Wed/Fri/Sun might work better for the market stall idea, let me sit with it over the weekend
+[10:00, 3/24] Fiona M: Hi, wondering if babka is available year-round or seasonal?
+[10:20, 3/24] Marcus - Crumb & Co: Year round! It's one of our best sellers
+[15:40, 3/26] Marcus - Crumb & Co: Fiona actually reconsidering the babka, might make it Christmas-only, still deciding, will update the menu once I know
+[16:00, 3/26] Fiona M: Haha no worries, let me know
+[11:30, 3/28] Dev Studio - Katie: Hi Marcus, following up on the website quote — did you decide on budget range?
+[12:00, 3/28] Marcus - Crumb & Co: Thinking £800-£1000 should cover it
+[09:05, 3/29] Marcus - Crumb & Co: Actually Katie could we talk £2000, want to add online ordering too, sorry for going back and forth
+[09:10, 3/29] Dev Studio - Katie: No problem, just let us know when you're sure and we'll send a proper quote
+[09:11, 3/29] Marcus - Crumb & Co: Will do! 👍
