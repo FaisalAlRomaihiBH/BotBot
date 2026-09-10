@@ -30,9 +30,11 @@ ROOT = Path(__file__).parent
 RUNS_DIR = ROOT / "evolve_runs"
 HISTORY_FILE = RUNS_DIR / "history.json"
 PROMPT_FILE = ROOT / "interviewer_prompt.txt"
+BENCHMARK_FILE = RUNS_DIR / "benchmark_persona.json"  # FIXED persona for fair regression tests
 MAX_TURNS = 30            # hard stop so a cycle can never run away
 MAX_PROMPT_CHARS = 9000   # cap prompt bloat: improver must stay concise
 SCORE_DROP_LIMIT = 1.5    # avg-score drop vs previous cycle that triggers revert
+BENCHMARK_EVERY = 3       # every Nth cycle, re-run the benchmark persona as regression test
 
 llm = intake.llm
 _blocks = intake._blocks_to_text
@@ -319,12 +321,36 @@ def run_cycle(cycle_no: int, history: list) -> dict:
         improved = improve_prompt(ev)
         print(f"    {improved or 'improvement rejected by guardrails / no change'}")
 
+    # ---- BENCHMARK regression test: same fixed persona vs the evolved prompt ----
+    # Fair comparison (same opponent every time) — unlike cycle scores, which are
+    # confounded by how hard each random persona happens to be.
+    benchmark_score = None
+    if not BENCHMARK_FILE.exists():
+        BENCHMARK_FILE.write_text(persona.model_dump_json(indent=2), encoding="utf-8")
+        benchmark_score = score  # this cycle's persona becomes the yardstick
+        print(f"    benchmark persona seeded: {persona.owner_name} (baseline {score}/10)")
+    elif improved and cycle_no % BENCHMARK_EVERY == 0:
+        print("    benchmark regression test...")
+        bench = Persona.model_validate_json(BENCHMARK_FILE.read_text(encoding="utf-8"))
+        b_result = run_interview(bench)
+        b_ev = evaluate(bench, b_result)
+        benchmark_score = avg_score(b_ev)
+        prev_bench = next((h["benchmark_score"] for h in reversed(history)
+                           if h.get("benchmark_score") is not None), None)
+        print(f"    benchmark: {benchmark_score}/10 (previous: {prev_bench})")
+        if prev_bench is not None and benchmark_score < prev_bench - SCORE_DROP_LIMIT:
+            print("    BENCHMARK REGRESSION — reverting this cycle's prompt change.")
+            git("checkout", commit_before, "--", "interviewer_prompt.txt")
+            improved = None
+            reverted = True
+
     entry = {
         "cycle": cycle_no, "stamp": stamp,
         "persona": f"{persona.industry} / {persona.personality}",
         "score": score, "completed": result["completed"],
         "improved": bool(improved), "reverted": reverted,
         "commit_before": commit_before,
+        "benchmark_score": benchmark_score,
         "top_improvement": ev.top_improvement,
         "schema_suggestions": ev.schema_suggestions,
     }
@@ -345,11 +371,27 @@ if __name__ == "__main__":
     n = int(sys.argv[1]) if len(sys.argv) > 1 else 1
     history = load_history()
     start = len(history) + 1
+    consecutive_failures = 0
     for i in range(start, start + n):
-        run_cycle(i, history)
+        try:
+            run_cycle(i, history)
+            consecutive_failures = 0
+        except Exception as e:
+            consecutive_failures += 1
+            print(f"\n!!! cycle {i} CRASHED: {type(e).__name__}: {e}")
+            git("checkout", "--", "interviewer_prompt.txt")  # discard any half-applied change
+            if consecutive_failures >= 2:
+                print("!!! two consecutive failures — halting the batch for safety.")
+                break
+            print("!!! continuing with next cycle...")
         time.sleep(2)
+
     print("\n=== history ===")
     for h in history:
-        print(f"  cycle {h['cycle']}: {h['score']}/10  {h['persona'][:60]}"
+        b = f"  bench={h['benchmark_score']}" if h.get("benchmark_score") is not None else ""
+        print(f"  cycle {h['cycle']}: {h['score']}/10{b}  {h['persona'][:60]}"
               + ("  [improved]" if h["improved"] else "")
               + ("  [reverted]" if h.get("reverted") else ""))
+
+    print("\npushing results to GitHub...")
+    print(git("push", "origin", "main") or "pushed")
