@@ -1,29 +1,45 @@
-[Mon, Feb 5, 10:14 AM] Hannah Reyes: Hi! I saw your walnut dining table on Instagram, could you give me a rough price for a 6-seater similar to that one?
-[Mon, Feb 5, 11:02 AM] Curtis - Ironwood: Yep that'd run you $1800 flat, walnut top, oak legs
-[Mon, Feb 5, 11:03 AM] Hannah Reyes: Great, and how long would it take?
-[Mon, Feb 5, 11:05 AM] Curtis - Ironwood: 3 weeks, I've got room right now
-[Wed, Feb 7, 4:40 PM] Hannah Reyes: Awesome, want to move forward! What's the deposit?
-[Wed, Feb 7, 5:12 PM] Curtis - Ironwood: No deposit needed, just pay when it's done, easier for both of us
-[Fri, Feb 9, 9:30 AM] Hannah Reyes: Perfect, just confirming - $1800 total, 3 week timeline, pay at completion?
-[Fri, Feb 9, 6:48 PM] Curtis - Ironwood: Correct that's what I quoted you
-[Tue, Feb 13, 2:15 PM] Marcus Webb: Hey Curtis, interested in built-in shelving for my living room, roughly 8ft wide. Ballpark cost?
-[Tue, Feb 13, 3:01 PM] Curtis - Ironwood: For something that size probably $2400-2600, need to see the space though
-[Tue, Feb 13, 3:02 PM] Marcus Webb: Sure, can I send photos?
-[Tue, Feb 13, 3:20 PM] Curtis - Ironwood: yeah send em over, I'll take a look tonight
-[Thu, Feb 15, 1:00 PM] Marcus Webb: Just checking in, did you get a chance to look at those photos?
-[Mon, Feb 19, 10:45 AM] Marcus Webb: Hi Curtis, following up again on the shelving photos I sent last week
-[Sat, Feb 24, 5:33 PM] Curtis - Ironwood: hey sorry been buried, let me check those tonight and get back to you
-[Sun, Feb 18, 8:12 AM] Hannah Reyes: Hi Curtis, just want to confirm the table is still on track for pickup around Feb 26?
-[Sun, Feb 18, 8:40 AM] Curtis - Ironwood: Should be more like 6 weeks total from when we started, so early March
-[Sun, Feb 18, 8:41 AM] Hannah Reyes: Oh — you told me 3 weeks originally, that's why I asked
-[Sun, Feb 18, 9:15 AM] Curtis - Ironwood: Right, 3 weeks is what I said, early March works for that
-[Mon, Feb 19, 7:02 PM] Hannah Reyes: Also wanted to double check - was there a deposit? My friend said you usually take 50% upfront
-[Mon, Feb 19, 8:30 PM] Curtis - Ironwood: Yeah 50% deposit, non-refundable once we approve the design, standard for me
-[Mon, Feb 19, 8:32 PM] Hannah Reyes: You told me no deposit was needed two weeks ago
-[Mon, Feb 19, 9:01 PM] Curtis - Ironwood: That's what I've always done, 50% upfront
-[Wed, Feb 21, 11:20 AM] New Customer - Priya S: Hi, do you deliver? I'm about 15 min from the shop
-[Wed, Feb 21, 12:45 PM] Curtis - Ironwood: Delivery's $75 flat within town
-[Thu, Feb 22, 9:10 AM] Priya S: Great, and are you open Mondays? I can only pick up then
-[Thu, Feb 22, 9:44 AM] Curtis - Ironwood: We're closed Mondays officially but I'm usually around, come by
-[Sat, Feb 24, 5:35 PM] Marcus Webb: Any update on the shelving quote/photos?
-[Sat, Feb 24, 5:36 PM] Curtis - Ironwood: still gotta check Deshawn's measurements from last time he was in, will confirm this week
+[Mon 9:14 AM] Jenna R: Hi! Do you do same-day flat repairs?
+[Mon 9:20 AM] Marcus: Yep, bring it in, we'll knock it out same day no problem
+[Mon 11:45 AM] Marcus: Actually hold on — we've got a big backlog this week, might be next day instead. Let's say next day to be safe
+[Mon 11:46 AM] Marcus: Actually you know what, if it's just a flat, yeah same day, that's quick. Ignore me. Same day.
+[Mon 11:47 AM] Jenna R: haha ok, same day it is?
+[Mon 11:50 AM] Marcus: Same day 👍
+
+[Tue 2:03 PM] Tom H: What's the price for a full overhaul on a road bike?
+[Tue 2:15 PM] Marcus: For you probably $180, pretty standard bike
+[Tue 2:16 PM] Marcus: Wait, is it carbon frame or aluminum?
+[Tue 2:17 PM] Tom H: Carbon
+[Tue 2:20 PM] Marcus: Ok that changes things, carbon needs more careful handling, gonna say $220
+[Wed 10:02 AM] Marcus: Been thinking about it overnight, let's do $200 flat, split the difference, that feels right
+[Wed 10:03 AM] Tom H: lol ok, $200 works for me
+
+[Wed 4:30 PM] Priya K: Do you still do custom frame painting?
+[Wed 4:50 PM] Marcus: Honestly? Thinking of dropping that service, eats up too much time
+[Thu 9:10 AM] Marcus: Actually reconsidering — I do enjoy it, and it's good money. Let's say yes still doing it for now
+[Thu 9:11 AM] Priya K: Ok great, what's the cost roughly?
+[Thu 9:30 AM] Marcus: Let me check on paint costs and get back to you
+[Sat 6:02 PM] Priya K: Hey just following up on the painting quote?
+[No further reply]
+
+[Fri 1:15 PM] Alex D: Interested in a custom build, mountain bike, what would that run me?
+[Fri 1:40 PM] Marcus: Ballpark $900 for a solid setup
+[Fri 5:00 PM] Marcus: Actually thinking more about the components you mentioned, probably closer to $1050
+[Sat 8:00 AM] Marcus: Slept on it — I think I was overestimating parts cost, let's go back to around $900-950
+[Sat 8:05 AM] Alex D: haha ok so which is it
+[Sat 8:10 AM] Marcus: $950, locking that in, promise
+[Sun 3:00 PM] Marcus: One more thought — if you want disc brakes that's extra, forgot to factor that in. Maybe $1000 total
+[Sun 3:02 PM] Alex D: Got it, I'll just plan for $1000
+
+[Sun 6:45 PM] Carla M: What are your hours on Saturdays?
+[Mon 9:00 AM] Marcus: 10-6 on Saturdays, Dani's usually here too
+
+[Tue 11:00 AM] Ben O: Do you require a deposit for custom builds?
+[Tue 11:20 AM] Marcus: Yeah 50% down usually
+[Tue 3:00 PM] Marcus: Actually you know, for regulars I usually skip that, I'll just trust it
+[Tue 3:01 PM] Ben O: I'm not a regular though, first time here
+[Tue 3:15 PM] Marcus: Right, let's do the deposit then, 50%, safer for both of us
+
+[Wed 8:00 AM] Nina F: Is the used blue Trek still available?
+[Wed 9:30 AM] Marcus: Let me check the floor and confirm
+[Thu 2:00 PM] Marcus: I think we sold it Saturday actually — let me double check with Dani
+[No further reply]
