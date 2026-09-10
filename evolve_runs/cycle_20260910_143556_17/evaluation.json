@@ -1,0 +1,51 @@
+{
+  "fact_capture": 7,
+  "no_repeats": 9,
+  "evidence_use": 8,
+  "naturalness": 8,
+  "completeness": 5,
+  "efficiency": 6,
+  "findings": [
+    {
+      "problem": "Pickup days were left ambiguous and then locked in wrong. The fact sheet says pickups are Thurs–Sat 10am–4pm; Bernie said 'Thursday Saturday 10 to 4' which Birdie silently interpreted as 'Thursday and Saturday only,' dropping Friday pickups. Birdie never asked a clarifying question about the range, and the readback baked the error in.",
+      "excerpt": "Bernadette \"Bernie\" Fontaine: Oh sure thing honey! So I bake Tuesday through Friday, that's my kitchen time, gotta have my coffee and my little radio going, I listen to that oldies station while I mix, and pickups are Thursday Saturday 10 to 4, that gives me a little wiggle room to finish things up before folks come knocking."
+    },
+    {
+      "problem": "Budget was never asked about; the brief's budget field is null even though Bernie volunteered a genuine financial constraint (saving for a double oven) which was buried in additional_notes instead of being probed for project budget/willingness to pay.",
+      "excerpt": "Bernadette \"Bernie\" Fontaine: And I guess the last little thing, not really a policy just my own gripe, my oven's old as the hills and I'm saving up for a nice new double oven, so if orders ever slow down some week it's probably cause I'm prayin over that thing to just hold on a little longer ha!"
+    },
+    {
+      "problem": "Target audience, success criteria, and timeline were never asked at all — three additional null fields in the brief. The final open-ended question was scoped only to 'pricing, policies, or the business,' missing the chance to define who the bot serves or what success looks like (e.g. fewer repeat texts, fewer bad-fit inquiries).",
+      "excerpt": "Birdie: Good to know, plain English keeps it simple! One last open question before I wrap up, Bernie — is there anything else on your mind about pricing, policies, or the business in general that you think would be helpful for me to know?"
+    },
+    {
+      "problem": "The cottage food license itself — the legal basis of the whole business and the reason the farmers-market question matters — was never captured. The brief only calls it a 'home-based bakery' and refers vaguely to 'my little license'; Birdie never asked what license type she holds or whether any disclosure is legally required on the bot.",
+      "excerpt": "Bernadette \"Bernie\" Fontaine: Oh and one more thing, and honey I probably shoulda mentioned this a while back but it just popped in my head, I'm not even real sure if my little license covers me sellin over at the farmers market two towns over, I been meanin to call the county about that for, oh Lord, two years now I think, just never got around to it, so I probably shouldn't have the bot sayin anything about farmers markets till I get that sorted, don't want to get myself in trouble ha!"
+    },
+    {
+      "problem": "Birdie abandoned the cancellation/deposit question after one non-answer instead of offering a concrete default (e.g. 'deposit is non-refundable within X days, otherwise held for a new date'). This leaves an open item that the bot literally cannot answer for a business that takes deposits — a wasted turn that produced nothing actionable.",
+      "excerpt": "Birdie: That's alright, Bernie, lots of small business owners are in the same boat — we can just note that as something still being figured out. Let's talk about your hours — what days and times are you actually available for people to reach you, place orders, or pick up cakes?"
+    },
+    {
+      "problem": "Low-value question spend: an entire turn was used on multilingual support for a word-of-mouth home bakery in suburban Scranton, while budget/timeline/success criteria went unasked. Interview ran 33 turns (above the 20–30 norm) yet still left four schema fields null.",
+      "excerpt": "Birdie: Aww, 'Bernie B' is so sweet, I love that — we'll pass along your name ideas to the build team so they can land on something warm like that. Just one more quick thing: will all your customers be messaging in English, or do you get folks texting you in other languages too, like Spanish?"
+    },
+    {
+      "problem": "Instagram is listed in the brief's channels array despite Bernie explicitly saying she abandoned it after six posts — a build team reading the channels list could scope an Instagram integration that isn't wanted. Birdie also never asked which channels the bot should actually be deployed on versus which merely exist.",
+      "excerpt": "Bernadette \"Bernie\" Fontaine: I tried the Instagram for about a hot minute, Ashley kept telling me \"Grandma you gotta post reels\" and I don't even know what a reel IS honey, I posted like six pictures of finished cakes and then just kind of forgot about it, my thumbs aren't fast enough for all that, between that and Facebook and just plain old texting it's a lot to keep track of for one old lady with a hip that don't work right ha."
+    },
+    {
+      "problem": "The capacity constraint (max ~4 large orders/week) was captured but never operationalized — Birdie never asked how the bot should behave when the week is full (say 'we're booked,' still take the request, offer a waitlist?). Given Bernie must 'check my book,' the bot has no rule for availability answers.",
+      "excerpt": "Bernadette \"Bernie\" Fontaine: Cupcakes same kinda thing, if it's just a simple dozen with regular frosting I can sometimes do it in a day or two if my week's not already packed, but honey I can only handle about four big orders a week total between everything, my kitchen's just me and my old oven bless its heart, so if someone calls me on a Wednesday wanting cupcakes for Friday I gotta check my book first before I say yes."
+    }
+  ],
+  "top_improvement": "Add a mandatory pre-wrap checklist pass: before the readback, Birdie must explicitly ask (or explicitly record as declined/N-A) the project-level fields that were left null here — who the typical customer is, what 'this is working' would look like, rough budget, and desired timeline — and must clarify any ambiguous day/time ranges (e.g. 'Thursday Saturday' → 'Thursday through Saturday, or Thursday and Saturday only?') rather than guessing during the readback.",
+  "schema_suggestions": [
+    "Add a structured `hours_and_availability` object (baking days, pickup days/times, closed days, response-hours) — hours are currently only prose inside faq_answers, which is where the Thurs/Sat ambiguity got silently frozen.",
+    "Add a `bot_persona` field (tone, name candidates, voice guidance). Persona details are currently crammed into additional_notes alongside anecdotes about Venmo mix-ups.",
+    "Add a `do_not_discuss` / guardrails field for topics the bot must avoid (farmers market licensing) and mandatory disclosures (nut-free warning). These are currently duplicated across business_policies, faq_answers, and open_items with no single authoritative place.",
+    "Add a `capacity_and_scheduling_constraints` field (max orders/week, seasonal peaks, what the bot should say when full) — currently buried in business_policies with no behavioral rule attached.",
+    "Add a `compliance_and_licensing` field (license type, jurisdiction, required disclosures) so cottage-food/legal constraints have a home instead of being inferred from an open_item.",
+    "Give the interviewer a capability to flag and re-ask ambiguous quantitative/scheduling answers before readback, rather than resolving ambiguity by assumption inside the summary."
+  ]
+}

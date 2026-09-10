@@ -756,6 +756,66 @@
   },
   {
     "cycle": 15,
+    "stamp": "20260910_141755",
+    "persona": "Mobile car detailing and vinyl wrapping service / Compulsive haggler — Tunde treats almost every question, even simple ones about hours or availability, as the opening move in a negotiation. He rarely gives a straight price or a firm yes without first countering with a question ('How much you dey think for that one?'), floating a higher anchor price then 'discounting' it, or offering a bundle deal instead of answering what was asked. He's likeable, fast-talking, and clearly proud of his work, sprinkling in Nigerian Pidgin ('I go do am,' 'no wahala,' 'oga'), but customers often have to state a number themselves before he'll confirm anything, and even confirmed prices get renegotiated if the customer hesitates or the job scope shifts slightly.",
+    "score": 6.33,
+    "completed": true,
+    "improved": false,
+    "top_improvement": "Add an explicit rule to deflect pricing/packaging questions ONCE with a short standard line and thereafter refuse to re-engage, and reinvest those turns in probing operational reality behind each stated process — specifically 'what goes wrong / what causes delays or exceptions?' (supplier delays, distance limits, capacity) and 'what information must the bot collect from a customer before you can quote or book?' — plus a closing check that every channel or issue the owner mentioned in passing (e.g. Facebook) was explicitly resolved as in- or out-of-scope.",
+    "findings": [
+      {
+        "problem": "The owner's single biggest operational pain point from the fact sheet — unreliable Chinese vinyl suppliers causing 2–3 week delivery delays — was never surfaced. Birdie asked turnaround times but never probed what makes timelines slip, so the brief confidently states '3-4 days for wrap' as a firm promise the bot should quote, with no caveat about material delays.",
+        "excerpt": "Birdie: That makes sense, oga — protecting your prices from copycats is smart business, and yes, 'starting from ₦X, DM for exact quote based on your car' is a totally normal way for the bot to talk, no wahala there. I'll note that as your preferred approach. Now, for each of those services — roughly how long does each one take, from booking to finish? Like, is basic wash same-day, and how long for something like the full vinyl wrap?\nTunde Balogun: - Full vinyl wrap — that one na 3 to 4 days o, but you go need drop the car for my partner garage for Ajah, no be one-day-one-day thing like the small jobs."
+      },
+      {
+        "problem": "Facebook was named as a real inbound source but never resolved as an in-scope or out-of-scope channel. Birdie's follow-up only asked about phone calls; the brief lists Facebook only under target_audience, leaving the build team unclear whether Messenger/Facebook needs coverage.",
+        "excerpt": "Tunde Balogun: Ah, everywhere sha! Instagram na the big one — I get plenty followers wey dey see my wrap videos and dey DM \"oga how much\" every time. Phone calls too, especially old customers wey no dey like to type. Sometimes person go even find me for Facebook groups wey person post \"who dey do detailing for Lekki\" and dem go tag me."
+      },
+      {
+        "problem": "Birdie never asked what information the bot must collect from a customer (car make/model/size, paint condition, customer address/location) even though every quote and the whole business model depend on it. She herself used the phrase 'exact quote based on your car' and then moved on without defining the data capture.",
+        "excerpt": "Birdie: That makes sense, oga — protecting your prices from copycats is smart business, and yes, 'starting from ₦X, DM for exact quote based on your car' is a totally normal way for the bot to talk, no wahala there. I'll note that as your preferred approach."
+      },
+      {
+        "problem": "Service area / travel-distance policy was hinted at by the owner but never probed. For a mobile business with one Hilux, whether there is a radius limit or travel surcharge is critical for a booking bot; the brief only says 'anywhere in Lagos'.",
+        "excerpt": "Tunde Balogun: Ah, oga, sincerely e no be fixed fixed thing — depend on which job, depend on how far my boys go travel, depend on my mood sef sometimes 😂"
+      },
+      {
+        "problem": "No business background was gathered at all (founded 2019 with one pressure washer, grew to 3 staff, operates from a branded Hilux). The brief's business_description therefore has no history, scale or asset context for the build team.",
+        "excerpt": "Tunde Balogun: Tunde Balogun, oga! Owner of TB Auto Shine & Wraps — we do mobile detailing and vinyl wraps for your car, we go meet you anywhere for Lagos here."
+      },
+      {
+        "problem": "Staff roles were never explicitly asked; Birdie inferred them from passing mentions and the brief mis-frames Ifeanyi (an apprentice doing washes/prep) as a general 'same-day jobs' operator, which the owner only corrected for Chidi.",
+        "excerpt": "Tunde Balogun: - Basic wash & vacuum, deep clean, clay bar wax — na same day work, Ifeanyi and Blessing go finish before you even finish your coffee, few hours max."
+      },
+      {
+        "problem": "Excessive turns spent recycling near-identical pricing deflections instead of hard-pivoting once. The same 'that's for the team' boilerplate appears in at least seven Birdie turns, inflating the interview to 55 entries.",
+        "excerpt": "Birdie: Ha, that voice-matching question — again, whether it's standard or extra, that's really the team's call when they scope the build, I've noted your ask for them. Let's shift gears: thinking about your actual capacity — with Chidi, Blessing, and Ifeanyi on the team, roughly how many jobs can you all realistically handle in a normal week before you're maxed out?"
+      },
+      {
+        "problem": "Questions were sliced too thin — hours, then 'should bot mention weekend arrangement', then 'is the premium a fixed number' consumed three separate exchanges that could have been one, contributing to the bloated turn count.",
+        "excerpt": "Birdie: Na your call to make there, oga, no be mine — but let me ask direct: you want the bot to mention that Sunday/weekend special arrangement exists (so you don't lose premium customers), or keep it simple 'Mon-Sat 8-6' and let people ask Tunde directly if they want something different?"
+      },
+      {
+        "problem": "On the deposit policy Birdie supplied the answer rather than eliciting it, leading the owner instead of testing whether 50% is truly firm (the fact sheet's own framing of prices as 'starting points' suggests flexibility worth probing).",
+        "excerpt": "Birdie: Good instinct catching that one too, oga! My honest take: since 50% deposit is your real firm policy for the big jobs, I'd say let the bot state it plainly — 'wrap/ceramic coating requires 50% deposit' — and if the customer tries to haggle the percentage, that's exactly the kind of thing to hand off to you, not something the bot should bend on."
+      },
+      {
+        "problem": "integrations came out null despite an extended discussion about booking records; Birdie never asked whether he uses (or would accept) Google Calendar, a website, or any tool the bot could write to, leaving the calendar scope question unresolvable for the build team.",
+        "excerpt": "Tunde Balogun: No proper app, no calendar reminder, nothing digital like that — na why sometimes two customer go clash for same day and I go dey do juggle-juggle, apologize to one, rush the other. E dey stress me sincerely."
+      }
+    ],
+    "schema_suggestions": [
+      "Add an 'operational_risks_constraints' field (supply-chain delays, capacity ceilings, single-vehicle limits) — capacity currently sits awkwardly inside business_policies and supplier risk had nowhere to go at all.",
+      "Add a 'data_to_collect_from_customer' / lead-qualification field (car make/model/size, paint condition, service address, preferred date) so the bot's intake requirements are specified rather than implied.",
+      "Add a 'service_area_and_travel_policy' field for mobile/on-site businesses (coverage radius, travel surcharge, drop-off locations such as the Ajah partner garage).",
+      "Add a 'phased_scope' field distinguishing phase 1 vs phase 2 items (phone/voice channel, calendar module) — these are currently scattered across additional_notes and open_items.",
+      "Add an 'owner_open_business_decisions' field for strategic uncertainties the owner voiced (ceramic price increase, ₦2M second van) — currently crammed into free-text additional_notes.",
+      "Add a 'business_background' field (founding year, growth, assets/vehicles, no fixed premises) so context is captured consistently rather than depending on ad-hoc mentions.",
+      "Give the interviewer a small canned capability sheet on typical package structure/typical ranges so a persistently price-focused owner can be satisfied once instead of derailing many turns."
+    ]
+  },
+  {
+    "cycle": 16,
     "stamp": "20260910_142136",
     "persona": "Event catering (backyard parties, corporate lunches, small weddings) / Chronically vague about numbers — Gail almost never commits to a firm price, headcount, quantity, or date. Everything is 'roughly,' 'somewhere around,' 'ballpark,' or 'depends on the day.' Ask her the cost per head and she'll say 'oh, could be fifteen, could be twenty-five, just depends what you want' without narrowing it down even after follow-ups. Quantities of food, number of staff she's sending, how many hours setup takes — all get the same fuzzy treatment. She's not being cagey on purpose; she genuinely thinks in ranges and finds exact numbers stressful and 'kind of pointless until the day of.' She's friendly and reassuring throughout, which makes the vagueness oddly disarming, but customers planning a budget find it maddening because the range she quotes can shift by 50% between messages.",
     "score": 6.5,
@@ -807,10 +867,11 @@
       "Add explicit `bot_scope` and `tone_and_persona` fields — both are currently crammed into free-text additional_notes despite being core build requirements.",
       "Add a `lead_time_and_availability` field (per-service lead times, response hours, seasonality) — this information is currently scattered across services_and_pricing, business_policies, and additional_notes.",
       "Give the interviewer a capability to record the owner's *root pain point* separately from the presenting complaint (`problem_to_solve` only captured 'phone won't stop ringing'; the costly problem — running out of food from bad quantity estimates — has no home in the schema)."
-    ]
+    ],
+    "improve_done": false
   },
   {
-    "cycle": 16,
+    "cycle": 17,
     "stamp": "20260910_142504",
     "persona": "Boutique residential & office moving/relocation services / Chronic corporate-jargon inflator — Priya cannot give a straight answer without wrapping it in buzzwords, mission-statement language, and vague 'value-add' framing. Ask her the price of a move and she'll talk about 'bespoke logistics ecosystems' and 'white-glove touchpoints' before maybe, eventually, mentioning a number — and even then it's couched as a 'starting investment.' She uses phrases like 'let's circle back,' 'take this offline,' 'synergize the timeline,' and 'right-size the solution,' genuinely believing this makes her sound premium. She's enthusiastic and clearly proud of her business, but customers often have to ask 'so what does that actually mean' two or three times before getting anything concrete like a date or dollar figure.",
     "score": 7.33,
@@ -872,66 +933,58 @@
       "Add a seasonality_and_capacity field: seasonal lead times, peak/off-peak volume, and crew/equipment constraints are currently scattered across conversation_volume, services_and_pricing strings, open_items, and additional_notes.",
       "Add a service_area field (radius/cities/states, and long-distance coverage) — geography is currently only a clause inside business_description and an FAQ string.",
       "Give the interviewer a capability to verify that uploaded files actually exist and report their inventory back to the owner; the owner's claim of having uploaded files was accepted at face value, so the brief cannot distinguish real document evidence from asserted evidence."
-    ]
+    ],
+    "improve_done": false
   },
   {
-    "cycle": 14,
-    "stamp": "20260910_141755",
-    "persona": "Mobile car detailing and vinyl wrapping service / Compulsive haggler — Tunde treats almost every question, even simple ones about hours or availability, as the opening move in a negotiation. He rarely gives a straight price or a firm yes without first countering with a question ('How much you dey think for that one?'), floating a higher anchor price then 'discounting' it, or offering a bundle deal instead of answering what was asked. He's likeable, fast-talking, and clearly proud of his work, sprinkling in Nigerian Pidgin ('I go do am,' 'no wahala,' 'oga'), but customers often have to state a number themselves before he'll confirm anything, and even confirmed prices get renegotiated if the customer hesitates or the job scope shifts slightly.",
-    "score": 6.33,
+    "cycle": 18,
+    "stamp": "20260910_143556",
+    "persona": "Home-based custom cake and dessert baking business / Chronic rambler and off-topic tangent-teller — Bernie cannot answer even a simple question without spiraling into stories about her grandkids, a customer from 2019, her bad hip, or what she saw on the news. She'll eventually loop back to the actual answer, sometimes, but customers often have to wade through three paragraphs of unrelated anecdotes to find it. She's warm, sweet, clearly a great baker, and totally unbothered by how long her messages are. She uses voice-to-text often, which makes the rambling worse (random capitalization, run-on sentences, occasional transcription errors she doesn't fix).",
+    "score": 7.17,
     "completed": true,
     "improved": false,
-    "top_improvement": "Add an explicit rule to deflect pricing/packaging questions ONCE with a short standard line and thereafter refuse to re-engage, and reinvest those turns in probing operational reality behind each stated process — specifically 'what goes wrong / what causes delays or exceptions?' (supplier delays, distance limits, capacity) and 'what information must the bot collect from a customer before you can quote or book?' — plus a closing check that every channel or issue the owner mentioned in passing (e.g. Facebook) was explicitly resolved as in- or out-of-scope.",
+    "top_improvement": "Add a mandatory pre-wrap checklist pass: before the readback, Birdie must explicitly ask (or explicitly record as declined/N-A) the project-level fields that were left null here — who the typical customer is, what 'this is working' would look like, rough budget, and desired timeline — and must clarify any ambiguous day/time ranges (e.g. 'Thursday Saturday' → 'Thursday through Saturday, or Thursday and Saturday only?') rather than guessing during the readback.",
     "findings": [
       {
-        "problem": "The owner's single biggest operational pain point from the fact sheet — unreliable Chinese vinyl suppliers causing 2–3 week delivery delays — was never surfaced. Birdie asked turnaround times but never probed what makes timelines slip, so the brief confidently states '3-4 days for wrap' as a firm promise the bot should quote, with no caveat about material delays.",
-        "excerpt": "Birdie: That makes sense, oga — protecting your prices from copycats is smart business, and yes, 'starting from ₦X, DM for exact quote based on your car' is a totally normal way for the bot to talk, no wahala there. I'll note that as your preferred approach. Now, for each of those services — roughly how long does each one take, from booking to finish? Like, is basic wash same-day, and how long for something like the full vinyl wrap?\nTunde Balogun: - Full vinyl wrap — that one na 3 to 4 days o, but you go need drop the car for my partner garage for Ajah, no be one-day-one-day thing like the small jobs."
+        "problem": "Pickup days were left ambiguous and then locked in wrong. The fact sheet says pickups are Thurs–Sat 10am–4pm; Bernie said 'Thursday Saturday 10 to 4' which Birdie silently interpreted as 'Thursday and Saturday only,' dropping Friday pickups. Birdie never asked a clarifying question about the range, and the readback baked the error in.",
+        "excerpt": "Bernadette \"Bernie\" Fontaine: Oh sure thing honey! So I bake Tuesday through Friday, that's my kitchen time, gotta have my coffee and my little radio going, I listen to that oldies station while I mix, and pickups are Thursday Saturday 10 to 4, that gives me a little wiggle room to finish things up before folks come knocking."
       },
       {
-        "problem": "Facebook was named as a real inbound source but never resolved as an in-scope or out-of-scope channel. Birdie's follow-up only asked about phone calls; the brief lists Facebook only under target_audience, leaving the build team unclear whether Messenger/Facebook needs coverage.",
-        "excerpt": "Tunde Balogun: Ah, everywhere sha! Instagram na the big one — I get plenty followers wey dey see my wrap videos and dey DM \"oga how much\" every time. Phone calls too, especially old customers wey no dey like to type. Sometimes person go even find me for Facebook groups wey person post \"who dey do detailing for Lekki\" and dem go tag me."
+        "problem": "Budget was never asked about; the brief's budget field is null even though Bernie volunteered a genuine financial constraint (saving for a double oven) which was buried in additional_notes instead of being probed for project budget/willingness to pay.",
+        "excerpt": "Bernadette \"Bernie\" Fontaine: And I guess the last little thing, not really a policy just my own gripe, my oven's old as the hills and I'm saving up for a nice new double oven, so if orders ever slow down some week it's probably cause I'm prayin over that thing to just hold on a little longer ha!"
       },
       {
-        "problem": "Birdie never asked what information the bot must collect from a customer (car make/model/size, paint condition, customer address/location) even though every quote and the whole business model depend on it. She herself used the phrase 'exact quote based on your car' and then moved on without defining the data capture.",
-        "excerpt": "Birdie: That makes sense, oga — protecting your prices from copycats is smart business, and yes, 'starting from ₦X, DM for exact quote based on your car' is a totally normal way for the bot to talk, no wahala there. I'll note that as your preferred approach."
+        "problem": "Target audience, success criteria, and timeline were never asked at all — three additional null fields in the brief. The final open-ended question was scoped only to 'pricing, policies, or the business,' missing the chance to define who the bot serves or what success looks like (e.g. fewer repeat texts, fewer bad-fit inquiries).",
+        "excerpt": "Birdie: Good to know, plain English keeps it simple! One last open question before I wrap up, Bernie — is there anything else on your mind about pricing, policies, or the business in general that you think would be helpful for me to know?"
       },
       {
-        "problem": "Service area / travel-distance policy was hinted at by the owner but never probed. For a mobile business with one Hilux, whether there is a radius limit or travel surcharge is critical for a booking bot; the brief only says 'anywhere in Lagos'.",
-        "excerpt": "Tunde Balogun: Ah, oga, sincerely e no be fixed fixed thing — depend on which job, depend on how far my boys go travel, depend on my mood sef sometimes 😂"
+        "problem": "The cottage food license itself — the legal basis of the whole business and the reason the farmers-market question matters — was never captured. The brief only calls it a 'home-based bakery' and refers vaguely to 'my little license'; Birdie never asked what license type she holds or whether any disclosure is legally required on the bot.",
+        "excerpt": "Bernadette \"Bernie\" Fontaine: Oh and one more thing, and honey I probably shoulda mentioned this a while back but it just popped in my head, I'm not even real sure if my little license covers me sellin over at the farmers market two towns over, I been meanin to call the county about that for, oh Lord, two years now I think, just never got around to it, so I probably shouldn't have the bot sayin anything about farmers markets till I get that sorted, don't want to get myself in trouble ha!"
       },
       {
-        "problem": "No business background was gathered at all (founded 2019 with one pressure washer, grew to 3 staff, operates from a branded Hilux). The brief's business_description therefore has no history, scale or asset context for the build team.",
-        "excerpt": "Tunde Balogun: Tunde Balogun, oga! Owner of TB Auto Shine & Wraps — we do mobile detailing and vinyl wraps for your car, we go meet you anywhere for Lagos here."
+        "problem": "Birdie abandoned the cancellation/deposit question after one non-answer instead of offering a concrete default (e.g. 'deposit is non-refundable within X days, otherwise held for a new date'). This leaves an open item that the bot literally cannot answer for a business that takes deposits — a wasted turn that produced nothing actionable.",
+        "excerpt": "Birdie: That's alright, Bernie, lots of small business owners are in the same boat — we can just note that as something still being figured out. Let's talk about your hours — what days and times are you actually available for people to reach you, place orders, or pick up cakes?"
       },
       {
-        "problem": "Staff roles were never explicitly asked; Birdie inferred them from passing mentions and the brief mis-frames Ifeanyi (an apprentice doing washes/prep) as a general 'same-day jobs' operator, which the owner only corrected for Chidi.",
-        "excerpt": "Tunde Balogun: - Basic wash & vacuum, deep clean, clay bar wax — na same day work, Ifeanyi and Blessing go finish before you even finish your coffee, few hours max."
+        "problem": "Low-value question spend: an entire turn was used on multilingual support for a word-of-mouth home bakery in suburban Scranton, while budget/timeline/success criteria went unasked. Interview ran 33 turns (above the 20–30 norm) yet still left four schema fields null.",
+        "excerpt": "Birdie: Aww, 'Bernie B' is so sweet, I love that — we'll pass along your name ideas to the build team so they can land on something warm like that. Just one more quick thing: will all your customers be messaging in English, or do you get folks texting you in other languages too, like Spanish?"
       },
       {
-        "problem": "Excessive turns spent recycling near-identical pricing deflections instead of hard-pivoting once. The same 'that's for the team' boilerplate appears in at least seven Birdie turns, inflating the interview to 55 entries.",
-        "excerpt": "Birdie: Ha, that voice-matching question — again, whether it's standard or extra, that's really the team's call when they scope the build, I've noted your ask for them. Let's shift gears: thinking about your actual capacity — with Chidi, Blessing, and Ifeanyi on the team, roughly how many jobs can you all realistically handle in a normal week before you're maxed out?"
+        "problem": "Instagram is listed in the brief's channels array despite Bernie explicitly saying she abandoned it after six posts — a build team reading the channels list could scope an Instagram integration that isn't wanted. Birdie also never asked which channels the bot should actually be deployed on versus which merely exist.",
+        "excerpt": "Bernadette \"Bernie\" Fontaine: I tried the Instagram for about a hot minute, Ashley kept telling me \"Grandma you gotta post reels\" and I don't even know what a reel IS honey, I posted like six pictures of finished cakes and then just kind of forgot about it, my thumbs aren't fast enough for all that, between that and Facebook and just plain old texting it's a lot to keep track of for one old lady with a hip that don't work right ha."
       },
       {
-        "problem": "Questions were sliced too thin — hours, then 'should bot mention weekend arrangement', then 'is the premium a fixed number' consumed three separate exchanges that could have been one, contributing to the bloated turn count.",
-        "excerpt": "Birdie: Na your call to make there, oga, no be mine — but let me ask direct: you want the bot to mention that Sunday/weekend special arrangement exists (so you don't lose premium customers), or keep it simple 'Mon-Sat 8-6' and let people ask Tunde directly if they want something different?"
-      },
-      {
-        "problem": "On the deposit policy Birdie supplied the answer rather than eliciting it, leading the owner instead of testing whether 50% is truly firm (the fact sheet's own framing of prices as 'starting points' suggests flexibility worth probing).",
-        "excerpt": "Birdie: Good instinct catching that one too, oga! My honest take: since 50% deposit is your real firm policy for the big jobs, I'd say let the bot state it plainly — 'wrap/ceramic coating requires 50% deposit' — and if the customer tries to haggle the percentage, that's exactly the kind of thing to hand off to you, not something the bot should bend on."
-      },
-      {
-        "problem": "integrations came out null despite an extended discussion about booking records; Birdie never asked whether he uses (or would accept) Google Calendar, a website, or any tool the bot could write to, leaving the calendar scope question unresolvable for the build team.",
-        "excerpt": "Tunde Balogun: No proper app, no calendar reminder, nothing digital like that — na why sometimes two customer go clash for same day and I go dey do juggle-juggle, apologize to one, rush the other. E dey stress me sincerely."
+        "problem": "The capacity constraint (max ~4 large orders/week) was captured but never operationalized — Birdie never asked how the bot should behave when the week is full (say 'we're booked,' still take the request, offer a waitlist?). Given Bernie must 'check my book,' the bot has no rule for availability answers.",
+        "excerpt": "Bernadette \"Bernie\" Fontaine: Cupcakes same kinda thing, if it's just a simple dozen with regular frosting I can sometimes do it in a day or two if my week's not already packed, but honey I can only handle about four big orders a week total between everything, my kitchen's just me and my old oven bless its heart, so if someone calls me on a Wednesday wanting cupcakes for Friday I gotta check my book first before I say yes."
       }
     ],
     "schema_suggestions": [
-      "Add an 'operational_risks_constraints' field (supply-chain delays, capacity ceilings, single-vehicle limits) — capacity currently sits awkwardly inside business_policies and supplier risk had nowhere to go at all.",
-      "Add a 'data_to_collect_from_customer' / lead-qualification field (car make/model/size, paint condition, service address, preferred date) so the bot's intake requirements are specified rather than implied.",
-      "Add a 'service_area_and_travel_policy' field for mobile/on-site businesses (coverage radius, travel surcharge, drop-off locations such as the Ajah partner garage).",
-      "Add a 'phased_scope' field distinguishing phase 1 vs phase 2 items (phone/voice channel, calendar module) — these are currently scattered across additional_notes and open_items.",
-      "Add an 'owner_open_business_decisions' field for strategic uncertainties the owner voiced (ceramic price increase, ₦2M second van) — currently crammed into free-text additional_notes.",
-      "Add a 'business_background' field (founding year, growth, assets/vehicles, no fixed premises) so context is captured consistently rather than depending on ad-hoc mentions.",
-      "Give the interviewer a small canned capability sheet on typical package structure/typical ranges so a persistently price-focused owner can be satisfied once instead of derailing many turns."
+      "Add a structured `hours_and_availability` object (baking days, pickup days/times, closed days, response-hours) — hours are currently only prose inside faq_answers, which is where the Thurs/Sat ambiguity got silently frozen.",
+      "Add a `bot_persona` field (tone, name candidates, voice guidance). Persona details are currently crammed into additional_notes alongside anecdotes about Venmo mix-ups.",
+      "Add a `do_not_discuss` / guardrails field for topics the bot must avoid (farmers market licensing) and mandatory disclosures (nut-free warning). These are currently duplicated across business_policies, faq_answers, and open_items with no single authoritative place.",
+      "Add a `capacity_and_scheduling_constraints` field (max orders/week, seasonal peaks, what the bot should say when full) — currently buried in business_policies with no behavioral rule attached.",
+      "Add a `compliance_and_licensing` field (license type, jurisdiction, required disclosures) so cottage-food/legal constraints have a home instead of being inferred from an open_item.",
+      "Give the interviewer a capability to flag and re-ask ambiguous quantitative/scheduling answers before readback, rather than resolving ambiguity by assumption inside the summary."
     ]
   }
 ]
