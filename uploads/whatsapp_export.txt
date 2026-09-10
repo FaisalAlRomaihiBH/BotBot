@@ -1,50 +1,29 @@
-[Mon, Mar 3, 9:12 AM] Karen T: Hi! Looking for a quote to move a 1-bedroom apartment across town, do you have availability this weekend?
-[Mon, Mar 3, 9:40 AM] Marcus - Webb & Sons: Hey! Yeah we can do Saturday, 1-bed is usually around $350
-[Mon, Mar 3, 9:41 AM] Marcus - Webb & Sons: actually thinking about it, if it's got a lot of stairs let's say $400 to be safe
-[Mon, Mar 3, 9:52 AM] Karen T: Okay, it's a 3rd floor walk-up, no elevator
-[Mon, Mar 3, 10:03 AM] Marcus - Webb & Sons: oh in that case let's just do flat $375 and not worry about counting flights, easier for everyone
-[Mon, Mar 3, 10:03 AM] Karen T: Got it, $375 flat. And Saturday works?
-[Mon, Mar 3, 10:15 AM] Marcus - Webb & Sons: yep should be fine, I'll have Dale confirm
-[Tue, Mar 4, 4:20 PM] Karen T: Hi just following up, did Dale confirm Saturday?
-[Tue, Mar 4, 6:01 PM] Marcus - Webb & Sons: let me check the calendar and get back to you tonight
-[Thu, Mar 6, 11:30 AM] Karen T: Hey Marcus, still waiting to hear about Saturday, can you confirm?
-[Thu, Mar 6, 2:45 PM] Marcus - Webb & Sons: yeah should be good! actually you know what, Sunday might be better for us, is that ok?
-[Thu, Mar 6, 2:46 PM] Karen T: I need it to be Saturday, that's when my lease starts
-[Thu, Mar 6, 2:50 PM] Marcus - Webb & Sons: no yeah Saturday's fine I was thinking of a different job, sorry, we're good for Saturday 9am
-
-[Sat, Mar 8, 7:15 AM] James P: Hi, do you guys do junk removal? Have an old couch and some boxes
-[Sat, Mar 8, 8:02 AM] Marcus - Webb & Sons: yep! $90 minimum for that kind of load
-[Sat, Mar 8, 8:03 AM] Marcus - Webb & Sons: actually a couch alone might just be like $70, depends on size, send a pic?
-[Sat, Mar 8, 8:10 AM] James P: [image attached]
-[Sat, Mar 8, 8:40 AM] Marcus - Webb & Sons: oh that's a sectional, that's more like $130 honestly with the boxes too
-[Sat, Mar 8, 8:41 AM] James P: lol ok so which is it, $70, $90, or $130?
-[Sat, Mar 8, 8:44 AM] Marcus - Webb & Sons: $130 all in, let's just go with that
-[Sat, Mar 8, 8:45 AM] James P: works for me, when can you come?
-[Sat, Mar 8, 9:01 AM] Marcus - Webb & Sons: Tuesday afternoon good?
-[Sat, Mar 8, 9:02 AM] James P: perfect thanks
-
-[Wed, Mar 12, 1:00 PM] Linda R: Hi, do you move pianos? Need to move an upright next month
-[Wed, Mar 12, 3:30 PM] Marcus - Webb & Sons: we can probably do that, let me check with Dale on pricing for that kind of thing, we don't do it a ton
-[Wed, Mar 12, 3:31 PM] Linda R: No worries, roughly what range though?
-[Wed, Mar 12, 3:45 PM] Marcus - Webb & Sons: honestly not sure yet, I keep meaning to set a flat rate for pianos and haven't, gimme a day
-[Fri, Mar 14, 5:00 PM] Linda R: Hey just checking back on the piano moving quote
-[Fri, Mar 14, 5:20 PM] Marcus - Webb & Sons: oh right! still need to sort that out, I'll text you
-[Mon, Mar 24, 10:00 AM] Linda R: Hi Marcus, any update on the piano move?
-[No further response]
-
-[Fri, Mar 21, 2:10 PM] Karen T: Just wanted to say the move went great Saturday, thanks!
-[Fri, Mar 21, 2:30 PM] Marcus - Webb & Sons: awesome glad to hear it! btw did we charge you the $375 or did I say $400 somewhere, just checking our records
-[Fri, Mar 21, 2:31 PM] Karen T: You charged $375, all good
-[Fri, Mar 21, 2:32 PM] Marcus - Webb & Sons: perfect, appreciate you
-
-[Sun, Mar 30, 11:00 AM] Tom H: Hi, do you have a deposit policy to book a move? Looking at April 15th
-[Sun, Mar 30, 11:40 AM] Marcus - Webb & Sons: yep 20% non-refundable to lock the date
-[Sun, Mar 30, 11:41 AM] Tom H: ok how much would that be for a 2-bed move
-[Sun, Mar 30, 11:50 AM] Marcus - Webb & Sons: 2-bed is usually $500 so deposit'd be $100
-[Sun, Mar 30, 11:52 AM] Marcus - Webb & Sons: actually you know what don't worry about the deposit for now, just send it day-of, easier
-[Sun, Mar 30, 11:53 AM] Tom H: are you sure? you just said it's required
-[Sun, Mar 30, 11:55 AM] Marcus - Webb & Sons: haha yeah I go back and forth on that, let's just say pay day-of, you seem legit
-[Sun, Mar 30, 11:56 AM] Tom H: alright, sounds good, see you the 15th
-[Mon, Apr 7, 9:00 AM] Tom H: Hi just confirming still on for April 15th?
-[Tue, Apr 8, 4:15 PM] Marcus - Webb & Sons: let me double check with Dale, our calendars don't always match, will confirm soon
-[No further response before job date]
+[Mon, Sept 2, 9:14 AM] Kunle Adeyemi: Good morning sir, I want to order a 2-piece suit for a wedding in October. How much and how long?
+[Mon, Sept 2, 9:40 AM] Nnamdi Okoro: Good morning my brother! For you, ₦85,000, two weeks max. We go finish am on time no wahala.
+[Mon, Sept 2, 9:41 AM] Kunle Adeyemi: Great, that works. Do I need to pay deposit?
+[Mon, Sept 2, 9:52 AM] Nnamdi Okoro: No deposit, just come and let's take your measurement, you go pay when you collect.
+[Tue, Sept 3, 11:03 AM] Kunle Adeyemi: Okay I'm coming Thursday. Also do you have navy blue Italian wool in stock?
+[Tue, Sept 3, 11:20 AM] Nnamdi Okoro: We have plenty! Very fine material. Come and see.
+[Thu, Sept 5, 4:15 PM] Kunle Adeyemi: I'm at the shop, Chidi says you're not around?
+[Thu, Sept 5, 4:30 PM] Nnamdi Okoro: Ah sorry I traveled to Balogun for material. Chidi will take your measurement, no problem.
+[Thu, Sept 5, 6:02 PM] Kunle Adeyemi: Measurement done. He said actually you need 50% deposit before starting?
+[Thu, Sept 5, 6:10 PM] Nnamdi Okoro: Yes yes, that's correct, 50% deposit, I forgot to tell you. Market don change small, prices don shift too, it's now ₦95,000 not 85.
+[Thu, Sept 5, 6:11 PM] Kunle Adeyemi: Wait, you said ₦85,000 on Monday.
+[Thu, Sept 5, 6:14 PM] Nnamdi Okoro: I don't think I said 85 o, maybe you misread. But don't worry I go still do you 90, because you're my customer.
+[Fri, Sept 6, 10:00 AM] Kunle Adeyemi: Fine, 90k. Sending deposit now. When will it be ready?
+[Fri, Sept 6, 10:44 AM] Nnamdi Okoro: Give us 10 days, we go rush am.
+[Fri, Sept 6, 10:45 AM] Kunle Adeyemi: You said 2 weeks before, now 10 days is faster, that's fine by me. Please confirm the wool is available.
+[Fri, Sept 6, 3:20 PM] Nnamdi Okoro: Let me check with Chidi on the wool stock, I'll get back to you.
+[Mon, Sept 9, 1:00 PM] Kunle Adeyemi: Any update on the material?
+[Mon, Sept 9, 1:00 PM] Kunle Adeyemi: Hello?
+[Wed, Sept 11, 8:45 AM] Ijeoma Bello: Hi, I'm getting married in December, need suits for my groom and 8 groomsmen. Can you handle that?
+[Wed, Sept 11, 9:10 AM] Nnamdi Okoro: Good morning ma, yes no problem, we can do 9 suits, December is fine.
+[Wed, Sept 11, 9:12 AM] Ijeoma Bello: Great, what's the total cost and can we start measurements next week?
+[Wed, Sept 11, 9:30 AM] Nnamdi Okoro: Depends on the design, but let's say around ₦70,000 per head, so total will be around ₦630,000.
+[Wed, Sept 11, 5:45 PM] Nnamdi Okoro: Actually ma, thinking about it well well, December is very tight for us, we already have plenty orders for wedding season. Let me not lie to you, 9 suits might strain us.
+[Wed, Sept 11, 5:47 PM] Ijeoma Bello: So can you do it or not?
+[Wed, Sept 11, 6:03 PM] Nnamdi Okoro: We can manage, just let's start early, no wahala. I go arrange with Chidi and Blessing.
+[Thu, Sept 12, 2:15 PM] Ijeoma Bello: Okay, sending our group's measurements schedule. Also please confirm price per suit again, ₦70k or has that changed too? 😅
+[Thu, Sept 12, 2:50 PM] Nnamdi Okoro: Haha no wahala, ₦70k still stands... though sha if una want the premium lining then na ₦80k.
+[Fri, Sept 13, 9:00 AM] Kunle Adeyemi: Still waiting to hear about my wool material and the suit status?
+[Fri, Sept 13, 9:00 AM] Kunle Adeyemi: It's been almost a week since you said you'll check.
