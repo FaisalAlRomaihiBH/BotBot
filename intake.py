@@ -16,6 +16,12 @@ from langchain_core.prompts import ChatPromptTemplate
 
 load_dotenv()
 
+# Cloud fallback: claude.ai cloud environments strip the reserved name
+# ANTHROPIC_API_KEY, so cloud routines provide the key as BOTBOT_API_KEY.
+import os
+if not os.environ.get("ANTHROPIC_API_KEY") and os.environ.get("BOTBOT_API_KEY"):
+    os.environ["ANTHROPIC_API_KEY"] = os.environ["BOTBOT_API_KEY"]
+
 llm = ChatAnthropic(model="claude-sonnet-5")
 
 UPLOADS_DIR = Path("uploads")
