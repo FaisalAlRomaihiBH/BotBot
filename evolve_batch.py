@@ -6,18 +6,29 @@
 # push goes through evolve.sync_push, which rebases onto siblings' pushes and
 # merges the shared history instead of losing either side's work.
 #
-# Usage: python evolve_batch.py [cycles] [--no-improve]     (default 3)
-#   --no-improve: register interviews only; a designated sibling routine runs
-#   the single hourly improve pass, so the prompt is rewritten once per hour
-#   instead of once per routine (repeated rewrites are what bloated it).
+# Usage: python evolve_batch.py [cycles] (--full | --register-only)
+#   --full:          interview cycles + the single hourly improve pass + PDF.
+#   --register-only: interview cycles only (alias: --no-improve); a designated
+#                    sibling routine runs the improve pass, so the prompt is
+#                    rewritten once per hour instead of once per routine
+#                    (repeated rewrites are what bloated it).
+#   Neither flag:    exits immediately. The original six staggered routines all
+#                    invoke this script bare; after consolidating to two
+#                    routines this retires them without editing their triggers.
 import sys
 
 import evolve
 import evolve_until
 
 if __name__ == "__main__":
-    args = [a for a in sys.argv[1:] if a != "--no-improve"]
-    do_improve = "--no-improve" not in sys.argv
+    flags = {a for a in sys.argv[1:] if a.startswith("--")}
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    if not flags & {"--full", "--register-only", "--no-improve"}:
+        print("retired invocation: this routine has been consolidated away. "
+              "The two remaining routines call --full or --register-only. "
+              "Nothing to do; exiting.")
+        sys.exit(0)
+    do_improve = "--full" in flags
     n = int(args[0]) if args else 3
     history = evolve.load_history()
     failures = 0
