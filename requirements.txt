@@ -1,0 +1,8 @@
+langchain
+langchain-classic
+langchain-anthropic
+langchain-community
+python-dotenv
+pydantic
+wikipedia
+ddgs

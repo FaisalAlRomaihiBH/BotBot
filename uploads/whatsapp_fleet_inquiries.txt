@@ -1,0 +1,16 @@
+[05/09/2026, 09:30] Fleet Customer A: Good morning, we are a delivery company with 25 vans. Do you offer fleet contracts?
+[05/09/2026, 10:15] Wash Factory: Good morning! Yes we serve fleets. How often do you need washing?
+[05/09/2026, 10:16] Fleet Customer A: twice a week, at our warehouse in exit 18
+[05/09/2026, 10:45] Wash Factory: For 25 vans twice weekly I need to check pricing with the owner and get back to you
+[05/09/2026, 10:46] Fleet Customer A: ok please send offer by Thursday
+[07/09/2026, 09:00] Fleet Customer A: any update on the offer?
+
+[06/09/2026, 11:20] Fleet Customer B: hi, we have 8 company cars, can you wash them every Saturday at our office parking?
+[06/09/2026, 11:50] Wash Factory: yes possible. which area?
+[06/09/2026, 11:51] Fleet Customer B: olaya
+[06/09/2026, 12:30] Wash Factory: the team leader will visit you first to see the parking and water access, when are you available?
+[06/09/2026, 12:31] Fleet Customer B: anytime sunday
+[06/09/2026, 12:32] Wash Factory: noted, sunday 10am visit
+
+[06/09/2026, 14:05] Fleet Customer C: do you give invoice? we need VAT invoice for company
+[06/09/2026, 14:55] Wash Factory: we will check and tell you
