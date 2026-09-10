@@ -1,35 +1,32 @@
-[Mar 3, 9:14 AM] Cristina Reyes: Hi po, magkano ang pagpaikli ng pants? Ordinary lang, no other alterations
-[Mar 3, 9:20 AM] Ligaya: Hi! For hemming lang ₱150 po
-[Mar 3, 9:21 AM] Ligaya: Ay wait, ₱200 pala kasi may lining yung pants usually, mas mahirap gawin
-[Mar 3, 9:22 AM] Cristina Reyes: Ok, ₱200 po pala
-[Mar 3, 11:45 AM] Ligaya: Actually ₱150 na lang sayo, regular customer ka naman diba? Hehe
-[Mar 3, 11:46 AM] Cristina Reyes: Haha ok po thank you! What time can I drop it off?
-[Mar 3, 11:50 AM] Ligaya: Anytime today, open kami hanggang 6pm
-[Mar 4, 8:02 AM] Ronaldo Cruz: Good morning, I need a barong for a wedding on April 20. How much and paano ang deposit?
-[Mar 4, 8:30 AM] Ligaya: Hello! Barong start ₱3,500 for cotton blend up to ₱8,000 for piña. Deposit is 50% po to start
-[Mar 4, 8:31 AM] Ronaldo Cruz: Got it, I'll go with jusi fabric, around ₱5,000?
-[Mar 4, 8:33 AM] Ligaya: Yes that's fine, so deposit is ₱2,500
-[Mar 4, 6:15 PM] Ligaya: Hi ulit, pwede ba 30% deposit muna? Mas okay para sayo di ba, tapos bayaran mo na lang balance pag pickup
-[Mar 4, 6:16 PM] Ronaldo Cruz: Oh sure, so ₱1,500 na lang?
-[Mar 4, 6:20 PM] Ligaya: Yes po tama
-[Mar 6, 10:00 AM] Ronaldo Cruz: Hi, just to confirm — when will it be ready? April 20 is the wedding
-[Mar 6, 10:40 AM] Ligaya: Don't worry, 1 week lang gagawin namin, plenty of time
-[Mar 6, 10:41 AM] Ligaya: Actually since April medyo busy season na, baka 2 weeks din, pero ok pa rin dadating siya April 15 the latest
-[Mar 15, 4:00 PM] Ronaldo Cruz: Hi po, any update on the barong?
-[Mar 15, 4:20 PM] Ligaya: Let me check with Baby, she's sewing it ngayon
-[Mar 18, 9:00 AM] Ronaldo Cruz: Hi po, following up — is it done?
-[Mar 18, no reply]
-[Mar 20, 2:00 PM] Ronaldo Cruz: Hello? Getting worried na po, wedding is in a month
-[Mar 20, 5:45 PM] Ligaya: Sorry ang busy dito! It's almost done, ready by next week promise
-[Apr 2, 9:10 AM] Marisol Tan: Hi, how much for a full resize of a gown, size 12 to size 8?
-[Apr 2, 9:30 AM] Ligaya: Full resizing usually ₱500-900 depende sa dami ng darts and seams
-[Apr 2, 9:31 AM] Marisol Tan: Ok, when can I bring it?
-[Apr 2, 9:35 AM] Ligaya: Anytime, but bukas Monday closed kami ha, Tues-Sun lang open
-[Apr 2, 12:15 PM] Ligaya: Actually if madaming darts sasabihin ko last time ₱900 pero baka mas mahal pa ngayon kasi tumaas presyo ng thread and materials, tignan ko na lang pag dating mo
-[Apr 5, 3:00 PM] Marisol Tan: Ok will drop by Saturday around 2pm
-[Apr 5, 3:02 PM] Ligaya: Perfect see you!
-[Apr 8, 11:00 AM] Cristina Reyes: Hi po, is rush service available? Need alterations for tomorrow
-[Apr 8, 11:20 AM] Ligaya: Yes rush is possible, +₱500 flat rush fee
-[Apr 8, 11:45 AM] Ligaya: Sorry actually depende sa dami ng ginagawa namin ngayon, minsan wala kaming charge extra kung friend ka, minsan +30% kung talagang sobrang bilis kailangan
-[Apr 8, 11:46 AM] Cristina Reyes: Ok so how much for mine specifically?
-[Apr 8, no reply]
+[03/11, 09:14] Tomasz Wiśniewski: Dzień dobry! Yes we build dining tables, oak is our specialty
+[03/11, 09:15] Tomasz Wiśniewski: For a 6-person table, let's say around 4500 PLN
+[03/11, 09:41] Customer - Kasia: Great, and how long would it take?
+[03/11, 09:52] Tomasz Wiśniewski: Hmm, 5 weeks should be fine
+[03/11, 09:53] Tomasz Wiśniewski: Actually wait, we have two staircases in queue right now, maybe more like 7 weeks. Let's say 7.
+[03/11, 10:10] Customer - Kasia: Ok, and the price - is 4500 with delivery?
+[03/11, 10:22] Tomasz Wiśniewski: No no delivery is separate. Actually — you know what, for you let's just include it, call it 4800 all in
+[03/11, 10:45] Customer - Kasia: So 4800 total including delivery?
+[03/11, 11:03] Tomasz Wiśniewski: Tentatively yes. Let me check diesel prices this week and confirm properly
+[03/12, 14:00] Customer - Marek: Hi, do you install staircases outside Poznań? I'm about 130km away
+[03/12, 14:30] Tomasz Wiśniewski: Should be fine, we've done further
+[03/12, 14:31] Tomasz Wiśniewski: Actually my van has been giving me trouble lately, honestly not sure, let me think about it
+[03/12, 18:02] Tomasz Wiśniewski: Ok thinking about it more — yes we can, I'll just rent a bigger van if needed. Deposit would be 30%
+[03/13, 08:15] Tomasz Wiśniewski: Sorry, meant 50% for out-of-town jobs, forgot we changed that
+[03/13, 08:16] Customer - Marek: Right, so 50%?
+[03/13, 09:00] Tomasz Wiśniewski: Let's say... tentatively yes, 50
+[03/14, 11:20] Customer - Halina: Hi! Do you do walnut cabinets? What's the price difference vs oak?
+[03/14, 11:50] Tomasz Wiśniewski: Yes walnut is beautiful, maybe 30% more expensive
+[03/14, 11:51] Tomasz Wiśniewski: Actually could be more like 35-40%, walnut prices went up recently, let me check with my supplier and get back to you
+[03/17, 16:03] Customer - Halina: Any update on the walnut price?
+[03/21, 10:00] Customer - Halina: Hello? Just checking in on this
+[03/25, 13:30] Customer - Halina: I'll assume this isn't happening, thanks anyway
+[03/18, 09:00] Customer - Piotr: What are your workshop hours if I want to visit and see wood samples?
+[03/18, 09:15] Tomasz Wiśniewski: Mon-Fri 9 to 5, Saturday mornings too
+[03/18, 09:16] Tomasz Wiśniewski: Well actually Saturdays Bartek isn't always here so maybe come weekday to be safe
+[03/19, 15:00] Customer - Kasia: Following up on my table - is it still 4800 with delivery, and 7 weeks?
+[03/19, 16:40] Tomasz Wiśniewski: Yes! 7 weeks... actually since it's already March, realistically call it 8. And price still 4800, I won't change it again I promise
+[03/26, 12:00] Customer - Nowy Klient: Do you do stain color matching to an existing floor?
+[03/26, 12:40] Tomasz Wiśniewski: Yes we can try, hard to quote exact price until we see the sample though
+[03/26, 12:41] Tomasz Wiśniewski: I'll take a look and give you a proper number by Friday
+[04/02, 10:00] Customer - Nowy Klient: Hi, following up, did you get a chance to look at the stain sample?
+[04/09, 08:00] Customer - Nowy Klient: Still interested if you're able to quote
