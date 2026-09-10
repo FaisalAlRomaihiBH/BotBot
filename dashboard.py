@@ -94,7 +94,9 @@ def collect() -> dict:
                                          "score": None, "findings": None,
                                          "tokens": None})
         if "] turn " in line:
-            iv["turn"] = int(line.split("] turn ")[1].split("/")[0])
+            iv["turn"] = int(line.split("] turn ")[1].split(":")[0].split("/")[0])
+            if "[OWNER LEFT]" in line:
+                iv["status"] = "owner left"
         if "] tokens: " in line:
             iv["tokens"] = line.split("] tokens: ")[1]
         if "judging..." in line:

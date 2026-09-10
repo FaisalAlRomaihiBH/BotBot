@@ -28,7 +28,10 @@ from requirements_bot import RequirementsBot, _blocks_to_text
 
 ROOT = Path(__file__).parent
 RUNS_DIR = ROOT / "parallel_runs"
-MAX_TURNS = 30  # hard stop so one interview can never run away
+# No scripted turn limit: an interview ends when the bot completes or the
+# persona leaves ([LEAVES]). The ceiling below is an emergency circuit
+# breaker only — it should never fire; hitting it means a runaway loop.
+SAFETY_CEILING = 60
 
 _print_lock = threading.Lock()
 _log_file: Path | None = None  # set per run; dashboard.py tails it
@@ -92,6 +95,11 @@ Rules:
 - If the consultant summarizes everything and asks you to confirm, check it
   against your knowledge: correct at most one or two real mistakes, otherwise
   confirm clearly.
+- You can LEAVE the chat at any moment, exactly like a real person closing
+  the chat window: when the interview feels finished, or you're out of
+  patience, or you've said your goodbyes and have nothing to add, end your
+  reply with the exact token [LEAVES]. After that the chat is over — so
+  don't keep exchanging pleasantries forever; leave like a busy owner would.
 
 Conversation so far:
 {transcript}
@@ -136,8 +144,12 @@ The transcript:
 The final requirements brief produced:
 {brief}
 
-Interview completed: {completed} (in {turns} transcript entries; fewer is better,
-~20-30 is normal, non-completion is a serious failure)
+Interview completed: {completed}, ended by: {ended_by} (in {turns} transcript
+entries; fewer is better, ~20-40 is normal). There is no turn limit: an
+interview ends when the bot completes or the owner leaves. "owner_left" with a
+rich brief and unanswered essentials parked in open_items is acceptable —
+judge how well the bot used the time it got and whether it wrapped up
+gracefully; "safety_ceiling" means a runaway loop, a serious failure.
 
 Score each rubric dimension 0-10 harshly. In findings, list concrete problems;
 for EACH finding, copy into its excerpt the exact transcript lines (speaker names
@@ -214,24 +226,34 @@ class ParallelPersonaRunner:
         bot = RequirementsBot(uploads_dir=uploads)
         transcript = [("Bot", RequirementsBot.GREETING)]
         tag = f"[{idx:03d} {persona.industry[:30]}]"
+        ended_by = "safety_ceiling"
 
-        for turn_no in range(1, MAX_TURNS + 1):
+        for turn_no in range(1, SAFETY_CEILING + 1):
             convo = "\n".join(f"{who}: {msg}" for who, msg in transcript)
             reply = self.persona_llm.invoke(PERSONA_TURN_PROMPT.format(
                 owner_name=persona.owner_name, business_name=persona.business_name,
                 industry=persona.industry, personality=persona.personality,
                 background_facts=persona.background_facts, transcript=convo))
             owner_msg = _blocks_to_text(reply.content).strip()
+            owner_left = "[LEAVES]" in owner_msg
+            owner_msg = owner_msg.replace("[LEAVES]", "").strip()
             transcript.append((persona.owner_name, owner_msg))
 
+            # The owner's last words still reach the bot so it can finalize
+            # the form; after that the chat window is closed.
             messages, turn = bot.send(owner_msg)
             for msg in messages:
                 transcript.append(("Bot", msg))
-            log(f"{tag} turn {turn_no}/{MAX_TURNS}: owner {len(owner_msg.split())}w"
+            log(f"{tag} turn {turn_no}: owner {len(owner_msg.split())}w"
                 f" -> bot {len(messages[-1].split())}w"
                 + (" [analyzed files]" if len(messages) > 1 else "")
-                + (" [COMPLETE]" if bot.complete else ""))
+                + (" [COMPLETE]" if bot.complete else "")
+                + (" [OWNER LEFT]" if owner_left else ""))
             if bot.complete:
+                ended_by = "bot_complete"
+                break
+            if owner_left:
+                ended_by = "owner_left"
                 break
 
         u = bot.usage
@@ -244,6 +266,7 @@ class ParallelPersonaRunner:
             "brief": turn.requirements.model_dump(),
             "analysis": bot.analysis.model_dump() if bot.analysis else None,
             "completed": bot.complete,
+            "ended_by": ended_by,
             "turns": len(transcript),
             "usage": u,
         }
@@ -257,7 +280,8 @@ class ParallelPersonaRunner:
             analysis=json.dumps(result.get("analysis"), indent=2, ensure_ascii=False),
             transcript=convo,
             brief=json.dumps(result["brief"], indent=2, ensure_ascii=False),
-            completed=result["completed"], turns=result["turns"],
+            completed=result["completed"], ended_by=result["ended_by"],
+            turns=result["turns"],
             format_instructions=parser.get_format_instructions()))
         return parser.parse(_blocks_to_text(reply.content))
 
@@ -267,7 +291,8 @@ class ParallelPersonaRunner:
         try:
             log(f"{tag} interviewing...")
             result = self.run_interview(idx, persona)
-            log(f"{tag} completed={result['completed']} in {result['turns']} entries; judging...")
+            log(f"{tag} completed={result['completed']} ({result['ended_by']}) "
+                f"in {result['turns']} entries; judging...")
             ev = self.evaluate(persona, result)
             score = round((ev.fact_capture + ev.no_repeats + ev.naturalness
                            + ev.completeness + ev.efficiency) / 5, 2)
