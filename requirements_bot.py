@@ -11,6 +11,7 @@
 # processes (see persona_test.py) or run in one sitting (see main.py).
 import base64
 import os
+import re
 from pathlib import Path
 from typing import Optional
 
@@ -290,9 +291,7 @@ class RequirementsBot:
         Safe to run every turn: the history keeps the model's RAW output, so
         these additions never feed back into the next turn and compound."""
         def merge(existing: Optional[list[str]], extra: list[str]) -> Optional[list[str]]:
-            out = list(existing or [])
-            out += [i for i in extra if i not in out]
-            return out or None
+            return _dedupe(list(existing or []) + list(extra)) or None
 
         if self.analysis:
             # Material-derived facts get their own home instead of being
@@ -302,14 +301,11 @@ class RequirementsBot:
             # business's channel from the export format). Tagged facts are
             # leads to confirm, not established facts: the prompt forbids
             # promoting one into a normal field before the owner verifies it.
-            known = {_untag_upload(i) for i in (requirements.facts_from_uploads or [])}
-            requirements.facts_from_uploads = (
-                list(requirements.facts_from_uploads or [])
-                + [f"{UPLOAD_TAG} {f}" for f in self.analysis.facts_learned
-                   if f not in known]) or None
+            requirements.facts_from_uploads = _merge_upload_facts(
+                requirements.facts_from_uploads, self.analysis.facts_learned)
             # A customer left hanging in the log is a fact about the business,
             # not something to wait for the owner to volunteer.
-            requirements.customer_replies_owed = merge(
+            requirements.customer_replies_owed = _merge_replies(
                 requirements.customer_replies_owed,
                 self.analysis.open_customer_requests)
             # ...and "no replies owed" must be a statement, never a silence:
@@ -318,12 +314,14 @@ class RequirementsBot:
             if complete and not requirements.customer_replies_owed:
                 requirements.customer_replies_owed = [NO_REPLIES_OWED]
 
-        # Legacy mirror: consumers reading the old single list still see
-        # everything, while the split fields carry the actionable/anecdotal cut.
+        # Legacy mirror: consumers reading the old single list still see the
+        # feelings a builder must act on. background_color is deliberately NOT
+        # mirrored — copying it forward filled this field with verbatim
+        # duplicates of other fields, and "the business was founded in 1978 by
+        # his father" is not a sentiment. Anecdote stays in background_color.
         requirements.owner_sentiment_or_concerns = merge(
             requirements.owner_sentiment_or_concerns,
-            list(requirements.adoption_risks or [])
-            + list(requirements.background_color or []))
+            list(requirements.adoption_risks or []))
         # Shipping this null hides whether the owner was asked at all. On the
         # final turn, say which it was — and if nothing was captured, that is
         # a gap the delivery team must close before the build.
@@ -332,33 +330,57 @@ class RequirementsBot:
             requirements.unresolved_business_facts = merge(
                 requirements.unresolved_business_facts, [SENTIMENT_GAP])
 
-        # A surcharge whose turnaround was never defined cannot be quoted or
-        # honoured, so it is an owner follow-up, not a priced service.
+        # A conditional price the bot cannot actually apply is an owner
+        # follow-up, not a priced service. Two different gaps, two different
+        # sentences: a rush price is missing its TURNAROUND, an ordinary
+        # "depends on..." price is missing its AMOUNTS. Emitting the surcharge
+        # wording for both produced lines like "lead time/turnaround for
+        # 'Burrito' (price depends on fillings) — a surcharge was recorded
+        # without the turnaround that triggers it", which describes nothing.
         for offer in requirements.services_and_pricing or []:
-            if isinstance(offer, str) or offer.lead_time:
+            if isinstance(offer, str):
                 continue
             trigger = offer.fee_trigger_condition or ""
-            if trigger or any(w in offer.name.lower() for w in _RUSH_WORDS):
+            applies = f" (applies when: {trigger})" if trigger else ""
+            gap = None
+            if (any(w in f"{offer.name} {trigger}".lower() for w in _RUSH_WORDS)
+                    and not offer.lead_time):
+                gap = (f"lead time/turnaround for '{offer.name}'{applies} — a rush "
+                       f"price was recorded without the turnaround it buys, so the "
+                       f"bot cannot say what the extra money gets the customer")
+            elif trigger and not (offer.price_min and offer.price_max):
+                gap = (f"price variants for '{offer.name}'{applies} — the price is "
+                       f"conditional but the amount for each case was never stated")
+            if gap:
                 requirements.unresolved_business_facts = merge(
-                    requirements.unresolved_business_facts,
-                    [f"lead time/turnaround for '{offer.name}'"
-                     f"{f' ({trigger})' if trigger else ''} — a surcharge was "
-                     f"recorded without the turnaround that triggers it"])
+                    requirements.unresolved_business_facts, [gap])
 
         # open_items is an INDEX, not a bucket — rebuilt from the routed lists
         # so nothing is invisible just because the model picked the wrong one.
         # Sentinels are deliberate statements of absence, not work: they stay
         # in their own field and out of the delivery team's to-do list.
+        # An item routed into two lists, or re-worded between turns, is still
+        # ONE piece of work, so the index dedupes on the normalized text rather
+        # than the exact string.
         routed = [("owner fact", requirements.unresolved_business_facts),
                   ("bot decision", requirements.pending_design_decisions),
                   ("customer reply owed", requirements.customer_replies_owed)]
-        seen = {i for _label, items in routed for i in (items or [])}
-        index = [f"[{label}] {i}" for label, items in routed
-                 for i in (items or []) if i not in _SENTINELS]
+        index: list[str] = []
+        seen: set[str] = set()
+        for label, items in routed:
+            for item in items or []:
+                if _norm(item) in seen:
+                    continue
+                seen.add(_norm(item))
+                if item not in _SENTINELS:
+                    index.append(f"[{label}] {item}")
         # Strip our own labels off whatever is already there, so rebuilding an
         # index we built before re-files entries instead of nesting the tags.
-        unfiled = [_unlabel(i) for i in (requirements.open_items or [])]
-        index += [f"[unfiled] {i}" for i in dict.fromkeys(unfiled) if i not in seen]
+        for item in (_unlabel(i) for i in (requirements.open_items or [])):
+            if _norm(item) in seen:
+                continue
+            seen.add(_norm(item))
+            index.append(f"[unfiled] {item}")
         requirements.open_items = index or None
 
     def _build_messages(self, question: str) -> list:
@@ -430,6 +452,7 @@ _OPEN_ITEM_LABELS = ("owner fact", "bot decision", "customer reply owed", "unfil
 # Provenance tag on every fact the materials analysis produced. It is a lead
 # until the owner confirms it out loud, never an established fact.
 UPLOAD_TAG = "[source: uploaded_materials, verified: false]"
+UPLOAD_TAG_VERIFIED = "[source: uploaded_materials, verified: true]"
 _UPLOAD_TAG_PREFIX = "[source: uploaded_materials"
 
 # Explicit statements of absence, so a null can never be read as "we asked and
@@ -442,18 +465,98 @@ SENTIMENT_GAP = ("the owner's own concerns/anxieties about the bot were never "
                  "captured — ask before the build starts")
 _SENTINELS = frozenset({NO_REPLIES_OWED, NO_SENTIMENT})
 
+# Joins two phrasings of one customer's outstanding request into a single
+# to-do item, so deduplicating never costs the delivery team a detail.
+_ALSO_RECORDED = " | also recorded as: "
+
 # Words that mark a price as conditional, so it is meaningless without the
 # turnaround it buys.
 _RUSH_WORDS = ("rush", "urgent", "express", "expedite", "surcharge", "same-day",
                "last-minute", "last minute")
 
 
-def _untag_upload(item: str) -> str:
-    """The bare fact behind a provenance tag, so re-seeding the analysis does
-    not re-add a fact the model has since re-tagged as verified."""
+def _norm(text: str) -> str:
+    """A comparison key for a list entry: case, punctuation and spacing dropped.
+
+    Exact-string equality is what let the same fact sit in a list twice under
+    two spellings; this collapses them without touching the text that ships."""
+    return re.sub(r"[^a-z0-9]+", " ", text.lower()).strip()
+
+
+def _reply_key(item: str) -> str:
+    """WHICH CUSTOMER an owed-reply entry is about.
+
+    Entries are written "<who/when> — <what they asked> (quote: ...)", and the
+    same request reaches us twice: once verbatim from the analyzer, once
+    re-phrased by the model. Nothing about the sentence is stable — not even
+    the date, which comes back as "14 March" one turn and "14 Mar" the next —
+    so identity is the name at the head, up to the first punctuation and at
+    most four words of it."""
+    head = re.split(r"[,(;:]|\s+[—–-]\s+", item, maxsplit=1)[0]
+    return " ".join(_norm(head).split()[:4])
+
+
+def _dedupe(items: list[str], key=_norm) -> list[str]:
+    """One entry per key, in first-seen order, keeping the fullest phrasing."""
+    best: dict[str, str] = {}
+    for item in items:
+        k = key(item)
+        if k not in best or len(item) > len(best[k]):
+            best[k] = item
+    return list(best.values())
+
+
+def _split_upload_tag(item: str) -> tuple[bool, str]:
+    """(verified?, the bare fact) behind a provenance tag. An untagged entry
+    counts as unverified — the safe direction, since the tag is what stops a
+    lead from being quoted to a customer as fact."""
     if item.startswith(_UPLOAD_TAG_PREFIX) and "]" in item:
-        return item.split("]", 1)[1].strip()
-    return item
+        tag, fact = item.split("]", 1)
+        return "verified: true" in tag.lower(), fact.strip()
+    return False, item.strip()
+
+
+def _merge_replies(existing: Optional[list[str]],
+                   incoming: list[str]) -> Optional[list[str]]:
+    """One entry per waiting CUSTOMER — but keeping every phrasing of what they
+    asked for.
+
+    The analyzer's verbatim entry and the model's re-worded one describe the
+    same person twice, and exact-string merging kept both, so a single hanging
+    customer became two items on the delivery team's list. The extra phrasing
+    is APPENDED rather than dropped: if the two really are two separate
+    requests from one customer, silently keeping only the longer sentence
+    would lose a real person waiting on a real answer."""
+    replies: dict[str, str] = {}
+    for item in (i.strip() for i in list(existing or []) + list(incoming)):
+        kept = replies.get(_reply_key(item))
+        if kept is None:
+            replies[_reply_key(item)] = item
+        elif _norm(item) not in _norm(kept):
+            replies[_reply_key(item)] = f"{kept}{_ALSO_RECORDED}{item}"
+    return list(replies.values()) or None
+
+
+def _merge_upload_facts(existing: Optional[list[str]],
+                        learned: list[str]) -> Optional[list[str]]:
+    """Seed the analyzer's facts into facts_from_uploads — ONE entry per fact,
+    carrying ONE verification flag.
+
+    The model re-emits a seeded fact in its own words, and re-tags it
+    "verified: true" once the owner confirms it, while the analyzer keeps
+    handing us the verbatim original. Matching on the exact string saw two
+    different strings and kept both, so every fact appeared twice, at once
+    verified and unverified. Facts are matched on their bare text instead, and
+    a "verified: true" anywhere wins: within one interview, confirmation by the
+    owner is a one-way door."""
+    facts: dict[str, tuple[bool, str]] = {}
+    for item in list(existing or []) + list(learned):
+        verified, fact = _split_upload_tag(item)
+        was_verified, kept = facts.get(_norm(fact), (False, fact))
+        facts[_norm(fact)] = (was_verified or verified,
+                              max(kept, fact, key=len))
+    return [f"{UPLOAD_TAG_VERIFIED if verified else UPLOAD_TAG} {fact}"
+            for verified, fact in facts.values()] or None
 
 
 def _unlabel(item: str) -> str:

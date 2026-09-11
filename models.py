@@ -9,6 +9,13 @@ from pydantic import BaseModel
 # first token of an entry: "unknown-varies — holidays move every year".
 UNKNOWN_VARIES = "unknown-varies"
 
+# The other half of that problem: "we asked, and the owner does not know yet —
+# someone must look it up". A null here reads as "none", which is how an
+# answered "no idea, check with Ute" became "this business holds no
+# certifications". Use it as the first token: "unknown - pending confirmation —
+# Ute knows which standards we hold".
+UNKNOWN_PENDING = "unknown - pending confirmation"
+
 
 class ServiceOffer(BaseModel):
     """One service/product line with the numbers a bot needs before it may quote.
@@ -16,7 +23,14 @@ class ServiceOffer(BaseModel):
     quick free-text capture) stay valid."""
     name: str                                   # "themed cupcakes", "rush order surcharge"
     price: Optional[str] = None                 # exactly as the owner stated it
-    price_basis: Optional[str] = None           # "fixed" | "from" (starting price) | "quote only"
+    price_basis: Optional[str] = None           # "fixed" | "from" (starting price) |
+                                                # "range" (a band: use price_min/price_max) |
+                                                # "quote only"
+    price_min: Optional[str] = None             # lower bound of a stated band ("45 €/hr").
+    price_max: Optional[str] = None             # upper bound ("90 €/hr"). A band forced into
+                                                # basis "from" silently drops the ceiling, so a
+                                                # bot quotes 45 €/hr for a 90 €/hr job — record
+                                                # both ends and what moves the price in notes
     minimum_order_quantity: Optional[str] = None    # "6 units", "none"
     fee_trigger_condition: Optional[str] = None     # what makes this fee apply
                                                     # ("orders under 48h notice")
@@ -39,22 +53,64 @@ class NotificationSettings(BaseModel):
     notes: Optional[list[str]] = None          # anything else notification-specific
 
 
+class PaymentCollectionRequirements(BaseModel):
+    """The mechanics behind any feature that MOVES MONEY (deposit, prepayment,
+    booking fee, invoice link). A scope line saying "takes deposits" is not
+    buildable: someone has to know which rail the money lands on, through which
+    provider, and who checks that it arrived. Every field Optional so a partial
+    answer is still recorded, but a money feature with all of them null is a
+    gap, not a spec."""
+    rail: Optional[str] = None           # the instrument itself: card, cash, bank transfer,
+                                         # wallet app (Venmo/Bizum/PIX), invoice on terms
+    provider: Optional[str] = None       # who processes it: Stripe, SumUp, the bank, "none —
+                                         # the customer just sends it to a handle"
+    who_reconciles: Optional[str] = None # the human who confirms the money arrived and marks
+                                         # the booking paid, and how often they check
+    trigger: Optional[str] = None        # what makes the charge happen (at booking, 24h before,
+                                         # on collection) and the amount/percentage
+    refund_handling: Optional[str] = None  # what happens to the money on a cancellation
+    notes: Optional[list[str]] = None    # anything else money-movement specific
+
+
 class BusinessRequirements(BaseModel):
     """The intake form. Every field Optional because it starts empty and fills up."""
     contact_name: Optional[str] = None           # the person we're interviewing
     business_name: Optional[str] = None
     industry: Optional[str] = None
     business_description: Optional[str] = None
+    locations: Optional[list[str]] = None        # WHERE the business physically is and operates,
+                                                 # one per entry: "<primary | alternate/rain
+                                                 # /contingency | service radius> — <full street
+                                                 # address INCLUDING city and region> — <when it
+                                                 # applies>". A brief with no city cannot be
+                                                 # built against, and a fallback pitch ("under
+                                                 # the bridge on Main when it rains") is a place
+                                                 # the bot must be able to name, not prose
     problem_to_solve: Optional[str] = None       # WHY they want a chatbot
     target_audience: Optional[str] = None        # who will talk to it
     channels: Optional[list[str]] = None         # where the BOT should live (WhatsApp, Instagram...);
                                                  # other ways customers reach the business today
                                                  # belong in business_description
+    adjacent_asks: Optional[list[str]] = None    # things BEYOND the chatbot that the owner asked
+                                                 # for out loud — a website, online ordering, a
+                                                 # POS or card reader, an app. Not in scope for
+                                                 # the bot, but a stated want with nowhere to
+                                                 # land was simply lost. One per entry:
+                                                 # "<what they want> — <their words/why> — <how
+                                                 # it relates to the bot>"
     integrations: Optional[list[str]] = None     # booking system, CRM, order DB...
     conversation_volume: Optional[str] = None    # rough conversations/day, hours coverage
     languages: Optional[list[str]] = None
     success_criteria: Optional[str] = None       # what "working" means to them
     solution_scope: Optional[str] = None         # simple Q&A / lead capture vs. full booking+payment app
+    payment_collection_requirements: Optional[PaymentCollectionRequirements] = None
+                                                 # the money mechanics BEHIND solution_scope.
+                                                 # Required the moment the scope includes a
+                                                 # deposit, booking fee, prepayment or any other
+                                                 # feature that takes money: rail, provider and
+                                                 # who reconciles it. Distinct from
+                                                 # payment_methods, which is what the BUSINESS
+                                                 # accepts today whether or not the bot touches it
     constraints: Optional[list[str]] = None      # compliance, privacy (GDPR), approvals, tech limits
     budget: Optional[str] = None
     timeline: Optional[str] = None
@@ -69,6 +125,14 @@ class BusinessRequirements(BaseModel):
                                                       # needed to place bookings on a calendar. Use
                                                       # "unknown-varies — <reason>" when the owner answered
                                                       # but the duration genuinely varies; null means UNASKED
+    operating_hours: Optional[list[str]] = None       # the normal weekly pattern, one entry per day or
+                                                      # day-range: "Tue-Sun — 11:00-21:00",
+                                                      # "Mon — closed". This is the calendar the bot
+                                                      # answers "are you open?" from, so it cannot live
+                                                      # inside faq_answers prose. Use
+                                                      # "unknown-varies — <reason>" when the pattern
+                                                      # genuinely shifts; null means UNASKED.
+                                                      # Exceptions to this pattern go in holiday_closures
     holiday_closures: Optional[list[str]] = None      # dates/rules the business is shut outside its normal
                                                       # weekly hours ("closed on holiday Mondays", "Aug 1-15").
                                                       # "unknown-varies — <reason>" when the owner answered
@@ -78,6 +142,15 @@ class BusinessRequirements(BaseModel):
                                                       # ("transmissions go to the Alameda shop", "towing
                                                       # via Joe's") — the bot must route these, not quote them
     faq_answers: Optional[list[str]] = None           # confirmed question->answer pairs the bot can use
+    payment_methods: Optional[list[str]] = None       # the CANONICAL home for what the business accepts
+                                                      # today, one rail per entry with its handle and any
+                                                      # limit: "Venmo — @tacoslacamachito",
+                                                      # "cash — preferred", "card — not accepted, no
+                                                      # reader". Previously duplicated across faq_answers
+                                                      # and business_policies, so a builder had two
+                                                      # half-lists and no source of truth. The policy
+                                                      # AROUND the money (deposits, refunds) stays in
+                                                      # business_policies
     business_policies: Optional[list[str]] = None     # cancellations, rush requests, coverage area, VAT...
     escalation_rules: Optional[list[str]] = None      # what goes to a human, to whom, via what channel.
                                                       # "none exists — bot should set expectations" is a
@@ -90,6 +163,23 @@ class BusinessRequirements(BaseModel):
     capacity_constraints: Optional[list[str]] = None  # the owner's operational rules of thumb and limits,
                                                       # in their own numbers ("2-3 events a weekend with
                                                       # my sister helping", "max 8 covers past 9pm")
+    current_systems_and_records: Optional[list[str]] = None  # where the data the bot would need actually
+                                                      # lives TODAY, one system per entry: "<what —
+                                                      # paper forms / Excel on a local server / an ERP /
+                                                      # one person's phone> — <what it holds> — <who
+                                                      # maintains it> — <backed up? reachable from
+                                                      # outside?>". Without a field for it the
+                                                      # interviewer never asked, and a brief that does
+                                                      # not say the quotes live in a paper binder is
+                                                      # missing the hardest part of the build
+    equipment_and_capacity_assets: Optional[list[str]] = None  # the physical things that set the ceiling,
+                                                      # one per entry: "<count> x <make/model> <what it
+                                                      # is> — <age/condition> — <what it limits>"
+                                                      # ("5 x Deckel milling machines — oldest from
+                                                      # 1994"). The count and the make are lookup data;
+                                                      # buried in a capacity_constraints sentence they
+                                                      # are unusable. The RULES those assets imply stay
+                                                      # in capacity_constraints
     customer_segments: Optional[list[str]] = None     # the distinct kinds of customer/order the bot must tell
                                                       # apart, each with its OWN intake rules, one per entry:
                                                       # "<retail walk-in | event/custom order | wholesale or
@@ -106,7 +196,11 @@ class BusinessRequirements(BaseModel):
     certifications_and_standards: Optional[list[str]] = None  # quality/regulatory standards, one per entry:
                                                       # "<standard> — held since <when> / under consideration
                                                       # — <cost, timeline, who audits, why>". Held and
-                                                      # aspirational both belong here, never in faq_answers
+                                                      # aspirational both belong here, never in faq_answers.
+                                                      # "I don't know, ask Ute" is an ANSWER: write
+                                                      # "unknown - pending confirmation — <who knows>"
+                                                      # rather than null, which downstream reads as "this
+                                                      # business holds no standards"
     upcoming_business_changes: Optional[list[str]] = None  # known-but-unsettled changes to the business that
                                                       # the build must survive: lease renewal, a second
                                                       # location, new staff, a certification in progress —
@@ -126,10 +220,14 @@ class BusinessRequirements(BaseModel):
     background_color: Optional[list[str]] = None      # human context that is NOT a requirement (the crying
                                                       # customer, the father who still visits) — kept so the
                                                       # brief reads true, but it drives no build decision
-    owner_sentiment_or_concerns: Optional[list[str]] = None  # LEGACY MIRROR of adoption_risks +
-                                                      # background_color, auto-filled by RequirementsBot so
-                                                      # older consumers keep working. Write the two fields
-                                                      # above instead of this one
+    owner_sentiment_or_concerns: Optional[list[str]] = None  # LEGACY MIRROR of adoption_risks ONLY,
+                                                      # auto-filled by RequirementsBot so older consumers
+                                                      # keep working. background_color is NOT mirrored
+                                                      # here any more: "founded in 1978 by his father" is
+                                                      # not a sentiment, and copying both fields forward
+                                                      # filled this list with a dozen verbatim duplicates
+                                                      # of other fields. Write adoption_risks or
+                                                      # background_color instead of this one
     maintenance_and_ownership: Optional[str] = None   # who updates the bot's content after launch, how
                                                       # often, appetite for paid managed updates, and what
                                                       # training the owner needs
