@@ -5,7 +5,8 @@
       "name": "dashboard",
       "runtimeExecutable": "C:\\Projects\\BotBot\\venv\\Scripts\\python.exe",
       "runtimeArgs": ["dashboard.py"],
-      "port": 8500
+      "port": 8500,
+      "autoPort": true
     }
   ]
 }
