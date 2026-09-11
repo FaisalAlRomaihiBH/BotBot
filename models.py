@@ -37,6 +37,27 @@ class ServiceOffer(BaseModel):
     lead_time: Optional[str] = None             # the turnaround THIS entry assumes. A
                                                 # surcharge without it is meaningless —
                                                 # rush pricing needs its rush definition
+    line_type: Optional[str] = None             # WHAT KIND OF LINE this is:
+                                                # "deliverable" (something a customer
+                                                # waits for) | "appointment" (an
+                                                # in-person slot: the duration IS the
+                                                # turnaround) | "discount" | "inclusion"
+                                                # (bundled at no extra charge) |
+                                                # "add-on" | "surcharge" | "fee".
+                                                # RequirementsBot gates its automatic
+                                                # "what is the turnaround?" and "what is
+                                                # the amount?" follow-ups on this: with
+                                                # it null, a "Referral discount" line
+                                                # generated a lead-time question that
+                                                # swamped the genuine gaps
+    price_examples: Optional[list[str]] = None  # real quoted prices seen for THIS line
+                                                # ("knotless braids, medium, shoulder
+                                                # length — $180"), one per entry. They
+                                                # illustrate the range; they are not
+                                                # services of their own. Promoting one
+                                                # into its own services_and_pricing row
+                                                # duplicated the parent line and spawned
+                                                # follow-ups against a price example
     notes: Optional[str] = None
 
 
@@ -71,6 +92,14 @@ class NotificationSettings(BaseModel):
     cancel_keywords: Optional[list[str]] = None    # words that cancel ("CANCEL", "STOP")
     opt_out_handling: Optional[str] = None     # how customers stop receiving messages
     quiet_hours: Optional[str] = None          # times the bot must not message
+    reminder_channel: Optional[str] = None     # HOW the reminder is delivered — WhatsApp,
+                                               # SMS, email, a push to a task list. Without
+                                               # it an agreed reminder feature has no
+                                               # transport and ends up parked as a pending
+                                               # design decision instead of a spec
+    reminder_recipients: Optional[list[str]] = None  # WHO receives it, one per entry:
+                                               # "<owner | staff member | the customer> —
+                                               # <their number/address> — <which reminders>"
     notes: Optional[list[str]] = None          # anything else notification-specific
 
 
@@ -89,8 +118,106 @@ class PaymentCollectionRequirements(BaseModel):
                                          # the booking paid, and how often they check
     trigger: Optional[str] = None        # what makes the charge happen (at booking, 24h before,
                                          # on collection) and the amount/percentage
+    deposit_amount: Optional[str] = None # the figure actually taken, as stated ("50", "30%")
+    deposit_threshold_amount: Optional[str] = None  # the order value AT OR ABOVE which the
+                                         # deposit applies, digits only ("200"). trigger is
+                                         # free text, so "we ask for one on the bigger jobs"
+                                         # could never become a rule anyone can implement
+    deposit_threshold_currency: Optional[str] = None  # "USD", "EUR", "BHD"
+    exempt_segments: Optional[list[str]] = None  # who is NEVER charged it ("regulars",
+                                         # "the two standing restaurant accounts") — the
+                                         # exception is half the rule
     refund_handling: Optional[str] = None  # what happens to the money on a cancellation
     notes: Optional[list[str]] = None    # anything else money-movement specific
+
+
+class TeamMember(BaseModel):
+    """One person who works in the business, with the parts a build actually
+    uses: what they are to the owner, what they can and cannot take on, when
+    they are there, and whether the bot may route work to them.
+
+    Staff used to be prose inside business_description ("Beto does the
+    transmissions, Tavo is learning"), which is exactly how a transmission
+    specialist and an apprentice arrived downstream as two interchangeable
+    names. team_members accepts these OR plain strings for back-compat."""
+    name: str
+    role: Optional[str] = None                    # "transmission mechanic", "apprentice"
+    relationship: Optional[str] = None            # to the owner/business: "owner's son",
+                                                  # "hired 2023", "sister, helps weekends"
+    skills_or_limitations: Optional[str] = None   # what only they can do, and what they
+                                                  # may NOT be given ("learning — never
+                                                  # books gearbox work on his own")
+    services_performed: Optional[list[str]] = None  # which catalog lines they can perform
+    days: Optional[str] = None                    # "Tue-Sat"
+    hours: Optional[str] = None                   # "10:00-18:00"
+    availability_notes: Optional[str] = None      # "in school, weekends only"
+    can_book: Optional[bool] = None               # may the bot place a booking on them
+    can_answer_customer_questions: Optional[bool] = None  # may the bot hand a customer to
+                                                  # them, or are they hands-off
+    notes: Optional[str] = None
+
+
+class SchedulingRequirements(BaseModel):
+    """The mechanics behind any feature that PLACES A BOOKING. "The bot books
+    appointments" in solution_scope is a promise, not a spec: someone has to
+    know what is bookable, how long a slot is, how many can run at once, who
+    confirms it and what happens when it is cancelled. Every field Optional so
+    a partial answer still lands, but a scheduling scope with all of them null
+    is a gap, not a feature."""
+    bookable_services: Optional[list[str]] = None  # which catalog lines the bot may book
+                                                   # (rarely all of them)
+    slot_length: Optional[str] = None      # the calendar granularity ("30 min", "per
+                                           # service duration")
+    concurrency: Optional[str] = None      # how many customers can be served AT ONCE, and
+                                           # what sets that number
+    resources: Optional[list[str]] = None  # the physical things a booking consumes:
+                                           # chairs, bays, rooms, tables — one per entry
+    who_confirms: Optional[str] = None     # who turns a request into a confirmed booking:
+                                           # the bot itself, the owner, whoever is on shift
+    booking_lead_time: Optional[str] = None  # shortest notice accepted, how far ahead the
+                                           # calendar opens
+    walk_in_handling: Optional[str] = None  # what happens to people who just turn up
+    cancellation_policy: Optional[str] = None  # notice required, fee, who may waive it
+    no_show_policy: Optional[str] = None   # what the business does, what the bot says
+    notes: Optional[list[str]] = None
+
+
+class ChannelStatus(BaseModel):
+    """One channel the owner named, and its real state.
+
+    Two different holes, one shape. "Website, maybe" went into channels as if a
+    site existed, so a build team read a deployment target where there was
+    nothing to deploy to; and a channel raised but never confirmed (a Facebook
+    page nobody came back to) fell into additional_notes and out of scope
+    silently. Both fields below take these OR plain strings."""
+    channel: str                           # "WhatsApp", "Instagram DMs", "the website"
+    in_scope: Optional[bool] = None        # None means RAISED BUT NEVER CONFIRMED either
+                                           # way — the state that used to vanish
+    readiness: Optional[str] = None        # "exists" | "planned" | "does not exist yet —
+                                           # must be built first"
+    platform: Optional[str] = None         # what it runs on/where it is hosted (Wix,
+                                           # Shopify, WhatsApp Business API)
+    owned_by: Optional[str] = None         # who holds the login, the domain, the page
+    notes: Optional[str] = None            # their words on it, why it is or is not in
+
+
+class DeferredCommitment(BaseModel):
+    """Something the OWNER promised to supply during the interview and hadn't
+    yet — "ahorita te digo", "tengo que checar el papelito", "I'll text you the
+    address tonight".
+
+    These only ever surfaced after the fact, as a line in
+    unresolved_business_facts, with nothing going back for them while the owner
+    was still on the call. Recorded here the moment it is said, RequirementsBot
+    forces one re-ask before it will accept the interview as complete."""
+    item: str                               # what is owed ("the exact street address")
+    promised_as: Optional[str] = None       # their words, so the nudge can quote them
+    how_delivered: Optional[str] = None     # how it will arrive ("he'll WhatsApp a photo
+                                            # of the paper"), and by when
+    asked_again: Optional[bool] = None      # set true once it has been chased in-interview
+    received: Optional[bool] = None         # true once they actually supplied it — an
+                                            # entry that never goes true ships as an owner
+                                            # follow-up
 
 
 class BusinessRequirements(BaseModel):
@@ -99,6 +226,16 @@ class BusinessRequirements(BaseModel):
     business_name: Optional[str] = None
     industry: Optional[str] = None
     business_description: Optional[str] = None
+    years_in_business: Optional[str] = None      # how long they have traded, as they said it
+                                                 # ("9 years", "since 2016") — the bot is
+                                                 # asked this constantly and it belongs in
+                                                 # the About copy, so it is not background
+    founding_story: Optional[str] = None         # how the business started, in one or two
+                                                 # sentences ("founded 9 years ago after
+                                                 # leaving a corporate job"). Copy material
+                                                 # for the bot's own answers; keep the
+                                                 # human detail that drives no build
+                                                 # decision in background_color
     locations: Optional[list[str]] = None        # WHERE the business physically is and operates,
                                                  # one per entry: "<primary | alternate/rain
                                                  # /contingency | service radius> — <full street
@@ -112,6 +249,21 @@ class BusinessRequirements(BaseModel):
     channels: Optional[list[str]] = None         # where the BOT should live (WhatsApp, Instagram...);
                                                  # other ways customers reach the business today
                                                  # belong in business_description
+    channel_readiness: Optional[list[Union[ChannelStatus, str]]] = None
+                                                 # DOES EACH CHANNEL IN channels ACTUALLY EXIST
+                                                 # YET — one ChannelStatus per channel with its
+                                                 # readiness, platform and who owns the login.
+                                                 # "Website, maybe" collapsed into channels as a
+                                                 # deployment target, and nothing recorded that
+                                                 # the site has to be BUILT before anything can
+                                                 # ship on it
+    channels_considered_not_in_scope: Optional[list[Union[ChannelStatus, str]]] = None
+                                                 # channels the owner RAISED but never confirmed
+                                                 # in or out — a Facebook page mentioned once and
+                                                 # dropped. Leave in_scope null when it was never
+                                                 # settled: that is the whole point of the field,
+                                                 # and as free text in additional_notes it was
+                                                 # indistinguishable from a decision
     adjacent_asks: Optional[list[str]] = None    # things BEYOND the chatbot that the owner asked
                                                  # for out loud — a website, online ordering, a
                                                  # POS or card reader, an app. Not in scope for
@@ -124,6 +276,23 @@ class BusinessRequirements(BaseModel):
     languages: Optional[list[str]] = None
     success_criteria: Optional[str] = None       # what "working" means to them
     solution_scope: Optional[str] = None         # simple Q&A / lead capture vs. full booking+payment app
+    scheduling_requirements: Optional[SchedulingRequirements] = None
+                                                 # the BOOKING mechanics behind solution_scope.
+                                                 # Required the moment the scope includes
+                                                 # appointments, slots or a calendar: what is
+                                                 # bookable, slot length, how many at once, who
+                                                 # confirms, cancellation and no-show. Scheduling
+                                                 # was being accepted into scope with nowhere to
+                                                 # record any of it, so the brief asserted a
+                                                 # feature with zero specification
+    lead_capture_fields: Optional[list[str]] = None  # WHAT THE BOT MUST COLLECT from an enquirer
+                                                 # before a human can answer, one per entry:
+                                                 # "<what to collect> — <why it is needed / what
+                                                 # it changes> — <required | optional>" ("event
+                                                 # date — decides availability and season pricing
+                                                 # — required"). Derive it from how the owner
+                                                 # themselves works out a quote. It is the core
+                                                 # of any quoting or enquiry bot and had no home
     payment_collection_requirements: Optional[PaymentCollectionRequirements] = None
                                                  # the money mechanics BEHIND solution_scope.
                                                  # Required the moment the scope includes a
@@ -221,6 +390,31 @@ class BusinessRequirements(BaseModel):
     capacity_constraints: Optional[list[str]] = None  # the owner's operational rules of thumb and limits,
                                                       # in their own numbers ("2-3 events a weekend with
                                                       # my sister helping", "max 8 covers past 9pm")
+    team_members: Optional[list[Union[TeamMember, str]]] = None
+                                                      # EVERY PERSON who works in the business, one
+                                                      # TeamMember each — name, role, relationship,
+                                                      # what they can and cannot do, days/hours, and
+                                                      # whether the bot may book them or hand a
+                                                      # customer to them. The single home for staff:
+                                                      # they were previously split across
+                                                      # business_description prose, capacity_constraints,
+                                                      # escalation_contacts and additional_notes, which
+                                                      # is how a named specialist and an apprentice
+                                                      # arrived downstream as two bare first names.
+                                                      # escalation_contacts still holds the CONTACT
+                                                      # ROUTE for whoever covers out of hours
+    concurrent_capacity: Optional[str] = None         # how many jobs/customers can run AT ONCE across
+                                                      # the whole business, and what sets the ceiling
+                                                      # ("2 — one chair each, Ana and Rosa"). The
+                                                      # single number a scheduler needs; as a sentence
+                                                      # inside capacity_constraints it was unusable
+    venue_capacity: Optional[list[str]] = None        # PHYSICAL ROOM for hospitality: seats, covers,
+                                                      # table sizes, standing capacity — one per entry
+                                                      # ("28 seats inside", "4 tables of 6, 2 of 2").
+                                                      # Its own field because capacity_constraints is
+                                                      # the operational rules ("we run out of birria
+                                                      # by 2pm"), and a bot that must answer "can you
+                                                      # fit 8 of us?" needs the number, not the rule
     current_systems_and_records: Optional[list[str]] = None  # where the data the bot would need actually
                                                       # lives TODAY, one system per entry: "<what —
                                                       # paper forms / Excel on a local server / an ERP /
@@ -263,6 +457,20 @@ class BusinessRequirements(BaseModel):
                                                       # This decides whether the bot quotes at all, so it is
                                                       # not the same thing as a missing number in
                                                       # unresolved_business_facts
+    open_strategic_decisions: Optional[list[str]] = None  # BUSINESS decisions the owner has not made,
+                                                      # one per entry: "<the decision> — <the options as
+                                                      # they framed them> — <what it hinges on / when
+                                                      # they decide> — <what it would change for the
+                                                      # bot>" ("whether to open a second office in
+                                                      # Berlin — undecided, depends on Q3 — a second
+                                                      # location means a second set of hours and a
+                                                      # routing question"). Distinct from
+                                                      # pricing_uncertainties (a price they cannot
+                                                      # state) and from out_of_scope_asides (decisions
+                                                      # with no build implication at all): a live
+                                                      # strategic question that WOULD change the build
+                                                      # had nowhere to live, so it was either lost or
+                                                      # mis-filed as a templated missing fact
     certifications_and_standards: Optional[list[str]] = None  # quality/regulatory standards, one per entry:
                                                       # "<standard> — held since <when> / under consideration
                                                       # — <cost, timeline, who audits, why>". Held and
@@ -309,16 +517,45 @@ class BusinessRequirements(BaseModel):
                                                       # turnaround times, informal discounts, unanswered
                                                       # threads). Auto-seeded from the materials analysis so
                                                       # they can be cross-checked against the transcript
+    upload_provenance_status: Optional[str] = None    # WHETHER THE UPLOADED MATERIALS CAN BE TRUSTED
+                                                      # AT ALL, as a single top-level statement:
+                                                      # "accepted as theirs" | "owner disputes the
+                                                      # provenance/authorization of the uploaded chat
+                                                      # logs — <their words>" | "not discussed". An
+                                                      # owner who challenges where the files came from
+                                                      # invalidates every fact derived from them at
+                                                      # once, and that verdict was being crammed into
+                                                      # additional_notes where no consumer looks
     fact_conflicts: Optional[list[str]] = None        # contradictions between sources, never silently
                                                       # merged: "hours — materials: 'most weekdays' vs.
                                                       # owner: 'evenings only' — unresolved"
     # --- follow-ups, split by WHO must act (open_items is an auto-built index) ---
+    deferred_owner_commitments: Optional[list[Union[DeferredCommitment, str]]] = None
+                                                            # things the owner promised MID-INTERVIEW
+                                                            # and has not handed over yet. Recorded the
+                                                            # turn they say it, so the promise can be
+                                                            # chased while they are still here:
+                                                            # RequirementsBot forces one re-ask before
+                                                            # it accepts the interview as complete, and
+                                                            # anything still outstanding at the end is
+                                                            # copied into unresolved_business_facts.
+                                                            # Set received true once it arrives
     unresolved_business_facts: Optional[list[str]] = None   # facts the OWNER must still supply (IBAN,
                                                             # kids-menu prices, exact opening hours)
     pending_design_decisions: Optional[list[str]] = None    # bot/product decisions still open (how to
                                                             # handle a thumbs-up reply, tone, fallback)
     customer_replies_owed: Optional[list[str]] = None       # replies the owner owes real customers,
-                                                            # surfaced from the materials
+                                                            # surfaced from the materials. Every entry
+                                                            # ENDS with its provenance, because an item
+                                                            # the owner rejected was becoming an action
+                                                            # item anyway: "<who/when> — <what they
+                                                            # asked> (quote: '...') — status: confirmed
+                                                            # | disputed_by_owner | unverified".
+                                                            # "confirmed" only once the owner agrees
+                                                            # this person is really waiting; an entry
+                                                            # contradicted in fact_conflicts is
+                                                            # "disputed_by_owner" and must say so here
+                                                            # too, never silently stay on the list
     open_items: Optional[list[str]] = None            # NOT a bucket to choose: RequirementsBot rebuilds this
                                                       # every turn as a REFERENCE INDEX into the three lists
                                                       # above — "[owner fact #2] <short excerpt>" — never a

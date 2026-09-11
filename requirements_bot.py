@@ -185,6 +185,16 @@ class RequirementsBot:
         "thing you need before you write this up. Do not re-summarize. If they "
         "decline or answer vaguely, record that in the field itself and close "
         "out on your next turn: this is the only time you will be sent back.)")
+    DEFERRED_NUDGE_NOTE = (
+        "(System note: you flagged the interview complete, but the owner "
+        "promised to supply these during the interview and never did: "
+        "{items}. Your closing message was NOT sent to the owner. Go back for "
+        "them NOW in ONE short message — quote their own promise back to them "
+        "and make one concrete ask for each ('can you send me the photo of "
+        "that paper now?'), not a passive 'whenever you get a chance'. Do not "
+        "re-summarize. Whatever they answer, record it — set received true on "
+        "anything they supply — and close out on your next turn: this is the "
+        "only time you will be sent back for these.)")
 
     def __init__(self, model: str = "claude-sonnet-5",
                  uploads_dir: Path = ROOT / "uploads"):
@@ -211,6 +221,9 @@ class RequirementsBot:
         # sweep for unasked essentials. Exactly one: a second refusal to accept
         # the owner's goodbye is how a wrap-up becomes an endless loop.
         self.essentials_swept: bool = False
+        # The same, for promises the owner made and never kept ("ahorita te
+        # digo"). Also exactly one, for the same reason.
+        self.deferred_nudged: bool = False
         # Token accounting across the whole interview (cache_read tokens are
         # billed at 10% of the fresh-input price).
         self.usage = {"fresh_in": 0, "cache_read": 0, "cache_write": 0, "out": 0}
@@ -254,6 +267,22 @@ class RequirementsBot:
                 record_as="(essentials sweep)")
             messages.append(turn.next_message)
 
+        # DEFERRED-PROMISE GATE. "I'll check the paper and tell you in a
+        # second" is the one follow-up that is free to close WHILE THE OWNER IS
+        # STILL HERE, and it was the one that never got closed: the promise
+        # surfaced only afterwards, as a line in unresolved_business_facts, and
+        # became the delivery team's problem. One nudge, then the interview may
+        # end whether or not they came through.
+        outstanding = _outstanding_commitments(turn.requirements)
+        if turn.interview_complete and outstanding and not self.deferred_nudged:
+            self.deferred_nudged = True
+            turn.interview_complete = False
+            messages.pop()
+            turn = self._ask(
+                self.DEFERRED_NUDGE_NOTE.format(items="; ".join(outstanding)),
+                record_as="(deferred-promise nudge)")
+            messages.append(turn.next_message)
+
         self.complete = turn.interview_complete
         return messages, turn
 
@@ -274,6 +303,7 @@ class RequirementsBot:
             "analyzed_files": self.analyzed_files,
             "complete": self.complete,
             "essentials_swept": self.essentials_swept,
+            "deferred_nudged": self.deferred_nudged,
             "usage": self.usage,
         }
 
@@ -288,6 +318,7 @@ class RequirementsBot:
         bot.complete = state["complete"]
         # Older sessions predate the completion gate: they get their one sweep.
         bot.essentials_swept = state.get("essentials_swept", False)
+        bot.deferred_nudged = state.get("deferred_nudged", False)  # likewise
         bot.usage = state.get("usage", bot.usage)  # older sessions lack it
         return bot
 
@@ -326,16 +357,23 @@ class RequirementsBot:
         def merge(existing: Optional[list[str]], extra: list[str]) -> Optional[list[str]]:
             return _dedupe(list(existing or []) + list(extra)) or None
 
-        if self.analysis:
-            # Material-derived facts get their own home instead of being
-            # indistinguishable from what the owner said out loud — and a
-            # provenance tag, because the analyzer does occasionally assert
-            # something the material never said (it once "learned" the
-            # business's channel from the export format). Tagged facts are
-            # leads to confirm, not established facts: the prompt forbids
-            # promoting one into a normal field before the owner verifies it.
+        # Material-derived facts get their own home instead of being
+        # indistinguishable from what the owner said out loud — and a
+        # provenance tag, because the analyzer does occasionally assert
+        # something the material never said (it once "learned" the business's
+        # channel from the export format). Tagged facts are leads to confirm,
+        # not established facts: the prompt forbids promoting one into a normal
+        # field before the owner verifies it.
+        # Unconditional, even with no analysis in hand: the merge is also what
+        # collapses the model's OWN duplicates, and gating it on self.analysis
+        # meant a resumed session whose analysis did not survive the round trip
+        # shipped every upload fact twice, tagged both ways at once.
+        if self.analysis or requirements.facts_from_uploads:
             requirements.facts_from_uploads = _merge_upload_facts(
-                requirements.facts_from_uploads, self.analysis.facts_learned)
+                requirements.facts_from_uploads,
+                self.analysis.facts_learned if self.analysis else [])
+
+        if self.analysis:
             # A customer left hanging in the log is a fact about the business,
             # not something to wait for the owner to volunteer.
             requirements.customer_replies_owed = _merge_replies(
@@ -377,29 +415,41 @@ class RequirementsBot:
         # wording for both produced lines like "lead time/turnaround for
         # 'Burrito' (price depends on fillings) — a surcharge was recorded
         # without the turnaround that triggers it", which describes nothing.
+        awaiting_turnaround: list[str] = []   # collapsed into one entry below
         for offer in requirements.services_and_pricing or []:
             if isinstance(offer, str):
                 continue
             trigger = offer.fee_trigger_condition or ""
             applies = f" (applies when: {trigger})" if trigger else ""
+            # A discount, an inclusion or a bundled add-on is not something a
+            # customer waits for or pays a separate amount for, so neither
+            # generator applies to it. Ungated, they invented "turnaround/lead
+            # time for 'Referral discount'" and "price variants for 'Local
+            # shoots — no extra charge'", and three lines of nonsense buried
+            # the one real gap in the same list.
+            deliverable = _is_deliverable(offer)
             gaps = []
-            if not offer.lead_time:
+            if not offer.lead_time and deliverable:
                 if any(w in f"{offer.name} {trigger}".lower() for w in _RUSH_WORDS):
                     gaps.append(
                         f"lead time/turnaround for '{offer.name}'{applies} — a rush "
                         f"price was recorded without the turnaround it buys, so the "
                         f"bot cannot say what the extra money gets the customer")
-                elif complete:
+                elif (complete
+                      and _line_type(offer) not in _APPOINTMENT_TYPES
+                      and not _has_duration(offer, requirements.service_durations)):
                     # Every persona run shipped a catalog with no turnaround on
                     # any line, and nothing said so. For repair and
                     # made-to-order work "how long will it take?" is the most
                     # common question the bot will receive, so a null here is
                     # named as unasked rather than shipped as silence.
-                    gaps.append(
-                        f"turnaround/lead time for '{offer.name}' — never recorded; "
-                        f"ask how long a customer waits for this line (and use "
-                        f"'{UNKNOWN_VARIES} — <reason>' if it genuinely varies)")
-            if trigger and _price_amounts_missing(offer):
+                    # Two exemptions, both cases where the answer IS on record:
+                    # an in-person appointment, whose duration is its
+                    # turnaround, and any line service_durations already
+                    # covers — "turnaround for 'Kids braiding' never recorded"
+                    # shipped against a brief that recorded 1-1.5 hours for it.
+                    awaiting_turnaround.append(offer.name)
+            if trigger and deliverable and _price_amounts_missing(offer):
                 gaps.append(
                     f"price variants for '{offer.name}'{applies} — the price is "
                     f"conditional but the amount for each case was never stated")
@@ -407,12 +457,41 @@ class RequirementsBot:
                 requirements.unresolved_business_facts = merge(
                     requirements.unresolved_business_facts, gaps)
 
+        # ONE follow-up for missing turnarounds, however many lines are missing
+        # one. The per-line template and the catalog-wide one both fired, so a
+        # five-service brief shipped five near-identical lead-time prompts plus
+        # a sixth global copy, and the genuinely missing facts sat underneath
+        # them. Anything this generator wrote on an earlier turn (and carried
+        # back to us in the model's output) is cleared first, so a growing
+        # catalog re-words the entry instead of stacking up another one.
+        kept = [item for item in (requirements.unresolved_business_facts or [])
+                if not item.lower().startswith(_TURNAROUND_PREFIX)]
+        requirements.unresolved_business_facts = kept or None
+        if awaiting_turnaround:
+            lines = ", ".join(f"'{name}'" for name in awaiting_turnaround)
+            requirements.unresolved_business_facts = merge(
+                requirements.unresolved_business_facts,
+                [f"{_TURNAROUND_PREFIX}{lines} — never recorded; ask how long a "
+                 f"customer waits for each (and use '{UNKNOWN_VARIES} — <reason>' "
+                 f"if it genuinely varies)"])
         # The same gap one level up: not one duration recorded for a business
         # that has services at all.
-        if (complete and requirements.services_and_pricing
+        elif (complete and requirements.services_and_pricing
                 and not requirements.service_durations):
             requirements.unresolved_business_facts = merge(
                 requirements.unresolved_business_facts, [DURATIONS_GAP])
+
+        # A promise the owner made and never kept is work for the delivery
+        # team, so it joins the owner's follow-up list at the end — after the
+        # in-interview nudge in send() has already had its one go at closing it.
+        if complete:
+            still_owed = [
+                f"{item} — the owner said during the interview that they would "
+                f"supply this, and it never arrived"
+                for item in _outstanding_commitments(requirements)]
+            if still_owed:
+                requirements.unresolved_business_facts = merge(
+                    requirements.unresolved_business_facts, still_owed)
 
         # A budget in the owner's words only ("small money if simple") is not
         # something anyone can scope against, so it ships as a required
@@ -534,7 +613,6 @@ class RequirementsBot:
 # A model-written provenance tag ("[source: uploaded_materials, ...]") does not
 # match — the colon stops it — so stripping a label never eats a real one.
 _REF_LABEL_RE = re.compile(r"^\[(?:see\s+)?[a-z][a-z_ ]*(?:\s*#\d+)?\]\s*")
-_REF_WIDTH = 72
 
 # Provenance tag on every fact the materials analysis produced. It is a lead
 # until the owner confirms it out loud, never an established fact.
@@ -578,6 +656,26 @@ _ALSO_RECORDED = " | also recorded as: "
 # turnaround it buys.
 _RUSH_WORDS = ("rush", "urgent", "express", "expedite", "surcharge", "same-day",
                "last-minute", "last minute")
+
+# ServiceOffer.line_type values for lines nobody waits for and nobody pays a
+# separate amount for. The turnaround and price-variant generators skip these:
+# "how long does 'Referral discount' take?" is not a gap, it is noise on the
+# same list as the real ones.
+_NON_DELIVERABLE_TYPES = frozenset({
+    "discount", "inclusion", "included", "add-on", "addon", "policy"})
+# ...and line_types whose turnaround is already answered by the appointment
+# itself. A 90-minute in-person slot has no separate lead time to ask about.
+_APPOINTMENT_TYPES = frozenset({"appointment", "in-person appointment", "booking",
+                                "slot"})
+# Fallback for briefs written before line_type existed, and for a model that
+# leaves it null. Deliberately narrow and deliberately excludes "surcharge" and
+# "fee": a rush fee genuinely does need the turnaround it buys, which is what
+# the _RUSH_WORDS branch asks for.
+_NON_DELIVERABLE_WORDS = ("discount", "included", "inclusion", "no extra charge",
+                          "no charge", "complimentary", "referral")
+# Every turnaround follow-up this module writes starts with it, so the previous
+# turn's version can be found and replaced instead of accumulating.
+_TURNAROUND_PREFIX = "turnaround/lead time for "
 
 # Wordings that mean the owner could not put a number on it. A price carrying one
 # of these is genuinely unstated; "$12/person" is not, whatever conditions hang
@@ -652,16 +750,16 @@ def _same_request(a: str, b: str) -> bool:
 
 
 def _ref(label: str, position: int, item: str) -> str:
-    """A POINTER to an entry that lives in full in another field.
+    """An entry LABELLED with the field and position that own it.
 
-    The index and the legacy sentiment mirror used to carry the whole sentence,
-    so one piece of work was readable verbatim in three fields and no reader
-    could tell which one owned it. An excerpt long enough to recognise, plus the
-    position it sits at, keeps the index usable without copying the text."""
-    body = " ".join(item.split())
-    if len(body) > _REF_WIDTH:
-        body = body[:_REF_WIDTH].rstrip() + "..."
-    return f"[{label} #{position}] {body}"
+    The label is what stops the index and the legacy sentiment mirror from
+    reading as second copies: a reader can see which field the item really
+    lives in. The TEXT ships whole. Clipping it to a fixed width to make that
+    point produced stubs like "[see adoption_risks #1] Priya doesn't fully
+    trust a bot to touch her calendar directly, worried..." — a sentence that
+    stops mid-thought is not a pointer, it is a broken quote, and every
+    consumer downstream had to go and reassemble the brief by hand."""
+    return f"[{label} #{position}] {' '.join(item.split())}"
 
 
 def _price_amounts_missing(offer) -> bool:
@@ -683,6 +781,55 @@ def _price_amounts_missing(offer) -> bool:
     if re.search(r"\d\s*(?:-|–|—|to)\s*\d", price):
         return True                        # "45-90/hr" never split into min/max
     return bool(_VAGUE_PRICE_RE.search(price))
+
+
+def _line_type(offer) -> str:
+    """The catalog line's declared kind, normalized ("" when unset)."""
+    return (offer.line_type or "").strip().lower()
+
+
+def _is_deliverable(offer) -> bool:
+    """Is this line something a customer WAITS for and pays a price for?
+
+    A discount, a bundled inclusion or a no-extra-charge add-on is neither, so
+    the automatic turnaround and price-variant follow-ups must not fire on it.
+    The declared line_type decides; a name-based fallback catches the obvious
+    cases in briefs written before the flag existed."""
+    kind = _line_type(offer)
+    if kind:
+        return kind not in _NON_DELIVERABLE_TYPES
+    name = (offer.name or "").lower()
+    return not any(word in name for word in _NON_DELIVERABLE_WORDS)
+
+
+def _has_duration(offer, durations: Optional[list[str]]) -> bool:
+    """Is this line's timing already on record in service_durations?
+
+    Durations are written "<line> — <how long>", so the line's name appearing
+    in one is the answer. Without this check the interview captured "Kids
+    braiding — 1-1.5 hours" from the owner and then shipped "turnaround/lead
+    time for 'Kids braiding' — never recorded" in the same brief."""
+    name = _norm(offer.name or "")
+    return bool(name) and any(name in _norm(entry) for entry in durations or [])
+
+
+def _outstanding_commitments(requirements: BusinessRequirements) -> list[str]:
+    """What the owner promised to supply and has not.
+
+    A bare string entry counts as outstanding: older briefs and a hurried model
+    write the promise without the received flag, and the cost of one extra
+    question is far below the cost of losing the address."""
+    outstanding = []
+    for entry in requirements.deferred_owner_commitments or []:
+        if isinstance(entry, str):
+            item = entry.strip()
+        elif entry.received:
+            continue
+        else:
+            item = (entry.item or "").strip()
+        if item:
+            outstanding.append(item)
+    return outstanding
 
 
 def _missing_essentials(requirements: BusinessRequirements) -> list[str]:
@@ -741,10 +888,19 @@ def _merge_upload_facts(existing: Optional[list[str]],
     different strings and kept both, so every fact appeared twice, at once
     verified and unverified. Facts are matched on their bare text instead, and
     a "verified: true" anywhere wins: within one interview, confirmation by the
-    owner is a one-way door."""
+    owner is a one-way door.
+
+    Matching is on the bare text and nothing looser. A word-overlap fallback
+    for facts the model RE-WORDED rather than re-emitted was tried and removed:
+    at any threshold loose enough to catch "an NDA gets signed before every
+    scoping call" against "NDA is signed before any scoping call", it also
+    merged "prices went up in March" into "prices went up in April". Losing a
+    fact is worse than shipping two phrasings of one."""
     facts: dict[str, tuple[bool, str]] = {}
     for item in list(existing or []) + list(learned):
         verified, fact = _split_upload_tag(item)
+        if not fact:
+            continue
         was_verified, kept = facts.get(_norm(fact), (False, fact))
         facts[_norm(fact)] = (was_verified or verified,
                               max(kept, fact, key=len))
