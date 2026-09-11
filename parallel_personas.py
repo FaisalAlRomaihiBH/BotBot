@@ -563,10 +563,13 @@ def _git(*args) -> str:
 
 
 def improve_and_push(runner: "ParallelPersonaRunner", records: list[dict],
-                     summary: dict) -> None:
-    log(f"[improve] running with {runner.judge_model}...")
-    improver = PromptImprover(runner.judge_llm, run_dir=runner.run_dir,
-                              model=runner.judge_model)
+                     summary: dict, improve_model: str | None = None) -> None:
+    from langchain_anthropic import ChatAnthropic
+    model = improve_model or runner.judge_model
+    llm = (runner.judge_llm if model == runner.judge_model
+           else ChatAnthropic(model=model, max_tokens=16000, max_retries=6))
+    log(f"[improve] running with {model}...")
+    improver = PromptImprover(llm, run_dir=runner.run_dir, model=model)
     change = improver.improve(records)
     u = improver.usage
     i_in = sum(u[k] for k in ("fresh_in", "cache_read", "cache_write"))
@@ -654,7 +657,9 @@ if __name__ == "__main__":
     ap.add_argument("--persona-model", default="claude-sonnet-5",
                     help="model that role-plays the business owners")
     ap.add_argument("--judge-model", default="claude-opus-5",
-                    help="model that judges transcripts and improves the prompt")
+                    help="model that judges transcripts")
+    ap.add_argument("--improve-model", default=None,
+                    help="model that rewrites the prompt (default: the judge model)")
     ap.add_argument("--fix-model", default="claude-opus-5",
                     help="model for the headless code-fix agent (claude -p)")
     args = ap.parse_args()
@@ -668,5 +673,6 @@ if __name__ == "__main__":
     if not args.no_improve:
         records = [json.loads(p.read_text(encoding="utf-8"))
                    for p in sorted(runner.run_dir.glob("interview_*.json"))]
-        improve_and_push(runner, records, run_summary)
+        improve_and_push(runner, records, run_summary,
+                         improve_model=args.improve_model)
         fix_code_issues(run_summary, model=args.fix_model)
