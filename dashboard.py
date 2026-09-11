@@ -516,6 +516,24 @@ body{margin:0;background:var(--bg);color:var(--text);font:13px/1.45 var(--sans)}
 }
 
 /* ---------- pipeline ---------- */
+#improve-grid{display:flex;gap:14px;margin:14px 20px 0;flex-wrap:wrap}
+.imp-tile{width:190px;aspect-ratio:1;background:var(--panel);
+  border:1px solid var(--border);border-radius:6px;cursor:pointer;color:var(--text);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:10px;padding:14px;text-align:center;transition:border-color .15s,background .15s}
+.imp-tile:hover{border-color:var(--border-hi);background:var(--panel2)}
+.imp-tile.on{border-color:var(--accent)}
+.imp-tile .bx-ico{width:38px;height:38px;border:1px solid var(--border-hi);
+  border-radius:8px;display:grid;place-items:center;font-size:18px;color:var(--accent)}
+.imp-tile .bx-t{font:600 12.5px var(--sans);line-height:1.35}
+.imp-tile .bx-d{font:10px var(--mono);color:var(--muted);line-height:1.4}
+.imp-panel.closed{display:none}
+.imp-panel.plc{margin:14px 20px 0;background:var(--panel);border:1px solid var(--border);
+  border-radius:6px}
+.empty{padding:40px 24px;text-align:center;color:var(--muted);font-size:12.5px;
+  line-height:1.6;max-width:640px;margin:0 auto}
+body.view-logs #improve-grid,body.view-chat #improve-grid,
+body.view-logs .imp-panel,body.view-chat .imp-panel{display:none}
 #pipeline-wrap{padding:14px 20px 0;overflow-x:auto}
 #pipeline{display:flex;align-items:stretch;min-width:940px}
 .stage{flex:1;min-width:172px;background:var(--panel);border:1px solid var(--border);
@@ -753,7 +771,44 @@ body.view-chat #chat{display:flex}
       <div class="sum"><div class="k">Completed Cycles</div><div class="v" id="s-completed-c">0</div></div>
     </div>
 
-    <div id="pipeline-wrap"><div id="pipeline"><div id="empty">Waiting for a run to appear in parallel_runs/ …</div></div></div>
+    <div id="improve-grid">
+      <button class="imp-tile" data-panel="pipeline-wrap">
+        <span class="bx-ico">⟳</span>
+        <span class="bx-t">Requirement Bot Improvement Cycle</span>
+        <span class="bx-d">persona interviews, judging, prompt improvement and code fixes</span>
+      </button>
+      <button class="imp-tile" data-panel="builder-wrap">
+        <span class="bx-ico">🛠</span>
+        <span class="bx-t">Builder Bot Improvement Cycle</span>
+        <span class="bx-d">builds the chatbot from the brief, then improves itself</span>
+      </button>
+      <button class="imp-tile" data-panel="brief-wrap">
+        <span class="bx-ico">📋</span>
+        <span class="bx-t">Brief Quality Cycle</span>
+        <span class="bx-d">a builder persona tries to build from each brief and reports what is ambiguous or missing</span>
+      </button>
+      <button class="imp-tile" data-panel="endcust-wrap">
+        <span class="bx-ico">🎭</span>
+        <span class="bx-t">End-Customer Simulation Cycle</span>
+        <span class="bx-d">personas play customers of the built chatbot; a judge scores how it handled them</span>
+      </button>
+      <button class="imp-tile" data-panel="feedback-wrap">
+        <span class="bx-ico">📥</span>
+        <span class="bx-t">Live Feedback Cycle</span>
+        <span class="bx-d">replays real conversation transcripts as test cases; real failures beat synthetic ones</span>
+      </button>
+      <button class="imp-tile" data-panel="regression-wrap">
+        <span class="bx-ico">🛡</span>
+        <span class="bx-t">Regression Cycle</span>
+        <span class="bx-d">re-runs golden interviews after every change and diffs scores, so improvements never quietly break things</span>
+      </button>
+    </div>
+    <div id="pipeline-wrap" class="closed imp-panel"><div id="pipeline"><div id="empty">Waiting for a run to appear in parallel_runs/ …</div></div></div>
+    <div id="builder-wrap" class="closed imp-panel plc"><div class="empty">No Builder Bot runs yet — this cycle is not built yet. It will build the chatbot from each brief, judge the result against the brief, then improve its own prompt and code.</div></div>
+    <div id="brief-wrap" class="closed imp-panel plc"><div class="empty">Not built yet. This cycle scores the BRIEF itself, not the interview: a builder persona tries to build from it and files everything ambiguous, missing, or contradictory back to the improver.</div></div>
+    <div id="endcust-wrap" class="closed imp-panel plc"><div class="empty">Not built yet. The ultimate test: personas play customers of the BUILT chatbot (bookings, complaints, discounts) and a judge scores whether it handled them like the brief promised.</div></div>
+    <div id="feedback-wrap" class="closed imp-panel plc"><div class="empty">Not built yet. Same machinery as the persona runs, but the test cases are REAL transcripts and uploaded chat exports instead of generated personas.</div></div>
+    <div id="regression-wrap" class="closed imp-panel plc"><div class="empty">Not built yet. Cheapest and most protective: a fixed set of golden interviews re-runs after every prompt or code change, and score diffs catch an "improvement" that quietly makes things worse.</div></div>
 
     <div id="console">
       <div id="con-bar">
@@ -1001,6 +1056,14 @@ $('#con-copy').onclick = () => navigator.clipboard.writeText(lastLog).catch(()=>
 $('#con-clear').onclick = () => { state.cleared = lastLog.split('\n').length; renderLog(lastLog); };
 $('#con-full').onclick = () => $('#console').classList.toggle('fullscreen');
 $('#sb-toggle').onclick = () => $('#sidebar').classList.toggle('collapsed');
+document.querySelectorAll('.imp-tile').forEach(tile => tile.onclick = () => {
+  const panel = document.getElementById(tile.dataset.panel);
+  const opening = panel.classList.contains('closed');
+  // one cycle open at a time
+  document.querySelectorAll('.imp-panel').forEach(p => p.classList.add('closed'));
+  document.querySelectorAll('.imp-tile').forEach(t => t.classList.remove('on'));
+  if(opening){ panel.classList.remove('closed'); tile.classList.add('on'); }
+});
 document.querySelectorAll('.nav-item[data-view]').forEach(item => item.onclick = () => {
   document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('active'));
   item.classList.add('active');
