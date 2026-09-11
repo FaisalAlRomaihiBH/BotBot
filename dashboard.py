@@ -6,6 +6,7 @@
 # All data is parsed live from run.log; the page polls every 2 seconds.
 import json
 import re
+import threading
 import time
 from datetime import datetime
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -137,6 +138,7 @@ def collect() -> dict:
                                          "turn": 0, "status": "interviewing",
                                          "score": None, "findings": None,
                                          "bot_model": None, "persona_model": None,
+                                         "bot_cost": None, "persona_cost": None,
                                          "io": None, "log": []})
         iv["log"] = (iv["log"] + [line[line.index("]") + 1:].strip()])[-150:]
         if "interviewing... (" in line:
@@ -166,6 +168,11 @@ def collect() -> dict:
                 part = body.split("| score ")[1]
                 iv["score"] = part.split(",")[0]
                 iv["findings"] = int(part.split(", ")[1].split(" ")[0])
+        if "] cost: $" in line:
+            m = re.search(r"\(bot [\w.-]+ \$([\d.]+) \+ persona [\w.-]+ "
+                          r"\$([\d.]+)", line)
+            if m:
+                iv["bot_cost"], iv["persona_cost"] = m.group(1), m.group(2)
         if "FAILED" in line:
             iv["status"] = "failed"
 
@@ -194,9 +201,22 @@ def _stage(num, sid, name, desc, usage):
 def build_lanes(d: dict) -> list[dict]:
     """One lane per persona: its own Interviewing -> Judge path."""
     lanes = []
+    g = d.get("generator") or {}
+    n = max(1, len(d["interviews"]))
     for iv in d["interviews"]:
         idx = iv["index"]
         j = next((x for x in d["judges"] if x["index"] == idx), None)
+
+        # per-lane share of the batched generator call (1 call for all personas)
+        pst = _stage(1, f"persona-{idx}", "Persona",
+                     f"Batched generation (1/{n} share)", "Claude API")
+        pst["status"] = "completed" if g.get("done") else "running"
+        pst["model"] = _model_name(g.get("model"))
+        if g.get("io"):
+            pst["inputTokens"] = _num(g["io"]["in_tok"]) // n
+            pst["outputTokens"] = _num(g["io"]["out_tok"]) // n
+            pst["cost"] = _usd(g["io"]["total"]) / n
+        pst["latestActivity"] = f"Generated in one batch call with {n} persona(s)"
 
         ist = _stage(2, f"interview-{idx}", "Interviewing",
                      iv["industry"], "Claude API")
@@ -208,6 +228,8 @@ def build_lanes(d: dict) -> list[dict]:
             ist["outputTokens"] = _num(iv["io"]["out_tok"])
             ist["cost"] = _usd(iv["io"]["total"])
         ist["progress"] = {"label": "turn", "value": iv["turn"]}
+        ist["botCost"] = iv.get("bot_cost")
+        ist["personaCost"] = iv.get("persona_cost")
         ist["latestActivity"] = (iv["log"][-1][:90] if iv["log"] else None)
         ist["logs"] = iv["log"][-40:]
 
@@ -228,9 +250,39 @@ def build_lanes(d: dict) -> list[dict]:
         elif ist["status"] == "running":
             jst["status"] = "queued"
 
+        # per-lane share of the shared run-level Improver / Fixing Code steps
+        shared = []
+        for num, key, name, usage, run_note in (
+                (4, "improve", "Improver", "Claude API", "Refining prompt…"),
+                (5, "codefix", "Fixing Code", "Claude Membership",
+                 "Applying code fixes…")):
+            raw = d["pipeline"][key]
+            st = _stage(num, f"{key}-{idx}", name,
+                        f"Shared step (1/{n} share)", usage)
+            st["status"] = {"run": "running", "done": "completed",
+                            "failed": "failed"}.get(raw["status"], "pending")
+            st["model"] = _model_name(raw.get("model"))
+            if raw.get("io"):
+                st["inputTokens"] = _num(raw["io"]["in_tok"]) // n
+                st["outputTokens"] = _num(raw["io"]["out_tok"]) // n
+                st["cost"] = _usd(raw["io"]["total"]) / n
+            st["latestActivity"] = raw.get("note") or (
+                run_note if st["status"] == "running" else None)
+            shared.append(st)
+        imp, fix = shared
+        if jst["status"] == "completed" and imp["status"] == "pending":
+            imp["status"] = "queued"
+        if imp["status"] == "completed" and fix["status"] == "pending":
+            fix["status"] = "queued"
+        if fix["status"] == "completed":
+            fix["name"] = "Completed Fixing Cycle"
+            fix["latestActivity"] = (fix["latestActivity"]
+                                     or "Cycle completed successfully.")
+
         lanes.append({"index": idx, "industry": iv["industry"],
                       "score": iv.get("score"),
-                      "interview": ist, "judge": jst})
+                      "persona": pst, "interview": ist, "judge": jst,
+                      "improve": imp, "codefix": fix})
     return lanes
 
 
@@ -357,6 +409,8 @@ def payload() -> dict:
         "fix_cycle_done": bool(stages) and stages[-1]["status"] == "completed",
         "elapsed": max(0, int((end or now) - started)) if started else None,
         "started_at": started,
+        "last_activity_ago": (max(0, int(now - d["last_activity"]))
+                              if d.get("last_activity") else None),
         "total_cost": round(sum(s["cost"] for s in stages), 2),
         "total_in": sum(s["inputTokens"] for s in stages),
         "total_out": sum(s["outputTokens"] for s in stages),
@@ -433,19 +487,33 @@ body{margin:0;background:var(--bg);color:var(--text);font:13px/1.45 var(--sans)}
 .badge.pending .b-dot,.badge.queued .b-dot,.badge.idle .b-dot{background:var(--muted)}
 .badge.retrying{color:var(--amber);border-color:#5c4a1e}
 .badge.retrying .b-dot{background:var(--amber)}
+.badge.completed_failures{color:var(--amber);border-color:#5c4a1e;background:rgba(251,191,36,.05)}
+.badge.completed_failures .b-dot{background:var(--amber)}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
 
 /* ---------- summary toolbar ---------- */
-#summary{display:flex;align-items:stretch;gap:0;margin:14px 20px 0;background:var(--panel);
-  border:1px solid var(--border);border-radius:6px;overflow-x:auto}
-.sum{padding:9px 16px;border-right:1px solid var(--border);min-width:0;flex:none}
-.sum:last-child{border-right:none}
-.sum .k{font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
-.sum .v{font:500 13.5px var(--mono);color:var(--text);margin-top:2px;white-space:nowrap}
-.sum .v small{color:var(--text2);font-size:11px}
-#sum-progress-bar{height:3px;background:var(--border);border-radius:2px;margin-top:6px;
-  overflow:hidden;width:110px}
-#sum-progress-fill{height:100%;background:var(--accent);width:0;transition:width .5s ease}
+#summary{display:grid;width:auto;margin:14px 20px 0;background:var(--panel);
+  border:1px solid var(--border);border-radius:6px;
+  grid-template-columns:minmax(95px,.85fr) minmax(110px,1fr) minmax(110px,1fr)
+    minmax(105px,.95fr) minmax(130px,1.15fr) minmax(110px,1fr)
+    minmax(105px,1fr) minmax(125px,1.1fr)}
+.sum{padding:8px 14px;min-width:0;position:relative;
+  display:flex;flex-direction:column;justify-content:center}
+.sum::after{content:'';position:absolute;right:0;top:8px;bottom:8px;width:1px;
+  background:var(--border)}
+.sum:last-child::after{display:none}
+.sum .k{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sum .v{font:500 14px var(--mono);color:var(--text);margin-top:1px;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+#s-running.hot{color:var(--accent)}
+#s-completed-c{color:var(--green)}
+#s-failed.hot{color:var(--red)}
+@media (max-width:1180px){
+  #summary{grid-template-columns:repeat(4,1fr)}
+  .sum:nth-child(4)::after{display:none}
+  .sum:nth-child(-n+4){border-bottom:1px solid var(--border)}
+}
 
 /* ---------- pipeline ---------- */
 #pipeline-wrap{padding:14px 20px 0;overflow-x:auto}
@@ -486,13 +554,41 @@ body{margin:0;background:var(--bg);color:var(--text);font:13px/1.45 var(--sans)}
 .st-model{font:10.5px var(--mono);color:var(--text2);border-top:1px solid var(--border);
   padding-top:6px;line-height:1.6}
 .st-model .lbl{color:var(--muted)}
-.st-act{font-size:10.5px;color:var(--muted);white-space:nowrap;overflow:hidden;
-  text-overflow:ellipsis;min-height:14px}
-.stage.running .st-act{color:var(--text2)}
 
-#lanes{flex:2;display:flex;flex-direction:column;gap:10px;min-width:0}
-.lane-label{font:10px var(--mono);color:var(--muted);text-transform:uppercase;
-  letter-spacing:.05em;margin:0 0 4px 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#lanes{flex:2;display:flex;flex-direction:column;gap:18px;min-width:0}
+.lane-bar{display:grid;align-items:stretch;background:var(--panel);
+  border:1px solid var(--border);border-radius:6px;margin-bottom:8px;
+  min-height:44px;
+  grid-template-columns:minmax(260px,1.5fr) minmax(70px,.45fr) minmax(135px,.85fr)
+    minmax(80px,.5fr) minmax(250px,1.6fr) minmax(105px,.65fr)
+    minmax(110px,.7fr) 28px}
+.lane-bar.failed{border-color:#553030}
+.lane-name{display:flex;align-items:baseline;gap:10px;padding:4px 14px;min-width:0;
+  position:relative}
+.lane-name::after{content:'';position:absolute;right:0;top:8px;bottom:8px;width:1px;
+  background:var(--border)}
+.lane-name .n{font:600 12px var(--sans);white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis;min-width:0}
+.lane-name .s{font:10px var(--mono);color:var(--muted);white-space:nowrap;flex:none}
+.lb-item{display:flex;flex-direction:column;justify-content:center;min-width:0;
+  padding:4px 12px;position:relative}
+.lb-item::after{content:'';position:absolute;right:0;top:8px;bottom:8px;width:1px;
+  background:var(--border)}
+.lb-item:last-of-type::after{display:none}
+.lb-item .k{font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lb-item .v{font:500 11.5px var(--mono);color:var(--text);white-space:nowrap;margin-top:1px;
+  overflow:hidden;text-overflow:ellipsis}
+.lb-item .v.err{color:var(--red)}
+.lb-more{background:none;border:none;color:var(--muted);cursor:pointer;
+  font-size:14px;padding:0;align-self:center;justify-self:center}
+.lb-more:hover{color:var(--text)}
+@media (max-width:1240px){
+  .lane-bar{grid-template-columns:minmax(220px,1.4fr) minmax(70px,.45fr)
+    minmax(110px,.75fr) minmax(75px,.5fr) minmax(200px,1.25fr)
+    minmax(100px,.65fr) 28px}
+  .lb-item.last-act{display:none}
+}
 .lane-row{display:flex;align-items:stretch}
 .lane-row .stage{min-width:150px}
 .connector{flex:none;width:26px;display:flex;align-items:center;position:relative}
@@ -553,10 +649,53 @@ body{margin:0;background:var(--bg);color:var(--text);font:13px/1.45 var(--sans)}
 
 #empty{padding:60px 20px;text-align:center;color:var(--muted)}
 
-/* ---------- views: Cycles (pipeline) vs Live Logs (console) ---------- */
+/* ---------- views: Cycles (pipeline) / Live Logs (console) / Chat ---------- */
 body.view-cycles #console{display:none}
 body.view-logs #summary,body.view-logs #pipeline-wrap{display:none}
 body.view-logs #console{flex:1}
+#chat{display:none}
+body.view-chat #summary,body.view-chat #pipeline-wrap,body.view-chat #console{display:none}
+body.view-chat #chat{display:flex}
+
+/* ---------- chat ---------- */
+#chat{flex:1;flex-direction:column;margin:14px 20px 20px;min-height:0;
+  background:var(--panel);border:1px solid var(--border);border-radius:6px}
+#chat-head{display:flex;align-items:center;gap:10px;padding:9px 14px;
+  border-bottom:1px solid var(--border)}
+#chat-head .t{font:600 11px var(--sans);text-transform:uppercase;
+  letter-spacing:.07em;color:var(--text2)}
+#chat-head .m{font:10.5px var(--mono);color:var(--muted)}
+#chat-reset{margin-left:auto}
+#chat-thread{flex:1;overflow-y:auto;padding:16px 18px;display:flex;
+  flex-direction:column;gap:12px;min-height:0}
+.msg{max-width:72%;border:1px solid var(--border);border-radius:6px;
+  padding:8px 12px;font-size:13px;line-height:1.55;white-space:pre-wrap;
+  overflow-wrap:break-word}
+.msg .who{font:600 9.5px var(--mono);text-transform:uppercase;
+  letter-spacing:.07em;color:var(--muted);margin-bottom:3px}
+.msg.ai{align-self:flex-start;background:var(--panel2)}
+.msg.human{align-self:flex-end;background:#161a20;border-color:#2b3a52}
+.msg.err{align-self:stretch;max-width:none;border-color:#553030;color:var(--red);
+  font-family:var(--mono);font-size:11.5px}
+.msg.sys{align-self:center;max-width:none;border:none;background:none;
+  color:var(--green);font:11px var(--mono)}
+#chat-typing{align-self:flex-start;color:var(--muted);font:11.5px var(--mono);
+  padding:2px 4px}
+#chat-typing .spin{margin-right:6px;vertical-align:-1px}
+#chat-bar{display:flex;gap:8px;padding:10px 12px;border-top:1px solid var(--border);
+  align-items:flex-end}
+#chat-input{flex:1;background:var(--panel2);border:1px solid var(--border);
+  color:var(--text);border-radius:6px;padding:8px 12px;font:13px/1.5 var(--sans);
+  resize:none;min-height:38px;max-height:140px}
+#chat-input:focus{outline:none;border-color:var(--border-hi)}
+#chat-send{background:#1d2a3f;border:1px solid #2b3a52;color:var(--text);
+  border-radius:6px;padding:8px 16px;font:600 12px var(--sans);cursor:pointer}
+#chat-send:hover{border-color:var(--accent)}
+#chat-send:disabled{opacity:.5;cursor:default}
+#chat-attach{background:var(--panel2);border:1px solid var(--border);color:var(--text2);
+  border-radius:6px;padding:8px 11px;font-size:13px;cursor:pointer}
+#chat-attach:hover{border-color:var(--border-hi);color:var(--text)}
+#chat-thread.drop{outline:1px dashed var(--accent);outline-offset:-6px}
 @media (max-width:760px){
   #sidebar{display:none}
   #pipeline{flex-direction:column;min-width:0}
@@ -569,7 +708,7 @@ body.view-logs #console{flex:1}
     <div id="sb-head"><div id="sb-logo">R</div><span id="sb-title">RequirementsBot</span>
       <button id="sb-toggle" title="Collapse">⟨⟩</button></div>
     <nav id="sb-nav">
-      <div class="nav-item"><span class="nav-ico">▶</span><span class="nav-label">Runs</span></div>
+      <div class="nav-item" id="nav-chat" data-view="chat"><span class="nav-ico">▶</span><span class="nav-label">Requirement Bot Chat</span></div>
       <div class="nav-item" id="nav-logs" data-view="logs"><span class="nav-ico">≣</span><span class="nav-label">Live Logs</span></div>
       <div class="nav-item active" id="nav-cycles" data-view="cycles"><span class="nav-ico">◈</span><span class="nav-label">Cycles</span></div>
       <div class="nav-item"><span class="nav-ico">◉</span><span class="nav-label">Personas</span></div>
@@ -603,16 +742,15 @@ body.view-logs #console{flex:1}
     </div>
 
     <div id="summary">
-      <div class="sum"><div class="k">Cost this cycle</div><div class="v" id="s-cost">$0.00</div></div>
-      <div class="sum"><div class="k">Tokens</div>
-        <div class="v"><span id="s-in">0</span> <small>Input Tokens</small> · <span id="s-out">0</span> <small>Output Tokens</small></div></div>
-      <div class="sum"><div class="k">Elapsed</div><div class="v" id="s-elapsed">—</div></div>
-      <div class="sum"><div class="k">Cycle progress</div>
-        <div class="v" id="s-progress">0 / 5</div>
-        <div id="sum-progress-bar"><div id="sum-progress-fill"></div></div></div>
-      <div class="sum"><div class="k">Current stage</div><div class="v" id="s-stage">—</div></div>
-      <div class="sum"><div class="k">State</div>
+      <div class="sum"><div class="k">Total Cost</div><div class="v" id="s-cost">$0.00</div></div>
+      <div class="sum"><div class="k">Input Tokens</div><div class="v" id="s-in">0</div></div>
+      <div class="sum"><div class="k">Output Tokens</div><div class="v" id="s-out">0</div></div>
+      <div class="sum"><div class="k">Elapsed Time</div><div class="v" id="s-elapsed">—</div></div>
+      <div class="sum"><div class="k">Run State</div>
         <div class="v" style="margin-top:1px"><span class="badge idle" id="s-state"><span class="b-dot"></span><span id="s-state-txt">Idle</span></span></div></div>
+      <div class="sum"><div class="k">Cycles Running</div><div class="v" id="s-running">0</div></div>
+      <div class="sum"><div class="k">Failed Cycles</div><div class="v" id="s-failed">0</div></div>
+      <div class="sum"><div class="k">Completed Cycles</div><div class="v" id="s-completed-c">0</div></div>
     </div>
 
     <div id="pipeline-wrap"><div id="pipeline"><div id="empty">Waiting for a run to appear in parallel_runs/ …</div></div></div>
@@ -637,6 +775,20 @@ body.view-logs #console{flex:1}
       </div>
       <div id="con-body"></div>
     </div>
+
+    <div id="chat">
+      <div id="chat-head"><span class="t">Requirement Bot Chat</span>
+        <span class="m">interactive interview · put files in uploads/ when asked</span>
+        <button class="act" id="chat-reset" title="Start a new interview">↺ New interview</button></div>
+      <div id="chat-thread"></div>
+      <div id="chat-bar">
+        <input type="file" id="chat-file" multiple hidden
+               accept=".txt,.md,.csv,.png,.jpg,.jpeg,.webp,.gif">
+        <button id="chat-attach" title="Attach chat exports / screenshots (saved to uploads/)">📎</button>
+        <textarea id="chat-input" rows="1" placeholder="Type your answer… (Enter to send, Shift+Enter for newline)" spellcheck="false"></textarea>
+        <button id="chat-send">Send</button>
+      </div>
+    </div>
   </div>
 
   <div id="inspector">
@@ -651,7 +803,8 @@ body.view-logs #console{flex:1}
 const $ = s => document.querySelector(s);
 const STAGE_ICONS = {persona:'◉', interview:'✎', judge:'⚖', improve:'⟳', codefix:'‹›'};
 const STATUS_TXT = {pending:'Pending', queued:'Queued', running:'Running',
-                    completed:'Completed', failed:'Failed', retrying:'Retrying', idle:'Idle'};
+                    completed:'Completed', failed:'Failed', retrying:'Retrying', idle:'Idle',
+                    completed_failures:'Completed With Failures'};
 const STATUS_DOT = {pending:'○', queued:'○', running:'●', completed:'✓', failed:'✕'};
 let state = {stages:[], lanes:[], selected:null, paused:false, autoscroll:true,
              filter:'all', search:'', fullscreen:false, cleared:0};
@@ -680,9 +833,6 @@ function stageCard(s){
       (s.progress ? `<span class="turn">${s.progress.label} ${s.progress.value}</span>` : '')
     : `<span style="color:${s.status==='completed'?'var(--green)':s.status==='failed'?'var(--red)':'var(--muted)'}">
        ${STATUS_DOT[s.status]||'○'} ${STATUS_TXT[s.status]||s.status}</span>`;
-  const waiting = (s.status==='queued'||s.status==='pending')
-    ? `<div class="st-act">Waiting for previous stage…</div>`
-    : `<div class="st-act" title="${(s.latestActivity||'').replace(/"/g,'&quot;')}">${s.latestActivity||''}</div>`;
   return `<div class="stage ${s.status}${state.selected===s.id?' selected':''}" data-id="${s.id}">
     <div class="st-top"><span class="st-num">${s.number}</span>
       <span class="st-ico">${STAGE_ICONS[s.id.split('-')[0]]||'▣'}</span>
@@ -695,7 +845,6 @@ function stageCard(s){
       <span>Input Tokens<b>${fmtTok(s.inputTokens)}</b></span>
       <span>Output Tokens<b>${fmtTok(s.outputTokens)}</b></span>
     </div>
-    ${waiting}
     <div class="st-model">
       <span class="lbl">model</span> ${s.model||'—'}<br>
       <span class="lbl">usage</span> ${s.usage}
@@ -709,35 +858,61 @@ function connector(prev, next){
   return `<div class="connector ${cls}"></div>`;
 }
 function allStages(){
-  const lane = state.lanes.flatMap(l => [l.interview, l.judge]);
+  const lane = state.lanes.flatMap(l =>
+    [l.persona, l.interview, l.judge, l.improve, l.codefix]);
   return state.stages.concat(lane);
-}
-function laneAgg(){
-  // pseudo-status of the whole lanes block, for the surrounding connectors
-  if(!state.lanes.length) return {status:'pending'};
-  const st = state.lanes.flatMap(l => [l.interview.status, l.judge.status]);
-  if(st.includes('running')) return {status:'running'};
-  if(st.every(s => s === 'completed')) return {status:'completed'};
-  return {status:'pending'};
 }
 function renderPipeline(){
   const p = $('#pipeline');
   if(!state.stages.length){ return; }
   const [s1, s2, s3, s4, s5] = state.stages;
-  let mid;
+  let html;
   if(state.lanes.length){
-    mid = `<div id="lanes">` + state.lanes.map(l => `
-      <div class="lane">
-        <div class="lane-label">#${l.index} ${l.industry}${l.score ? ' · '+l.score : ''}</div>
-        <div class="lane-row">${stageCard(l.interview)}${connector(l.interview, l.judge)}${stageCard(l.judge)}</div>
-      </div>`).join('') + `</div>`;
+    html = `<div id="lanes">` + state.lanes.map(l => {
+      const seq = [l.persona, l.interview, l.judge, l.improve, l.codefix];
+      const cost = seq.reduce((a,s) => a + s.cost, 0);
+      const tin = seq.reduce((a,s) => a + s.inputTokens, 0);
+      const tout = seq.reduce((a,s) => a + s.outputTokens, 0);
+      const done = seq.filter(s => s.status === 'completed').length;
+      const running = seq.find(s => s.status === 'running');
+      const failedStage = seq.find(s => s.status === 'failed');
+      const st = running ? 'running'
+               : failedStage ? 'failed'
+               : done === seq.length ? 'completed'
+               : seq.some(s => s.status === 'queued') ? 'queued' : 'pending';
+      // "Step 4 / 5 · Fixing Code" — the stage being worked on (or where it stopped)
+      const cur = running || failedStage
+                || (done === seq.length ? seq[seq.length-1] : seq[Math.min(done, seq.length-1)]);
+      const stepNo = seq.indexOf(cur) + 1;
+      const ago = state.lastActivityAgo;
+      const lastAct = ago == null ? '—'
+        : (st === 'failed' ? 'Failed ' : '') + fmtElapsed(ago) + ' ago';
+      return `<div class="lane">
+        <div class="lane-bar${st === 'failed' ? ' failed' : ''}">
+          <div class="lane-name"><span class="n">#${l.index} ${l.industry}</span>
+            ${l.score ? `<span class="s">score ${l.score}</span>` : ''}</div>
+          <div class="lb-item"><span class="k">Cost</span><span class="v">$${cost.toFixed(2)}</span></div>
+          <div class="lb-item"><span class="k">Tokens</span>
+            <span class="v" title="Input ${tin.toLocaleString()}\nOutput ${tout.toLocaleString()}">${fmtTok(tin)} / ${fmtTok(tout)}</span></div>
+          <div class="lb-item"><span class="k">Elapsed</span><span class="v">${fmtElapsed(state.elapsed)}</span></div>
+          <div class="lb-item"><span class="k">Step</span>
+            <span class="v">Step ${stepNo} / ${seq.length} · ${cur.name}</span></div>
+          <div class="lb-item"><span class="k">State</span>
+            <span class="v" style="margin-top:2px"><span class="badge ${st}"><span class="b-dot"></span>${STATUS_TXT[st]}</span></span></div>
+          <div class="lb-item last-act"><span class="k">Last Activity</span>
+            <span class="v${st === 'failed' ? ' err' : ''}">${lastAct}</span></div>
+          <button class="lb-more" title="More">⋯</button>
+        </div>
+        <div class="lane-row">${seq.map((s,i) =>
+          (i ? connector(seq[i-1], s) : '') + stageCard(s)).join('')}</div>
+      </div>`;
+    }).join('') + `</div>`;
   }else{
-    mid = stageCard(s2) + connector(s2, s3) + stageCard(s3);
+    html = stageCard(s1) + connector(s1, s2) + stageCard(s2)
+         + connector(s2, s3) + stageCard(s3) + connector(s3, s4)
+         + stageCard(s4) + connector(s4, s5) + stageCard(s5);
   }
-  const block = laneAgg();
-  p.innerHTML = stageCard(s1) + connector(s1, state.lanes.length ? block : s2)
-    + mid + connector(state.lanes.length ? block : s3, s4)
-    + stageCard(s4) + connector(s4, s5) + stageCard(s5);
+  p.innerHTML = html;
   p.querySelectorAll('.stage').forEach(el =>
     el.onclick = () => openInspector(el.dataset.id));
 }
@@ -761,7 +936,14 @@ function openInspector(id){
       ${kv('Input', s.inputTokens.toLocaleString())}
       ${kv('Output', s.outputTokens.toLocaleString())}
     </div>
-    <div class="insp-sec"><h4>Cost</h4>${kv('Total', '$'+s.cost.toFixed(2))}</div>
+    <div class="insp-sec"><h4>Cost</h4>
+      ${kv('Total', '$'+s.cost.toFixed(2))}
+      ${s.id.startsWith('interview') ? (
+        s.botCost != null
+          ? kv('RequirementsBot', '$'+s.botCost) + kv('Persona', '$'+s.personaCost)
+          : kv('RequirementsBot / Persona split', 'available when interview ends')
+      ) : ''}
+    </div>
     <div class="insp-sec"><h4>Latest activity</h4>
       <div style="font-size:12px;color:var(--text2)">${s.latestActivity||'—'}</div></div>
     <div class="insp-sec"><h4>Logs</h4>
@@ -824,7 +1006,99 @@ document.querySelectorAll('.nav-item[data-view]').forEach(item => item.onclick =
   item.classList.add('active');
   document.body.className = 'view-' + item.dataset.view;
   if(item.dataset.view === 'logs') renderLog(lastLog);
+  if(item.dataset.view === 'chat' && !chat.loaded) loadChat();
 });
+
+/* ---------- Requirement Bot chat ---------- */
+const chat = {loaded:false, busy:false, complete:false};
+const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+function renderChat(d){
+  chat.complete = d.complete;
+  const t = $('#chat-thread');
+  t.innerHTML = d.messages.map(m =>
+    `<div class="msg ${m.role === 'human' ? 'human' : 'ai'}">
+       <div class="who">${m.role === 'human' ? 'You' : 'RequirementsBot'}</div>${esc(m.text)}</div>`
+  ).join('')
+  + (d.error ? `<div class="msg err">${esc(d.error)}</div>` : '')
+  + (d.saved ? `<div class="msg sys">✓ Interview complete — full brief saved to ${d.saved}</div>` : '')
+  + (chat.busy ? `<div id="chat-typing"><span class="spin"></span>RequirementsBot is thinking…</div>` : '');
+  t.scrollTop = t.scrollHeight;
+  $('#chat-send').disabled = chat.busy || chat.complete;
+  $('#chat-input').disabled = chat.complete;
+}
+async function loadChat(){
+  chat.loaded = true;
+  try{ renderChat(await (await fetch('/chat/history')).json()); }
+  catch(e){ chat.loaded = false; }
+}
+async function sendChat(){
+  const inp = $('#chat-input'), text = inp.value.trim();
+  if(!text || chat.busy || chat.complete) return;
+  chat.busy = true; inp.value = '';
+  // optimistic echo while the bot works
+  const t = $('#chat-thread');
+  t.insertAdjacentHTML('beforeend',
+    `<div class="msg human"><div class="who">You</div>${esc(text)}</div>
+     <div id="chat-typing"><span class="spin"></span>RequirementsBot is thinking…</div>`);
+  t.scrollTop = t.scrollHeight;
+  $('#chat-send').disabled = true;
+  try{
+    const d = await (await fetch('/chat/send', {method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({message: text})})).json();
+    chat.busy = false; renderChat(d);
+  }catch(e){
+    chat.busy = false;
+    document.getElementById('chat-typing')?.remove();
+    t.insertAdjacentHTML('beforeend',
+      `<div class="msg err">Request failed — is the server still running?</div>`);
+    $('#chat-send').disabled = false;
+  }
+  inp.focus();
+}
+async function uploadChatFiles(fileList){
+  const files = await Promise.all([...fileList].map(f => new Promise(res => {
+    const r = new FileReader();
+    r.onload = () => res({name: f.name, data_b64: r.result.split(',')[1]});
+    r.readAsDataURL(f);
+  })));
+  if(!files.length) return;
+  const t = $('#chat-thread');
+  try{
+    const d = await (await fetch('/chat/upload', {method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({files})})).json();
+    if(d.saved && d.saved.length)
+      t.insertAdjacentHTML('beforeend',
+        `<div class="msg sys">📎 Uploaded to uploads/: ${esc(d.saved.join(', '))} — now tell the bot the files are ready.</div>`);
+    (d.rejected||[]).forEach(msg =>
+      t.insertAdjacentHTML('beforeend', `<div class="msg err">${esc(msg)}</div>`));
+  }catch(e){
+    t.insertAdjacentHTML('beforeend', `<div class="msg err">Upload failed.</div>`);
+  }
+  t.scrollTop = t.scrollHeight;
+  $('#chat-file').value = '';
+}
+$('#chat-attach').onclick = () => $('#chat-file').click();
+$('#chat-file').onchange = e => uploadChatFiles(e.target.files);
+$('#chat-thread').addEventListener('dragover', e => {
+  e.preventDefault(); e.currentTarget.classList.add('drop');
+});
+$('#chat-thread').addEventListener('dragleave', e =>
+  e.currentTarget.classList.remove('drop'));
+$('#chat-thread').addEventListener('drop', e => {
+  e.preventDefault(); e.currentTarget.classList.remove('drop');
+  uploadChatFiles(e.dataTransfer.files);
+});
+$('#chat-send').onclick = sendChat;
+$('#chat-input').addEventListener('keydown', e => {
+  if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); sendChat(); }
+});
+$('#chat-reset').onclick = async () => {
+  if(chat.busy) return;
+  const d = await (await fetch('/chat/reset', {method:'POST'})).json();
+  chat.complete = false; renderChat(d); $('#chat-input').disabled = false;
+};
 
 /* ---------- polling ---------- */
 let lastLog = '';
@@ -836,21 +1110,41 @@ async function tick(){
   $('#run-id').textContent = d.run_id ? 'Run #' + d.run_id : 'no runs yet';
   $('#run-meta').textContent = d.started_at
     ? '· started ' + fmtElapsed(Math.floor(Date.now()/1000 - d.started_at)) + ' ago' : '';
-  const overall = d.overall;
-  const overallTxt = (overall === 'completed' && d.fix_cycle_done)
-                   ? 'Completed Fixing Cycle' : STATUS_TXT[overall] || overall;
+  state.elapsed = d.elapsed;
+  state.lastActivityAgo = d.last_activity_ago;
+
+  // cycle counters, derived from each lane's stage states
+  const laneSt = state.lanes.map(l => {
+    const seq = [l.persona, l.interview, l.judge, l.improve, l.codefix];
+    if(seq.some(s => s.status === 'running')) return 'running';
+    if(seq.some(s => s.status === 'failed')) return 'failed';
+    if(l.codefix.status === 'completed') return 'completed';
+    return 'queued';
+  });
+  const nRun = laneSt.filter(s => s === 'running').length;
+  const nFail = laneSt.filter(s => s === 'failed').length;
+  const nDone = laneSt.filter(s => s === 'completed').length;
+
+  let overall;
+  if(!state.lanes.length) overall = d.overall;
+  else if(nRun > 0 || d.overall === 'running') overall = 'running';
+  else if(nFail > 0) overall = nDone > 0 ? 'completed_failures' : 'failed';
+  else overall = d.overall === 'idle' ? 'idle' : 'completed';
+  const overallTxt = STATUS_TXT[overall] || overall;
   $('#run-badge').className = 'badge ' + overall;
   $('#run-badge-txt').textContent = overallTxt;
   $('#s-state').className = 'badge ' + overall;
   $('#s-state-txt').textContent = overallTxt;
+
   $('#s-cost').textContent = '$' + (d.total_cost||0).toFixed(2);
   $('#s-in').textContent = fmtTok(d.total_in||0);
   $('#s-out').textContent = fmtTok(d.total_out||0);
   $('#s-elapsed').textContent = fmtElapsed(d.elapsed);
-  $('#s-progress').textContent = (d.completed_stages||0) + ' / ' + (d.total_stages||5);
-  $('#sum-progress-fill').style.width =
-    (100*(d.completed_stages||0)/(d.total_stages||5)) + '%';
-  $('#s-stage').textContent = d.current_stage || '—';
+  $('#s-running').textContent = nRun;
+  $('#s-running').classList.toggle('hot', nRun > 0);
+  $('#s-failed').textContent = nFail;
+  $('#s-failed').classList.toggle('hot', nFail > 0);
+  $('#s-completed-c').textContent = nDone;
   renderPipeline();
   if(state.selected) {
     const wasOpen = $('#inspector').classList.contains('open');
@@ -863,16 +1157,144 @@ tick(); setInterval(tick, 2000);
 </script></body></html>"""
 
 
+# ---------- live chat with RequirementsBot (the same bot main.py runs) ----------
+CHAT = {"bot": None, "turn": None, "busy": False, "shown": []}
+CHAT_LOCK = threading.Lock()
+
+
+def _chat_bot():
+    """Lazy: importing requirements_bot pulls langchain — only pay for it
+    when the chat page is actually used."""
+    if CHAT["bot"] is None:
+        from requirements_bot import RequirementsBot
+        bot = RequirementsBot()
+        bot.uploads_dir.mkdir(exist_ok=True)
+        CHAT["bot"] = bot
+    return CHAT["bot"]
+
+
+def _save_brief(partial: bool) -> None:
+    bot, turn = CHAT["bot"], CHAT["turn"]
+    if bot is None or turn is None:
+        return
+    brief = bot.brief(turn)
+    if partial:
+        brief["partial"] = True
+    (ROOT / "requirements_brief.json").write_text(
+        json.dumps(brief, indent=2, ensure_ascii=False), encoding="utf-8")
+
+
+def chat_history() -> dict:
+    # bot.chat_history holds the model's raw JSON turns; CHAT["shown"] keeps
+    # the clean conversational texts that send() returns (what main.py prints)
+    if not CHAT["shown"]:
+        from requirements_bot import RequirementsBot
+        CHAT["shown"] = [{"role": "ai", "text": RequirementsBot.GREETING}]
+    complete = CHAT["bot"].complete if CHAT["bot"] else False
+    return {"messages": CHAT["shown"], "complete": complete,
+            "busy": CHAT["busy"]}
+
+
+def chat_send(message: str) -> dict:
+    with CHAT_LOCK:
+        if CHAT["busy"]:
+            return {"error": "The bot is still answering — wait a moment."}
+        CHAT["busy"] = True
+    try:
+        bot = _chat_bot()
+        chat_history()  # ensure the greeting is seeded before appending
+        CHAT["shown"].append({"role": "human", "text": message})
+        msgs, turn = bot.send(message)
+        CHAT["shown"] += [{"role": "ai", "text": m} for m in msgs]
+        CHAT["turn"] = turn
+        if bot.complete:
+            _save_brief(partial=False)
+        return chat_history() | {
+            "saved": "requirements_brief.json" if bot.complete else None}
+    except RuntimeError as e:
+        # materials gate: the bot refuses to interview blind over unreadable
+        # files — surface it in the thread instead of a 500
+        return chat_history() | {"error": f"Stopped — {e}. "
+                                 "Fix or remove the files in uploads/."}
+    except Exception as e:
+        return chat_history() | {"error": f"{type(e).__name__}: {e}"}
+    finally:
+        CHAT["busy"] = False
+
+
+ALLOWED_EXTS = {".txt", ".md", ".csv", ".png", ".jpg", ".jpeg", ".webp", ".gif"}
+
+
+def chat_upload(files: list) -> dict:
+    """Save attached files into uploads/ so the bot's material scan sees them."""
+    import base64
+    updir = ROOT / "uploads"
+    updir.mkdir(exist_ok=True)
+    saved, rejected = [], []
+    for f in files[:20]:
+        name = Path(str(f.get("name", ""))).name  # strip any path components
+        ext = Path(name).suffix.lower()
+        if not name or ext not in ALLOWED_EXTS:
+            rejected.append(f"{name or '(unnamed)'} — only "
+                            + " ".join(sorted(ALLOWED_EXTS)) + " are readable")
+            continue
+        try:
+            data = base64.b64decode(str(f.get("data_b64", "")), validate=True)
+        except Exception:
+            rejected.append(f"{name} — could not decode")
+            continue
+        if len(data) > 15 * 1024 * 1024:
+            rejected.append(f"{name} — larger than 15MB")
+            continue
+        (updir / name).write_bytes(data)
+        saved.append(name)
+    return {"saved": saved, "rejected": rejected}
+
+
+def chat_reset() -> dict:
+    with CHAT_LOCK:
+        if CHAT["busy"]:
+            return {"error": "The bot is still answering — wait a moment."}
+        if CHAT["bot"] is not None and not CHAT["bot"].complete:
+            _save_brief(partial=True)  # don't lose a half-finished interview
+        CHAT.update(bot=None, turn=None, shown=[])
+    return chat_history()
+
+
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == "/data":
             body = json.dumps(payload()).encode("utf-8")
+            ctype = "application/json"
+        elif self.path == "/chat/history":
+            body = json.dumps(chat_history()).encode("utf-8")
             ctype = "application/json"
         else:
             body = PAGE.encode("utf-8")
             ctype = "text/html; charset=utf-8"
         self.send_response(200)
         self.send_header("Content-Type", ctype)
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def do_POST(self):
+        n = int(self.headers.get("Content-Length") or 0)
+        try:
+            req = json.loads(self.rfile.read(n) or b"{}")
+        except json.JSONDecodeError:
+            req = {}
+        if self.path == "/chat/send":
+            out = chat_send(str(req.get("message", "")).strip())
+        elif self.path == "/chat/upload":
+            out = chat_upload(req.get("files") or [])
+        elif self.path == "/chat/reset":
+            out = chat_reset()
+        else:
+            out = {"error": "unknown endpoint"}
+        body = json.dumps(out).encode("utf-8")
+        self.send_response(200)
+        self.send_header("Content-Type", "application/json")
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
         self.wfile.write(body)
