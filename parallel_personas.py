@@ -238,6 +238,7 @@ class ParallelPersonaRunner:
         parser = PydanticOutputParser(pydantic_object=PersonaBatch)
         personas: list[Persona] = []
         self.persona_gen_usage = empty_usage()
+        log(f"[personas] model {self.persona_model}")
         while len(personas) < self.count:
             n = min(10, self.count - len(personas))
             last_error = None

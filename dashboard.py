@@ -44,6 +44,11 @@ PAGE = """<!doctype html><html><head><meta charset="utf-8">
  .done .bar i{background:#3ecf6a} .failed .bar i{background:#e5534b}
  .judge{border-color:#6e56cf} .judge .bar i{background:#6e56cf}
  .judge.done .bar i{background:#3ecf6a}
+ .chips{display:flex;gap:8px;margin:8px 0}
+ .chip{flex:1;background:#0f1320;border:1px solid #232834;border-radius:6px;
+       padding:6px 4px;text-align:center}
+ .chip .i{font-size:16px} .chip .t{font-size:11px;font-weight:600;margin:2px 0}
+ .chip .m{color:#8a93a6;font-size:10px}
  .stats{display:flex;gap:8px;margin:8px 0}
  .stat{flex:1;background:#0f1320;border:1px solid #232834;border-radius:6px;
        padding:7px 4px;text-align:center}
@@ -67,6 +72,9 @@ async function tick(){
     document.querySelectorAll('.mini').forEach(m=>{
       stickiness[m.id] = m.scrollTop + m.clientHeight >= m.scrollHeight - 20;
     });
+    const chip = (icon, name, model) => model ? `<div class="chip">
+      <div class="i">${icon}</div><div class="t">${name}</div>
+      <div class="m">Model: ${model.replace('claude-','')}</div></div>` : '';
     const boxes = io => io ? `<div class="stats">
       <div class="stat"><div class="p">$${io.in_usd}</div><div class="l">Input Tokens</div><div class="n">${io.in_tok}</div></div>
       <div class="stat"><div class="p">$${io.out_usd}</div><div class="l">Output Tokens</div><div class="n">${io.out_tok}</div></div>
@@ -74,7 +82,9 @@ async function tick(){
     </div>` : '';
     const genCard = d.generator ? `<div class="card done"><b>Persona generator</b>
       <div class="bar"><i style="width:100%"></i></div>
-      <span class="muted">${d.generator.progress}</span>${boxes(d.generator.io)}</div>` : '';
+      <span class="muted">${d.generator.progress}</span>
+      <div class="chips">${chip('🎲','Generator',d.generator.model)}</div>
+      ${boxes(d.generator.io)}</div>` : '';
     document.getElementById('cards').innerHTML = genCard + d.interviews.map(iv=>{
       const cls = iv.status==='complete'?'done':(iv.status==='failed'?'failed':'');
       const pct = Math.min(100, Math.round(100*iv.turn/30));
@@ -82,13 +92,15 @@ async function tick(){
         <span class="score">${iv.score??''}</span>
         <div class="bar"><i style="width:${pct}%"></i></div>
         <span class="muted">${iv.status} — turn ${iv.turn}${iv.findings!=null?' · '+iv.findings+' findings':''}
-        ${iv.models?'<br>'+iv.models:''}
-        ${iv.tokens?'<br>'+iv.tokens:''}</span>${boxes(iv.io)}
+        ${iv.tokens?'<br>'+iv.tokens:''}</span>
+        <div class="chips">${chip('🤖','RequirementsBot',iv.bot_model)}${chip('🎭','Persona',iv.persona_model)}</div>
+        ${boxes(iv.io)}
         <div class="mini" id="mini${iv.index}">${iv.log.join('\\n')}</div></div>`;
     }).join('') + d.judges.map(j=>{
       return `<div class="card judge ${j.done?'done':''}"><b>Judge [${j.model}] — #${j.index} ${j.industry}</b>
         <div class="bar"><i style="width:${j.done?100:40}%"></i></div>
-        <span class="muted">${j.detail}</span>${boxes(j.io)}</div>`;
+        <span class="muted">${j.detail}</span>
+        <div class="chips">${chip('⚖️','Judge',j.model)}</div>${boxes(j.io)}</div>`;
     }).join('');
     document.querySelectorAll('.mini').forEach(m=>{
       if (stickiness[m.id] !== false) m.scrollTop = m.scrollHeight;
@@ -131,9 +143,12 @@ def collect() -> dict:
         if line.startswith("[personas]"):
             body = line[len("[personas]"):].strip()
             if generator is None:
-                generator = {"progress": "", "io": None}
-            if "generator[" in body:
+                generator = {"progress": "", "io": None, "model": None}
+            if body.startswith("model "):
+                generator["model"] = body[len("model "):]
+            elif "generator[" in body:
                 generator["io"] = parse_io(body)
+                generator["model"] = generator["model"] or body.split("generator[")[1].split("]")[0]
             else:
                 generator["progress"] = body
             continue
@@ -148,11 +163,14 @@ def collect() -> dict:
                                          "turn": 0, "status": "interviewing",
                                          "score": None, "findings": None,
                                          "tokens": None, "cost": None,
-                                         "models": None, "io": None, "log": []})
+                                         "bot_model": None, "persona_model": None,
+                                         "io": None, "log": []})
         # This interview's own line, without the shared [idx industry] prefix.
         iv["log"] = (iv["log"] + [line[line.index("]") + 1:].strip()])[-150:]
         if "interviewing... (" in line:
-            iv["models"] = line.split("interviewing... (")[1].rstrip(")")
+            m = re.search(r"bot: ([\w.-]+), persona: ([\w.-]+)", line)
+            if m:
+                iv["bot_model"], iv["persona_model"] = m.group(1), m.group(2)
         if "] turn " in line:
             iv["turn"] = int(line.split("] turn ")[1].split(":")[0].split("/")[0])
             if " | in " in line:
