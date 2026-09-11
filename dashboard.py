@@ -46,7 +46,10 @@ async function tick(){
     document.querySelectorAll('.mini').forEach(m=>{
       stickiness[m.id] = m.scrollTop + m.clientHeight >= m.scrollHeight - 20;
     });
-    document.getElementById('cards').innerHTML = d.interviews.map(iv=>{
+    const genCard = d.generator ? `<div class="card done"><b>Persona generator</b>
+      <div class="bar"><i style="width:100%"></i></div>
+      <span class="muted">${d.generator.progress}${d.generator.result?'<br><b>'+d.generator.result+'</b>':''}</span></div>` : '';
+    document.getElementById('cards').innerHTML = genCard + d.interviews.map(iv=>{
       const cls = iv.status==='complete'?'done':(iv.status==='failed'?'failed':'');
       const pct = Math.min(100, Math.round(100*iv.turn/30));
       return `<div class="card ${cls}"><b>#${iv.index} ${iv.industry}</b>
@@ -93,7 +96,17 @@ def collect() -> dict:
 
     # Live per-interview state, reconstructed from the log + result files.
     interviews: dict[int, dict] = {}
+    generator = None  # the persona-generation step's own status card
     for line in log_text.splitlines():
+        if line.startswith("[personas]"):
+            body = line[len("[personas]"):].strip()
+            if generator is None:
+                generator = {"progress": "", "result": ""}
+            if "generator[" in body:
+                generator["result"] = body
+            else:
+                generator["progress"] = body
+            continue
         if not line.startswith("["):
             continue
         try:
@@ -150,6 +163,7 @@ def collect() -> dict:
                         f"judge {m['judge']}")
 
     return {"run_dir": run.name, "log": log_text[-40000:], "summary": summary,
+            "generator": generator,
             "interviews": sorted(interviews.values(), key=lambda i: i["index"])}
 
 

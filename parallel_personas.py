@@ -232,12 +232,14 @@ class ParallelPersonaRunner:
         bad character must not kill a whole run before it starts."""
         parser = PydanticOutputParser(pydantic_object=PersonaBatch)
         personas: list[Persona] = []
+        self.persona_gen_usage = empty_usage()
         while len(personas) < self.count:
             n = min(10, self.count - len(personas))
             last_error = None
             for attempt in range(1, 4):
                 reply = self.persona_llm.invoke(PERSONA_BATCH_PROMPT.format(
                     n=n, format_instructions=parser.get_format_instructions()))
+                add_usage(self.persona_gen_usage, reply)
                 try:
                     batch = parser.parse(_blocks_to_text(reply.content)).personas[:n]
                     break
@@ -248,6 +250,11 @@ class ParallelPersonaRunner:
                 raise last_error
             personas.extend(batch)
             log(f"[personas] {len(personas)}/{self.count} generated")
+        g = self.persona_gen_usage
+        gen_in = g["fresh_in"] + g["cache_read"] + g["cache_write"]
+        self.persona_gen_cost = round(usd(self.persona_model, g), 4)
+        log(f"[personas] generator[{self.persona_model.replace('claude-', '')}] "
+            f"in {gen_in:,} out {g['out']:,} | ${self.persona_gen_cost:.2f}")
         return personas
 
     def run_interview(self, idx: int, persona: Persona) -> dict:
@@ -417,8 +424,14 @@ class ParallelPersonaRunner:
             },
             "models": {"bot": "claude-sonnet-5", "persona": self.persona_model,
                        "judge": self.judge_model},
+            "persona_generation": {
+                "model": self.persona_model,
+                "usage": getattr(self, "persona_gen_usage", None),
+                "cost_usd": getattr(self, "persona_gen_cost", 0.0),
+            },
             "total_cost_usd": round(sum(r["cost"]["total_usd"] for r in scored
-                                        if r.get("cost")), 2),
+                                        if r.get("cost"))
+                                    + getattr(self, "persona_gen_cost", 0.0), 2),
         }
         (self.run_dir / "summary.json").write_text(
             json.dumps(summary, indent=2, ensure_ascii=False), encoding="utf-8")
