@@ -158,7 +158,7 @@ class RequirementsBot:
     """The requirements-gathering interviewer. Holds one interview's state."""
 
     GREETING = ("Hi! I help businesses figure out exactly what they need from a "
-                "chatbot. Before we start — what's your name?")
+                "chatbot. What's your name?")
     NO_MATERIALS = "No materials shared yet."
     # The interviewer's system prompt lives in its own file so it can be
     # edited and improved without touching this code.
@@ -578,8 +578,20 @@ class RequirementsBot:
                 "refusing to interview: uploaded materials have not been analyzed "
                 "into the interviewer's context")
         last_error = None
-        for _ in range(3):
-            reply = self.llm.invoke(self._build_messages(question))
+        for attempt in range(3):
+            messages = self._build_messages(question)
+            if attempt:
+                # A bare retry replays the identical request and fails the
+                # identical way (short/gibberish owner messages reliably tempt
+                # the model into replying as plain chat text). Tell it what
+                # went wrong so the retry actually differs.
+                messages.append(AIMessage(content=output))
+                messages.append(HumanMessage(content=(
+                    "FORMAT ERROR: that reply was not the required JSON. Resend "
+                    "the same content as one valid JSON object matching the "
+                    "format instructions, with your chat text in next_message. "
+                    "Output nothing except the JSON object.")))
+            reply = self.llm.invoke(messages)
             u = reply.response_metadata.get("usage") or {}
             self.usage["fresh_in"] += u.get("input_tokens") or 0
             self.usage["cache_read"] += u.get("cache_read_input_tokens") or 0
