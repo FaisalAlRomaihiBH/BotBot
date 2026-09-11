@@ -29,6 +29,8 @@ PAGE = """<!doctype html><html><head><meta charset="utf-8">
  .bar{height:6px;background:#262b36;border-radius:3px;margin:8px 0}
  .bar i{display:block;height:6px;border-radius:3px;background:#4f8cff}
  .done .bar i{background:#3ecf6a} .failed .bar i{background:#e5534b}
+ .judge{border-color:#6e56cf} .judge .bar i{background:#6e56cf}
+ .judge.done .bar i{background:#3ecf6a}
  .score{float:right;font-weight:700}
  #log{margin:0 22px 22px;background:#0a0c10;border:1px solid #262b36;border-radius:8px;
       padding:12px;font:12px/1.5 Consolas,monospace;white-space:pre-wrap;
@@ -59,6 +61,10 @@ async function tick(){
         ${iv.models?'<br>'+iv.models:''}${iv.live_io?'<br>'+iv.live_io:''}
         ${iv.tokens?'<br>'+iv.tokens:''}${iv.cost?'<br><b>'+iv.cost+'</b>':''}</span>
         <div class="mini" id="mini${iv.index}">${iv.log.join('\\n')}</div></div>`;
+    }).join('') + d.judges.map(j=>{
+      return `<div class="card judge ${j.done?'done':''}"><b>Judge [${j.model}] — #${j.index} ${j.industry}</b>
+        <div class="bar"><i style="width:${j.done?100:40}%"></i></div>
+        <span class="muted">${j.detail}</span></div>`;
     }).join('');
     document.querySelectorAll('.mini').forEach(m=>{
       if (stickiness[m.id] !== false) m.scrollTop = m.scrollHeight;
@@ -96,6 +102,7 @@ def collect() -> dict:
 
     # Live per-interview state, reconstructed from the log + result files.
     interviews: dict[int, dict] = {}
+    judges: dict[int, dict] = {}  # judging is a separate model/process: own cards
     generator = None  # the persona-generation step's own status card
     for line in log_text.splitlines():
         if line.startswith("[personas]"):
@@ -135,13 +142,23 @@ def collect() -> dict:
             iv["tokens"] = line.split("] ")[1]
         if "] cost: " in line:
             iv["cost"] = line.split("] cost: ")[1]
-        if "judging..." in line:
-            iv["status"] = "judging"
-        if "] score " in line:
+        if "; judging with " in line:
+            iv["status"] = "interview done"
+            judges[idx] = {"index": idx, "industry": industry, "done": False,
+                           "model": line.split("; judging with ")[1].rstrip(". "),
+                           "detail": "judging..."}
+        if "] judge[" in line:
+            body = line.split("] judge[")[1]           # "opus-5] in 1,2.. | $0.17 | score 6/10, 9 findings"
+            j = judges.setdefault(idx, {"index": idx, "industry": industry,
+                                        "model": "", "detail": ""})
+            j["model"] = body.split("]")[0]
+            j["detail"] = body.split("] ", 1)[1]
+            j["done"] = True
             iv["status"] = "complete"
-            part = line.split("] score ")[1]          # "6.8/10, 9 findings"
-            iv["score"] = part.split(",")[0]
-            iv["findings"] = int(part.split(", ")[1].split(" ")[0])
+            if "| score " in body:
+                part = body.split("| score ")[1]       # "6.8/10, 9 findings"
+                iv["score"] = part.split(",")[0]
+                iv["findings"] = int(part.split(", ")[1].split(" ")[0])
         if "FAILED" in line:
             iv["status"] = "failed"
 
@@ -164,6 +181,7 @@ def collect() -> dict:
 
     return {"run_dir": run.name, "log": log_text[-40000:], "summary": summary,
             "generator": generator,
+            "judges": sorted(judges.values(), key=lambda j: j["index"]),
             "interviews": sorted(interviews.values(), key=lambda i: i["index"])}
 
 

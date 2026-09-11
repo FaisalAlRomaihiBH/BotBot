@@ -347,8 +347,7 @@ class ParallelPersonaRunner:
         tag = f"[{idx:03d} {persona.industry[:30]}]"
         try:
             log(f"{tag} interviewing... "
-                f"(bot: claude-sonnet-5, persona: {self.persona_model}, "
-                f"judge: {self.judge_model})")
+                f"(bot: claude-sonnet-5, persona: {self.persona_model})")
             result = self.run_interview(idx, persona)
             log(f"{tag} completed={result['completed']} ({result['ended_by']}) "
                 f"in {result['turns']} entries; "
@@ -373,7 +372,10 @@ class ParallelPersonaRunner:
                 "score": score,
                 "error": None,
             }
-            log(f"{tag} score {score}/10, {len(ev.findings)} findings")
+            j_in = sum(judge_usage[k] for k in ("fresh_in", "cache_read", "cache_write"))
+            log(f"{tag} judge[{self.judge_model.replace('claude-', '')}] "
+                f"in {j_in:,} out {judge_usage['out']:,} | ${cost['judge_usd']:.2f} "
+                f"| score {score}/10, {len(ev.findings)} findings")
             log(f"{tag} cost: ${cost['total_usd']:.2f} "
                 f"(bot {m['bot']} ${cost['bot_usd']:.2f} + "
                 f"persona {m['persona']} ${cost['persona_usd']:.2f} + "
