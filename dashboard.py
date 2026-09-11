@@ -710,7 +710,7 @@ body.view-chat #chat{display:flex}
     <nav id="sb-nav">
       <div class="nav-item" id="nav-chat" data-view="chat"><span class="nav-ico">▶</span><span class="nav-label">Requirement Bot Chat</span></div>
       <div class="nav-item" id="nav-logs" data-view="logs"><span class="nav-ico">≣</span><span class="nav-label">Live Logs</span></div>
-      <div class="nav-item active" id="nav-cycles" data-view="cycles"><span class="nav-ico">◈</span><span class="nav-label">Cycles</span></div>
+      <div class="nav-item active" id="nav-cycles" data-view="cycles"><span class="nav-ico">◈</span><span class="nav-label">Learning &amp; Training Cycles</span></div>
       <div class="nav-item"><span class="nav-ico">◉</span><span class="nav-label">Personas</span></div>
       <div class="nav-item"><span class="nav-ico">✎</span><span class="nav-label">Interviews</span></div>
       <div class="nav-item"><span class="nav-ico">⚖</span><span class="nav-label">Evaluations</span></div>
