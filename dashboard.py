@@ -159,6 +159,13 @@ def collect() -> dict:
                 part = body.split("| score ")[1]       # "6.8/10, 9 findings"
                 iv["score"] = part.split(",")[0]
                 iv["findings"] = int(part.split(", ")[1].split(" ")[0])
+        if "] score " in line:  # legacy runs logged score without a judge line
+            iv["status"] = "complete"
+            part = line.split("] score ")[1]
+            iv["score"] = part.split(",")[0]
+            iv["findings"] = int(part.split(", ")[1].split(" ")[0])
+        if "judging..." in line and "; judging with " not in line:
+            iv["status"] = "judging"  # legacy judging line
         if "FAILED" in line:
             iv["status"] = "failed"
 
