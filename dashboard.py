@@ -184,17 +184,62 @@ def _model_name(raw):
     return ("Claude " + name.title()) if name else None
 
 
+def _stage(num, sid, name, desc, usage):
+    return {"id": sid, "number": num, "name": name, "description": desc,
+            "status": "pending", "model": None, "usage": usage,
+            "inputTokens": 0, "outputTokens": 0, "cost": 0.0,
+            "progress": None, "latestActivity": None, "logs": []}
+
+
+def build_lanes(d: dict) -> list[dict]:
+    """One lane per persona: its own Interviewing -> Judge path."""
+    lanes = []
+    for iv in d["interviews"]:
+        idx = iv["index"]
+        j = next((x for x in d["judges"] if x["index"] == idx), None)
+
+        ist = _stage(2, f"interview-{idx}", "Interviewing",
+                     iv["industry"], "Claude API")
+        ist["status"] = ("running" if iv["status"] == "interviewing"
+                         else "failed" if iv["status"] == "failed" else "completed")
+        ist["model"] = _model_name(iv.get("bot_model"))
+        if iv.get("io"):
+            ist["inputTokens"] = _num(iv["io"]["in_tok"])
+            ist["outputTokens"] = _num(iv["io"]["out_tok"])
+            ist["cost"] = _usd(iv["io"]["total"])
+        ist["progress"] = {"label": "turn", "value": iv["turn"]}
+        ist["latestActivity"] = (iv["log"][-1][:90] if iv["log"] else None)
+        ist["logs"] = iv["log"][-40:]
+
+        jst = _stage(3, f"judge-{idx}", "Judge",
+                     "Evaluates requirements quality", "Claude API")
+        if j:
+            jst["status"] = "completed" if j.get("done") else "running"
+            jst["model"] = _model_name(j.get("model"))
+            if j.get("io"):
+                jst["inputTokens"] = _num(j["io"]["in_tok"])
+                jst["outputTokens"] = _num(j["io"]["out_tok"])
+                jst["cost"] = _usd(j["io"]["total"])
+            if j.get("done") and iv.get("score"):
+                jst["latestActivity"] = (f"score {iv['score']}, "
+                                         f"{iv['findings']} findings")
+            elif jst["status"] == "running":
+                jst["latestActivity"] = "Evaluating requirements…"
+        elif ist["status"] == "running":
+            jst["status"] = "queued"
+
+        lanes.append({"index": idx, "industry": iv["industry"],
+                      "score": iv.get("score"),
+                      "interview": ist, "judge": jst})
+    return lanes
+
+
 def build_stages(d: dict) -> list[dict]:
     """Aggregate parsed run data into the 5 reusable stage objects."""
     interviews, judges = d["interviews"], d["judges"]
     g = d.get("generator") or {}
     p = d["pipeline"]
-
-    def stage(num, sid, name, desc, usage):
-        return {"id": sid, "number": num, "name": name, "description": desc,
-                "status": "pending", "model": None, "usage": usage,
-                "inputTokens": 0, "outputTokens": 0, "cost": 0.0,
-                "progress": None, "latestActivity": None, "logs": []}
+    stage = _stage
 
     s1 = stage(1, "persona", "Persona Generator",
                "Generates business-owner personas", "Claude API")
@@ -301,7 +346,8 @@ def payload() -> dict:
     end = d.get("last_activity") if overall in ("completed", "failed") else now
     return {
         "run_id": d["run_dir"], "log": d["log"],
-        "stages": stages, "overall": overall,
+        "stages": stages, "lanes": build_lanes(d) if stages else [],
+        "overall": overall,
         "completed_stages": completed, "total_stages": len(stages) or 5,
         "current_stage": (running[0]["name"] if running else
                           ("—" if not stages or overall != "running"
@@ -433,9 +479,10 @@ body{margin:0;background:var(--bg);color:var(--text);font:13px/1.45 var(--sans)}
   animation:flow 1.4s linear infinite}
 .stage.pending .st-bar i,.stage.queued .st-bar i{background:transparent}
 @keyframes flow{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
-.st-metrics{display:flex;gap:10px;font:11px var(--mono)}
-.st-metrics span{color:var(--text2)}
-.st-metrics b{color:var(--text);font-weight:500;display:block;font-size:11.5px}
+.st-metrics{display:flex;flex-direction:column;gap:2px;font:11px var(--mono)}
+.st-metrics span{color:var(--muted);font-size:9.5px;text-transform:uppercase;
+  letter-spacing:.04em;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.st-metrics b{color:var(--text);font-weight:500;font-size:11.5px}
 .st-model{font:10.5px var(--mono);color:var(--text2);border-top:1px solid var(--border);
   padding-top:6px;line-height:1.6}
 .st-model .lbl{color:var(--muted)}
@@ -443,6 +490,11 @@ body{margin:0;background:var(--bg);color:var(--text);font:13px/1.45 var(--sans)}
   text-overflow:ellipsis;min-height:14px}
 .stage.running .st-act{color:var(--text2)}
 
+#lanes{flex:2;display:flex;flex-direction:column;gap:10px;min-width:0}
+.lane-label{font:10px var(--mono);color:var(--muted);text-transform:uppercase;
+  letter-spacing:.05em;margin:0 0 4px 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lane-row{display:flex;align-items:stretch}
+.lane-row .stage{min-width:150px}
 .connector{flex:none;width:26px;display:flex;align-items:center;position:relative}
 .connector::before{content:'';height:1px;width:100%;background:var(--border)}
 .connector.completed::before{background:#2f5c40}
@@ -500,20 +552,26 @@ body{margin:0;background:var(--bg);color:var(--text);font:13px/1.45 var(--sans)}
   overflow-y:auto;white-space:pre-wrap;word-break:break-all}
 
 #empty{padding:60px 20px;text-align:center;color:var(--muted)}
+
+/* ---------- views: Cycles (pipeline) vs Live Logs (console) ---------- */
+body.view-cycles #console{display:none}
+body.view-logs #summary,body.view-logs #pipeline-wrap{display:none}
+body.view-logs #console{flex:1}
 @media (max-width:760px){
   #sidebar{display:none}
   #pipeline{flex-direction:column;min-width:0}
   .connector{width:auto;height:20px;justify-content:center;margin-left:20px}
   .connector::before{width:1px;height:100%}
 }
-</style></head><body>
+</style></head><body class="view-cycles">
 <div id="shell">
   <aside id="sidebar">
     <div id="sb-head"><div id="sb-logo">R</div><span id="sb-title">RequirementsBot</span>
       <button id="sb-toggle" title="Collapse">⟨⟩</button></div>
     <nav id="sb-nav">
       <div class="nav-item"><span class="nav-ico">▶</span><span class="nav-label">Runs</span></div>
-      <div class="nav-item active"><span class="nav-ico">◈</span><span class="nav-label">Cycles</span></div>
+      <div class="nav-item" id="nav-logs" data-view="logs"><span class="nav-ico">≣</span><span class="nav-label">Live Logs</span></div>
+      <div class="nav-item active" id="nav-cycles" data-view="cycles"><span class="nav-ico">◈</span><span class="nav-label">Cycles</span></div>
       <div class="nav-item"><span class="nav-ico">◉</span><span class="nav-label">Personas</span></div>
       <div class="nav-item"><span class="nav-ico">✎</span><span class="nav-label">Interviews</span></div>
       <div class="nav-item"><span class="nav-ico">⚖</span><span class="nav-label">Evaluations</span></div>
@@ -547,7 +605,7 @@ body{margin:0;background:var(--bg);color:var(--text);font:13px/1.45 var(--sans)}
     <div id="summary">
       <div class="sum"><div class="k">Cost this cycle</div><div class="v" id="s-cost">$0.00</div></div>
       <div class="sum"><div class="k">Tokens</div>
-        <div class="v"><span id="s-in">0</span> <small>in</small> · <span id="s-out">0</span> <small>out</small></div></div>
+        <div class="v"><span id="s-in">0</span> <small>Input Tokens</small> · <span id="s-out">0</span> <small>Output Tokens</small></div></div>
       <div class="sum"><div class="k">Elapsed</div><div class="v" id="s-elapsed">—</div></div>
       <div class="sum"><div class="k">Cycle progress</div>
         <div class="v" id="s-progress">0 / 5</div>
@@ -595,7 +653,7 @@ const STAGE_ICONS = {persona:'◉', interview:'✎', judge:'⚖', improve:'⟳',
 const STATUS_TXT = {pending:'Pending', queued:'Queued', running:'Running',
                     completed:'Completed', failed:'Failed', retrying:'Retrying', idle:'Idle'};
 const STATUS_DOT = {pending:'○', queued:'○', running:'●', completed:'✓', failed:'✕'};
-let state = {stages:[], selected:null, paused:false, autoscroll:true,
+let state = {stages:[], lanes:[], selected:null, paused:false, autoscroll:true,
              filter:'all', search:'', fullscreen:false, cleared:0};
 
 function fmtTok(n){
@@ -627,15 +685,15 @@ function stageCard(s){
     : `<div class="st-act" title="${(s.latestActivity||'').replace(/"/g,'&quot;')}">${s.latestActivity||''}</div>`;
   return `<div class="stage ${s.status}${state.selected===s.id?' selected':''}" data-id="${s.id}">
     <div class="st-top"><span class="st-num">${s.number}</span>
-      <span class="st-ico">${STAGE_ICONS[s.id]||'▣'}</span>
+      <span class="st-ico">${STAGE_ICONS[s.id.split('-')[0]]||'▣'}</span>
       <span class="st-name">${s.name}</span></div>
     <div class="st-desc">${s.description}</div>
     <div class="st-status">${statusRow}</div>
     <div class="st-bar"><i></i></div>
     <div class="st-metrics">
-      <span><b>$${s.cost.toFixed(2)}</b>cost</span>
-      <span><b>${fmtTok(s.inputTokens)}</b>in</span>
-      <span><b>${fmtTok(s.outputTokens)}</b>out</span>
+      <span>Cost<b>$${s.cost.toFixed(2)}</b></span>
+      <span>Input Tokens<b>${fmtTok(s.inputTokens)}</b></span>
+      <span>Output Tokens<b>${fmtTok(s.outputTokens)}</b></span>
     </div>
     ${waiting}
     <div class="st-model">
@@ -650,11 +708,36 @@ function connector(prev, next){
   else if(prev.status === 'running') cls = 'running';
   return `<div class="connector ${cls}"></div>`;
 }
+function allStages(){
+  const lane = state.lanes.flatMap(l => [l.interview, l.judge]);
+  return state.stages.concat(lane);
+}
+function laneAgg(){
+  // pseudo-status of the whole lanes block, for the surrounding connectors
+  if(!state.lanes.length) return {status:'pending'};
+  const st = state.lanes.flatMap(l => [l.interview.status, l.judge.status]);
+  if(st.includes('running')) return {status:'running'};
+  if(st.every(s => s === 'completed')) return {status:'completed'};
+  return {status:'pending'};
+}
 function renderPipeline(){
   const p = $('#pipeline');
   if(!state.stages.length){ return; }
-  p.innerHTML = state.stages.map((s,i) =>
-    (i ? connector(state.stages[i-1], s) : '') + stageCard(s)).join('');
+  const [s1, s2, s3, s4, s5] = state.stages;
+  let mid;
+  if(state.lanes.length){
+    mid = `<div id="lanes">` + state.lanes.map(l => `
+      <div class="lane">
+        <div class="lane-label">#${l.index} ${l.industry}${l.score ? ' · '+l.score : ''}</div>
+        <div class="lane-row">${stageCard(l.interview)}${connector(l.interview, l.judge)}${stageCard(l.judge)}</div>
+      </div>`).join('') + `</div>`;
+  }else{
+    mid = stageCard(s2) + connector(s2, s3) + stageCard(s3);
+  }
+  const block = laneAgg();
+  p.innerHTML = stageCard(s1) + connector(s1, state.lanes.length ? block : s2)
+    + mid + connector(state.lanes.length ? block : s3, s4)
+    + stageCard(s4) + connector(s4, s5) + stageCard(s5);
   p.querySelectorAll('.stage').forEach(el =>
     el.onclick = () => openInspector(el.dataset.id));
 }
@@ -662,7 +745,7 @@ function renderPipeline(){
 /* ---------- inspector ---------- */
 function openInspector(id){
   state.selected = id; renderPipeline();
-  const s = state.stages.find(x => x.id === id); if(!s) return;
+  const s = allStages().find(x => x.id === id); if(!s) return;
   $('#insp-title').textContent = s.name;
   $('#insp-badge').className = 'badge ' + s.status;
   $('#insp-badge-txt').textContent = STATUS_TXT[s.status] || s.status;
@@ -736,6 +819,12 @@ $('#con-copy').onclick = () => navigator.clipboard.writeText(lastLog).catch(()=>
 $('#con-clear').onclick = () => { state.cleared = lastLog.split('\n').length; renderLog(lastLog); };
 $('#con-full').onclick = () => $('#console').classList.toggle('fullscreen');
 $('#sb-toggle').onclick = () => $('#sidebar').classList.toggle('collapsed');
+document.querySelectorAll('.nav-item[data-view]').forEach(item => item.onclick = () => {
+  document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('active'));
+  item.classList.add('active');
+  document.body.className = 'view-' + item.dataset.view;
+  if(item.dataset.view === 'logs') renderLog(lastLog);
+});
 
 /* ---------- polling ---------- */
 let lastLog = '';
@@ -743,6 +832,7 @@ async function tick(){
   let d;
   try{ d = await (await fetch('/data')).json(); }catch(e){ return; }
   state.stages = d.stages || [];
+  state.lanes = d.lanes || [];
   $('#run-id').textContent = d.run_id ? 'Run #' + d.run_id : 'no runs yet';
   $('#run-meta').textContent = d.started_at
     ? '· started ' + fmtElapsed(Math.floor(Date.now()/1000 - d.started_at)) + ' ago' : '';
