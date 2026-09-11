@@ -492,10 +492,13 @@ Rewrite the prompt to fix the problems found. STRICT rules:
 {top}
 """
 
-    def __init__(self, llm, run_dir: Path | None = None):
+    def __init__(self, llm, run_dir: Path | None = None,
+                 model: str = "claude-opus-5"):
         self.llm = llm
+        self.model = model
         self.prompt_file = RequirementsBot.PROMPT_FILE
         self.run_dir = run_dir
+        self.usage = empty_usage()
 
     @staticmethod
     def _violation(new: str, current: str) -> str | None:
@@ -536,6 +539,7 @@ Rewrite the prompt to fix the problems found. STRICT rules:
         feedback = ""
         for attempt in range(1, 4):
             reply = self.llm.invoke(base_prompt + feedback)
+            add_usage(self.usage, reply)
             new = _blocks_to_text(reply.content).strip()
             if new.startswith("```"):
                 new = new.strip("`").lstrip("text").strip()
@@ -560,10 +564,16 @@ def _git(*args) -> str:
 
 def improve_and_push(runner: "ParallelPersonaRunner", records: list[dict],
                      summary: dict) -> None:
-    log("=== improving the prompt from this run's findings...")
-    improver = PromptImprover(runner.judge_llm, run_dir=runner.run_dir)
+    log(f"[improve] running with {runner.judge_model}...")
+    improver = PromptImprover(runner.judge_llm, run_dir=runner.run_dir,
+                              model=runner.judge_model)
     change = improver.improve(records)
-    log(f"    {change or 'no change (nothing to fix, or guardrails rejected the rewrite)'}")
+    u = improver.usage
+    i_in = sum(u[k] for k in ("fresh_in", "cache_read", "cache_write"))
+    ii, io_ = usd_in_out(improver.model, u)
+    log(f"[improve] improver[{improver.model.replace('claude-', '')}] "
+        f"in {i_in:,} (${ii:.2f}) out {u['out']:,} (${io_:.2f}) total ${ii + io_:.2f}")
+    log(f"[improve] {change or 'no change (nothing to fix, or guardrails rejected the rewrite)'}")
     if change:
         _git("add", str(RequirementsBot.PROMPT_FILE))
         _git("commit", "-m",
@@ -606,20 +616,30 @@ def fix_code_issues(summary: dict, model: str = "claude-opus-5") -> None:
         return
     exe = shutil.which("claude")
     if not exe:
-        log("=== claude CLI not found; code suggestions saved in summary.json only.")
+        log("[codefix] claude CLI not found; code suggestions saved in summary.json only.")
         return
-    log(f"=== fixing {len(suggestions)} code-level suggestion(s) via claude -p ...")
+    log(f"[codefix] running {len(suggestions)} suggestion(s) with {model}...")
     prompt = CODE_FIX_PROMPT.format(
         suggestions="\n".join(f"- {s}" for s in suggestions))
     r = subprocess.run(
         [exe, "-p", prompt,
          "--model", model,
+         "--output-format", "json",
          "--permission-mode", "acceptEdits",
          "--allowedTools", "Bash(python*) Bash(git add:*) Bash(git commit:*) Bash(git push:*)"],
         cwd=ROOT, capture_output=True, text=True, timeout=1800)
-    log(r.stdout.strip()[-2000:] or "(no output)")
+    text, cost = r.stdout.strip(), None
+    try:
+        payload = json.loads(text)
+        cost = payload.get("total_cost_usd")
+        text = payload.get("result") or text
+    except (json.JSONDecodeError, AttributeError):
+        pass
+    if cost is not None:
+        log(f"[codefix] agent[{model.replace('claude-', '')}] total ${cost:.2f}")
+    log("[codefix] " + (text[-1500:] or "(no output)"))
     if r.returncode != 0:
-        log(f"    code-fix agent exited {r.returncode}: {r.stderr.strip()[-500:]}")
+        log(f"[codefix] agent exited {r.returncode}: {r.stderr.strip()[-500:]}")
 
 
 if __name__ == "__main__":

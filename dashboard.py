@@ -1,13 +1,18 @@
 # dashboard.py — live localhost dashboard for parallel persona runs.
 #
 # Run:  python dashboard.py            (serves http://localhost:8500)
-# Shows the latest run in parallel_runs/: one card per interview (status,
-# turns, score, findings, token usage) plus the streaming run.log. The page
-# polls every 2 seconds, so it updates live while a run is going.
+# Shows the latest run in parallel_runs/ as pipeline paths: every interview is
+# a card with milestones Persona -> Interview -> Judge (status, model, costs),
+# and one shared card carries the run-level Improve -> Code-fix stages.
+# The page polls every 2 seconds, so it updates live while a run is going.
 import json
 import re
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+
+ROOT = Path(__file__).parent
+RUNS_DIR = ROOT / "parallel_runs"
+PORT = 8500
 
 # "in 45,120 ($0.12) out 3,240 ($0.08) total $0.20" -> stat-box numbers
 IO_RE = re.compile(r"in ([\d,]+) \(\$([\d.]+)\) out ([\d,]+) \(\$([\d.]+)\) "
@@ -21,9 +26,6 @@ def parse_io(text: str):
     return {"in_tok": m.group(1), "in_usd": m.group(2),
             "out_tok": m.group(3), "out_usd": m.group(4), "total": m.group(5)}
 
-ROOT = Path(__file__).parent
-RUNS_DIR = ROOT / "parallel_runs"
-PORT = 8500
 
 PAGE = """<!doctype html><html><head><meta charset="utf-8">
 <title>RequirementsBot — persona runs</title>
@@ -32,38 +34,53 @@ PAGE = """<!doctype html><html><head><meta charset="utf-8">
  header{padding:14px 22px;background:#171a21;border-bottom:1px solid #262b36;
         display:flex;justify-content:space-between;align-items:baseline}
  h1{font-size:17px;margin:0} #rundir{color:#8a93a6;font-size:13px}
- #cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));
+ #cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(430px,1fr));
         gap:10px;padding:16px 22px}
  .card{background:#171a21;border:1px solid #262b36;border-radius:8px;padding:10px 14px}
  .card b{font-size:13px} .muted{color:#8a93a6;font-size:12px}
+ .score{float:right;font-weight:700}
+ .path{display:flex;align-items:stretch;gap:4px;margin:10px 0}
+ .arrow{align-self:center;color:#3a4152;font-size:15px}
+ .ms{flex:1;background:#0f1320;border:1px solid #232834;border-radius:8px;
+     padding:7px 6px;text-align:center;min-width:0}
+ .ms .i{font-size:16px} .ms .t{font-size:11px;font-weight:600;margin-top:1px}
+ .ms .m{color:#8a93a6;font-size:10px;margin:1px 0}
+ .ms .c{font-size:10px;color:#c9d2e0;margin-top:3px}
+ .ms .c b{color:#3ecf6a;font-size:11px}
+ .ms .st{font-size:10px;margin-top:3px;color:#8a93a6}
+ .ms.done{border-color:#2c5e3f} .ms.done .st{color:#3ecf6a}
+ .ms.failed{border-color:#7a2e2a} .ms.failed .st{color:#e5534b}
+ .ms.run{border-color:#4f8cff;animation:pulse 1.2s ease-in-out infinite}
+ .ms.run .st{color:#4f8cff}
+ @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(79,140,255,.35)}
+                  50%{box-shadow:0 0 0 5px rgba(79,140,255,0)}}
+ .spin{display:inline-block;animation:rot 1s linear infinite}
+ @keyframes rot{to{transform:rotate(360deg)}}
  .mini{background:#0a0c10;border:1px solid #232834;border-radius:6px;margin-top:8px;
        padding:8px;font:11px/1.5 Consolas,monospace;white-space:pre-wrap;
-       height:150px;overflow-y:auto;color:#9fd0a0}
- .bar{height:6px;background:#262b36;border-radius:3px;margin:8px 0}
- .bar i{display:block;height:6px;border-radius:3px;background:#4f8cff}
- .done .bar i{background:#3ecf6a} .failed .bar i{background:#e5534b}
- .judge{border-color:#6e56cf} .judge .bar i{background:#6e56cf}
- .judge.done .bar i{background:#3ecf6a}
- .chips{display:flex;gap:8px;margin:8px 0}
- .chip{flex:1;background:#0f1320;border:1px solid #232834;border-radius:6px;
-       padding:6px 4px;text-align:center}
- .chip .i{font-size:16px} .chip .t{font-size:11px;font-weight:600;margin:2px 0}
- .chip .m{color:#8a93a6;font-size:10px}
- .stats{display:flex;gap:8px;margin:8px 0}
- .stat{flex:1;background:#0f1320;border:1px solid #232834;border-radius:6px;
-       padding:7px 4px;text-align:center}
- .stat .p{color:#3ecf6a;font-weight:700;font-size:13px}
- .stat .l{color:#8a93a6;font-size:10px;text-transform:uppercase;margin:2px 0}
- .stat .n{font-size:14px;font-weight:600}
- .score{float:right;font-weight:700}
+       height:130px;overflow-y:auto;color:#9fd0a0}
  #log{margin:0 22px 22px;background:#0a0c10;border:1px solid #262b36;border-radius:8px;
       padding:12px;font:12px/1.5 Consolas,monospace;white-space:pre-wrap;
-      max-height:45vh;overflow-y:auto;color:#9fd0a0}
- #summary{margin:0 22px 12px;color:#c9d2e0;font-size:13px}
+      max-height:40vh;overflow-y:auto;color:#9fd0a0}
 </style></head><body>
 <header><h1>RequirementsBot — parallel persona run</h1><span id="rundir"></span></header>
 <div id="cards"></div><pre id="log"></pre>
 <script>
+const STATUS_LABEL = {pending:'waiting', run:'', done:'done', failed:'failed'};
+function milestone(icon, name, model, status, io, note){
+  const st = status==='run' ? '<span class="spin">◌</span> running'
+           : (note || STATUS_LABEL[status] || status);
+  const costs = io ? `<div class="c">in ${io.in_tok} <b>$${io.in_usd}</b><br>
+                      out ${io.out_tok} <b>$${io.out_usd}</b><br>
+                      total <b>$${io.total}</b></div>`
+                   : (status==='done' ? '' : '');
+  return `<div class="ms ${status}"><div class="i">${icon}</div>
+    <div class="t">${name}</div>
+    <div class="m">${model ? 'Model: '+model.replace('claude-','') : '&nbsp;'}</div>
+    ${costs}<div class="st">${st}</div></div>`;
+}
+const arrow = '<span class="arrow">➜</span>';
+
 async function tick(){
   try{
     const d = await (await fetch('/data')).json();
@@ -72,36 +89,42 @@ async function tick(){
     document.querySelectorAll('.mini').forEach(m=>{
       stickiness[m.id] = m.scrollTop + m.clientHeight >= m.scrollHeight - 20;
     });
-    const chip = (icon, name, model) => model ? `<div class="chip">
-      <div class="i">${icon}</div><div class="t">${name}</div>
-      <div class="m">Model: ${model.replace('claude-','')}</div></div>` : '';
-    const boxes = io => io ? `<div class="stats">
-      <div class="stat"><div class="p">$${io.in_usd}</div><div class="l">Input Tokens</div><div class="n">${io.in_tok}</div></div>
-      <div class="stat"><div class="p">$${io.out_usd}</div><div class="l">Output Tokens</div><div class="n">${io.out_tok}</div></div>
-      <div class="stat"><div class="p">$${io.total}</div><div class="l">Total Cost</div><div class="n">&nbsp;</div></div>
-    </div>` : '';
-    const genCard = d.generator ? `<div class="card done"><b>Persona generator</b>
-      <div class="bar"><i style="width:100%"></i></div>
-      <span class="muted">${d.generator.progress}</span>
-      <div class="chips">${chip('🎲','Generator',d.generator.model)}</div>
-      ${boxes(d.generator.io)}</div>` : '';
-    document.getElementById('cards').innerHTML = genCard + d.interviews.map(iv=>{
-      const cls = iv.status==='complete'?'done':(iv.status==='failed'?'failed':'');
-      const pct = Math.min(100, Math.round(100*iv.turn/30));
-      return `<div class="card ${cls}"><b>#${iv.index} ${iv.industry}</b>
+
+    const n = Math.max(1, d.interviews.length);
+    const cards = d.interviews.map(iv=>{
+      const g = d.generator || {};
+      const gIo = g.io ? {...g.io,
+        in_usd:(g.io.in_usd/n).toFixed(2), out_usd:(g.io.out_usd/n).toFixed(2),
+        total:(g.io.total/n).toFixed(2), in_tok:g.io.in_tok, out_tok:g.io.out_tok} : null;
+      const j = d.judges.find(x=>x.index===iv.index);
+      const ivStatus = iv.status==='interviewing' ? 'run'
+                     : iv.status==='failed' ? 'failed' : 'done';
+      const jStatus = !j ? 'pending' : (j.done ? 'done' : 'run');
+      return `<div class="card"><b>#${iv.index} ${iv.industry}</b>
         <span class="score">${iv.score??''}</span>
-        <div class="bar"><i style="width:${pct}%"></i></div>
-        <span class="muted">${iv.status} — turn ${iv.turn}${iv.findings!=null?' · '+iv.findings+' findings':''}
-        ${iv.tokens?'<br>'+iv.tokens:''}</span>
-        <div class="chips">${chip('🤖','RequirementsBot',iv.bot_model)}${chip('🎭','Persona',iv.persona_model)}</div>
-        ${boxes(iv.io)}
+        <div class="path">
+          ${milestone('🎲','Persona', g.model, g.done?'done':'run', gIo,
+                      g.done?'done':'generating')}${arrow}
+          ${milestone('🤖','Interview', iv.bot_model, ivStatus, iv.io,
+                      ivStatus==='done' ? (iv.status==='owner left'?'owner left':'done')
+                                        : 'turn '+iv.turn)}${arrow}
+          ${milestone('⚖️','Judge', j?j.model:null, jStatus, j?j.io:null,
+                      j&&j.done&&iv.findings!=null ? iv.findings+' findings' : null)}
+        </div>
         <div class="mini" id="mini${iv.index}">${iv.log.join('\\n')}</div></div>`;
-    }).join('') + d.judges.map(j=>{
-      return `<div class="card judge ${j.done?'done':''}"><b>Judge [${j.model}] — #${j.index} ${j.industry}</b>
-        <div class="bar"><i style="width:${j.done?100:40}%"></i></div>
-        <span class="muted">${j.detail}</span>
-        <div class="chips">${chip('⚖️','Judge',j.model)}</div>${boxes(j.io)}</div>`;
     }).join('');
+
+    const p = d.pipeline;
+    const shared = (p.improve.status!=='pending' || p.codefix.status!=='pending' || d.run_finished)
+      ? `<div class="card"><b>Run pipeline — after all interviews</b>
+         <div class="path">
+           ${milestone('🛠️','Improve prompt', p.improve.model, p.improve.status,
+                       p.improve.io, p.improve.note)}${arrow}
+           ${milestone('🧑‍💻','Code fixes', p.codefix.model, p.codefix.status,
+                       p.codefix.io, p.codefix.note)}
+         </div></div>` : '';
+
+    document.getElementById('cards').innerHTML = cards + shared;
     document.querySelectorAll('.mini').forEach(m=>{
       if (stickiness[m.id] !== false) m.scrollTop = m.scrollHeight;
     });
@@ -128,30 +151,68 @@ def latest_run_dir():
 
 def collect() -> dict:
     run = latest_run_dir()
+    empty_stage = lambda: {"status": "pending", "model": None, "io": None, "note": None}
+    pipeline = {"improve": empty_stage(), "codefix": empty_stage()}
     if run is None:
-        return {"run_dir": None, "interviews": [], "judges": [], "generator": None, "log": ""}
+        return {"run_dir": None, "interviews": [], "judges": [],
+                "generator": None, "pipeline": pipeline,
+                "run_finished": False, "log": ""}
 
     log_file = run / "run.log"
     log_text = log_file.read_text(encoding="utf-8", errors="replace") \
         if log_file.exists() else "(this run has no run.log — older run)"
 
-    # Live per-interview state, reconstructed from the log + result files.
     interviews: dict[int, dict] = {}
-    judges: dict[int, dict] = {}  # judging is a separate model/process: own cards
-    generator = None  # the persona-generation step's own status card
+    judges: dict[int, dict] = {}
+    generator = {"model": None, "io": None, "done": False}
+    run_finished = False
+
     for line in log_text.splitlines():
         if line.startswith("[personas]"):
             body = line[len("[personas]"):].strip()
-            if generator is None:
-                generator = {"progress": "", "io": None, "model": None}
             if body.startswith("model "):
                 generator["model"] = body[len("model "):]
             elif "generator[" in body:
                 generator["io"] = parse_io(body)
-                generator["model"] = generator["model"] or body.split("generator[")[1].split("]")[0]
-            else:
-                generator["progress"] = body
+                generator["model"] = (generator["model"]
+                                      or body.split("generator[")[1].split("]")[0])
+                generator["done"] = True
             continue
+        if line.startswith("[improve]"):
+            body = line[len("[improve]"):].strip()
+            st = pipeline["improve"]
+            if body.startswith("running with "):
+                st.update(status="run", model=body[len("running with "):].rstrip(". "))
+            elif "improver[" in body:
+                st["io"] = parse_io(body)
+            elif body.startswith("prompt updated"):
+                st.update(status="done", note=body)
+            elif body.startswith("no change"):
+                st.update(status="done", note="no change")
+            elif "attempt" in body and "rejected" in body:
+                st["note"] = body[:60]
+            continue
+        if line.startswith("[codefix]"):
+            body = line[len("[codefix]"):].strip()
+            st = pipeline["codefix"]
+            if body.startswith("running "):
+                st.update(status="run",
+                          model=body.split(" with ")[-1].rstrip(". ") if " with " in body else None,
+                          note=body.split(" with ")[0].replace("running ", ""))
+            elif body.startswith("agent[") and "total $" in body:
+                st.update(status="done",
+                          io={"in_tok": "—", "in_usd": "0.00", "out_tok": "—",
+                              "out_usd": "0.00",
+                              "total": body.split("total $")[1].split()[0]})
+            elif "claude CLI not found" in body:
+                st.update(status="failed", note="claude CLI not found")
+            elif "exited" in body:
+                st.update(status="failed", note=body[:60])
+            elif st["status"] == "run":
+                st.update(status="done", note="finished")
+            continue
+        if line.startswith("=== done"):
+            run_finished = True
         if not line.startswith("["):
             continue
         try:
@@ -162,10 +223,8 @@ def collect() -> dict:
         iv = interviews.setdefault(idx, {"index": idx, "industry": industry,
                                          "turn": 0, "status": "interviewing",
                                          "score": None, "findings": None,
-                                         "tokens": None, "cost": None,
                                          "bot_model": None, "persona_model": None,
                                          "io": None, "log": []})
-        # This interview's own line, without the shared [idx industry] prefix.
         iv["log"] = (iv["log"] + [line[line.index("]") + 1:].strip()])[-150:]
         if "interviewing... (" in line:
             m = re.search(r"bot: ([\w.-]+), persona: ([\w.-]+)", line)
@@ -177,41 +236,29 @@ def collect() -> dict:
                 iv["io"] = parse_io(line) or iv.get("io")
             if "[OWNER LEFT]" in line:
                 iv["status"] = "owner left"
-        if " tokens: " in line:
-            iv["tokens"] = line.split("] ")[1]
-        if "] cost: " in line:
-            iv["cost"] = line.split("] cost: ")[1]
         if "; judging with " in line:
-            iv["status"] = "interview done"
-            judges[idx] = {"index": idx, "industry": industry, "done": False,
-                           "model": line.split("; judging with ")[1].rstrip(". "),
-                           "detail": "judging...", "io": None}
+            if iv["status"] == "interviewing":
+                iv["status"] = "interview done"
+            judges[idx] = {"index": idx, "done": False, "io": None,
+                           "model": line.split("; judging with ")[1].rstrip(". ")}
         if "] judge[" in line:
-            body = line.split("] judge[")[1]           # "opus-5] in 1,2.. | $0.17 | score 6/10, 9 findings"
-            j = judges.setdefault(idx, {"index": idx, "industry": industry,
-                                        "model": "", "detail": ""})
+            body = line.split("] judge[")[1]
+            j = judges.setdefault(idx, {"index": idx, "model": "", "io": None})
             j["model"] = body.split("]")[0]
             j["io"] = parse_io(body)
-            j["detail"] = (body.split("| score ")[1] and "score " + body.split("| score ")[1]) \
-                if "| score " in body else body.split("] ", 1)[1]
             j["done"] = True
-            iv["status"] = "complete"
+            if iv["status"] != "owner left":
+                iv["status"] = "complete"
             if "| score " in body:
-                part = body.split("| score ")[1]       # "6.8/10, 9 findings"
+                part = body.split("| score ")[1]
                 iv["score"] = part.split(",")[0]
                 iv["findings"] = int(part.split(", ")[1].split(" ")[0])
-        if "] score " in line:  # legacy runs logged score without a judge line
-            iv["status"] = "complete"
-            part = line.split("] score ")[1]
-            iv["score"] = part.split(",")[0]
-            iv["findings"] = int(part.split(", ")[1].split(" ")[0])
-        if "judging..." in line and "; judging with " not in line:
-            iv["status"] = "judging"  # legacy judging line
         if "FAILED" in line:
             iv["status"] = "failed"
 
     return {"run_dir": run.name, "log": log_text[-40000:],
-            "generator": generator,
+            "generator": generator, "pipeline": pipeline,
+            "run_finished": run_finished,
             "judges": sorted(judges.values(), key=lambda j: j["index"]),
             "interviews": sorted(interviews.values(), key=lambda i: i["index"])}
 
