@@ -38,7 +38,7 @@ PAGE = """<!doctype html><html><head><meta charset="utf-8">
  #summary{margin:0 22px 12px;color:#c9d2e0;font-size:13px}
 </style></head><body>
 <header><h1>RequirementsBot — parallel persona run</h1><span id="rundir"></span></header>
-<div id="cards"></div><div id="summary"></div><pre id="log"></pre>
+<div id="cards"></div><pre id="log"></pre>
 <script>
 async function tick(){
   try{
@@ -69,7 +69,6 @@ async function tick(){
     document.querySelectorAll('.mini').forEach(m=>{
       if (stickiness[m.id] !== false) m.scrollTop = m.scrollHeight;
     });
-    document.getElementById('summary').textContent = d.summary || '';
     const log = document.getElementById('log');
     const stick = log.scrollTop + log.clientHeight >= log.scrollHeight - 30;
     log.textContent = d.log;
@@ -94,7 +93,7 @@ def latest_run_dir():
 def collect() -> dict:
     run = latest_run_dir()
     if run is None:
-        return {"run_dir": None, "interviews": [], "log": "", "summary": ""}
+        return {"run_dir": None, "interviews": [], "judges": [], "generator": None, "log": ""}
 
     log_file = run / "run.log"
     log_text = log_file.read_text(encoding="utf-8", errors="replace") \
@@ -132,10 +131,14 @@ def collect() -> dict:
             iv["models"] = line.split("interviewing... (")[1].rstrip(")")
         if "] turn " in line:
             iv["turn"] = int(line.split("] turn ")[1].split(":")[0].split("/")[0])
-            if " | in " in line:  # live token counts, e.g. "| in 45,120 out 3,240"
-                iv["live_io"] = "in " + line.split(" | in ")[1].split(" | ")[0]
-            if " | $" in line:  # live running cost, e.g. "| $0.42 so far"
-                iv["cost"] = "$" + line.split(" | $")[1].split(" [")[0]
+            if " | in " in line:
+                # "in 45,120 ($0.12) out 3,240 ($0.08) total $0.20 [markers]"
+                seg = line.split(" | in ")[1].split(" [")[0]
+                if " total " in seg:
+                    iv["live_io"] = "in " + seg.split(" total ")[0]
+                    iv["cost"] = "total " + seg.split(" total ")[1]
+                else:  # legacy format without prices
+                    iv["live_io"] = "in " + seg.split(" | ")[0]
             if "[OWNER LEFT]" in line:
                 iv["status"] = "owner left"
         if " tokens: " in line:
@@ -169,24 +172,7 @@ def collect() -> dict:
         if "FAILED" in line:
             iv["status"] = "failed"
 
-    summary_file = run / "summary.json"
-    summary = ""
-    if summary_file.exists():
-        s = json.loads(summary_file.read_text(encoding="utf-8"))
-        summary = (f"RUN DONE — {s['succeeded']}/{s['count']} judged, "
-                   f"{s['completed_interviews']} completed, avg {s['avg_score']}/10")
-        if s.get("bot_token_usage"):
-            u = s["bot_token_usage"]
-            summary += (f" · bot tokens: {u['fresh_in']} fresh, "
-                        f"{u['cache_read']} cached, {u['out']} out")
-        if s.get("total_cost_usd") is not None:
-            summary += f" · TOTAL COST ${s['total_cost_usd']:.2f}"
-        if s.get("models"):
-            m = s["models"]
-            summary += (f" · models: bot {m['bot']}, persona {m['persona']}, "
-                        f"judge {m['judge']}")
-
-    return {"run_dir": run.name, "log": log_text[-40000:], "summary": summary,
+    return {"run_dir": run.name, "log": log_text[-40000:],
             "generator": generator,
             "judges": sorted(judges.values(), key=lambda j: j["index"]),
             "interviews": sorted(interviews.values(), key=lambda i: i["index"])}

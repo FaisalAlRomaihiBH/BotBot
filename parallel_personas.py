@@ -43,13 +43,18 @@ PRICING = {
 }
 
 
-def usd(model: str, usage: dict) -> float:
-    """Dollar cost of a usage dict {fresh_in, cache_write, cache_read, out}."""
+def usd_in_out(model: str, usage: dict) -> tuple[float, float]:
+    """(input cost, output cost) in dollars for a usage dict."""
     inp, outp = PRICING.get(model, (5.00, 25.00))  # unknown model: price as Opus
-    return (usage.get("fresh_in", 0) * inp
-            + usage.get("cache_write", 0) * inp * 1.25
-            + usage.get("cache_read", 0) * inp * 0.10
-            + usage.get("out", 0) * outp) / 1_000_000
+    cost_in = (usage.get("fresh_in", 0) * inp
+               + usage.get("cache_write", 0) * inp * 1.25
+               + usage.get("cache_read", 0) * inp * 0.10) / 1_000_000
+    return cost_in, usage.get("out", 0) * outp / 1_000_000
+
+
+def usd(model: str, usage: dict) -> float:
+    """Total dollar cost of a usage dict {fresh_in, cache_write, cache_read, out}."""
+    return sum(usd_in_out(model, usage))
 
 
 def add_usage(acc: dict, reply) -> None:
@@ -253,8 +258,10 @@ class ParallelPersonaRunner:
         g = self.persona_gen_usage
         gen_in = g["fresh_in"] + g["cache_read"] + g["cache_write"]
         self.persona_gen_cost = round(usd(self.persona_model, g), 4)
+        gi, go = usd_in_out(self.persona_model, g)
         log(f"[personas] generator[{self.persona_model.replace('claude-', '')}] "
-            f"in {gen_in:,} out {g['out']:,} | ${self.persona_gen_cost:.2f}")
+            f"in {gen_in:,} (${gi:.2f}) out {g['out']:,} (${go:.2f}) "
+            f"total ${self.persona_gen_cost:.2f}")
         return personas
 
     def run_interview(self, idx: int, persona: Persona) -> dict:
@@ -294,9 +301,12 @@ class ParallelPersonaRunner:
             out_tok = bot.usage["out"] + persona_usage["out"]
             pm = self.persona_model.replace("claude-", "")
             bm = bot.model.replace("claude-", "")
+            b_in, b_out = usd_in_out(bot.model, bot.usage)
+            p_in, p_out = usd_in_out(self.persona_model, persona_usage)
             log(f"{tag} turn {turn_no}: owner[{pm}] {len(owner_msg.split())}w"
                 f" -> bot[{bm}] {len(messages[-1].split())}w"
-                f" | in {in_tok:,} out {out_tok:,} | ${running:.2f} so far"
+                f" | in {in_tok:,} (${b_in + p_in:.2f}) out {out_tok:,} "
+                f"(${b_out + p_out:.2f}) total ${running:.2f}"
                 + (" [analyzed files]" if len(messages) > 1 else "")
                 + (" [COMPLETE]" if bot.complete else "")
                 + (" [OWNER LEFT]" if owner_left else ""))
@@ -373,8 +383,10 @@ class ParallelPersonaRunner:
                 "error": None,
             }
             j_in = sum(judge_usage[k] for k in ("fresh_in", "cache_read", "cache_write"))
+            ji, jo = usd_in_out(self.judge_model, judge_usage)
             log(f"{tag} judge[{self.judge_model.replace('claude-', '')}] "
-                f"in {j_in:,} out {judge_usage['out']:,} | ${cost['judge_usd']:.2f} "
+                f"in {j_in:,} (${ji:.2f}) out {judge_usage['out']:,} (${jo:.2f}) "
+                f"total ${cost['judge_usd']:.2f} "
                 f"| score {score}/10, {len(ev.findings)} findings")
             log(f"{tag} cost: ${cost['total_usd']:.2f} "
                 f"(bot {m['bot']} ${cost['bot_usd']:.2f} + "
