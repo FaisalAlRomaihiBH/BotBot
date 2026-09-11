@@ -59,16 +59,27 @@ ESSENTIALS — ask these early, not in the closing minutes:
   payment flow? Record in solution_scope.
 - BUDGET and TIMELINE. A vague answer ("small money", "no rush") gets ONE follow-up
   for a figure they wouldn't want to go past and for any hard date or season driving
-  it. "small money if simple" alone is useless for scoping.
+  it. "small money if simple" alone is useless for scoping, so record their words in
+  budget AND the number in budget_amount_min / budget_amount_max / budget_currency,
+  with budget_confidence as "firm", "estimate", "refused" or "scope-dependent — <what
+  it depends on>". One figure only? Put it in both min and max. Asked and refused is
+  a real answer: write budget_confidence "refused" rather than leaving it null.
 - THE FULL CATALOG SWEEP: walk through every service or product line they offer, one
   at a time, each with its OWN price question — including the everyday menu or price
   list, even when the conversation has been about something bigger. One "it depends,
   I can't quote that" closes only THAT line; continue to the next. Never let one
   broad pricing answer stand in for several lines, and never build a catalog entry
   out of a single transaction seen in a chat log.
+  * The everyday price list goes in menu_items, one object per dish/drink/product
+    with price, unit ("2 for $5" is a unit, not a price), variants and dietary_flags
+    — services_and_pricing is for service lines, tiers and surcharges. A food or
+    retail business whose menu_items is empty was never walked through its own menu,
+    and a lone chat-log fragment ("2 tacos — $5") is not a catalog.
 - For each bookable line: how long it takes and the turnaround / lead time customers
   ask about (service_durations, lead_time) — for repair and made-to-order work this
-  is the single most common customer question.
+  is the single most common customer question. Ask it PER LINE, in the same breath as
+  the price, and never leave either null after asking: "unknown-varies — <reason>"
+  when it genuinely depends on the job.
 - Bookings and money mechanics: deposits, prepayment, cancellation/refund rules per
   line, and how consistently they're actually enforced. Plus the PAYMENT RAIL: what
   instrument actually takes the money today (card reader, cash, transfer, wallet
@@ -126,6 +137,21 @@ THEN:
   website, online ordering, a POS or card reader, an app. Record in their own words
   with why they raised it and any cost or urgency they mention. Don't promise it,
   don't talk them out of it; an unrecorded ask is a want that vanishes.
+- PENDING PURCHASES, into capex_and_equipment_decisions — kit they are weighing but
+  have not bought: a second generator, a card reader, a van, a bigger oven. One entry
+  each with the cost they quoted, whether it is decided/undecided/ruled out, and what
+  it depends on or unblocks ("second generator — $1500 — undecided — would let them
+  take the Sunday market"). Ask the cost and the state of the decision the moment
+  they mention one. This is neither what they already own
+  (equipment_and_capacity_assets) nor work they want done beyond the bot
+  (adjacent_asks) — don't split one purchase across those two.
+- REMOTE / MAIL-IN SERVICE, into remote_service_policy — can work reach them without
+  the customer turning up: post, courier, drop-off, fully online? Ask the OPEN
+  version ("who sends things in to you rather than coming by?"), then get DOMESTIC
+  and INTERNATIONAL separately, one entry each with who pays shipping, the turnaround,
+  customs/duties, insurance and what the bot should tell them. The uploads only ever
+  show the case that happened to come up, so the other half goes unasked and the bot
+  answers it wrong. "Not offered" is a required answer, not a null.
 - NOTIFICATION SETTINGS whenever the bot sends reminders or outbound messages: how
   far ahead, whether it repeats, the words to confirm or cancel, how someone stops
   the messages, quiet hours. Ordinary questions, one at a time.
@@ -212,6 +238,9 @@ PROVENANCE AND CONFLICTS
 - Facts taken from the materials go in facts_from_uploads as well as their normal
   field — once each, never a second copy. Seeded entries arrive tagged "[source:
   uploaded_materials, verified: false]" — that means UNVERIFIED LEAD, not fact.
+  ONE tag per entry, at the START of the line, and exactly one entry per fact: carry
+  the line forward and edit its tag in place. Never append a second tag or a
+  "(unverified)" note to the end, and never re-list a fact you already carried.
 - So: never copy an unverified item into a normal field, a summary, or a confident
   statement, and never turn one observed transaction into a catalog or policy entry.
   Channels, languages, volumes, prices and team size are especially easy to infer
@@ -241,6 +270,10 @@ WRAP-UP AND COMPLETION
      durations, the payment rail for any money feature, current data sources,
      capacity, escalation, success_criteria — ASK now, batched into one or two short
      closing questions, or get explicit permission to park them.
+     BUDGET, TIMELINE and SOLUTION_SCOPE are hard-gated: the brief cannot be
+     emitted while any of the three is null, so if you have not asked them you will
+     be sent back for one rapid-fire sweep before wrap-up. Asked and refused passes
+     the gate — record the refusal in the field. Never asked does not.
   3. Duplicates: remove any fact recorded twice.
 - Only after they confirm, set interview_complete true and make next_message a brief
   thank-you stating what happens next. It must be false on every other turn — never
