@@ -118,8 +118,8 @@ def collect() -> dict:
                 iv["cost"] = "$" + line.split(" | $")[1].split(" [")[0]
             if "[OWNER LEFT]" in line:
                 iv["status"] = "owner left"
-        if "] tokens: " in line:
-            iv["tokens"] = line.split("] tokens: ")[1]
+        if " tokens: " in line:
+            iv["tokens"] = line.split("] ")[1]
         if "] cost: " in line:
             iv["cost"] = line.split("] cost: ")[1]
         if "judging..." in line:

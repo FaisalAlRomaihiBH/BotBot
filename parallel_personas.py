@@ -285,8 +285,10 @@ class ParallelPersonaRunner:
             in_tok = sum(bot.usage[k] + persona_usage[k]
                          for k in ("fresh_in", "cache_read", "cache_write"))
             out_tok = bot.usage["out"] + persona_usage["out"]
-            log(f"{tag} turn {turn_no}: owner {len(owner_msg.split())}w"
-                f" -> bot {len(messages[-1].split())}w"
+            pm = self.persona_model.replace("claude-", "")
+            bm = bot.model.replace("claude-", "")
+            log(f"{tag} turn {turn_no}: owner[{pm}] {len(owner_msg.split())}w"
+                f" -> bot[{bm}] {len(messages[-1].split())}w"
                 f" | in {in_tok:,} out {out_tok:,} | ${running:.2f} so far"
                 + (" [analyzed files]" if len(messages) > 1 else "")
                 + (" [COMPLETE]" if bot.complete else "")
@@ -301,7 +303,8 @@ class ParallelPersonaRunner:
         u = bot.usage
         total_in = u["fresh_in"] + u["cache_read"] + u["cache_write"]
         hit = round(100 * u["cache_read"] / total_in) if total_in else 0
-        log(f"{tag} tokens: {u['fresh_in']} fresh + {u['cache_write']} cache-write "
+        log(f"{tag} bot[{bot.model.replace('claude-', '')}] tokens: "
+            f"{u['fresh_in']} fresh + {u['cache_write']} cache-write "
             f"+ {u['cache_read']} cache-read ({hit}% cached) -> {u['out']} out")
         return {
             "transcript": transcript,
@@ -341,7 +344,8 @@ class ParallelPersonaRunner:
                 f"judge: {self.judge_model})")
             result = self.run_interview(idx, persona)
             log(f"{tag} completed={result['completed']} ({result['ended_by']}) "
-                f"in {result['turns']} entries; judging...")
+                f"in {result['turns']} entries; "
+                f"judging with {self.judge_model.replace('claude-', '')}...")
             ev, judge_usage = self.evaluate(persona, result)
             score = round((ev.fact_capture + ev.no_repeats + ev.naturalness
                            + ev.completeness + ev.efficiency) / 5, 2)
