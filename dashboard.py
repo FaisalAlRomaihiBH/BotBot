@@ -5,8 +5,21 @@
 # turns, score, findings, token usage) plus the streaming run.log. The page
 # polls every 2 seconds, so it updates live while a run is going.
 import json
+import re
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+
+# "in 45,120 ($0.12) out 3,240 ($0.08) total $0.20" -> stat-box numbers
+IO_RE = re.compile(r"in ([\d,]+) \(\$([\d.]+)\) out ([\d,]+) \(\$([\d.]+)\) "
+                   r"total \$([\d.]+)")
+
+
+def parse_io(text: str):
+    m = IO_RE.search(text)
+    if not m:
+        return None
+    return {"in_tok": m.group(1), "in_usd": m.group(2),
+            "out_tok": m.group(3), "out_usd": m.group(4), "total": m.group(5)}
 
 ROOT = Path(__file__).parent
 RUNS_DIR = ROOT / "parallel_runs"
@@ -31,6 +44,12 @@ PAGE = """<!doctype html><html><head><meta charset="utf-8">
  .done .bar i{background:#3ecf6a} .failed .bar i{background:#e5534b}
  .judge{border-color:#6e56cf} .judge .bar i{background:#6e56cf}
  .judge.done .bar i{background:#3ecf6a}
+ .stats{display:flex;gap:8px;margin:8px 0}
+ .stat{flex:1;background:#0f1320;border:1px solid #232834;border-radius:6px;
+       padding:7px 4px;text-align:center}
+ .stat .p{color:#3ecf6a;font-weight:700;font-size:13px}
+ .stat .l{color:#8a93a6;font-size:10px;text-transform:uppercase;margin:2px 0}
+ .stat .n{font-size:14px;font-weight:600}
  .score{float:right;font-weight:700}
  #log{margin:0 22px 22px;background:#0a0c10;border:1px solid #262b36;border-radius:8px;
       padding:12px;font:12px/1.5 Consolas,monospace;white-space:pre-wrap;
@@ -48,9 +67,14 @@ async function tick(){
     document.querySelectorAll('.mini').forEach(m=>{
       stickiness[m.id] = m.scrollTop + m.clientHeight >= m.scrollHeight - 20;
     });
+    const boxes = io => io ? `<div class="stats">
+      <div class="stat"><div class="p">$${io.in_usd}</div><div class="l">Input Tokens</div><div class="n">${io.in_tok}</div></div>
+      <div class="stat"><div class="p">$${io.out_usd}</div><div class="l">Output Tokens</div><div class="n">${io.out_tok}</div></div>
+      <div class="stat"><div class="p">$${io.total}</div><div class="l">Total Cost</div><div class="n">&nbsp;</div></div>
+    </div>` : '';
     const genCard = d.generator ? `<div class="card done"><b>Persona generator</b>
       <div class="bar"><i style="width:100%"></i></div>
-      <span class="muted">${d.generator.progress}${d.generator.result?'<br><b>'+d.generator.result+'</b>':''}</span></div>` : '';
+      <span class="muted">${d.generator.progress}</span>${boxes(d.generator.io)}</div>` : '';
     document.getElementById('cards').innerHTML = genCard + d.interviews.map(iv=>{
       const cls = iv.status==='complete'?'done':(iv.status==='failed'?'failed':'');
       const pct = Math.min(100, Math.round(100*iv.turn/30));
@@ -58,13 +82,13 @@ async function tick(){
         <span class="score">${iv.score??''}</span>
         <div class="bar"><i style="width:${pct}%"></i></div>
         <span class="muted">${iv.status} — turn ${iv.turn}${iv.findings!=null?' · '+iv.findings+' findings':''}
-        ${iv.models?'<br>'+iv.models:''}${iv.live_io?'<br>'+iv.live_io:''}
-        ${iv.tokens?'<br>'+iv.tokens:''}${iv.cost?'<br><b>'+iv.cost+'</b>':''}</span>
+        ${iv.models?'<br>'+iv.models:''}
+        ${iv.tokens?'<br>'+iv.tokens:''}</span>${boxes(iv.io)}
         <div class="mini" id="mini${iv.index}">${iv.log.join('\\n')}</div></div>`;
     }).join('') + d.judges.map(j=>{
       return `<div class="card judge ${j.done?'done':''}"><b>Judge [${j.model}] — #${j.index} ${j.industry}</b>
         <div class="bar"><i style="width:${j.done?100:40}%"></i></div>
-        <span class="muted">${j.detail}</span></div>`;
+        <span class="muted">${j.detail}</span>${boxes(j.io)}</div>`;
     }).join('');
     document.querySelectorAll('.mini').forEach(m=>{
       if (stickiness[m.id] !== false) m.scrollTop = m.scrollHeight;
@@ -107,9 +131,9 @@ def collect() -> dict:
         if line.startswith("[personas]"):
             body = line[len("[personas]"):].strip()
             if generator is None:
-                generator = {"progress": "", "result": ""}
+                generator = {"progress": "", "io": None}
             if "generator[" in body:
-                generator["result"] = body
+                generator["io"] = parse_io(body)
             else:
                 generator["progress"] = body
             continue
@@ -124,7 +148,7 @@ def collect() -> dict:
                                          "turn": 0, "status": "interviewing",
                                          "score": None, "findings": None,
                                          "tokens": None, "cost": None,
-                                         "models": None, "live_io": None, "log": []})
+                                         "models": None, "io": None, "log": []})
         # This interview's own line, without the shared [idx industry] prefix.
         iv["log"] = (iv["log"] + [line[line.index("]") + 1:].strip()])[-150:]
         if "interviewing... (" in line:
@@ -132,13 +156,7 @@ def collect() -> dict:
         if "] turn " in line:
             iv["turn"] = int(line.split("] turn ")[1].split(":")[0].split("/")[0])
             if " | in " in line:
-                # "in 45,120 ($0.12) out 3,240 ($0.08) total $0.20 [markers]"
-                seg = line.split(" | in ")[1].split(" [")[0]
-                if " total " in seg:
-                    iv["live_io"] = "in " + seg.split(" total ")[0]
-                    iv["cost"] = "total " + seg.split(" total ")[1]
-                else:  # legacy format without prices
-                    iv["live_io"] = "in " + seg.split(" | ")[0]
+                iv["io"] = parse_io(line) or iv.get("io")
             if "[OWNER LEFT]" in line:
                 iv["status"] = "owner left"
         if " tokens: " in line:
@@ -149,13 +167,15 @@ def collect() -> dict:
             iv["status"] = "interview done"
             judges[idx] = {"index": idx, "industry": industry, "done": False,
                            "model": line.split("; judging with ")[1].rstrip(". "),
-                           "detail": "judging..."}
+                           "detail": "judging...", "io": None}
         if "] judge[" in line:
             body = line.split("] judge[")[1]           # "opus-5] in 1,2.. | $0.17 | score 6/10, 9 findings"
             j = judges.setdefault(idx, {"index": idx, "industry": industry,
                                         "model": "", "detail": ""})
             j["model"] = body.split("]")[0]
-            j["detail"] = body.split("] ", 1)[1]
+            j["io"] = parse_io(body)
+            j["detail"] = (body.split("| score ")[1] and "score " + body.split("| score ")[1]) \
+                if "| score " in body else body.split("] ", 1)[1]
             j["done"] = True
             iv["status"] = "complete"
             if "| score " in body:
