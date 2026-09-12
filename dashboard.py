@@ -265,9 +265,9 @@ body.view-home #run-header{display:none}
 #sup-fab .fab-dot{position:absolute;top:3px;right:3px;width:9px;height:9px;
   border-radius:50%;border:2px solid var(--bg);background:var(--muted)}
 #sup-fab .fab-dot.on{background:var(--green)}
-#sup-fab-label{position:fixed;right:0;bottom:4px;width:96px;z-index:60;
-  text-align:center;font:9.5px var(--mono);color:var(--muted);
-  pointer-events:none}
+#sup-fab-label{position:fixed;right:22px;bottom:3px;width:52px;z-index:60;
+  text-align:center;font:9px var(--mono);color:var(--muted);
+  white-space:nowrap;overflow:visible;pointer-events:none}
 .overlay{position:fixed;right:22px;bottom:84px;z-index:60;width:360px;
   max-width:calc(100vw - 44px);height:480px;max-height:calc(100vh - 130px);
   background:var(--panel);border:1px solid var(--border);border-radius:8px;
@@ -1463,6 +1463,92 @@ document.getElementById('list').innerHTML = samples.map(([n,t,d,make])=>`
 </script></body></html>"""
 
 
+# ============================ PILL CLARITY SAMPLES ============================
+# Demo at /pills: five ways to keep the status pill readable where the
+# comet ring passes underneath it.
+PILL_DEMO = r"""<!doctype html><html><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pill Clarity — pick one</title>
+<style>
+:root{--bg:#0d0d0d;--panel:#151515;--panel2:#1a1a1a;--border:#2a2a2a;
+  --border-hi:#3f3f46;--text:#f5f5f5;--text2:#a1a1aa;--muted:#71717a;
+  --accent:#6ea8fe;--green:#4ade80;--sans:-apple-system,'Segoe UI',system-ui,sans-serif;
+  --mono:'Cascadia Code',Consolas,monospace}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 var(--sans);padding:26px}
+h1{font-size:19px;margin:0 0 4px}
+p.sub{color:var(--text2);margin:0 0 26px;font-size:12.5px}
+.sample{background:var(--panel);border:1px solid var(--border);border-radius:8px;
+  padding:18px 22px;margin-bottom:18px}
+.sample h2{font-size:15px;margin:0 0 2px}
+.sample .d{color:var(--muted);font-size:12px;margin:0 0 22px}
+.row{display:flex;gap:56px;flex-wrap:wrap}
+.slot{display:flex;flex-direction:column;align-items:center;gap:12px}
+.slot .cap{font:10.5px var(--mono);color:var(--muted)}
+.node{position:relative;width:140px;height:140px}
+.ringc{position:absolute;inset:0;border-radius:50%;
+  background:conic-gradient(from 0deg, transparent 0 12%,
+    rgba(110,168,254,.12) 35%, rgba(110,168,254,.55) 75%, var(--accent) 100%);
+  -webkit-mask:radial-gradient(closest-side,transparent calc(100% - 6px),#000 calc(100% - 5px));
+  mask:radial-gradient(closest-side,transparent calc(100% - 6px),#000 calc(100% - 5px));
+  animation:rot 2.2s linear infinite}
+@keyframes rot{to{transform:rotate(360deg)}}
+.face{position:absolute;inset:5px;border-radius:50%;background:var(--panel2);
+  border:1px solid var(--border-hi);display:flex;align-items:center;
+  justify-content:center}
+.t{font-weight:600;font-size:13.5px;text-align:center;line-height:1.25}
+.pill{position:absolute;left:50%;transform:translateX(-50%);
+  font-size:10.5px;color:var(--text2);white-space:nowrap;
+  background:var(--panel);border:1px solid var(--border-hi);
+  border-radius:99px;padding:2.5px 11px;z-index:3}
+.pill .dot{color:var(--green)}
+@media (prefers-reduced-motion:reduce){.ringc{animation:none}}
+
+/* 1 — solid pill with shadow: opaque bg + soft dark halo swallows the ring */
+.s1 .pill{bottom:-10px;background:#101216;
+  box-shadow:0 0 0 4px var(--bg),0 2px 10px rgba(0,0,0,.8)}
+/* 2 — ring fades out at the bottom, leaving calm space for the pill */
+.s2 .ringc{-webkit-mask:
+   radial-gradient(closest-side,transparent calc(100% - 6px),#000 calc(100% - 5px)),
+   linear-gradient(#000 62%, transparent 86%);
+  -webkit-mask-composite:source-in;
+  mask:radial-gradient(closest-side,transparent calc(100% - 6px),#000 calc(100% - 5px)),
+   linear-gradient(#000 62%, transparent 86%);
+  mask-composite:intersect}
+.s2 .pill{bottom:-10px}
+/* 3 — pill fully OUTSIDE the circle, clear of the ring */
+.s3 .pill{bottom:-26px}
+/* 4 — pill fully INSIDE the circle, above the bottom edge */
+.s4 .pill{bottom:16px;background:var(--panel2)}
+/* 5 — frosted glass pill: blur + bright text over whatever passes below */
+.s5 .pill{bottom:-10px;background:rgba(16,18,22,.55);
+  backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);
+  color:var(--text);border-color:rgba(110,168,254,.35)}
+</style></head><body>
+<h1>Pill clarity samples</h1>
+<p class="sub">The comet runs fast here so you can judge readability at the
+worst moment. Tell Claude which number you want.</p>
+<div id="list"></div>
+<script>
+const samples=[
+ [1,'Solid pill with dark halo','Opaque pill plus a soft dark halo that swallows the ring behind it.'],
+ [2,'Ring fades near the pill','The comet dims out at the bottom of the circle, leaving calm space under the pill.'],
+ [3,'Pill fully outside','The pill drops below the circle entirely — the ring never touches it.'],
+ [4,'Pill fully inside','The pill tucks inside the circle above the bottom edge; the ring stays outside it.'],
+ [5,'Frosted glass pill','Semi-transparent blurred pill with brighter text — the ring glows through, softened.'],
+];
+document.getElementById('list').innerHTML = samples.map(([n,t,d])=>`
+ <div class="sample"><h2>${n}. ${t}</h2><p class="d">${d}</p>
+  <div class="row">
+   <div class="slot"><div class="node s${n}">
+     <div class="ringc"></div>
+     <div class="face"><span class="t">Requirements<br>Bot</span></div>
+     <span class="pill"><span class="dot">●</span> 2 running tasks</span>
+   </div><div class="cap">running (worst case)</div></div>
+  </div></div>`).join('');
+</script></body></html>"""
+
+
 # ============================ BACKEND ============================
 def _project_of(value) -> str:
     pid = str((value.get("project") if isinstance(value, dict) else value) or "").strip()
@@ -1669,6 +1755,10 @@ class Handler(BaseHTTPRequestHandler):
                        {"Set-Cookie": f"botbot_owner={_owner_token()}; "
                                       f"Path=/; HttpOnly; SameSite=Lax",
                         "Cache-Control": "no-store"})
+            return
+        if route == "/pills":
+            self._send(PILL_DEMO.encode("utf-8"), "text/html; charset=utf-8",
+                       {"Cache-Control": "no-store"})
             return
         if route == "/statuses":
             self._send(STATUS_DEMO.encode("utf-8"), "text/html; charset=utf-8",
