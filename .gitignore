@@ -1,13 +1,9 @@
-# Secrets — NEVER commit the API key
-.env
-
-# Virtual environment (recreate with: pip install -r requirements.txt)
 venv/
-
-# Python cache
 __pycache__/
-
-# Generated output from interview runs
-requirements_brief.json
+orchestrator_data/
+uploads/
 persona_sessions/
 parallel_runs/
+requirements_brief.json
+orchestrator_config.json
+.env
