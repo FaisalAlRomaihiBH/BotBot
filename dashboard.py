@@ -456,7 +456,9 @@ body{margin:0;background:var(--bg);color:var(--text);font:13px/1.45 var(--sans)}
 #sb-foot{border-top:1px solid var(--border);padding:10px 12px;font:11px var(--mono);
   color:var(--muted);white-space:nowrap}
 #sb-foot .dot{display:inline-block;width:6px;height:6px;border-radius:50%;
-  background:var(--green);margin-right:6px;vertical-align:1px}
+  background:var(--muted);margin-right:6px;vertical-align:1px}
+#sb-foot .dot.ok{background:var(--green)}
+#sb-foot .dot.bad{background:var(--red)}
 #sb-foot div{margin:3px 0}
 #sidebar.collapsed #sb-title,#sidebar.collapsed .nav-label,#sidebar.collapsed #sb-foot{display:none}
 
@@ -714,32 +716,102 @@ body.view-chat #chat{display:flex}
   border-radius:6px;padding:8px 11px;font-size:13px;cursor:pointer}
 #chat-attach:hover{border-color:var(--border-hi);color:var(--text)}
 #chat-thread.drop{outline:1px dashed var(--accent);outline-offset:-6px}
+
+/* ---------- Home (orchestrator graph) & Contracts/Review views ---------- */
+#home,#review{display:none;flex-direction:column;margin:14px 20px 20px;gap:14px;min-height:0}
+body.view-home #summary,body.view-home #pipeline-wrap,body.view-home #console,
+body.view-home #improve-grid,body.view-home .imp-panel{display:none}
+body.view-home #home{display:flex}
+body.view-review #summary,body.view-review #pipeline-wrap,body.view-review #console,
+body.view-review #improve-grid,body.view-review .imp-panel{display:none}
+body.view-review #review{display:flex}
+#proj-bar{display:flex;align-items:center;gap:10px;background:var(--panel);
+  border:1px solid var(--border);border-radius:6px;padding:8px 14px;flex-wrap:wrap}
+#proj-bar .pb-label{font:600 10px var(--sans);text-transform:uppercase;
+  letter-spacing:.07em;color:var(--muted)}
+#proj-select{background:var(--panel2);border:1px solid var(--border);color:var(--text);
+  border-radius:5px;padding:4px 8px;font:12px var(--sans);max-width:280px}
+#home-stale{margin-left:auto;font:10.5px var(--mono);color:var(--muted)}
+#home-stale.bad{color:var(--red)}
+#home-grid{display:flex;gap:14px;align-items:stretch;flex-wrap:wrap}
+.h-card{background:var(--panel);border:1px solid var(--border);border-radius:6px;
+  display:flex;flex-direction:column;min-width:0}
+#graph-card{flex:1.4;min-width:380px}
+#orch-panel{flex:1;min-width:320px;max-height:520px}
+.op-head{display:flex;align-items:center;gap:8px;padding:9px 14px;
+  border-bottom:1px solid var(--border);font:600 11px var(--sans);
+  text-transform:uppercase;letter-spacing:.07em;color:var(--text2)}
+#graph{width:100%;height:auto;display:block}
+#graph-note{padding:6px 14px 10px;font:10px var(--mono);color:var(--muted)}
+.gnode{cursor:pointer}
+.gnode:focus{outline:none}
+.gnode:focus circle{stroke:var(--accent)}
+.gnode.planned{cursor:default}
+.gedge{stroke:var(--border);stroke-width:1.2}
+.gedge.active{stroke:var(--accent);stroke-dasharray:6 6;animation:dashmove 1s linear infinite}
+@keyframes dashmove{to{stroke-dashoffset:-12}}
+@media (prefers-reduced-motion:reduce){.gedge.active{animation:none}}
+#mgmt-thread{flex:1;overflow-y:auto;padding:12px 14px;display:flex;
+  flex-direction:column;gap:9px;min-height:160px}
+#mgmt-bar{display:flex;gap:8px;padding:10px 12px;border-top:1px solid var(--border);
+  align-items:flex-end}
+#mgmt-input{flex:1;background:var(--panel2);border:1px solid var(--border);
+  color:var(--text);border-radius:6px;padding:7px 10px;font:12.5px/1.5 var(--sans);
+  resize:none;min-height:34px;max-height:110px}
+#mgmt-input:focus{outline:none;border-color:var(--border-hi)}
+.mmsg{max-width:85%;border:1px solid var(--border);border-radius:6px;
+  padding:6px 10px;font-size:12.5px;line-height:1.5;white-space:pre-wrap;
+  overflow-wrap:break-word}
+.mmsg .who{font:600 9px var(--mono);text-transform:uppercase;
+  letter-spacing:.07em;color:var(--muted);margin-bottom:2px}
+.mmsg.operator{align-self:flex-end;background:#161a20;border-color:#2b3a52}
+.mmsg.supervisor{align-self:flex-start;background:var(--panel2)}
+.mmsg.system{align-self:center;max-width:none;border-style:dashed;
+  color:var(--muted);font:11px var(--mono)}
+#attention-list{padding:10px 14px;display:flex;flex-direction:column;gap:8px}
+.att-item{display:flex;align-items:flex-start;gap:10px;border:1px solid var(--border);
+  border-radius:6px;padding:8px 12px;font-size:12.5px;background:var(--panel2)}
+.att-item .blk{flex:none;font:600 9px var(--mono);text-transform:uppercase;
+  letter-spacing:.05em;padding:2px 7px;border-radius:99px;margin-top:1px}
+.att-item .blk.b1{color:var(--red);border:1px solid #552b2b}
+.att-item .blk.b0{color:var(--amber);border:1px solid #5c4a1e}
+.att-item .txt{flex:1;line-height:1.5}
+.att-item .meta{font:10px var(--mono);color:var(--muted)}
+.att-empty{color:var(--muted);font-size:12px;padding:4px 0}
+.rv-card{background:var(--panel);border:1px solid var(--border);border-radius:6px}
+.rv-body{padding:10px 14px;font-size:12.5px;line-height:1.6}
+.rv-body table{width:100%;border-collapse:collapse;font-size:12px}
+.rv-body td,.rv-body th{padding:4px 8px;border-bottom:1px solid var(--border);
+  text-align:left;vertical-align:top}
+.rv-body th{font:600 10px var(--sans);text-transform:uppercase;
+  letter-spacing:.06em;color:var(--muted)}
+#rv-actions{display:flex;gap:8px;padding:10px 14px;border-top:1px solid var(--border);
+  flex-wrap:wrap;align-items:center}
+.stage-chip{font:600 9.5px var(--mono);padding:2px 8px;border-radius:99px;
+  border:1px solid var(--border);color:var(--muted);margin-right:6px}
+.stage-chip.on{color:var(--green);border-color:#234534}
 @media (max-width:760px){
   #sidebar{display:none}
   #pipeline{flex-direction:column;min-width:0}
   .connector{width:auto;height:20px;justify-content:center;margin-left:20px}
   .connector::before{width:1px;height:100%}
 }
-</style></head><body class="view-cycles">
+</style></head><body class="view-home">
 <div id="shell">
   <aside id="sidebar">
     <div id="sb-head"><div id="sb-logo">R</div><span id="sb-title">RequirementsBot</span>
       <button id="sb-toggle" title="Collapse">⟨⟩</button></div>
     <nav id="sb-nav">
-      <div class="nav-item" id="nav-chat" data-view="chat"><span class="nav-ico">▶</span><span class="nav-label">Requirement Bot Chat</span></div>
-      <div class="nav-item" id="nav-logs" data-view="logs"><span class="nav-ico">≣</span><span class="nav-label">Live Logs</span></div>
-      <div class="nav-item active" id="nav-cycles" data-view="cycles"><span class="nav-ico">◈</span><span class="nav-label">Learning &amp; Training Cycles</span></div>
-      <div class="nav-item"><span class="nav-ico">◉</span><span class="nav-label">Personas</span></div>
-      <div class="nav-item"><span class="nav-ico">✎</span><span class="nav-label">Interviews</span></div>
-      <div class="nav-item"><span class="nav-ico">⚖</span><span class="nav-label">Evaluations</span></div>
-      <div class="nav-item"><span class="nav-ico">‹›</span><span class="nav-label">Fixes</span></div>
-      <div class="nav-item"><span class="nav-ico">≡</span><span class="nav-label">Reports</span></div>
-      <div class="nav-item"><span class="nav-ico">⚙</span><span class="nav-label">Settings</span></div>
+      <div class="nav-item active" id="nav-home" data-view="home"><span class="nav-ico">◎</span><span class="nav-label">Home</span></div>
+      <div class="nav-item" id="nav-chat" data-view="chat"><span class="nav-ico">▶</span><span class="nav-label">Requirements Bot Chat</span></div>
+      <div class="nav-item" id="nav-review" data-view="review"><span class="nav-ico">☑</span><span class="nav-label">Contracts &amp; Review</span></div>
+      <div class="nav-item" id="nav-logs" data-view="logs"><span class="nav-ico">≣</span><span class="nav-label">Activity / Live Logs</span></div>
+      <div class="nav-item" id="nav-cycles" data-view="cycles"><span class="nav-ico">◈</span><span class="nav-label">Testing &amp; Improvement</span></div>
     </nav>
     <div id="sb-foot">
-      <div><span class="dot"></span>API connected</div>
-      <div><span class="dot"></span>Claude operational</div>
-      <div style="color:#52525b">v1.0.0</div>
+      <div><span class="dot" id="dot-store"></span><span id="txt-store">store: checking…</span></div>
+      <div><span class="dot" id="dot-provider"></span><span id="txt-provider">model: no calls yet</span></div>
+      <div><span class="dot" id="dot-sup"></span><span id="txt-sup">supervisor: —</span></div>
     </div>
   </aside>
 
@@ -751,12 +823,57 @@ body.view-chat #chat{display:flex}
       </div>
       <span class="badge idle" id="run-badge"><span class="b-dot"></span><span id="run-badge-txt">Idle</span></span>
       <div id="run-actions">
-        <button class="act" title="Pause">⏸</button>
-        <button class="act" title="Stop">■</button>
-        <button class="act" title="Restart">↻</button>
-        <button class="act" title="Settings">⚙</button>
-        <button class="act" title="More">⋯</button>
+        <span id="hdr-project" style="font:11px var(--mono);color:var(--muted)"></span>
       </div>
+    </div>
+
+    <div id="home">
+      <div id="proj-bar">
+        <span class="pb-label">Project</span>
+        <select id="proj-select" aria-label="Select project"></select>
+        <button class="act" id="proj-new">+ New project</button>
+        <span class="badge idle" id="proj-state"><span class="b-dot"></span><span id="proj-state-txt">—</span></span>
+        <span id="home-stale"></span>
+      </div>
+      <div id="home-grid">
+        <div class="h-card" id="graph-card">
+          <div class="op-head">Orchestrator
+            <span style="margin-left:auto;font:10px var(--mono);color:var(--muted);text-transform:none;letter-spacing:0">registry-driven · idle ≠ missing</span></div>
+          <svg id="graph" viewBox="0 0 680 400" role="img" aria-label="Orchestrator graph"></svg>
+          <div id="graph-note">A line is controller-mediated communication — not authority for one AI to call another. Dashed nodes are planned, not implemented.</div>
+        </div>
+        <div class="h-card" id="orch-panel">
+          <div class="op-head">AI Supervisor
+            <span class="badge idle" id="sup-mode"><span class="b-dot"></span><span id="sup-mode-txt">—</span></span>
+            <button class="act" id="sup-toggle" style="margin-left:auto">…</button></div>
+          <div id="mgmt-thread"></div>
+          <div id="mgmt-bar">
+            <textarea id="mgmt-input" rows="1" placeholder="Ask the supervisor about this project… (a paid call when enabled)" spellcheck="false"></textarea>
+            <button class="act" id="mgmt-send">Ask</button>
+          </div>
+        </div>
+      </div>
+      <div class="h-card" id="attention-card">
+        <div class="op-head">Needs Attention</div>
+        <div id="attention-list"></div>
+      </div>
+    </div>
+
+    <div id="review">
+      <div class="rv-card"><div class="op-head">Lifecycle</div>
+        <div class="rv-body" id="rv-state"></div></div>
+      <div class="rv-card"><div class="op-head">Readiness (computed rubric — interview completion is not readiness)</div>
+        <div class="rv-body" id="rv-readiness"></div></div>
+      <div class="rv-card"><div class="op-head">Review requests</div>
+        <div class="rv-body" id="rv-reviews"></div></div>
+      <div class="rv-card"><div class="op-head">Revisions &amp; approval</div>
+        <div class="rv-body" id="rv-revisions"></div>
+        <div id="rv-actions">
+          <button class="act" id="rv-approve">Approve head revision</button>
+          <button class="act" id="rv-export-legacy">Export brief (legacy)</button>
+          <button class="act" id="rv-export-ext">Export extended package</button>
+          <span id="rv-msg" style="font:11px var(--mono);color:var(--muted)"></span>
+        </div></div>
     </div>
 
     <div id="summary">
@@ -1070,6 +1187,8 @@ document.querySelectorAll('.nav-item[data-view]').forEach(item => item.onclick =
   document.body.className = 'view-' + item.dataset.view;
   if(item.dataset.view === 'logs') renderLog(lastLog);
   if(item.dataset.view === 'chat' && !chat.loaded) loadChat();
+  if(item.dataset.view === 'home') loadHome();
+  if(item.dataset.view === 'review') loadReview();
 });
 
 /* ---------- Requirement Bot chat ---------- */
@@ -1091,7 +1210,7 @@ function renderChat(d){
 }
 async function loadChat(){
   chat.loaded = true;
-  try{ renderChat(await (await fetch('/chat/history')).json()); }
+  try{ renderChat(await (await fetch('/chat/history?project='+proj.id)).json()); }
   catch(e){ chat.loaded = false; }
 }
 async function sendChat(){
@@ -1108,7 +1227,7 @@ async function sendChat(){
   try{
     const d = await (await fetch('/chat/send', {method:'POST',
       headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({message: text})})).json();
+      body: JSON.stringify({message: text, project: proj.id})})).json();
     chat.busy = false; renderChat(d);
   }catch(e){
     chat.busy = false;
@@ -1130,7 +1249,7 @@ async function uploadChatFiles(fileList){
   try{
     const d = await (await fetch('/chat/upload', {method:'POST',
       headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({files})})).json();
+      body: JSON.stringify({files, project: proj.id})})).json();
     if(d.saved && d.saved.length)
       t.insertAdjacentHTML('beforeend',
         `<div class="msg sys">📎 Uploaded to uploads/: ${esc(d.saved.join(', '))} — now tell the bot the files are ready.</div>`);
@@ -1159,9 +1278,249 @@ $('#chat-input').addEventListener('keydown', e => {
 });
 $('#chat-reset').onclick = async () => {
   if(chat.busy) return;
-  const d = await (await fetch('/chat/reset', {method:'POST'})).json();
+  const d = await (await fetch('/chat/reset', {method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({project: proj.id})})).json();
   chat.complete = false; renderChat(d); $('#chat-input').disabled = false;
 };
+
+/* ---------- Home: projects, orchestrator graph, supervisor chat ---------- */
+const proj = {id:'default', name:'Default project', busy:false, mode:'disabled'};
+let homeFails = 0;
+
+function switchProject(id){
+  proj.id = id; chat.loaded = false; mgmtCount = -1;
+  loadHome();
+  if(document.body.className === 'view-chat') loadChat();
+  if(document.body.className === 'view-review') loadReview();
+}
+
+async function loadHome(){
+  let d;
+  try{ d = await (await fetch('/api/home?project='+proj.id)).json(); homeFails = 0; }
+  catch(e){
+    homeFails++;
+    $('#home-stale').textContent = 'stale — server unreachable';
+    $('#home-stale').className = 'bad';
+    return;
+  }
+  $('#home-stale').textContent = 'updated just now';
+  $('#home-stale').className = '';
+  proj.name = d.project.name; proj.busy = d.project.busy;
+  proj.mode = d.health.supervisor_mode;
+  $('#hdr-project').textContent = proj.name + ' · ' + (d.project.state||'—');
+
+  // project selector
+  const sel = $('#proj-select');
+  sel.innerHTML = d.projects.map(p =>
+    `<option value="${p.id}"${p.id===proj.id?' selected':''}>${esc(p.name)} (${p.state})</option>`).join('');
+  const stateCls = {interviewing:'running', review_required:'retrying',
+                    approved:'completed', interview_closed:'retrying'}[d.project.state] || 'idle';
+  $('#proj-state').className = 'badge ' + stateCls;
+  $('#proj-state-txt').textContent = (d.project.state||'created').replace(/_/g,' ');
+
+  // honest footer
+  const h = d.health;
+  $('#dot-store').className = 'dot ' + (h.store_ok ? 'ok' : 'bad');
+  $('#txt-store').textContent = 'store: ' + (h.store_ok ? 'writable' : 'ERROR');
+  const lc = h.last_call;
+  $('#dot-provider').className = 'dot ' + (lc ? (lc.error ? 'bad' : 'ok') : '');
+  $('#txt-provider').textContent = lc
+    ? 'model: last ' + lc.purpose + (lc.error ? ' FAILED' : ' ok')
+    : 'model: no calls yet';
+  $('#dot-sup').className = 'dot ' + (proj.mode==='advisory' ? 'ok' : '');
+  $('#txt-sup').textContent = 'supervisor: ' + proj.mode;
+
+  // supervisor panel header
+  $('#sup-mode').className = 'badge ' + (proj.mode==='advisory' ? 'completed' : 'idle');
+  $('#sup-mode-txt').textContent = proj.mode==='advisory' ? 'Advisory' : 'Disabled';
+  $('#sup-toggle').textContent = proj.mode==='advisory' ? 'Disable' : 'Enable advisory mode';
+
+  renderGraph(d);
+  renderAttention(d.attention);
+  loadMgmt();
+}
+
+function renderGraph(d){
+  const caps = d.capabilities;
+  const W=680, H=400, cx=W/2, cy=H/2, R=142;
+  const nodes = caps.filter(c => c.id !== 'ai_supervisor');
+  const parts = [];
+  nodes.forEach((c,i) => {
+    const a = (-90 + i*360/nodes.length) * Math.PI/180;
+    const x = cx + R*Math.cos(a), y = cy + R*Math.sin(a);
+    const active = c.id==='requirements_bot' && d.project.busy;
+    parts.push(`<line class="gedge${active?' active':''}" x1="${cx}" y1="${cy}" x2="${x}" y2="${y}"/>`);
+    const dash = c.planned ? ' stroke-dasharray="5 4"' : '';
+    const stroke = c.planned ? 'var(--muted)' : (c.enabled ? 'var(--border-hi)' : 'var(--border)');
+    const status = c.planned ? 'Planned — not implemented'
+                 : active ? 'Working' : (c.enabled ? 'Idle' : 'Disabled');
+    const dot = c.planned ? 'var(--muted)' : active ? 'var(--accent)'
+              : c.enabled ? 'var(--green)' : 'var(--muted)';
+    parts.push(`<g class="gnode${c.planned?' planned':''}" data-cap="${c.id}" tabindex="0"
+        role="button" aria-label="${esc(c.name)} — ${status}">
+      <circle cx="${x}" cy="${y}" r="34" fill="var(--panel2)" stroke="${stroke}"${dash}/>
+      <circle cx="${x}" cy="${y-12}" r="3" fill="${dot}"/>
+      <text x="${x}" y="${y+4}" text-anchor="middle" fill="var(--text)"
+        font-size="10" font-weight="600">${esc(c.name.split(' ')[0])}</text>
+      <text x="${x}" y="${y+16}" text-anchor="middle" fill="var(--muted)"
+        font-size="8.5">${esc(status)}</text>
+      <text x="${x}" y="${y+52}" text-anchor="middle" fill="var(--text2)"
+        font-size="9.5">${esc(c.name)}</text>
+    </g>`);
+  });
+  const supTxt = proj.mode==='advisory' ? 'supervisor: advisory' : 'supervisor: disabled';
+  const busyTxt = d.project.busy ? 'controller: executing' : 'controller: idle';
+  parts.push(`<g class="gnode" data-cap="orchestrator" tabindex="0" role="button"
+      aria-label="Orchestrator — controller and AI supervisor">
+    <circle cx="${cx}" cy="${cy}" r="76" fill="var(--panel2)" stroke="var(--accent)" stroke-width="1.4"/>
+    <text x="${cx}" y="${cy-12}" text-anchor="middle" fill="var(--text)"
+      font-size="15" font-weight="700">Orchestrator</text>
+    <text x="${cx}" y="${cy+6}" text-anchor="middle" fill="var(--text2)" font-size="9.5">${busyTxt}</text>
+    <text x="${cx}" y="${cy+20}" text-anchor="middle" fill="var(--muted)" font-size="9.5">${supTxt}</text>
+  </g>`);
+  const svg = $('#graph');
+  svg.innerHTML = parts.join('');
+  svg.querySelectorAll('.gnode').forEach(g => {
+    const go = () => {
+      const cap = g.dataset.cap;
+      if(cap === 'requirements_bot') $('#nav-chat').click();
+      else if(cap === 'persona_runner') $('#nav-cycles').click();
+      else if(cap === 'orchestrator') $('#mgmt-input').focus();
+    };
+    g.onclick = go;
+    g.onkeydown = e => { if(e.key==='Enter'||e.key===' '){ e.preventDefault(); go(); } };
+  });
+}
+
+function renderAttention(items){
+  $('#attention-list').innerHTML = (items && items.length)
+    ? items.map(rv => `<div class="att-item">
+        <span class="blk b${rv.blocking?1:0}">${rv.blocking?'blocking':'review'}</span>
+        <span class="txt">${esc(rv.decision_needed)}
+          <div class="meta">rev ${rv.revision??'—'} · ${rv.source} · #${rv.id}</div></span>
+        <button class="act" data-rid="${rv.id}">Resolve…</button>
+      </div>`).join('')
+    : `<div class="att-empty">Nothing needs attention for this project.</div>`;
+  document.querySelectorAll('#attention-list [data-rid]').forEach(b => b.onclick = async () => {
+    const disp = prompt('Disposition (what was decided and why):');
+    if(!disp) return;
+    await fetch('/api/review/resolve', {method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({project: proj.id, review_id: +b.dataset.rid, disposition: disp})});
+    loadHome();
+  });
+}
+
+/* ---------- supervisor management chat ---------- */
+let mgmtCount = -1;
+async function loadMgmt(){
+  try{
+    const d = await (await fetch('/api/management?project='+proj.id)).json();
+    const n = (d.messages||[]).length;
+    if(n === mgmtCount) return;   // don't clobber the thread on every poll
+    mgmtCount = n;
+    renderMgmt(d);
+  }catch(e){}
+}
+function renderMgmt(d){
+  const t = $('#mgmt-thread');
+  t.innerHTML = (d.messages||[]).map(m =>
+    `<div class="mmsg ${m.role}"><div class="who">${m.role}</div>${esc(m.text)}</div>`).join('')
+    || `<div class="mmsg system">No management conversation yet. Ask the supervisor about this project — it reads recorded state only and cannot change anything.</div>`;
+  t.scrollTop = t.scrollHeight;
+}
+async function sendMgmt(){
+  const inp = $('#mgmt-input'), text = inp.value.trim();
+  if(!text) return;
+  inp.value = '';
+  const t = $('#mgmt-thread');
+  t.insertAdjacentHTML('beforeend',
+    `<div class="mmsg operator"><div class="who">operator</div>${esc(text)}</div>
+     <div class="mmsg system" id="mgmt-wait">supervisor is answering…</div>`);
+  t.scrollTop = t.scrollHeight;
+  try{
+    const d = await (await fetch('/api/management', {method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({project: proj.id, text})})).json();
+    mgmtCount = (d.messages||[]).length;
+    renderMgmt(d);
+  }catch(e){
+    document.getElementById('mgmt-wait')?.remove();
+    t.insertAdjacentHTML('beforeend', `<div class="mmsg system">request failed</div>`);
+  }
+}
+$('#mgmt-send').onclick = sendMgmt;
+$('#mgmt-input').addEventListener('keydown', e => {
+  if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); sendMgmt(); }
+});
+$('#sup-toggle').onclick = async () => {
+  const enabling = proj.mode !== 'advisory';
+  if(enabling && !confirm('Enable the AI supervisor (advisory mode)? Each question you ask it becomes a paid model call.')) return;
+  await fetch('/api/supervisor/enable', {method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({enabled: enabling})});
+  loadHome();
+};
+$('#proj-select').onchange = e => switchProject(e.target.value);
+$('#proj-new').onclick = async () => {
+  const name = prompt('New project name (one project per business interview):');
+  if(!name) return;
+  const d = await (await fetch('/api/projects', {method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({name})})).json();
+  if(d.id) switchProject(d.id);
+};
+
+/* ---------- Contracts & Review ---------- */
+async function loadReview(){
+  let d;
+  try{ d = await (await fetch('/api/review?project='+proj.id)).json(); }
+  catch(e){ return; }
+  const stages = ['interviewing','interview_closed','review_required','approved'];
+  const idx = stages.indexOf(d.state);
+  $('#rv-state').innerHTML =
+    stages.map((s,i) => `<span class="stage-chip${i<=idx?' on':''}">${s.replace(/_/g,' ')}</span>`).join('')
+    + `<div style="margin-top:8px;color:var(--muted);font-size:11.5px">
+       Interview closed, ready for review, and approved are three different facts —
+       a finished interview is not an approved brief.</div>`;
+  $('#rv-readiness').innerHTML = (d.readiness && d.readiness.length)
+    ? `<table><tr><th>Gap</th><th>Blocking</th><th>Why</th></tr>` +
+      d.readiness.map(g => `<tr><td>${esc(g.name)}</td>
+        <td>${g.blocking?'<span style="color:var(--red)">yes</span>':'no'}</td>
+        <td>${esc(g.why)}</td></tr>`).join('') + `</table>`
+    : `<span style="color:var(--muted)">No revision yet — nothing to evaluate.</span>`;
+  $('#rv-reviews').innerHTML = (d.reviews && d.reviews.length)
+    ? `<table><tr><th>#</th><th>Status</th><th>Decision needed</th><th>Disposition</th></tr>` +
+      d.reviews.map(r => `<tr><td>${r.id}</td><td>${r.status}${r.blocking?' · blocking':''}</td>
+        <td>${esc(r.decision_needed)}</td><td>${esc(r.disposition||'—')}</td></tr>`).join('') + `</table>`
+    : `<span style="color:var(--muted)">No review requests yet.</span>`;
+  $('#rv-revisions').innerHTML =
+    (d.approval ? `<div style="color:var(--green);margin-bottom:8px">✓ rev ${d.approval.revision}
+       approved by ${esc(d.approval.actor)} — ${esc(d.approval.reason||'')}</div>` : '')
+    + ((d.revisions && d.revisions.length)
+      ? `<table><tr><th>Rev</th><th>Size</th><th>Committed</th></tr>` +
+        d.revisions.map(r => `<tr><td>r${r.rev}${r.rev===d.head?' (head)':''}</td>
+          <td>${(r.size/1024).toFixed(1)} kB</td>
+          <td>${new Date(r.created_ts*1000).toLocaleString()}</td></tr>`).join('') + `</table>`
+      : `<span style="color:var(--muted)">No revisions committed yet.</span>`);
+  $('#rv-approve').disabled = !d.head;
+  $('#rv-approve').onclick = async () => {
+    const reason = prompt(`Approve revision r${d.head} for handoff? State the reason:`);
+    if(!reason) return;
+    const res = await (await fetch('/api/approve', {method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({project: proj.id, revision: d.head, reason})})).json();
+    $('#rv-msg').textContent = res.error || ('approved r' + res.revision);
+    loadReview();
+  };
+  $('#rv-export-legacy').onclick = () =>
+    window.open('/api/export?project='+proj.id+'&format=legacy');
+  $('#rv-export-ext').onclick = () =>
+    window.open('/api/export?project='+proj.id+'&format=extended');
+}
+loadHome();
+setInterval(() => { if(document.body.className === 'view-home') loadHome(); }, 5000);
 
 /* ---------- polling ---------- */
 let lastLog = '';
@@ -1220,79 +1579,74 @@ tick(); setInterval(tick, 2000);
 </script></body></html>"""
 
 
-# ---------- live chat with RequirementsBot (the same bot main.py runs) ----------
-CHAT = {"bot": None, "turn": None, "busy": False, "shown": []}
-CHAT_LOCK = threading.Lock()
+# ---------- orchestrated chat: every interview is a project in the store ----
+# The legacy /chat/* routes keep their request/response shapes but are served
+# by the execution controller against the selected project (default: the
+# auto-created "default" project, which preserves the old single-session
+# behavior including the shared uploads/ folder and requirements_brief.json).
+from orchestrator import controller, registry, store, supervisor  # noqa: E402
 
 
-def _chat_bot():
-    """Lazy: importing requirements_bot pulls langchain — only pay for it
-    when the chat page is actually used."""
-    if CHAT["bot"] is None:
-        from requirements_bot import RequirementsBot
-        bot = RequirementsBot()
-        bot.uploads_dir.mkdir(exist_ok=True)
-        CHAT["bot"] = bot
-    return CHAT["bot"]
+def _project_of(value) -> str:
+    pid = str((value.get("project") if isinstance(value, dict) else value) or "").strip()
+    store.ensure_default_project()
+    if not pid or store.get_project(pid) is None:
+        return store.DEFAULT_PROJECT
+    return pid
 
 
-def _save_brief(partial: bool) -> None:
-    bot, turn = CHAT["bot"], CHAT["turn"]
-    if bot is None or turn is None:
-        return
-    brief = bot.brief(turn)
-    if partial:
-        brief["partial"] = True
-    (ROOT / "requirements_brief.json").write_text(
-        json.dumps(brief, indent=2, ensure_ascii=False), encoding="utf-8")
+def chat_history(pid: str) -> dict:
+    return controller.chat_payload(pid)
 
 
-def chat_history() -> dict:
-    # bot.chat_history holds the model's raw JSON turns; CHAT["shown"] keeps
-    # the clean conversational texts that send() returns (what main.py prints)
-    if not CHAT["shown"]:
-        from requirements_bot import RequirementsBot
-        CHAT["shown"] = [{"role": "ai", "text": RequirementsBot.GREETING}]
-    complete = CHAT["bot"].complete if CHAT["bot"] else False
-    return {"messages": CHAT["shown"], "complete": complete,
-            "busy": CHAT["busy"]}
+def chat_send(pid: str, message: str) -> dict:
+    if not message:
+        return chat_history(pid) | {"error": "empty message"}
+    out = controller.send_interview_message(pid, message)
+    if "messages" not in out:  # lock/validation errors still show the thread
+        out = chat_history(pid) | out
+    return out
 
 
-def chat_send(message: str) -> dict:
-    with CHAT_LOCK:
-        if CHAT["busy"]:
-            return {"error": "The bot is still answering — wait a moment."}
-        CHAT["busy"] = True
-    try:
-        bot = _chat_bot()
-        chat_history()  # ensure the greeting is seeded before appending
-        CHAT["shown"].append({"role": "human", "text": message})
-        msgs, turn = bot.send(message)
-        CHAT["shown"] += [{"role": "ai", "text": m} for m in msgs]
-        CHAT["turn"] = turn
-        if bot.complete:
-            _save_brief(partial=False)
-        return chat_history() | {
-            "saved": "requirements_brief.json" if bot.complete else None}
-    except RuntimeError as e:
-        # materials gate: the bot refuses to interview blind over unreadable
-        # files — surface it in the thread instead of a 500
-        return chat_history() | {"error": f"Stopped — {e}. "
-                                 "Fix or remove the files in uploads/."}
-    except Exception as e:
-        return chat_history() | {"error": f"{type(e).__name__}: {e}"}
-    finally:
-        CHAT["busy"] = False
+def home_payload(pid: str) -> dict:
+    project = store.get_project(pid) or {}
+    return {
+        "project": {"id": pid, "name": project.get("name"),
+                    "state": project.get("state"),
+                    "busy": controller.is_busy(pid)},
+        "projects": [{"id": p["id"], "name": p["name"], "state": p["state"]}
+                     for p in store.list_projects()],
+        "capabilities": registry.capabilities(),
+        "attention": store.open_reviews(pid),
+        "usage": store.usage_totals(pid),
+        "health": store.health() | {
+            "last_call": store.last_provider_event(),
+            "supervisor_mode": supervisor.mode()},
+        "events": store.recent_events(pid, 12),
+    }
+
+
+def review_payload(pid: str) -> dict:
+    head = store.get_revision(pid)
+    project = store.get_project(pid) or {}
+    return {
+        "state": project.get("state"),
+        "head": head and head["rev"],
+        "revisions": store.list_revisions(pid),
+        "readiness": controller.evaluate_readiness_readonly(pid),
+        "reviews": store.all_reviews(pid)[:30],
+        "approval": store.active_approval(pid),
+    }
 
 
 ALLOWED_EXTS = {".txt", ".md", ".csv", ".png", ".jpg", ".jpeg", ".webp", ".gif"}
 
 
-def chat_upload(files: list) -> dict:
-    """Save attached files into uploads/ so the bot's material scan sees them."""
+def chat_upload(pid: str, files: list) -> dict:
+    """Save attached files into the PROJECT's uploads dir for the bot's scan."""
     import base64
-    updir = ROOT / "uploads"
-    updir.mkdir(exist_ok=True)
+    updir = controller.uploads_dir(pid)
+    updir.mkdir(parents=True, exist_ok=True)
     saved, rejected = [], []
     for f in files[:20]:
         name = Path(str(f.get("name", ""))).name  # strip any path components
@@ -1311,56 +1665,85 @@ def chat_upload(files: list) -> dict:
             continue
         (updir / name).write_bytes(data)
         saved.append(name)
+    if saved:
+        store.append_event(pid, "materials.uploaded", "owner", {"files": saved})
     return {"saved": saved, "rejected": rejected}
 
 
-def chat_reset() -> dict:
-    with CHAT_LOCK:
-        if CHAT["busy"]:
-            return {"error": "The bot is still answering — wait a moment."}
-        if CHAT["bot"] is not None and not CHAT["bot"].complete:
-            _save_brief(partial=True)  # don't lose a half-finished interview
-        CHAT.update(bot=None, turn=None, shown=[])
-    return chat_history()
-
-
 class Handler(BaseHTTPRequestHandler):
-    def do_GET(self):
-        if self.path == "/data":
-            body = json.dumps(payload()).encode("utf-8")
-            ctype = "application/json"
-        elif self.path == "/chat/history":
-            body = json.dumps(chat_history()).encode("utf-8")
-            ctype = "application/json"
-        else:
-            body = PAGE.encode("utf-8")
-            ctype = "text/html; charset=utf-8"
+    def _send(self, body: bytes, ctype: str, extra: dict | None = None):
         self.send_response(200)
         self.send_header("Content-Type", ctype)
+        for k, v in (extra or {}).items():
+            self.send_header(k, v)
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
         self.wfile.write(body)
 
+    def _json(self, obj):
+        self._send(json.dumps(obj, default=str).encode("utf-8"),
+                   "application/json")
+
+    def do_GET(self):
+        from urllib.parse import parse_qs, urlparse
+        u = urlparse(self.path)
+        q = {k: v[0] for k, v in parse_qs(u.query).items()}
+        pid = _project_of(q.get("project"))
+        route = u.path
+        if route == "/data":
+            self._json(payload())
+        elif route == "/chat/history":
+            self._json(chat_history(pid))
+        elif route == "/api/home":
+            self._json(home_payload(pid))
+        elif route == "/api/review":
+            self._json(review_payload(pid))
+        elif route == "/api/management":
+            self._json(supervisor.management_payload(pid))
+        elif route == "/api/export":
+            out = controller.export_package(pid, q.get("format", "legacy"))
+            self._send(json.dumps(out, indent=2, ensure_ascii=False,
+                                  default=str).encode("utf-8"),
+                       "application/json",
+                       {"Content-Disposition":
+                        f'attachment; filename="{pid}_brief.json"'})
+        else:
+            self._send(PAGE.encode("utf-8"), "text/html; charset=utf-8")
+
     def do_POST(self):
         n = int(self.headers.get("Content-Length") or 0)
+        if n > 32 * 1024 * 1024:
+            self._json({"error": "request too large"})
+            return
         try:
             req = json.loads(self.rfile.read(n) or b"{}")
         except json.JSONDecodeError:
             req = {}
+        pid = _project_of(req)
         if self.path == "/chat/send":
-            out = chat_send(str(req.get("message", "")).strip())
+            out = chat_send(pid, str(req.get("message", "")).strip())
         elif self.path == "/chat/upload":
-            out = chat_upload(req.get("files") or [])
+            out = chat_upload(pid, req.get("files") or [])
         elif self.path == "/chat/reset":
-            out = chat_reset()
+            out = controller.reset_interview(pid)
+        elif self.path == "/api/projects":
+            name = str(req.get("name", "")).strip()[:80]
+            out = store.create_project(name) if name else {"error": "name required"}
+        elif self.path == "/api/management":
+            out = supervisor.ask(pid, str(req.get("text", "")).strip()[:4000])
+        elif self.path == "/api/supervisor/enable":
+            out = supervisor.set_enabled(bool(req.get("enabled")))
+        elif self.path == "/api/review/resolve":
+            ok = store.resolve_review(pid, int(req.get("review_id") or 0),
+                                      str(req.get("disposition", ""))[:500]
+                                      or "resolved", "operator")
+            out = {"ok": ok} if ok else {"error": "review not open"}
+        elif self.path == "/api/approve":
+            out = controller.approve(pid, int(req.get("revision") or 0),
+                                     str(req.get("reason", ""))[:500])
         else:
             out = {"error": "unknown endpoint"}
-        body = json.dumps(out).encode("utf-8")
-        self.send_response(200)
-        self.send_header("Content-Type", "application/json")
-        self.send_header("Content-Length", str(len(body)))
-        self.end_headers()
-        self.wfile.write(body)
+        self._json(out)
 
     def log_message(self, *args):  # keep the console quiet
         pass
