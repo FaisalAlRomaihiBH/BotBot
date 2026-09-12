@@ -265,6 +265,9 @@ body.view-home #run-header{display:none}
 #sup-fab .fab-dot{position:absolute;top:3px;right:3px;width:9px;height:9px;
   border-radius:50%;border:2px solid var(--bg);background:var(--muted)}
 #sup-fab .fab-dot.on{background:var(--green)}
+#sup-fab-label{position:fixed;right:0;bottom:4px;width:96px;z-index:60;
+  text-align:center;font:9.5px var(--mono);color:var(--muted);
+  pointer-events:none}
 .overlay{position:fixed;right:22px;bottom:84px;z-index:60;width:360px;
   max-width:calc(100vw - 44px);height:480px;max-height:calc(100vh - 130px);
   background:var(--panel);border:1px solid var(--border);border-radius:8px;
@@ -425,6 +428,7 @@ body.view-home #run-header{display:none}
 
 <button id="sup-fab" title="AI Supervisor (system scope)" aria-label="Open AI supervisor chat"
   aria-expanded="false">AI<span class="fab-dot" id="fab-dot"></span></button>
+<div id="sup-fab-label" aria-hidden="true">supervisor: —</div>
 <div id="sup-drawer" class="overlay" role="dialog" aria-label="AI supervisor chat">
   <div class="op-head">AI Supervisor · System
     <span class="badge idle" id="sup-mode"><span class="b-dot"></span><span id="sup-mode-txt">—</span></span>
@@ -495,6 +499,7 @@ async function loadSystem(){
   $('#sup-mode-txt').textContent = mode==='advisory' ? 'Advisory' : 'Disabled';
   $('#sup-toggle').textContent = mode==='advisory' ? 'Disable' : 'Enable advisory mode';
   $('#fab-dot').className = 'fab-dot' + (mode==='advisory' ? ' on' : '');
+  $('#sup-fab-label').textContent = 'supervisor: ' + mode;
   renderGraph();
 }
 
@@ -595,10 +600,10 @@ function renderGraph(){
   });
   const centerRing = nActive ? 'center-active' : 'center-idle';
   ringsArr.push({x: cx, y: cy, r: rC, cls: centerRing});
+  // Supervisor status lives under the AI launcher (bottom-right), not here.
   const center = graphNode({id:'orchestrator', enabled:true}, cx, cy, rC,
     ['BotBot','Orchestrator'],
-    [`controller: ${nActive ? 'executing' : 'idle'}`,
-     `supervisor: ${sys.health.supervisor_mode}`],
+    [`controller: ${nActive ? 'executing' : 'idle'}`],
     nActive ? 'var(--accent)' : 'var(--green)', true, centerRing);
   // RequirementsBotEntryAction: New Session pill pinned under the node
   let entry = '';
@@ -1361,6 +1366,98 @@ document.getElementById('list').innerHTML = styles.map(([n,t,d])=>`
 </script></body></html>"""
 
 
+# ============================ STATUS POSITION SAMPLES ============================
+# Demo at /statuses: five candidate placements for the "● Idle" status
+# relative to the circles, rendered with the chosen comet ring.
+STATUS_DEMO = r"""<!doctype html><html><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Status Positions — pick one</title>
+<style>
+:root{--bg:#0d0d0d;--panel:#151515;--panel2:#1a1a1a;--border:#2a2a2a;
+  --border-hi:#3f3f46;--text:#f5f5f5;--text2:#a1a1aa;--muted:#71717a;
+  --accent:#6ea8fe;--green:#4ade80;--sans:-apple-system,'Segoe UI',system-ui,sans-serif;
+  --mono:'Cascadia Code',Consolas,monospace}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 var(--sans);
+  padding:26px}
+h1{font-size:19px;margin:0 0 4px}
+p.sub{color:var(--text2);margin:0 0 26px;font-size:12.5px}
+.sample{background:var(--panel);border:1px solid var(--border);border-radius:8px;
+  padding:18px 22px;margin-bottom:18px}
+.sample h2{font-size:15px;margin:0 0 2px}
+.sample .d{color:var(--muted);font-size:12px;margin:0 0 18px}
+.row{display:flex;gap:52px;align-items:flex-start;flex-wrap:wrap}
+.slot{display:flex;flex-direction:column;align-items:center;gap:10px}
+.slot .cap{font:10.5px var(--mono);color:var(--muted)}
+.node{position:relative;width:132px;height:132px}
+.node.big{width:210px;height:210px}
+.ringc{position:absolute;inset:0;border-radius:50%;
+  background:conic-gradient(from 0deg, transparent 0 12%,
+    rgba(110,168,254,.12) 35%, rgba(110,168,254,.55) 75%, var(--accent) 100%);
+  -webkit-mask:radial-gradient(closest-side,transparent calc(100% - 6px),#000 calc(100% - 5px));
+  mask:radial-gradient(closest-side,transparent calc(100% - 6px),#000 calc(100% - 5px));
+  animation:rot 7s linear infinite;opacity:.75}
+@keyframes rot{to{transform:rotate(360deg)}}
+.face{position:absolute;inset:5px;border-radius:50%;background:var(--panel2);
+  border:1px solid var(--border-hi);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:4px}
+.t{font-weight:600;font-size:13.5px;text-align:center;line-height:1.25}
+.node.big .t{font-size:20px}
+.st{font-size:10.5px;color:var(--text2);white-space:nowrap}
+.st .dot{color:var(--green)}
+@media (prefers-reduced-motion:reduce){.ringc{animation:none}}
+
+/* 1 — inside, under the title (current) */
+.p1 .st{margin-top:2px}
+/* 2 — inside, pinned to the bottom arc */
+.p2 .face{justify-content:center}
+.p2 .st{position:absolute;bottom:12px;left:0;right:0;text-align:center}
+.p2.big-slot .st{bottom:20px}
+/* 3 — outside, below the circle */
+.p3-out{margin-top:8px;font-size:10.5px;color:var(--text2)}
+/* 4 — pill overlapping the bottom border */
+.p4 .st{position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);
+  background:var(--panel);border:1px solid var(--border-hi);border-radius:99px;
+  padding:2px 10px;z-index:2}
+/* 5 — chip at the top-right edge, like a badge */
+.p5 .st{position:absolute;top:2px;right:-8px;background:var(--panel);
+  border:1px solid var(--border-hi);border-radius:99px;padding:2px 9px;z-index:2}
+</style></head><body>
+<h1>Status position samples</h1>
+<p class="sub">Where should “● Idle / ● 2 running tasks” sit? Each shows a
+small node and the big center. Tell Claude which number you want.</p>
+<div id="list"></div>
+<script>
+const mk = (n, extra, statusInFace, bigTitle) => `
+  <div class="node ${bigTitle?'big':''} p${n} ${bigTitle?'big-slot':''}">
+    <div class="ringc"></div>
+    <div class="face">
+      <span class="t">${bigTitle?'BotBot<br>Orchestrator':'Requirements<br>Bot'}</span>
+      ${statusInFace?`<span class="st"><span class="dot">●</span> ${bigTitle?'controller: idle':'Idle'}</span>`:''}
+    </div>
+    ${extra||''}
+  </div>`;
+const samples = [
+ [1,'Inside, under the title','The status line sits right beneath the name (current layout).',
+   n=>mk(1,null,true,n)],
+ [2,'Inside, on the bottom arc','Title dead-center; the status hugs the inside bottom edge of the circle.',
+   n=>mk(2,null,true,n)],
+ [3,'Outside, below the circle','Only the title lives inside; the status sits under the node.',
+   n=>mk(3,null,false,n)+`<div class="p3-out"><span style="color:var(--green)">●</span> ${n?'controller: idle':'Idle'}</div>`],
+ [4,'Pill on the bottom border','A small pill badge overlaps the bottom of the border — half in, half out.',
+   n=>mk(4,`<span class="st"><span class="dot">●</span> ${n?'controller: idle':'Idle'}</span>`,false,n)],
+ [5,'Badge at the top edge','A chip pinned at the top-right of the circle, like a notification badge.',
+   n=>mk(5,`<span class="st"><span class="dot">●</span> ${n?'idle':'Idle'}</span>`,false,n)],
+];
+document.getElementById('list').innerHTML = samples.map(([n,t,d,make])=>`
+ <div class="sample"><h2>${n}. ${t}</h2><p class="d">${d}</p>
+  <div class="row">
+   <div class="slot">${make(false)}<div class="cap">small node</div></div>
+   <div class="slot">${make(true)}<div class="cap">center</div></div>
+  </div></div>`).join('');
+</script></body></html>"""
+
+
 # ============================ BACKEND ============================
 def _project_of(value) -> str:
     pid = str((value.get("project") if isinstance(value, dict) else value) or "").strip()
@@ -1567,6 +1664,10 @@ class Handler(BaseHTTPRequestHandler):
                        {"Set-Cookie": f"botbot_owner={_owner_token()}; "
                                       f"Path=/; HttpOnly; SameSite=Lax",
                         "Cache-Control": "no-store"})
+            return
+        if route == "/statuses":
+            self._send(STATUS_DEMO.encode("utf-8"), "text/html; charset=utf-8",
+                       {"Cache-Control": "no-store"})
             return
         if route == "/rings":
             self._send(RING_DEMO.encode("utf-8"), "text/html; charset=utf-8",
