@@ -45,6 +45,11 @@ CREATE TABLE IF NOT EXISTS approvals(
   revision INTEGER NOT NULL, actor TEXT NOT NULL, reason TEXT,
   status TEXT NOT NULL DEFAULT 'active',     -- active | invalidated
   ts REAL NOT NULL);
+CREATE TABLE IF NOT EXISTS client_sessions(
+  token TEXT PRIMARY KEY,          -- server-issued, unguessable
+  project_id TEXT NOT NULL REFERENCES projects(id),
+  created_ts REAL NOT NULL, last_seen_ts REAL NOT NULL,
+  revoked INTEGER NOT NULL DEFAULT 0);
 CREATE TABLE IF NOT EXISTS invocations(
   id INTEGER PRIMARY KEY AUTOINCREMENT, project_id TEXT, purpose TEXT NOT NULL,
   model TEXT, fresh_in INTEGER, cache_read INTEGER, cache_write INTEGER,
@@ -74,6 +79,17 @@ def health() -> dict:
 
 # ---------------- projects ----------------
 DEFAULT_PROJECT = "default"
+# Hidden scope for the platform owner's SYSTEM-level supervisor conversation.
+# A real projects row (for foreign keys) that never appears in listings.
+SYSTEM_SCOPE = "__system__"
+
+
+def ensure_system_scope() -> None:
+    with _connect() as con:
+        con.execute(
+            "INSERT OR IGNORE INTO projects(id, name, state, created_ts) "
+            "VALUES(?,?,?,?)",
+            (SYSTEM_SCOPE, "(system)", "system", time.time()))
 
 
 def ensure_default_project() -> None:
@@ -99,8 +115,79 @@ def list_projects() -> list[dict]:
         rows = con.execute(
             "SELECT p.*, s.complete AS interview_complete FROM projects p "
             "LEFT JOIN sessions s ON s.project_id = p.id "
-            "ORDER BY p.created_ts").fetchall()
+            "WHERE p.id != ? ORDER BY p.created_ts", (SYSTEM_SCOPE,)).fetchall()
     return [dict(r) for r in rows]
+
+
+def system_stats() -> dict:
+    """Aggregate, system-wide operational facts for the owner console.
+    Lifecycle states are stored facts; they are NOT worker health — a project
+    'interviewing' with no active run is a person we are waiting for."""
+    with _connect() as con:
+        states = {r["state"]: r["n"] for r in con.execute(
+            "SELECT state, COUNT(*) n FROM projects WHERE id != ? "
+            "GROUP BY state", (SYSTEM_SCOPE,))}
+        blocking = con.execute(
+            "SELECT COUNT(*) n FROM reviews WHERE status='requested' AND "
+            "blocking=1").fetchone()["n"]
+        reviews_open = con.execute(
+            "SELECT COUNT(*) n FROM reviews WHERE status='requested'"
+        ).fetchone()["n"]
+        usage = con.execute(
+            "SELECT COALESCE(SUM(fresh_in),0) f, COALESCE(SUM(cache_read),0) cr, "
+            "COALESCE(SUM(cache_write),0) cw, COALESCE(SUM(out_tokens),0) o, "
+            "COUNT(*) n, COALESCE(SUM(error IS NOT NULL),0) errs "
+            "FROM invocations").fetchone()
+        recent_failures = [dict(r) for r in con.execute(
+            "SELECT project_id, type, payload, ts FROM events WHERE "
+            "type IN ('run.failed','supervisor.failed') "
+            "ORDER BY seq DESC LIMIT 5")]
+    return {
+        "project_states": states,
+        "open_reviews": reviews_open, "blocking_reviews": blocking,
+        "usage_all_time": {"fresh_in": usage["f"], "cache_read": usage["cr"],
+                           "cache_write": usage["cw"], "out": usage["o"],
+                           "invocations": usage["n"], "errors": usage["errs"]},
+        "recent_failures": recent_failures,
+    }
+
+
+# ---------------- client sessions (server-issued, unguessable) ----------------
+def create_client_session(project_id: str) -> str:
+    import secrets
+    token = secrets.token_urlsafe(32)
+    with _connect() as con:
+        con.execute("INSERT INTO client_sessions(token, project_id, created_ts, "
+                    "last_seen_ts) VALUES(?,?,?,?)",
+                    (token, project_id, time.time(), time.time()))
+    return token
+
+
+def resolve_client_session(token: str) -> str | None:
+    """Token -> its OWN project id, or None. The only authorization a client
+    request ever gets; client-supplied project ids are never honored."""
+    if not token:
+        return None
+    with _connect() as con:
+        r = con.execute("SELECT project_id FROM client_sessions WHERE token=? "
+                        "AND revoked=0", (token,)).fetchone()
+        if r:
+            con.execute("UPDATE client_sessions SET last_seen_ts=? WHERE token=?",
+                        (time.time(), token))
+    return r["project_id"] if r else None
+
+
+def revoke_client_session(token: str) -> None:
+    with _connect() as con:
+        con.execute("UPDATE client_sessions SET revoked=1 WHERE token=?", (token,))
+
+
+def count_client_messages(project_id: str) -> int:
+    with _connect() as con:
+        r = con.execute("SELECT COUNT(*) n FROM messages WHERE project_id=? AND "
+                        "conversation='interview' AND role='owner'",
+                        (project_id,)).fetchone()
+    return r["n"]
 
 
 def get_project(pid: str) -> dict | None:
@@ -253,6 +340,16 @@ def open_reviews(pid: str) -> list[dict]:
     with _connect() as con:
         rows = con.execute("SELECT * FROM reviews WHERE project_id=? AND "
                            "status='requested' ORDER BY id", (pid,)).fetchall()
+    return [dict(r) for r in rows]
+
+
+def open_reviews_all() -> list[dict]:
+    """Every open review request across all projects, for the owner console."""
+    with _connect() as con:
+        rows = con.execute(
+            "SELECT r.*, p.name AS project_name FROM reviews r "
+            "JOIN projects p ON p.id = r.project_id "
+            "WHERE r.status='requested' ORDER BY r.blocking DESC, r.id").fetchall()
     return [dict(r) for r in rows]
 
 

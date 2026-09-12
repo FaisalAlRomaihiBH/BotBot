@@ -34,6 +34,13 @@ def is_busy(pid: str) -> bool:
     return _busy.get(pid, False)
 
 
+def active_runs() -> list[str]:
+    """Projects with a model call ACTUALLY executing right now. This is worker
+    activity — distinct from a lifecycle state like 'interviewing', which can
+    coexist with an idle worker waiting on the person."""
+    return [pid for pid, b in _busy.items() if b]
+
+
 def uploads_dir(pid: str) -> Path:
     """Per-project materials directory. The default project keeps the legacy
     ROOT/uploads folder so existing behavior (and the CLI) is unchanged."""

@@ -1,23 +1,48 @@
-# dashboard.py — the Orchestrator dashboard (serves http://localhost:8500).
+# dashboard.py — BotBot server: owner operations console + client intake chat.
 #
-# Views: Home (orchestrator graph, supervisor chat, needs-attention),
-# Requirements Bot Chat (the customer interview), Contracts & Review
-# (revisions, readiness, approval, export). All state comes from the
-# orchestrator store; the page polls /api/home every 5 seconds.
+# Two entry points, one backend, one RequirementsBot engine:
+#   /admin  (also /)  the PLATFORM OWNER's operations console: system-wide
+#                     orchestrator map, sessions inspection, contracts &
+#                     review, floating AI supervisor (system scope).
+#   /chat             a CLIENT-facing page: only the RequirementsBot
+#                     conversation. No sidebar, no graph, no costs, no
+#                     supervisor, no other clients' records.
 #
-# The persona-testing / prompt-improvement machinery that used to live here
-# was removed on purpose: evaluation and improvement will be their own bots
-# connected to the Orchestrator, not a dashboard feature.
+# Access model (V1, localhost only — see release blockers in the repo docs):
+#   - Owner: an unguessable owner token is stored server-side and set as an
+#     HttpOnly cookie when /admin is served from localhost. Every /api/* and
+#     legacy owner route requires it. This gates client sessions out of the
+#     console; it is NOT internet-grade auth — do not expose publicly.
+#   - Client: the first message POSTed from /chat creates one isolated
+#     project and a server-issued session token (HttpOnly cookie). A client
+#     request is authorized ONLY by that cookie — client-supplied project
+#     ids, query params and owner cookies are never honored on client routes.
+#   - Mutating POSTs verify the Origin header against this host.
 import json
+import secrets
+import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 ROOT = Path(__file__).parent
 PORT = int(__import__("os").environ.get("PORT", 8500))
 
-PAGE = r"""<!doctype html><html><head><meta charset="utf-8">
+from orchestrator import controller, registry, store, supervisor  # noqa: E402
+
+OWNER_TOKEN_FILE = store.DATA_DIR / "owner_token.txt"
+
+
+def _owner_token() -> str:
+    store.DATA_DIR.mkdir(exist_ok=True)
+    if not OWNER_TOKEN_FILE.exists():
+        OWNER_TOKEN_FILE.write_text(secrets.token_urlsafe(32), encoding="utf-8")
+    return OWNER_TOKEN_FILE.read_text(encoding="utf-8").strip()
+
+
+# ============================ OWNER CONSOLE PAGE ============================
+ADMIN_PAGE = r"""<!doctype html><html><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>BotBot — Orchestrator</title>
+<title>BotBot — Operations Console</title>
 <style>
 :root{
   --bg:#0d0d0d; --panel:#151515; --panel2:#1a1a1a; --border:#2a2a2a;
@@ -66,7 +91,7 @@ body{margin:0;background:var(--bg);color:var(--text);font:13px/1.45 var(--sans)}
 #run-header{display:flex;align-items:center;gap:14px;padding:12px 20px;
   border-bottom:1px solid var(--border);background:var(--panel);position:sticky;top:0;z-index:5}
 #run-title{font-size:14px;font-weight:600}
-#run-actions{margin-left:auto;display:flex;gap:6px}
+#run-actions{margin-left:auto;display:flex;gap:6px;align-items:center}
 .act{background:var(--panel2);border:1px solid var(--border);color:var(--text2);
   border-radius:5px;padding:4px 10px;font-size:12px;cursor:pointer}
 .act:hover{border-color:var(--border-hi);color:var(--text)}
@@ -96,16 +121,102 @@ body{margin:0;background:var(--bg);color:var(--text);font:13px/1.45 var(--sans)}
 body.view-chat #chat{display:flex}
 body.view-home #home{display:flex}
 body.view-review #review{display:flex}
-#home,#review{flex-direction:column;margin:14px 20px 20px;gap:14px;min-height:0}
+#review{flex-direction:column;margin:14px 20px 20px;gap:14px;min-height:0}
+/* Home is the full remaining workspace: no narrow card, no page scroll */
+#home{flex:1;flex-direction:column;min-height:0;overflow:hidden}
+body.view-home #main{overflow:hidden}
 
-/* ---------- chat ---------- */
+/* ---------- ops toolbar (compact, above the map) ---------- */
+#ops-bar{display:flex;align-items:center;gap:18px;padding:9px 20px;
+  border-bottom:1px solid var(--border);background:var(--panel);flex-wrap:wrap}
+.ops{display:flex;flex-direction:column;min-width:0}
+.ops .k{font-size:9.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);
+  white-space:nowrap}
+.ops .v{font:500 13px var(--mono);color:var(--text);white-space:nowrap}
+.ops .v .sub{color:var(--muted);font-size:10.5px}
+#att-chip{cursor:pointer}
+#att-chip .v{color:var(--muted)}
+#att-chip.hot .v{color:var(--amber)}
+#ops-right{margin-left:auto;display:flex;gap:8px;align-items:center}
+#ops-note{font:10px var(--mono);color:var(--muted)}
+
+/* ---------- orchestrator map: fills the workspace ---------- */
+#graph-wrap{flex:1;min-height:0;position:relative;display:flex;
+  align-items:center;justify-content:center;background:var(--bg)}
+#graph{display:block;width:100%;height:100%}
+.gnode{cursor:pointer}
+.gnode:focus{outline:none}
+.gnode:focus>circle{stroke:var(--accent)}
+.gnode.planned{cursor:default;opacity:.6}
+.gnode text{font-family:var(--sans)}
+.gedge{stroke:var(--border);stroke-width:1.2}
+.gedge.planned{stroke-dasharray:2 5;opacity:.5}
+.gedge.active{stroke:var(--accent);stroke-dasharray:6 6;animation:dashmove 1s linear infinite}
+@keyframes dashmove{to{stroke-dashoffset:-12}}
+@media (prefers-reduced-motion:reduce){.gedge.active{animation:none}}
+
+/* ---------- floating supervisor (owner-only) ---------- */
+#sup-fab{position:fixed;right:22px;bottom:22px;z-index:60;width:52px;height:52px;
+  border-radius:50%;background:#1d2a3f;border:1px solid #2b3a52;color:var(--text);
+  font:600 13px var(--sans);cursor:pointer;display:grid;place-items:center;
+  box-shadow:0 6px 24px rgba(0,0,0,.5)}
+#sup-fab:hover{border-color:var(--accent)}
+#sup-fab .fab-dot{position:absolute;top:3px;right:3px;width:9px;height:9px;
+  border-radius:50%;border:2px solid var(--bg);background:var(--muted)}
+#sup-fab .fab-dot.on{background:var(--green)}
+.overlay{position:fixed;right:22px;bottom:84px;z-index:60;width:360px;
+  max-width:calc(100vw - 44px);height:480px;max-height:calc(100vh - 130px);
+  background:var(--panel);border:1px solid var(--border);border-radius:8px;
+  display:none;flex-direction:column;box-shadow:0 14px 44px rgba(0,0,0,.55)}
+.overlay.open{display:flex}
+.op-head{display:flex;align-items:center;gap:8px;padding:9px 14px;
+  border-bottom:1px solid var(--border);font:600 11px var(--sans);
+  text-transform:uppercase;letter-spacing:.07em;color:var(--text2)}
+.overlay .op-head{border-radius:8px 8px 0 0}
+.ov-close{margin-left:6px;background:none;border:none;color:var(--muted);
+  cursor:pointer;font-size:14px}
+.ov-close:hover{color:var(--text)}
+#mgmt-thread{flex:1;overflow-y:auto;padding:12px 14px;display:flex;
+  flex-direction:column;gap:9px;min-height:120px}
+#mgmt-bar{display:flex;gap:8px;padding:10px 12px;border-top:1px solid var(--border);
+  align-items:flex-end}
+#mgmt-input{flex:1;background:var(--panel2);border:1px solid var(--border);
+  color:var(--text);border-radius:6px;padding:7px 10px;font:12.5px/1.5 var(--sans);
+  resize:none;min-height:34px;max-height:110px}
+#mgmt-input:focus{outline:none;border-color:var(--border-hi)}
+.mmsg{max-width:85%;border:1px solid var(--border);border-radius:6px;
+  padding:6px 10px;font-size:12.5px;line-height:1.5;white-space:pre-wrap;
+  overflow-wrap:break-word}
+.mmsg .who{font:600 9px var(--mono);text-transform:uppercase;
+  letter-spacing:.07em;color:var(--muted);margin-bottom:2px}
+.mmsg.operator{align-self:flex-end;background:#161a20;border-color:#2b3a52}
+.mmsg.supervisor{align-self:flex-start;background:var(--panel2)}
+.mmsg.system{align-self:center;max-width:none;border-style:dashed;
+  color:var(--muted);font:11px var(--mono)}
+
+/* ---------- attention overlay ---------- */
+#att-list{flex:1;overflow-y:auto;padding:10px 14px;display:flex;
+  flex-direction:column;gap:8px}
+.att-item{display:flex;align-items:flex-start;gap:10px;border:1px solid var(--border);
+  border-radius:6px;padding:8px 12px;font-size:12.5px;background:var(--panel2)}
+.att-item .blk{flex:none;font:600 9px var(--mono);text-transform:uppercase;
+  letter-spacing:.05em;padding:2px 7px;border-radius:99px;margin-top:1px}
+.att-item .blk.b1{color:var(--red);border:1px solid #552b2b}
+.att-item .blk.b0{color:var(--amber);border:1px solid #5c4a1e}
+.att-item .txt{flex:1;line-height:1.5}
+.att-item .meta{font:10px var(--mono);color:var(--muted)}
+.att-empty{color:var(--muted);font-size:12px;padding:14px}
+
+/* ---------- sessions (owner testing chat) & review ---------- */
 #chat{flex:1;flex-direction:column;margin:14px 20px 20px;min-height:0;
   background:var(--panel);border:1px solid var(--border);border-radius:6px}
 #chat-head{display:flex;align-items:center;gap:10px;padding:9px 14px;
-  border-bottom:1px solid var(--border)}
+  border-bottom:1px solid var(--border);flex-wrap:wrap}
 #chat-head .t{font:600 11px var(--sans);text-transform:uppercase;
   letter-spacing:.07em;color:var(--text2)}
 #chat-head .m{font:10.5px var(--mono);color:var(--muted)}
+.proj-select{background:var(--panel2);border:1px solid var(--border);color:var(--text);
+  border-radius:5px;padding:4px 8px;font:12px var(--sans);max-width:260px}
 #chat-reset{margin-left:auto}
 #chat-thread{flex:1;overflow-y:auto;padding:16px 18px;display:flex;
   flex-direction:column;gap:12px;min-height:0}
@@ -138,80 +249,6 @@ body.view-review #review{display:flex}
 #chat-attach:hover{border-color:var(--border-hi);color:var(--text)}
 #chat-thread.drop{outline:1px dashed var(--accent);outline-offset:-6px}
 
-/* ---------- Home (orchestrator graph) & Contracts/Review views ---------- */
-#proj-bar{display:flex;align-items:center;gap:10px;background:var(--panel);
-  border:1px solid var(--border);border-radius:6px;padding:8px 14px;flex-wrap:wrap}
-#proj-bar .pb-label{font:600 10px var(--sans);text-transform:uppercase;
-  letter-spacing:.07em;color:var(--muted)}
-#proj-select{background:var(--panel2);border:1px solid var(--border);color:var(--text);
-  border-radius:5px;padding:4px 8px;font:12px var(--sans);max-width:280px}
-#home-stale{margin-left:auto;font:10.5px var(--mono);color:var(--muted)}
-#home-stale.bad{color:var(--red)}
-.h-card{background:var(--panel);border:1px solid var(--border);border-radius:6px;
-  display:flex;flex-direction:column;min-width:0}
-#graph-card{width:100%;max-width:960px;margin:0 auto}
-.op-head{display:flex;align-items:center;gap:8px;padding:9px 14px;
-  border-bottom:1px solid var(--border);font:600 11px var(--sans);
-  text-transform:uppercase;letter-spacing:.07em;color:var(--text2)}
-#graph{width:100%;height:auto;display:block}
-#graph-note{padding:6px 14px 10px;font:10px var(--mono);color:var(--muted);
-  text-align:center}
-.gnode{cursor:pointer}
-.gnode:focus{outline:none}
-.gnode:focus>circle{stroke:var(--accent)}
-.gnode.planned{cursor:default;opacity:.6}
-.gnode text{font-family:var(--sans)}
-.gedge{stroke:var(--border);stroke-width:1.2}
-.gedge.planned{stroke-dasharray:2 5;opacity:.5}
-.gedge.active{stroke:var(--accent);stroke-dasharray:6 6;animation:dashmove 1s linear infinite}
-@keyframes dashmove{to{stroke-dashoffset:-12}}
-@media (prefers-reduced-motion:reduce){.gedge.active{animation:none}}
-
-/* ---------- floating supervisor chat ---------- */
-#sup-fab{position:fixed;right:22px;bottom:22px;z-index:60;width:48px;height:48px;
-  border-radius:50%;background:#1d2a3f;border:1px solid #2b3a52;color:var(--text);
-  font:600 13px var(--sans);cursor:pointer;display:grid;place-items:center;
-  box-shadow:0 6px 24px rgba(0,0,0,.5)}
-#sup-fab:hover{border-color:var(--accent)}
-#sup-fab .fab-dot{position:absolute;top:3px;right:3px;width:9px;height:9px;
-  border-radius:50%;border:2px solid var(--bg);background:var(--muted)}
-#sup-fab .fab-dot.on{background:var(--green)}
-#sup-drawer{position:fixed;right:22px;bottom:80px;z-index:60;width:350px;
-  max-width:calc(100vw - 44px);height:460px;max-height:calc(100vh - 120px);
-  background:var(--panel);border:1px solid var(--border);border-radius:8px;
-  display:none;flex-direction:column;box-shadow:0 14px 44px rgba(0,0,0,.55)}
-#sup-drawer.open{display:flex}
-#sup-drawer .op-head{border-radius:8px 8px 0 0}
-#sup-close{margin-left:6px;background:none;border:none;color:var(--muted);
-  cursor:pointer;font-size:14px}
-#sup-close:hover{color:var(--text)}
-#mgmt-thread{flex:1;overflow-y:auto;padding:12px 14px;display:flex;
-  flex-direction:column;gap:9px;min-height:160px}
-#mgmt-bar{display:flex;gap:8px;padding:10px 12px;border-top:1px solid var(--border);
-  align-items:flex-end}
-#mgmt-input{flex:1;background:var(--panel2);border:1px solid var(--border);
-  color:var(--text);border-radius:6px;padding:7px 10px;font:12.5px/1.5 var(--sans);
-  resize:none;min-height:34px;max-height:110px}
-#mgmt-input:focus{outline:none;border-color:var(--border-hi)}
-.mmsg{max-width:85%;border:1px solid var(--border);border-radius:6px;
-  padding:6px 10px;font-size:12.5px;line-height:1.5;white-space:pre-wrap;
-  overflow-wrap:break-word}
-.mmsg .who{font:600 9px var(--mono);text-transform:uppercase;
-  letter-spacing:.07em;color:var(--muted);margin-bottom:2px}
-.mmsg.operator{align-self:flex-end;background:#161a20;border-color:#2b3a52}
-.mmsg.supervisor{align-self:flex-start;background:var(--panel2)}
-.mmsg.system{align-self:center;max-width:none;border-style:dashed;
-  color:var(--muted);font:11px var(--mono)}
-#attention-list{padding:10px 14px;display:flex;flex-direction:column;gap:8px}
-.att-item{display:flex;align-items:flex-start;gap:10px;border:1px solid var(--border);
-  border-radius:6px;padding:8px 12px;font-size:12.5px;background:var(--panel2)}
-.att-item .blk{flex:none;font:600 9px var(--mono);text-transform:uppercase;
-  letter-spacing:.05em;padding:2px 7px;border-radius:99px;margin-top:1px}
-.att-item .blk.b1{color:var(--red);border:1px solid #552b2b}
-.att-item .blk.b0{color:var(--amber);border:1px solid #5c4a1e}
-.att-item .txt{flex:1;line-height:1.5}
-.att-item .meta{font:10px var(--mono);color:var(--muted)}
-.att-empty{color:var(--muted);font-size:12px;padding:4px 0}
 .rv-card{background:var(--panel);border:1px solid var(--border);border-radius:6px}
 .rv-body{padding:10px 14px;font-size:12.5px;line-height:1.6}
 .rv-body table{width:100%;border-collapse:collapse;font-size:12px}
@@ -226,15 +263,18 @@ body.view-review #review{display:flex}
 .stage-chip.on{color:var(--green);border-color:#234534}
 @media (max-width:760px){
   #sidebar{display:none}
+  body.view-home #main{overflow-y:auto}
+  #home{overflow:visible}
+  #graph-wrap{min-height:420px}
 }
 </style></head><body class="view-home">
 <div id="shell">
   <aside id="sidebar">
-    <div id="sb-head"><div id="sb-logo">B</div><span id="sb-title">BotBot</span>
+    <div id="sb-head"><div id="sb-logo">B</div><span id="sb-title">BotBot Ops</span>
       <button id="sb-toggle" title="Collapse">⟨⟩</button></div>
     <nav id="sb-nav">
       <div class="nav-item active" id="nav-home" data-view="home"><span class="nav-ico">◎</span><span class="nav-label">Home</span></div>
-      <div class="nav-item" id="nav-chat" data-view="chat"><span class="nav-ico">▶</span><span class="nav-label">Requirements Bot Chat</span></div>
+      <div class="nav-item" id="nav-chat" data-view="chat"><span class="nav-ico">▶</span><span class="nav-label">Sessions</span></div>
       <div class="nav-item" id="nav-review" data-view="review"><span class="nav-ico">☑</span><span class="nav-label">Contracts &amp; Review</span></div>
     </nav>
     <div id="sb-foot">
@@ -246,34 +286,33 @@ body.view-review #review{display:flex}
 
   <div id="main">
     <div id="run-header">
-      <div><div id="run-title">Orchestrator</div></div>
+      <div><div id="run-title">Operations Console</div></div>
       <div id="run-actions">
-        <span id="hdr-project" style="font:11px var(--mono);color:var(--muted)"></span>
+        <button class="act" id="client-link" title="Copy the client intake link">Copy client link</button>
+        <span id="ops-note"></span>
       </div>
     </div>
 
     <div id="home">
-      <div id="proj-bar">
-        <span class="pb-label">Project</span>
-        <select id="proj-select" aria-label="Select project"></select>
-        <button class="act" id="proj-new">+ New project</button>
-        <span class="badge idle" id="proj-state"><span class="b-dot"></span><span id="proj-state-txt">—</span></span>
-        <span id="home-stale"></span>
+      <div id="ops-bar">
+        <div class="ops"><span class="k">Active runs</span><span class="v" id="op-active">—</span></div>
+        <div class="ops"><span class="k">Interviews</span><span class="v" id="op-interviews">—</span></div>
+        <div class="ops" id="att-chip" role="button" tabindex="0" title="Open review queue">
+          <span class="k">Needs attention</span><span class="v" id="op-attention">—</span></div>
+        <div class="ops"><span class="k">Model calls <span style="text-transform:none">(all time)</span></span>
+          <span class="v" id="op-calls">—</span></div>
+        <div class="ops"><span class="k">Last model call</span><span class="v" id="op-last">—</span></div>
+        <div id="ops-right"><span id="ops-stale" style="font:10px var(--mono);color:var(--muted)"></span></div>
       </div>
-      <div class="h-card" id="graph-card">
-        <div class="op-head">Orchestrator map
-          <span style="margin-left:auto;font:10px var(--mono);color:var(--muted);text-transform:none;letter-spacing:0">registry-driven · idle ≠ missing</span></div>
-        <svg id="graph" viewBox="0 0 760 490" role="img" aria-label="Orchestrator graph"></svg>
-        <div id="graph-note">Lines are controller-mediated communication. Dashed nodes are planned, not implemented.</div>
-      </div>
-      <div class="h-card" id="attention-card">
-        <div class="op-head">Needs Attention</div>
-        <div id="attention-list"></div>
+      <div id="graph-wrap" title="Nodes come from the capability registry. Idle means available, not missing. Lines are controller-mediated communication.">
+        <svg id="graph" role="img" aria-label="Orchestrator map"></svg>
       </div>
     </div>
 
     <div id="review">
-      <div class="rv-card"><div class="op-head">Lifecycle</div>
+      <div class="rv-card"><div class="op-head">Session
+        <select class="proj-select" id="proj-select-rev" aria-label="Select session"></select>
+        <span style="margin-left:auto"></span></div>
         <div class="rv-body" id="rv-state"></div></div>
       <div class="rv-card"><div class="op-head">Readiness (computed rubric — interview completion is not readiness)</div>
         <div class="rv-body" id="rv-readiness"></div></div>
@@ -290,14 +329,16 @@ body.view-review #review{display:flex}
     </div>
 
     <div id="chat">
-      <div id="chat-head"><span class="t">Requirement Bot Chat</span>
-        <span class="m">interactive interview · put files in uploads/ when asked</span>
+      <div id="chat-head"><span class="t">Session</span>
+        <select class="proj-select" id="proj-select-chat" aria-label="Select session"></select>
+        <button class="act" id="proj-new">+ New test session</button>
+        <span class="m">owner testing uses the same engine as the client link</span>
         <button class="act" id="chat-reset" title="Start a new interview">↺ New interview</button></div>
       <div id="chat-thread"></div>
       <div id="chat-bar">
         <input type="file" id="chat-file" multiple hidden
                accept=".txt,.md,.csv,.png,.jpg,.jpeg,.webp,.gif">
-        <button id="chat-attach" title="Attach chat exports / screenshots (saved to uploads/)">📎</button>
+        <button id="chat-attach" title="Attach chat exports / screenshots">📎</button>
         <textarea id="chat-input" rows="1" placeholder="Type your answer… (Enter to send, Shift+Enter for newline)" spellcheck="false"></textarea>
         <button id="chat-send">Send</button>
       </div>
@@ -305,35 +346,304 @@ body.view-review #review{display:flex}
   </div>
 </div>
 
-<button id="sup-fab" title="AI Supervisor" aria-label="Open AI supervisor chat"
+<button id="sup-fab" title="AI Supervisor (system scope)" aria-label="Open AI supervisor chat"
   aria-expanded="false">AI<span class="fab-dot" id="fab-dot"></span></button>
-<div id="sup-drawer" role="dialog" aria-label="AI supervisor chat">
-  <div class="op-head">AI Supervisor
+<div id="sup-drawer" class="overlay" role="dialog" aria-label="AI supervisor chat">
+  <div class="op-head">AI Supervisor · System
     <span class="badge idle" id="sup-mode"><span class="b-dot"></span><span id="sup-mode-txt">—</span></span>
     <button class="act" id="sup-toggle" style="margin-left:auto">…</button>
-    <button id="sup-close" title="Close" aria-label="Close">✕</button></div>
+    <button class="ov-close" id="sup-close" title="Close" aria-label="Close">✕</button></div>
   <div id="mgmt-thread"></div>
   <div id="mgmt-bar">
-    <textarea id="mgmt-input" rows="1" placeholder="Ask the supervisor about this project… (a paid call when enabled)" spellcheck="false"></textarea>
+    <textarea id="mgmt-input" rows="1" placeholder="Ask about the platform… (a paid call when enabled)" spellcheck="false"></textarea>
     <button class="act" id="mgmt-send">Ask</button>
   </div>
+</div>
+<div id="att-drawer" class="overlay" role="dialog" aria-label="Needs attention">
+  <div class="op-head">Needs Attention
+    <button class="ov-close" id="att-close" title="Close" aria-label="Close" style="margin-left:auto">✕</button></div>
+  <div id="att-list"></div>
 </div>
 
 <script>
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
-$('#sb-toggle').onclick = () => $('#sidebar').classList.toggle('collapsed');
+$('#sb-toggle').onclick = () => {
+  $('#sidebar').classList.toggle('collapsed');
+  if(document.body.className === 'view-home') renderGraph();
+};
 document.querySelectorAll('.nav-item[data-view]').forEach(item => item.onclick = () => {
   document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('active'));
   item.classList.add('active');
   document.body.className = 'view-' + item.dataset.view;
   if(item.dataset.view === 'chat' && !chat.loaded) loadChat();
-  if(item.dataset.view === 'home') loadHome();
+  if(item.dataset.view === 'home') loadSystem();
   if(item.dataset.view === 'review') loadReview();
 });
 
-/* ---------- Requirement Bot chat ---------- */
+/* ================= system-wide Home ================= */
+let sys = null;   // last /api/system payload
+
+async function loadSystem(){
+  try{ sys = await (await fetch('/api/system')).json(); }
+  catch(e){
+    $('#ops-stale').textContent = 'stale — server unreachable';
+    $('#ops-stale').style.color = 'var(--red)';
+    return;
+  }
+  $('#ops-stale').textContent = 'updated just now';
+  $('#ops-stale').style.color = '';
+  const s = sys;
+  $('#op-active').textContent = s.active_runs.length;
+  const ps = s.stats.project_states;
+  const interviewing = (ps.interviewing||0), closed = (ps.interview_closed||0)
+    + (ps.review_required||0), approved = (ps.approved||0);
+  $('#op-interviews').innerHTML =
+    `${interviewing} <span class="sub">open · ${closed} closed · ${approved} approved</span>`;
+  const att = s.stats.open_reviews, blk = s.stats.blocking_reviews;
+  $('#op-attention').textContent = att ? `${att} open (${blk} blocking)` : 'No issues';
+  $('#att-chip').classList.toggle('hot', att > 0);
+  const u = s.stats.usage_all_time;
+  $('#op-calls').innerHTML = `${u.invocations}` +
+    (u.errors ? ` <span class="sub" style="color:var(--red)">${u.errors} failed</span>` : '');
+  const lc = s.health.last_call;
+  $('#op-last').textContent = lc ? (lc.purpose + (lc.error ? ' — FAILED' : ' — ok')) : '—';
+
+  // honest footer
+  $('#dot-store').className = 'dot ' + (s.health.store_ok ? 'ok' : 'bad');
+  $('#txt-store').textContent = 'store: ' + (s.health.store_ok ? 'writable' : 'ERROR');
+  $('#dot-provider').className = 'dot ' + (lc ? (lc.error ? 'bad' : 'ok') : '');
+  $('#txt-provider').textContent = lc
+    ? 'model: last ' + lc.purpose + (lc.error ? ' FAILED' : ' ok')
+    : 'model: no calls yet';
+  const mode = s.health.supervisor_mode;
+  $('#dot-sup').className = 'dot ' + (mode==='advisory' ? 'ok' : '');
+  $('#txt-sup').textContent = 'supervisor: ' + mode;
+  $('#sup-mode').className = 'badge ' + (mode==='advisory' ? 'completed' : 'idle');
+  $('#sup-mode-txt').textContent = mode==='advisory' ? 'Advisory' : 'Disabled';
+  $('#sup-toggle').textContent = mode==='advisory' ? 'Disable' : 'Enable advisory mode';
+  $('#fab-dot').className = 'fab-dot' + (mode==='advisory' ? ' on' : '');
+  renderGraph();
+}
+
+/* ---------- one geometry pass for the whole map ---------- */
+function graphNode(c, x, y, r, lines, status, dotColor, big){
+  const tSize = big ? 24 : 15, sSize = big ? 12.5 : 11, lh = big ? 28 : 18;
+  const total = lines.length*lh + (big ? 40 : 26);
+  let ty = y - total/2 + lh*0.8;
+  let title = '';
+  for(const ln of lines){
+    title += `<text x="${x}" y="${ty}" text-anchor="middle" fill="var(--text)"
+      font-size="${tSize}" font-weight="600">${esc(ln)}</text>`;
+    ty += lh;
+  }
+  ty += big ? 6 : 3;
+  const rows = Array.isArray(status) ? status : [status];
+  let stat = '';
+  for(const s of rows){
+    stat += `<text x="${x}" y="${ty}" text-anchor="middle" font-size="${sSize}">
+      <tspan fill="${dotColor}">●</tspan><tspan dx="5" fill="var(--text2)">${esc(s)}</tspan></text>`;
+    ty += sSize + 5;
+  }
+  const stroke = big ? 'var(--accent)'
+    : c.planned ? 'var(--muted)' : (c.enabled ? 'var(--border-hi)' : 'var(--border)');
+  const dash = (!big && c.planned) ? ' stroke-dasharray="6 5"' : '';
+  return `<g class="gnode${c.planned?' planned':''}" data-cap="${c.id}" tabindex="0"
+      role="button" aria-label="${esc(lines.join(' '))} — ${esc(rows.join(', '))}">
+    <circle cx="${x}" cy="${y}" r="${r}" fill="var(--panel2)" stroke="${stroke}"
+      stroke-width="${big?1.5:1.2}"${dash}/>
+    ${title}${stat}
+  </g>`;
+}
+
+const TITLES = {requirements_bot:['Requirements','Bot'],
+  materials_analyzer:['Materials','Analyzer'], builder_agent:['Builder','Bot'],
+  architecture_agent:['Architecture','Agent'], evaluation_agent:['Evaluation','Bot']};
+
+function renderGraph(){
+  if(!sys) return;
+  const wrap = $('#graph-wrap'), svg = $('#graph');
+  const W = Math.max(560, wrap.clientWidth), H = Math.max(380, wrap.clientHeight);
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  const cx = W/2, cy = H/2;
+  // measured fit: shrink radii together if the workspace is small
+  let rC = 112, rN = 64, margin = 26;
+  let ring = Math.min(W, H)/2 - rN - margin;
+  const need = rC + rN + 42;
+  if(ring < need){
+    const k = Math.max(.55, ring/need);
+    rC *= k; rN *= k;
+    ring = Math.min(W, H)/2 - rN - margin;
+  }
+  const caps = sys.capabilities.filter(c => c.id !== 'ai_supervisor');
+  const nActive = sys.active_runs.length;
+  const edges = [], nodes = [];
+  caps.forEach((c,i) => {
+    const a = (-90 + i*360/caps.length) * Math.PI/180;
+    const x = cx + ring*Math.cos(a), y = cy + ring*Math.sin(a);
+    const isReq = c.id === 'requirements_bot';
+    const working = isReq && nActive > 0;
+    edges.push(`<line class="gedge${working?' active':''}${c.planned?' planned':''}"
+      x1="${cx + rC*Math.cos(a)}" y1="${cy + rC*Math.sin(a)}"
+      x2="${cx + (ring-rN)*Math.cos(a)}" y2="${cy + (ring-rN)*Math.sin(a)}"/>`);
+    const status = c.planned ? 'Planned'
+      : isReq ? (nActive ? `${nActive} active` : 'Idle')
+      : (c.enabled ? 'Idle' : 'Disabled');
+    const dot = c.planned ? 'var(--muted)' : working ? 'var(--accent)'
+      : c.enabled ? 'var(--green)' : 'var(--muted)';
+    nodes.push(graphNode(c, x, y, rN, TITLES[c.id]||[c.name], status, dot, false));
+  });
+  const center = graphNode({id:'orchestrator', enabled:true}, cx, cy, rC,
+    ['Orchestrator'],
+    [`controller: ${nActive ? 'executing' : 'idle'}`,
+     `supervisor: ${sys.health.supervisor_mode}`],
+    nActive ? 'var(--accent)' : 'var(--green)', true);
+  svg.innerHTML = edges.join('') + nodes.join('') + center;
+  svg.querySelectorAll('.gnode').forEach(g => {
+    const go = () => {
+      const cap = g.dataset.cap;
+      if(cap === 'requirements_bot') $('#nav-chat').click();
+      else if(cap === 'orchestrator') openOverlay('#sup-drawer', '#mgmt-input');
+    };
+    g.onclick = go;
+    g.onkeydown = e => { if(e.key==='Enter'||e.key===' '){ e.preventDefault(); go(); } };
+  });
+}
+let rsz;
+window.addEventListener('resize', () => { clearTimeout(rsz); rsz = setTimeout(renderGraph, 120); });
+
+/* ---------- overlays (supervisor + attention) ---------- */
+function openOverlay(sel, focusSel){
+  document.querySelectorAll('.overlay').forEach(o => o.classList.remove('open'));
+  $(sel).classList.add('open');
+  $('#sup-fab').setAttribute('aria-expanded', String(sel === '#sup-drawer'));
+  if(sel === '#sup-drawer') loadMgmt();
+  if(sel === '#att-drawer') loadAttention();
+  if(focusSel) $(focusSel).focus();
+}
+function closeOverlays(){
+  document.querySelectorAll('.overlay').forEach(o => o.classList.remove('open'));
+  $('#sup-fab').setAttribute('aria-expanded', 'false');
+}
+$('#sup-fab').onclick = () =>
+  $('#sup-drawer').classList.contains('open') ? closeOverlays()
+    : openOverlay('#sup-drawer', '#mgmt-input');
+$('#sup-close').onclick = closeOverlays;
+$('#att-close').onclick = closeOverlays;
+$('#att-chip').onclick = () => openOverlay('#att-drawer');
+$('#att-chip').onkeydown = e => {
+  if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openOverlay('#att-drawer'); } };
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeOverlays(); });
+
+async function loadAttention(){
+  let items = [];
+  try{ items = await (await fetch('/api/attention')).json(); }catch(e){}
+  $('#att-list').innerHTML = (items && items.length)
+    ? items.map(rv => `<div class="att-item">
+        <span class="blk b${rv.blocking?1:0}">${rv.blocking?'blocking':'review'}</span>
+        <span class="txt">${esc(rv.decision_needed)}
+          <div class="meta">${esc(rv.project_name||rv.project_id)} · rev ${rv.revision??'—'} · #${rv.id}</div></span>
+        <button class="act" data-rid="${rv.id}" data-pid="${rv.project_id}">Resolve…</button>
+      </div>`).join('')
+    : `<div class="att-empty">No open alerts or review requests.</div>`;
+  document.querySelectorAll('#att-list [data-rid]').forEach(b => b.onclick = async () => {
+    const disp = prompt('Disposition (what was decided and why):');
+    if(!disp) return;
+    await fetch('/api/review/resolve', {method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({project: b.dataset.pid, review_id: +b.dataset.rid, disposition: disp})});
+    loadAttention(); loadSystem();
+  });
+}
+
+/* ---------- supervisor management chat (SYSTEM scope) ---------- */
+let mgmtCount = -1;
+async function loadMgmt(){
+  try{
+    const d = await (await fetch('/api/management?scope=system')).json();
+    const n = (d.messages||[]).length;
+    if(n === mgmtCount) return;
+    mgmtCount = n;
+    renderMgmt(d);
+  }catch(e){}
+}
+function renderMgmt(d){
+  const t = $('#mgmt-thread');
+  t.innerHTML = (d.messages||[]).map(m =>
+    `<div class="mmsg ${m.role}"><div class="who">${m.role}</div>${esc(m.text)}</div>`).join('')
+    || `<div class="mmsg system">System scope: ask what is running, which runs failed, or what awaits review. The supervisor reads recorded state only and cannot change anything.</div>`;
+  t.scrollTop = t.scrollHeight;
+}
+async function sendMgmt(){
+  const inp = $('#mgmt-input'), text = inp.value.trim();
+  if(!text) return;
+  inp.value = '';
+  const t = $('#mgmt-thread');
+  t.insertAdjacentHTML('beforeend',
+    `<div class="mmsg operator"><div class="who">operator</div>${esc(text)}</div>
+     <div class="mmsg system" id="mgmt-wait">supervisor is answering…</div>`);
+  t.scrollTop = t.scrollHeight;
+  try{
+    const d = await (await fetch('/api/management', {method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({scope: 'system', text})})).json();
+    mgmtCount = (d.messages||[]).length;
+    renderMgmt(d);
+  }catch(e){
+    document.getElementById('mgmt-wait')?.remove();
+    t.insertAdjacentHTML('beforeend', `<div class="mmsg system">request failed</div>`);
+  }
+}
+$('#mgmt-send').onclick = sendMgmt;
+$('#mgmt-input').addEventListener('keydown', e => {
+  if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); sendMgmt(); }
+});
+$('#sup-toggle').onclick = async () => {
+  const enabling = (sys && sys.health.supervisor_mode) !== 'advisory';
+  if(enabling && !confirm('Enable the AI supervisor (advisory mode)? Each question you ask it becomes a paid model call.')) return;
+  await fetch('/api/supervisor/enable', {method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({enabled: enabling})});
+  loadSystem();
+};
+
+/* ---------- client link ---------- */
+$('#client-link').onclick = async () => {
+  const url = location.origin + '/chat';
+  try{ await navigator.clipboard.writeText(url); }catch(e){}
+  $('#ops-note').textContent = url + ' (local-only)';
+  setTimeout(() => $('#ops-note').textContent = '', 6000);
+};
+
+/* ================= sessions (owner testing) & review ================= */
+const proj = {id:'default'};
 const chat = {loaded:false, busy:false, complete:false};
+
+async function loadProjects(){
+  let list = [];
+  try{ list = await (await fetch('/api/projects')).json(); }catch(e){ return; }
+  for(const sel of ['#proj-select-chat', '#proj-select-rev']){
+    $(sel).innerHTML = list.map(p =>
+      `<option value="${p.id}"${p.id===proj.id?' selected':''}>${esc(p.name)} (${p.state})</option>`).join('');
+  }
+}
+function switchProject(id){
+  proj.id = id; chat.loaded = false;
+  loadProjects();
+  if(document.body.className === 'view-chat') loadChat();
+  if(document.body.className === 'view-review') loadReview();
+}
+$('#proj-select-chat').onchange = e => switchProject(e.target.value);
+$('#proj-select-rev').onchange = e => switchProject(e.target.value);
+$('#proj-new').onclick = async () => {
+  const name = prompt('New TEST session name (real clients get their own via the client link):');
+  if(!name) return;
+  const d = await (await fetch('/api/projects', {method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({name})})).json();
+  if(d.id) switchProject(d.id);
+};
+
 function renderChat(d){
   chat.complete = d.complete;
   const t = $('#chat-thread');
@@ -350,6 +660,7 @@ function renderChat(d){
 }
 async function loadChat(){
   chat.loaded = true;
+  loadProjects();
   try{ renderChat(await (await fetch('/chat/history?project='+proj.id)).json()); }
   catch(e){ chat.loaded = false; }
 }
@@ -357,7 +668,6 @@ async function sendChat(){
   const inp = $('#chat-input'), text = inp.value.trim();
   if(!text || chat.busy || chat.complete) return;
   chat.busy = true; inp.value = '';
-  // optimistic echo while the bot works
   const t = $('#chat-thread');
   t.insertAdjacentHTML('beforeend',
     `<div class="msg human"><div class="who">You</div>${esc(text)}</div>
@@ -392,7 +702,7 @@ async function uploadChatFiles(fileList){
       body: JSON.stringify({files, project: proj.id})})).json();
     if(d.saved && d.saved.length)
       t.insertAdjacentHTML('beforeend',
-        `<div class="msg sys">📎 Uploaded to uploads/: ${esc(d.saved.join(', '))} — now tell the bot the files are ready.</div>`);
+        `<div class="msg sys">📎 Uploaded: ${esc(d.saved.join(', '))} — now tell the bot the files are ready.</div>`);
     (d.rejected||[]).forEach(msg =>
       t.insertAdjacentHTML('beforeend', `<div class="msg err">${esc(msg)}</div>`));
   }catch(e){
@@ -424,237 +734,8 @@ $('#chat-reset').onclick = async () => {
   chat.complete = false; renderChat(d); $('#chat-input').disabled = false;
 };
 
-/* ---------- Home: projects, orchestrator graph, supervisor chat ---------- */
-const proj = {id:'default', name:'Default project', busy:false, mode:'disabled'};
-
-function switchProject(id){
-  proj.id = id; chat.loaded = false; mgmtCount = -1;
-  loadHome();
-  if(document.body.className === 'view-chat') loadChat();
-  if(document.body.className === 'view-review') loadReview();
-}
-
-async function loadHome(){
-  let d;
-  try{ d = await (await fetch('/api/home?project='+proj.id)).json(); }
-  catch(e){
-    $('#home-stale').textContent = 'stale — server unreachable';
-    $('#home-stale').className = 'bad';
-    return;
-  }
-  $('#home-stale').textContent = 'updated just now';
-  $('#home-stale').className = '';
-  proj.name = d.project.name; proj.busy = d.project.busy;
-  proj.mode = d.health.supervisor_mode;
-  $('#hdr-project').textContent = proj.name + ' · ' + (d.project.state||'—');
-
-  // project selector
-  const sel = $('#proj-select');
-  sel.innerHTML = d.projects.map(p =>
-    `<option value="${p.id}"${p.id===proj.id?' selected':''}>${esc(p.name)} (${p.state})</option>`).join('');
-  const stateCls = {interviewing:'running', review_required:'retrying',
-                    approved:'completed', interview_closed:'retrying'}[d.project.state] || 'idle';
-  $('#proj-state').className = 'badge ' + stateCls;
-  $('#proj-state-txt').textContent = (d.project.state||'created').replace(/_/g,' ');
-
-  // honest footer
-  const h = d.health;
-  $('#dot-store').className = 'dot ' + (h.store_ok ? 'ok' : 'bad');
-  $('#txt-store').textContent = 'store: ' + (h.store_ok ? 'writable' : 'ERROR');
-  const lc = h.last_call;
-  $('#dot-provider').className = 'dot ' + (lc ? (lc.error ? 'bad' : 'ok') : '');
-  $('#txt-provider').textContent = lc
-    ? 'model: last ' + lc.purpose + (lc.error ? ' FAILED' : ' ok')
-    : 'model: no calls yet';
-  $('#dot-sup').className = 'dot ' + (proj.mode==='advisory' ? 'ok' : '');
-  $('#txt-sup').textContent = 'supervisor: ' + proj.mode;
-
-  // supervisor drawer header + floating button dot
-  $('#sup-mode').className = 'badge ' + (proj.mode==='advisory' ? 'completed' : 'idle');
-  $('#sup-mode-txt').textContent = proj.mode==='advisory' ? 'Advisory' : 'Disabled';
-  $('#sup-toggle').textContent = proj.mode==='advisory' ? 'Disable' : 'Enable advisory mode';
-  $('#fab-dot').className = 'fab-dot' + (proj.mode==='advisory' ? ' on' : '');
-
-  renderGraph(d);
-  renderAttention(d.attention);
-  loadMgmt();
-}
-
-/* One node of the orchestrator graph: title + one status line inside the
-   circle, nothing else — the circle IS the label, so no outside caption to
-   duplicate it. Multi-word names stack as two centered lines. */
-function graphNode(c, x, y, r, status, dotColor){
-  const words = c.name.split(' ');
-  const line1 = words[0], line2 = words.slice(1).join(' ');
-  // vertical rhythm: title block centered slightly above middle, status below
-  const titleY = line2 ? y - 8 : y - 3;
-  const title = line2
-    ? `<text x="${x}" y="${titleY}" text-anchor="middle" fill="var(--text)"
-         font-size="10.5" font-weight="600">${esc(line1)}</text>
-       <text x="${x}" y="${titleY+12}" text-anchor="middle" fill="var(--text)"
-         font-size="10.5" font-weight="600">${esc(line2)}</text>`
-    : `<text x="${x}" y="${titleY}" text-anchor="middle" fill="var(--text)"
-         font-size="10.5" font-weight="600">${esc(line1)}</text>`;
-  const stroke = c.planned ? 'var(--muted)' : (c.enabled ? 'var(--border-hi)' : 'var(--border)');
-  const dash = c.planned ? ' stroke-dasharray="5 4"' : '';
-  return `<g class="gnode${c.planned?' planned':''}" data-cap="${c.id}" tabindex="0"
-      role="button" aria-label="${esc(c.name)} — ${status}">
-    <circle cx="${x}" cy="${y}" r="${r}" fill="var(--panel2)" stroke="${stroke}"${dash}/>
-    ${title}
-    <text x="${x}" y="${y+18}" text-anchor="middle" fill="var(--muted)"
-      font-size="8.5" letter-spacing=".04em">${esc(status.toUpperCase())}</text>
-    <circle cx="${x}" cy="${y-r+9}" r="3" fill="${dotColor}"/>
-  </g>`;
-}
-
-function renderGraph(d){
-  const caps = d.capabilities;
-  // Deterministic radial layout: center node at the exact canvas center,
-  // outer nodes evenly spaced by angle on one invisible ring, first at 12
-  // o'clock. The SVG scales as one unit, so it stays centered responsively.
-  const W=760, H=490, cx=W/2, cy=H/2, RING=168, R_CENTER=82, R_NODE=46;
-  const nodes = caps.filter(c => c.id !== 'ai_supervisor');
-  const edges = [], circles = [];
-  nodes.forEach((c,i) => {
-    const a = (-90 + i*360/nodes.length) * Math.PI/180;
-    const x = cx + RING*Math.cos(a), y = cy + RING*Math.sin(a);
-    const active = c.id==='requirements_bot' && d.project.busy;
-    // trim edges to the circle borders so lines don't pierce the nodes
-    const x1 = cx + R_CENTER*Math.cos(a), y1 = cy + R_CENTER*Math.sin(a);
-    const x2 = cx + (RING-R_NODE)*Math.cos(a), y2 = cy + (RING-R_NODE)*Math.sin(a);
-    edges.push(`<line class="gedge${active?' active':''}${c.planned?' planned':''}"
-      x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"/>`);
-    const status = c.planned ? 'Planned' : active ? 'Working'
-                 : (c.enabled ? 'Idle' : 'Disabled');
-    const dot = c.planned ? 'var(--muted)' : active ? 'var(--accent)'
-              : c.enabled ? 'var(--green)' : 'var(--muted)';
-    circles.push(graphNode(c, x, y, R_NODE, status, dot));
-  });
-  const supTxt = 'supervisor: ' + (proj.mode==='advisory' ? 'advisory' : 'disabled');
-  const busyTxt = 'controller: ' + (d.project.busy ? 'executing' : 'idle');
-  const center = `<g class="gnode" data-cap="orchestrator" tabindex="0" role="button"
-      aria-label="Orchestrator — controller and AI supervisor">
-    <circle cx="${cx}" cy="${cy}" r="${R_CENTER}" fill="var(--panel2)"
-      stroke="var(--accent)" stroke-width="1.4"/>
-    <text x="${cx}" y="${cy-10}" text-anchor="middle" fill="var(--text)"
-      font-size="16" font-weight="700">Orchestrator</text>
-    <text x="${cx}" y="${cy+12}" text-anchor="middle" fill="var(--text2)"
-      font-size="9.5">${busyTxt}</text>
-    <text x="${cx}" y="${cy+27}" text-anchor="middle" fill="var(--muted)"
-      font-size="9.5">${supTxt}</text>
-  </g>`;
-  const svg = $('#graph');
-  svg.innerHTML = edges.join('') + circles.join('') + center;
-  svg.querySelectorAll('.gnode').forEach(g => {
-    const go = () => {
-      const cap = g.dataset.cap;
-      if(cap === 'requirements_bot') $('#nav-chat').click();
-      else if(cap === 'orchestrator') openSupervisor();
-    };
-    g.onclick = go;
-    g.onkeydown = e => { if(e.key==='Enter'||e.key===' '){ e.preventDefault(); go(); } };
-  });
-}
-
-function renderAttention(items){
-  $('#attention-list').innerHTML = (items && items.length)
-    ? items.map(rv => `<div class="att-item">
-        <span class="blk b${rv.blocking?1:0}">${rv.blocking?'blocking':'review'}</span>
-        <span class="txt">${esc(rv.decision_needed)}
-          <div class="meta">rev ${rv.revision??'—'} · ${rv.source} · #${rv.id}</div></span>
-        <button class="act" data-rid="${rv.id}">Resolve…</button>
-      </div>`).join('')
-    : `<div class="att-empty">Nothing needs attention for this project.</div>`;
-  document.querySelectorAll('#attention-list [data-rid]').forEach(b => b.onclick = async () => {
-    const disp = prompt('Disposition (what was decided and why):');
-    if(!disp) return;
-    await fetch('/api/review/resolve', {method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({project: proj.id, review_id: +b.dataset.rid, disposition: disp})});
-    loadHome();
-  });
-}
-
-/* ---------- floating supervisor chat (drawer) ---------- */
-function openSupervisor(){
-  $('#sup-drawer').classList.add('open');
-  $('#sup-fab').setAttribute('aria-expanded', 'true');
-  loadMgmt();
-  $('#mgmt-input').focus();
-}
-function closeSupervisor(){
-  $('#sup-drawer').classList.remove('open');
-  $('#sup-fab').setAttribute('aria-expanded', 'false');
-}
-$('#sup-fab').onclick = () =>
-  $('#sup-drawer').classList.contains('open') ? closeSupervisor() : openSupervisor();
-$('#sup-close').onclick = closeSupervisor;
-document.addEventListener('keydown', e => {
-  if(e.key === 'Escape' && $('#sup-drawer').classList.contains('open')) closeSupervisor();
-});
-
-/* ---------- supervisor management chat ---------- */
-let mgmtCount = -1;
-async function loadMgmt(){
-  try{
-    const d = await (await fetch('/api/management?project='+proj.id)).json();
-    const n = (d.messages||[]).length;
-    if(n === mgmtCount) return;   // don't clobber the thread on every poll
-    mgmtCount = n;
-    renderMgmt(d);
-  }catch(e){}
-}
-function renderMgmt(d){
-  const t = $('#mgmt-thread');
-  t.innerHTML = (d.messages||[]).map(m =>
-    `<div class="mmsg ${m.role}"><div class="who">${m.role}</div>${esc(m.text)}</div>`).join('')
-    || `<div class="mmsg system">No management conversation yet. Ask the supervisor about this project — it reads recorded state only and cannot change anything.</div>`;
-  t.scrollTop = t.scrollHeight;
-}
-async function sendMgmt(){
-  const inp = $('#mgmt-input'), text = inp.value.trim();
-  if(!text) return;
-  inp.value = '';
-  const t = $('#mgmt-thread');
-  t.insertAdjacentHTML('beforeend',
-    `<div class="mmsg operator"><div class="who">operator</div>${esc(text)}</div>
-     <div class="mmsg system" id="mgmt-wait">supervisor is answering…</div>`);
-  t.scrollTop = t.scrollHeight;
-  try{
-    const d = await (await fetch('/api/management', {method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({project: proj.id, text})})).json();
-    mgmtCount = (d.messages||[]).length;
-    renderMgmt(d);
-  }catch(e){
-    document.getElementById('mgmt-wait')?.remove();
-    t.insertAdjacentHTML('beforeend', `<div class="mmsg system">request failed</div>`);
-  }
-}
-$('#mgmt-send').onclick = sendMgmt;
-$('#mgmt-input').addEventListener('keydown', e => {
-  if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); sendMgmt(); }
-});
-$('#sup-toggle').onclick = async () => {
-  const enabling = proj.mode !== 'advisory';
-  if(enabling && !confirm('Enable the AI supervisor (advisory mode)? Each question you ask it becomes a paid model call.')) return;
-  await fetch('/api/supervisor/enable', {method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({enabled: enabling})});
-  loadHome();
-};
-$('#proj-select').onchange = e => switchProject(e.target.value);
-$('#proj-new').onclick = async () => {
-  const name = prompt('New project name (one project per business interview):');
-  if(!name) return;
-  const d = await (await fetch('/api/projects', {method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({name})})).json();
-  if(d.id) switchProject(d.id);
-};
-
-/* ---------- Contracts & Review ---------- */
 async function loadReview(){
+  loadProjects();
   let d;
   try{ d = await (await fetch('/api/review?project='+proj.id)).json(); }
   catch(e){ return; }
@@ -700,19 +781,178 @@ async function loadReview(){
   $('#rv-export-ext').onclick = () =>
     window.open('/api/export?project='+proj.id+'&format=extended');
 }
-loadHome();
-setInterval(() => { if(document.body.className === 'view-home') loadHome(); }, 5000);
+
+loadSystem();
+setInterval(() => { if(document.body.className === 'view-home') loadSystem(); }, 5000);
 </script></body></html>"""
 
 
-# ---------- orchestrated chat: every interview is a project in the store ----
-# The legacy /chat/* routes keep their request/response shapes but are served
-# by the execution controller against the selected project (default: the
-# auto-created "default" project, which preserves the old single-session
-# behavior including the shared uploads/ folder and requirements_brief.json).
-from orchestrator import controller, registry, store, supervisor  # noqa: E402
+# ============================ CLIENT CHAT PAGE ============================
+CLIENT_PAGE = r"""<!doctype html><html><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BotBot — Let's plan your chatbot</title>
+<style>
+:root{
+  --bg:#0d0d0d; --panel:#151515; --panel2:#1a1a1a; --border:#2a2a2a;
+  --border-hi:#3f3f46; --text:#f5f5f5; --text2:#a1a1aa; --muted:#71717a;
+  --accent:#6ea8fe; --green:#4ade80; --red:#f87171;
+  --mono:'Cascadia Code',Consolas,'SF Mono',monospace;
+  --sans:-apple-system,'Segoe UI',system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 var(--sans);
+  display:flex;justify-content:center;min-height:100vh}
+#wrap{width:100%;max-width:760px;display:flex;flex-direction:column;height:100vh}
+header{padding:16px 20px 12px;border-bottom:1px solid var(--border)}
+header .brand{display:flex;align-items:center;gap:10px}
+header .logo{width:26px;height:26px;border:1px solid var(--border-hi);border-radius:6px;
+  display:grid;place-items:center;font:600 12px var(--mono);color:var(--accent)}
+header h1{margin:0;font-size:16px;font-weight:600}
+header p{margin:6px 0 0;color:var(--text2);font-size:12.5px}
+#thread{flex:1;overflow-y:auto;padding:18px 20px;display:flex;
+  flex-direction:column;gap:12px}
+.msg{max-width:82%;border:1px solid var(--border);border-radius:10px;
+  padding:9px 13px;white-space:pre-wrap;overflow-wrap:break-word}
+.msg .who{font:600 9.5px var(--mono);text-transform:uppercase;
+  letter-spacing:.07em;color:var(--muted);margin-bottom:3px}
+.msg.ai{align-self:flex-start;background:var(--panel2)}
+.msg.human{align-self:flex-end;background:#161a20;border-color:#2b3a52}
+.msg.err{align-self:stretch;max-width:none;border-color:#553030;color:var(--red);
+  font-size:12.5px}
+.msg.sys{align-self:center;max-width:none;border:none;background:none;
+  color:var(--green);font:12px var(--mono);text-align:center}
+#typing{align-self:flex-start;color:var(--muted);font:12px var(--mono);padding:2px 4px}
+.spin{display:inline-block;width:10px;height:10px;border:1.5px solid var(--border-hi);
+  border-top-color:var(--accent);border-radius:50%;animation:rot .8s linear infinite;
+  margin-right:6px;vertical-align:-1px}
+@keyframes rot{to{transform:rotate(360deg)}}
+#bar{display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--border);
+  align-items:flex-end}
+#inp{flex:1;background:var(--panel2);border:1px solid var(--border);color:var(--text);
+  border-radius:8px;padding:10px 13px;font:14px/1.5 var(--sans);resize:none;
+  min-height:42px;max-height:150px}
+#inp:focus{outline:none;border-color:var(--border-hi)}
+#send{background:#1d2a3f;border:1px solid #2b3a52;color:var(--text);border-radius:8px;
+  padding:10px 18px;font:600 13px var(--sans);cursor:pointer}
+#send:hover{border-color:var(--accent)}
+#send:disabled{opacity:.5;cursor:default}
+#attach{background:var(--panel2);border:1px solid var(--border);color:var(--text2);
+  border-radius:8px;padding:10px 12px;font-size:14px;cursor:pointer}
+#attach:hover{border-color:var(--border-hi);color:var(--text)}
+#thread.drop{outline:1px dashed var(--accent);outline-offset:-6px}
+footer{padding:6px 16px 12px;text-align:center;font:10.5px var(--mono);color:var(--muted)}
+</style></head><body>
+<div id="wrap">
+  <header>
+    <div class="brand"><div class="logo">B</div><h1>Let's plan your chatbot</h1></div>
+    <p>Answer a few questions about your business. You can also attach real
+    customer conversations (chat exports or screenshots) when asked — they help
+    us ask better questions.</p>
+  </header>
+  <div id="thread" aria-live="polite"></div>
+  <div id="bar">
+    <input type="file" id="file" multiple hidden
+           accept=".txt,.md,.csv,.png,.jpg,.jpeg,.webp,.gif">
+    <button id="attach" title="Attach chat exports / screenshots">📎</button>
+    <textarea id="inp" rows="1" placeholder="Type your answer…" spellcheck="false"></textarea>
+    <button id="send">Send</button>
+  </div>
+  <footer>Your answers are saved as you go. Refreshing this page continues the
+  same conversation.</footer>
+</div>
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const st = {busy:false, complete:false, started:false};
+
+function render(d){
+  st.complete = d.complete; st.started = d.started;
+  $('#thread').innerHTML = d.messages.map(m =>
+    `<div class="msg ${m.role==='human'?'human':'ai'}">
+       <div class="who">${m.role==='human'?'You':'BotBot'}</div>${esc(m.text)}</div>`).join('')
+  + (d.error ? `<div class="msg err">${esc(d.error)}</div>` : '')
+  + (d.complete ? `<div class="msg sys">✓ All done — thank you! We have everything
+      we need for now, and our team will review your answers and follow up.</div>` : '')
+  + (st.busy ? `<div id="typing"><span class="spin"></span>thinking…</div>` : '');
+  $('#thread').scrollTop = $('#thread').scrollHeight;
+  $('#send').disabled = st.busy || st.complete;
+  $('#inp').disabled = st.complete;
+}
+async function load(){
+  try{ render(await (await fetch('/client/history')).json()); }
+  catch(e){ render({messages:[], error:'Could not reach the server. Please refresh.'}); }
+}
+async function send(){
+  const text = $('#inp').value.trim();
+  if(!text || st.busy || st.complete) return;
+  st.busy = true; $('#inp').value = '';
+  $('#thread').insertAdjacentHTML('beforeend',
+    `<div class="msg human"><div class="who">You</div>${esc(text)}</div>
+     <div id="typing"><span class="spin"></span>thinking…</div>`);
+  $('#thread').scrollTop = $('#thread').scrollHeight;
+  $('#send').disabled = true;
+  try{
+    const d = await (await fetch('/client/send', {method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({message: text})})).json();
+    st.busy = false; render(d);
+  }catch(e){
+    st.busy = false;
+    document.getElementById('typing')?.remove();
+    $('#thread').insertAdjacentHTML('beforeend',
+      `<div class="msg err">Something went wrong sending that. Your earlier
+       answers are saved — please try again.</div>`);
+    $('#send').disabled = false;
+  }
+  $('#inp').focus();
+}
+async function upload(fileList){
+  if(!st.started){
+    $('#thread').insertAdjacentHTML('beforeend',
+      `<div class="msg err">Please send a message first, then attach your files.</div>`);
+    return;
+  }
+  const files = await Promise.all([...fileList].map(f => new Promise(res => {
+    const r = new FileReader();
+    r.onload = () => res({name: f.name, data_b64: r.result.split(',')[1]});
+    r.readAsDataURL(f);
+  })));
+  if(!files.length) return;
+  try{
+    const d = await (await fetch('/client/upload', {method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({files})})).json();
+    if(d.saved && d.saved.length)
+      $('#thread').insertAdjacentHTML('beforeend',
+        `<div class="msg sys">📎 Received: ${esc(d.saved.join(', '))} — now tell
+         BotBot the files are ready.</div>`);
+    (d.rejected||[]).forEach(m =>
+      $('#thread').insertAdjacentHTML('beforeend', `<div class="msg err">${esc(m)}</div>`));
+  }catch(e){
+    $('#thread').insertAdjacentHTML('beforeend',
+      `<div class="msg err">Upload failed — please try again.</div>`);
+  }
+  $('#thread').scrollTop = $('#thread').scrollHeight;
+  $('#file').value = '';
+}
+$('#send').onclick = send;
+$('#inp').addEventListener('keydown', e => {
+  if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); send(); }
+});
+$('#attach').onclick = () => $('#file').click();
+$('#file').onchange = e => upload(e.target.files);
+$('#thread').addEventListener('dragover', e => {
+  e.preventDefault(); e.currentTarget.classList.add('drop'); });
+$('#thread').addEventListener('dragleave', e =>
+  e.currentTarget.classList.remove('drop'));
+$('#thread').addEventListener('drop', e => {
+  e.preventDefault(); e.currentTarget.classList.remove('drop');
+  upload(e.dataTransfer.files); });
+load();
+</script></body></html>"""
 
 
+# ============================ BACKEND ============================
 def _project_of(value) -> str:
     pid = str((value.get("project") if isinstance(value, dict) else value) or "").strip()
     store.ensure_default_project()
@@ -729,26 +969,21 @@ def chat_send(pid: str, message: str) -> dict:
     if not message:
         return chat_history(pid) | {"error": "empty message"}
     out = controller.send_interview_message(pid, message)
-    if "messages" not in out:  # lock/validation errors still show the thread
+    if "messages" not in out:
         out = chat_history(pid) | out
     return out
 
 
-def home_payload(pid: str) -> dict:
-    project = store.get_project(pid) or {}
+def system_payload() -> dict:
+    store.ensure_default_project()
     return {
-        "project": {"id": pid, "name": project.get("name"),
-                    "state": project.get("state"),
-                    "busy": controller.is_busy(pid)},
-        "projects": [{"id": p["id"], "name": p["name"], "state": p["state"]}
-                     for p in store.list_projects()],
+        "stats": store.system_stats(),
+        "active_runs": controller.active_runs(),
         "capabilities": registry.capabilities(),
-        "attention": store.open_reviews(pid),
-        "usage": store.usage_totals(pid),
         "health": store.health() | {
             "last_call": store.last_provider_event(),
             "supervisor_mode": supervisor.mode()},
-        "events": store.recent_events(pid, 12),
+        "client_link": {"path": "/chat", "local_only": True},
     }
 
 
@@ -768,8 +1003,8 @@ def review_payload(pid: str) -> dict:
 ALLOWED_EXTS = {".txt", ".md", ".csv", ".png", ".jpg", ".jpeg", ".webp", ".gif"}
 
 
-def chat_upload(pid: str, files: list) -> dict:
-    """Save attached files into the PROJECT's uploads dir for the bot's scan."""
+def save_uploads(pid: str, files: list) -> dict:
+    """Validated upload into the PROJECT's own materials dir."""
     import base64
     updir = controller.uploads_dir(pid)
     updir.mkdir(parents=True, exist_ok=True)
@@ -779,7 +1014,7 @@ def chat_upload(pid: str, files: list) -> dict:
         ext = Path(name).suffix.lower()
         if not name or ext not in ALLOWED_EXTS:
             rejected.append(f"{name or '(unnamed)'} — only "
-                            + " ".join(sorted(ALLOWED_EXTS)) + " are readable")
+                            + " ".join(sorted(ALLOWED_EXTS)) + " files are readable")
             continue
         try:
             data = base64.b64decode(str(f.get("data_b64", "")), validate=True)
@@ -796,9 +1031,44 @@ def chat_upload(pid: str, files: list) -> dict:
     return {"saved": saved, "rejected": rejected}
 
 
+# ---------- client-side payloads (no internals, redacted errors) ----------
+CLIENT_MAX_MESSAGES = 200
+
+
+def client_history(pid: str | None) -> dict:
+    from requirements_bot import RequirementsBot
+    if pid is None:  # no session yet: the static greeting, nothing created
+        return {"messages": [{"role": "ai", "text": RequirementsBot.GREETING}],
+                "complete": False, "started": False}
+    return controller.chat_payload(pid) | {"started": True}
+
+
+def client_send(pid: str, message: str) -> dict:
+    if len(message) > 4000:
+        return client_history(pid) | {"error": "That message is too long — "
+                                      "please split it up."}
+    if store.count_client_messages(pid) >= CLIENT_MAX_MESSAGES:
+        return client_history(pid) | {"error": "This conversation has reached "
+                                      "its limit. Please contact us directly."}
+    out = controller.send_interview_message(pid, message)
+    if "error" in out:
+        err = str(out["error"])
+        # Clients see actionable-but-safe text only; details stay in events.
+        if not (err.startswith("Stopped —") or "wait a moment" in err):
+            out["error"] = ("Something went wrong on our side. Your answers "
+                            "are saved — please try again in a moment.")
+    if "messages" not in out:
+        out = controller.chat_payload(pid) | {"error": out.get("error")}
+    out.pop("saved", None)          # internal filename, not for clients
+    out["started"] = True
+    return out
+
+
 class Handler(BaseHTTPRequestHandler):
-    def _send(self, body: bytes, ctype: str, extra: dict | None = None):
-        self.send_response(200)
+    # ---------------- plumbing ----------------
+    def _send(self, body: bytes, ctype: str, extra: dict | None = None,
+              status: int = 200):
+        self.send_response(status)
         self.send_header("Content-Type", ctype)
         for k, v in (extra or {}).items():
             self.send_header(k, v)
@@ -806,24 +1076,78 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
-    def _json(self, obj):
+    def _json(self, obj, status: int = 200, extra: dict | None = None):
         self._send(json.dumps(obj, default=str).encode("utf-8"),
-                   "application/json")
+                   "application/json", extra, status)
 
+    def _cookies(self) -> dict:
+        out = {}
+        for part in (self.headers.get("Cookie") or "").split(";"):
+            if "=" in part:
+                k, v = part.split("=", 1)
+                out[k.strip()] = v.strip()
+        return out
+
+    def _is_owner(self) -> bool:
+        return secrets.compare_digest(
+            self._cookies().get("botbot_owner", ""), _owner_token())
+
+    def _client_pid(self) -> str | None:
+        """The ONLY authorization a client request gets: its own session
+        cookie resolved server-side. Owner cookies and any client-supplied
+        project ids are ignored on client routes."""
+        return store.resolve_client_session(
+            self._cookies().get("botbot_client", ""))
+
+    def _origin_ok(self) -> bool:
+        origin = self.headers.get("Origin")
+        if not origin:
+            return True     # same-origin non-CORS requests may omit it
+        return origin in (f"http://localhost:{PORT}", f"http://127.0.0.1:{PORT}")
+
+    # ---------------- GET ----------------
     def do_GET(self):
         from urllib.parse import parse_qs, urlparse
         u = urlparse(self.path)
         q = {k: v[0] for k, v in parse_qs(u.query).items()}
-        pid = _project_of(q.get("project"))
         route = u.path
-        if route == "/chat/history":
+
+        # pages
+        if route in ("/", "/admin"):
+            # Owner console served on localhost; sets the owner cookie that
+            # every owner API call requires. NOT internet-grade auth.
+            self._send(ADMIN_PAGE.encode("utf-8"), "text/html; charset=utf-8",
+                       {"Set-Cookie": f"botbot_owner={_owner_token()}; "
+                                      f"Path=/; HttpOnly; SameSite=Lax"})
+            return
+        if route == "/chat":
+            self._send(CLIENT_PAGE.encode("utf-8"), "text/html; charset=utf-8")
+            return
+
+        # client API (client cookie only; never owner, never project params)
+        if route == "/client/history":
+            self._json(client_history(self._client_pid()))
+            return
+
+        # owner API (owner cookie required — deny by default)
+        if not self._is_owner():
+            self._json({"error": "owner authorization required"}, status=403)
+            return
+        pid = _project_of(q.get("project"))
+        if route == "/api/system":
+            self._json(system_payload())
+        elif route == "/api/projects":
+            self._json([{"id": p["id"], "name": p["name"], "state": p["state"]}
+                        for p in store.list_projects()])
+        elif route == "/api/attention":
+            self._json(store.open_reviews_all())
+        elif route == "/chat/history":
             self._json(chat_history(pid))
-        elif route == "/api/home":
-            self._json(home_payload(pid))
         elif route == "/api/review":
             self._json(review_payload(pid))
         elif route == "/api/management":
-            self._json(supervisor.management_payload(pid))
+            scope = (store.SYSTEM_SCOPE if q.get("scope") == "system" else pid)
+            self._json(supervisor.management_payload(scope))
         elif route == "/api/export":
             out = controller.export_package(pid, q.get("format", "legacy"))
             self._send(json.dumps(out, indent=2, ensure_ascii=False,
@@ -832,9 +1156,13 @@ class Handler(BaseHTTPRequestHandler):
                        {"Content-Disposition":
                         f'attachment; filename="{pid}_brief.json"'})
         else:
-            self._send(PAGE.encode("utf-8"), "text/html; charset=utf-8")
+            self._json({"error": "unknown endpoint"}, status=404)
 
+    # ---------------- POST ----------------
     def do_POST(self):
+        if not self._origin_ok():
+            self._json({"error": "bad origin"}, status=403)
+            return
         n = int(self.headers.get("Content-Length") or 0)
         if n > 32 * 1024 * 1024:
             self._json({"error": "request too large"})
@@ -843,18 +1171,48 @@ class Handler(BaseHTTPRequestHandler):
             req = json.loads(self.rfile.read(n) or b"{}")
         except json.JSONDecodeError:
             req = {}
+
+        # ----- client routes: authorized ONLY by the client session cookie
+        if self.path == "/client/send":
+            pid = self._client_pid()
+            extra = None
+            if pid is None:
+                # First message: create the isolated interview exactly once
+                # and issue the session. Merely loading the page never does.
+                name = "Client " + time.strftime("%Y-%m-%d %H:%M")
+                pid = store.create_project(name)["id"]
+                token = store.create_client_session(pid)
+                extra = {"Set-Cookie": f"botbot_client={token}; Path=/; "
+                                       f"HttpOnly; SameSite=Lax"}
+            out = client_send(pid, str(req.get("message", "")).strip())
+            self._json(out, extra=extra)
+            return
+        if self.path == "/client/upload":
+            pid = self._client_pid()
+            if pid is None:
+                self._json({"saved": [], "rejected":
+                            ["Please send a message first, then attach files."]})
+                return
+            self._json(save_uploads(pid, req.get("files") or []))
+            return
+
+        # ----- owner routes: owner cookie required, deny by default
+        if not self._is_owner():
+            self._json({"error": "owner authorization required"}, status=403)
+            return
         pid = _project_of(req)
         if self.path == "/chat/send":
             out = chat_send(pid, str(req.get("message", "")).strip())
         elif self.path == "/chat/upload":
-            out = chat_upload(pid, req.get("files") or [])
+            out = save_uploads(pid, req.get("files") or [])
         elif self.path == "/chat/reset":
             out = controller.reset_interview(pid)
         elif self.path == "/api/projects":
             name = str(req.get("name", "")).strip()[:80]
             out = store.create_project(name) if name else {"error": "name required"}
         elif self.path == "/api/management":
-            out = supervisor.ask(pid, str(req.get("text", "")).strip()[:4000])
+            scope = (store.SYSTEM_SCOPE if req.get("scope") == "system" else pid)
+            out = supervisor.ask(scope, str(req.get("text", "")).strip()[:4000])
         elif self.path == "/api/supervisor/enable":
             out = supervisor.set_enabled(bool(req.get("enabled")))
         elif self.path == "/api/review/resolve":
@@ -874,5 +1232,6 @@ class Handler(BaseHTTPRequestHandler):
 
 
 if __name__ == "__main__":
-    print(f"Dashboard: http://localhost:{PORT}")
+    print(f"Owner console: http://localhost:{PORT}/admin")
+    print(f"Client chat:   http://localhost:{PORT}/chat   (local-only)")
     ThreadingHTTPServer(("127.0.0.1", PORT), Handler).serve_forever()
