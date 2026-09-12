@@ -275,9 +275,14 @@ body.view-home #run-header{display:none}
 #sup-fab .fab-dot{position:absolute;top:3px;right:3px;width:9px;height:9px;
   border-radius:50%;border:2px solid var(--bg);background:var(--muted)}
 #sup-fab .fab-dot.on{background:var(--green)}
-#sup-fab-label{position:fixed;right:22px;bottom:3px;width:52px;z-index:60;
-  text-align:center;font:9px var(--mono);color:var(--muted);
-  white-space:nowrap;overflow:visible;pointer-events:none}
+#sup-fab-label{position:fixed;right:48px;bottom:2px;z-index:60;
+  transform:translateX(50%);white-space:nowrap;pointer-events:none;
+  font:9.5px var(--sans);color:var(--text);
+  background:rgba(16,18,22,.55);
+  backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);
+  border:1px solid rgba(110,168,254,.35);border-radius:99px;
+  padding:2px 9px}
+#sup-fab-label .dot{font-size:8px}
 .overlay{position:fixed;right:22px;bottom:84px;z-index:60;width:360px;
   max-width:calc(100vw - 44px);height:480px;max-height:calc(100vh - 130px);
   background:var(--panel);border:1px solid var(--border);border-radius:8px;
@@ -509,7 +514,9 @@ async function loadSystem(){
   $('#sup-mode-txt').textContent = mode==='advisory' ? 'Advisory' : 'Disabled';
   $('#sup-toggle').textContent = mode==='advisory' ? 'Disable' : 'Enable advisory mode';
   $('#fab-dot').className = 'fab-dot' + (mode==='advisory' ? ' on' : '');
-  $('#sup-fab-label').textContent = mode;   // "disabled" | "advisory"
+  $('#sup-fab-label').innerHTML =
+    `<span class="dot" style="color:${mode==='advisory'?'var(--green)':'var(--muted)'}">●</span> `
+    + (mode==='advisory' ? 'Advisory' : 'Disabled');
   $('#sup-fab-label').title = 'AI supervisor mode';
   renderGraph();
 }
@@ -607,7 +614,7 @@ function renderGraph(){
   const centerRing = nActive ? 'center-active' : 'center-idle';
   ringsArr.push({x: cx, y: cy, r: rC, cls: centerRing});
   pillsArr.push({x: cx, y: cy + rC,
-    text: `controller: ${nActive ? 'executing' : 'idle'}`,
+    text: nActive ? 'Working' : 'Idle',
     dot: nActive ? 'var(--accent)' : 'var(--green)'});
   // Supervisor status lives under the AI launcher (bottom-right), not here.
   const center = graphNode({id:'orchestrator', enabled:true}, cx, cy, rC,
@@ -1791,14 +1798,19 @@ class Handler(BaseHTTPRequestHandler):
         if route == "/chat":
             extra = None
             if q.get("new") == "1":
-                # Explicit fresh start: revoke the old client session (its
-                # records are preserved for the owner) and clear the cookie
-                # so the first message creates a brand-new interview.
+                # Explicit fresh start (the owner's New Session button):
+                # revoke the old client session (records preserved), create
+                # the new interview NOW so its flow card appears in Chatbot
+                # Flows immediately, and bind this browser to it.
                 old = self._cookies().get("botbot_client")
                 if old:
                     store.revoke_client_session(old)
-                extra = {"Set-Cookie": "botbot_client=; Path=/; HttpOnly; "
-                         "SameSite=Lax; Max-Age=0"}
+                pid = store.create_project(
+                    "Client " + time.strftime("%Y-%m-%d %H:%M"))["id"]
+                store.set_project_state(pid, "interviewing")
+                token = store.create_client_session(pid)
+                extra = {"Set-Cookie": f"botbot_client={token}; Path=/; "
+                         f"HttpOnly; SameSite=Lax"}
             self._send(CLIENT_PAGE.encode("utf-8"), "text/html; charset=utf-8",
                        (extra or {}) | {"Cache-Control": "no-store"})
             return
