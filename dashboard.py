@@ -147,24 +147,44 @@ body.view-review #review{display:flex}
   border-radius:5px;padding:4px 8px;font:12px var(--sans);max-width:280px}
 #home-stale{margin-left:auto;font:10.5px var(--mono);color:var(--muted)}
 #home-stale.bad{color:var(--red)}
-#home-grid{display:flex;gap:14px;align-items:stretch;flex-wrap:wrap}
 .h-card{background:var(--panel);border:1px solid var(--border);border-radius:6px;
   display:flex;flex-direction:column;min-width:0}
-#graph-card{flex:1.4;min-width:380px}
-#orch-panel{flex:1;min-width:320px;max-height:520px}
+#graph-card{width:100%;max-width:960px;margin:0 auto}
 .op-head{display:flex;align-items:center;gap:8px;padding:9px 14px;
   border-bottom:1px solid var(--border);font:600 11px var(--sans);
   text-transform:uppercase;letter-spacing:.07em;color:var(--text2)}
 #graph{width:100%;height:auto;display:block}
-#graph-note{padding:6px 14px 10px;font:10px var(--mono);color:var(--muted)}
+#graph-note{padding:6px 14px 10px;font:10px var(--mono);color:var(--muted);
+  text-align:center}
 .gnode{cursor:pointer}
 .gnode:focus{outline:none}
-.gnode:focus circle{stroke:var(--accent)}
-.gnode.planned{cursor:default}
+.gnode:focus>circle{stroke:var(--accent)}
+.gnode.planned{cursor:default;opacity:.6}
+.gnode text{font-family:var(--sans)}
 .gedge{stroke:var(--border);stroke-width:1.2}
+.gedge.planned{stroke-dasharray:2 5;opacity:.5}
 .gedge.active{stroke:var(--accent);stroke-dasharray:6 6;animation:dashmove 1s linear infinite}
 @keyframes dashmove{to{stroke-dashoffset:-12}}
 @media (prefers-reduced-motion:reduce){.gedge.active{animation:none}}
+
+/* ---------- floating supervisor chat ---------- */
+#sup-fab{position:fixed;right:22px;bottom:22px;z-index:60;width:48px;height:48px;
+  border-radius:50%;background:#1d2a3f;border:1px solid #2b3a52;color:var(--text);
+  font:600 13px var(--sans);cursor:pointer;display:grid;place-items:center;
+  box-shadow:0 6px 24px rgba(0,0,0,.5)}
+#sup-fab:hover{border-color:var(--accent)}
+#sup-fab .fab-dot{position:absolute;top:3px;right:3px;width:9px;height:9px;
+  border-radius:50%;border:2px solid var(--bg);background:var(--muted)}
+#sup-fab .fab-dot.on{background:var(--green)}
+#sup-drawer{position:fixed;right:22px;bottom:80px;z-index:60;width:350px;
+  max-width:calc(100vw - 44px);height:460px;max-height:calc(100vh - 120px);
+  background:var(--panel);border:1px solid var(--border);border-radius:8px;
+  display:none;flex-direction:column;box-shadow:0 14px 44px rgba(0,0,0,.55)}
+#sup-drawer.open{display:flex}
+#sup-drawer .op-head{border-radius:8px 8px 0 0}
+#sup-close{margin-left:6px;background:none;border:none;color:var(--muted);
+  cursor:pointer;font-size:14px}
+#sup-close:hover{color:var(--text)}
 #mgmt-thread{flex:1;overflow-y:auto;padding:12px 14px;display:flex;
   flex-direction:column;gap:9px;min-height:160px}
 #mgmt-bar{display:flex;gap:8px;padding:10px 12px;border-top:1px solid var(--border);
@@ -240,23 +260,11 @@ body.view-review #review{display:flex}
         <span class="badge idle" id="proj-state"><span class="b-dot"></span><span id="proj-state-txt">—</span></span>
         <span id="home-stale"></span>
       </div>
-      <div id="home-grid">
-        <div class="h-card" id="graph-card">
-          <div class="op-head">Orchestrator
-            <span style="margin-left:auto;font:10px var(--mono);color:var(--muted);text-transform:none;letter-spacing:0">registry-driven · idle ≠ missing</span></div>
-          <svg id="graph" viewBox="0 0 680 400" role="img" aria-label="Orchestrator graph"></svg>
-          <div id="graph-note">A line is controller-mediated communication — not authority for one AI to call another. Dashed nodes are planned, not implemented.</div>
-        </div>
-        <div class="h-card" id="orch-panel">
-          <div class="op-head">AI Supervisor
-            <span class="badge idle" id="sup-mode"><span class="b-dot"></span><span id="sup-mode-txt">—</span></span>
-            <button class="act" id="sup-toggle" style="margin-left:auto">…</button></div>
-          <div id="mgmt-thread"></div>
-          <div id="mgmt-bar">
-            <textarea id="mgmt-input" rows="1" placeholder="Ask the supervisor about this project… (a paid call when enabled)" spellcheck="false"></textarea>
-            <button class="act" id="mgmt-send">Ask</button>
-          </div>
-        </div>
+      <div class="h-card" id="graph-card">
+        <div class="op-head">Orchestrator map
+          <span style="margin-left:auto;font:10px var(--mono);color:var(--muted);text-transform:none;letter-spacing:0">registry-driven · idle ≠ missing</span></div>
+        <svg id="graph" viewBox="0 0 760 490" role="img" aria-label="Orchestrator graph"></svg>
+        <div id="graph-note">Lines are controller-mediated communication. Dashed nodes are planned, not implemented.</div>
       </div>
       <div class="h-card" id="attention-card">
         <div class="op-head">Needs Attention</div>
@@ -294,6 +302,20 @@ body.view-review #review{display:flex}
         <button id="chat-send">Send</button>
       </div>
     </div>
+  </div>
+</div>
+
+<button id="sup-fab" title="AI Supervisor" aria-label="Open AI supervisor chat"
+  aria-expanded="false">AI<span class="fab-dot" id="fab-dot"></span></button>
+<div id="sup-drawer" role="dialog" aria-label="AI supervisor chat">
+  <div class="op-head">AI Supervisor
+    <span class="badge idle" id="sup-mode"><span class="b-dot"></span><span id="sup-mode-txt">—</span></span>
+    <button class="act" id="sup-toggle" style="margin-left:auto">…</button>
+    <button id="sup-close" title="Close" aria-label="Close">✕</button></div>
+  <div id="mgmt-thread"></div>
+  <div id="mgmt-bar">
+    <textarea id="mgmt-input" rows="1" placeholder="Ask the supervisor about this project… (a paid call when enabled)" spellcheck="false"></textarea>
+    <button class="act" id="mgmt-send">Ask</button>
   </div>
 </div>
 
@@ -447,61 +469,87 @@ async function loadHome(){
   $('#dot-sup').className = 'dot ' + (proj.mode==='advisory' ? 'ok' : '');
   $('#txt-sup').textContent = 'supervisor: ' + proj.mode;
 
-  // supervisor panel header
+  // supervisor drawer header + floating button dot
   $('#sup-mode').className = 'badge ' + (proj.mode==='advisory' ? 'completed' : 'idle');
   $('#sup-mode-txt').textContent = proj.mode==='advisory' ? 'Advisory' : 'Disabled';
   $('#sup-toggle').textContent = proj.mode==='advisory' ? 'Disable' : 'Enable advisory mode';
+  $('#fab-dot').className = 'fab-dot' + (proj.mode==='advisory' ? ' on' : '');
 
   renderGraph(d);
   renderAttention(d.attention);
   loadMgmt();
 }
 
+/* One node of the orchestrator graph: title + one status line inside the
+   circle, nothing else — the circle IS the label, so no outside caption to
+   duplicate it. Multi-word names stack as two centered lines. */
+function graphNode(c, x, y, r, status, dotColor){
+  const words = c.name.split(' ');
+  const line1 = words[0], line2 = words.slice(1).join(' ');
+  // vertical rhythm: title block centered slightly above middle, status below
+  const titleY = line2 ? y - 8 : y - 3;
+  const title = line2
+    ? `<text x="${x}" y="${titleY}" text-anchor="middle" fill="var(--text)"
+         font-size="10.5" font-weight="600">${esc(line1)}</text>
+       <text x="${x}" y="${titleY+12}" text-anchor="middle" fill="var(--text)"
+         font-size="10.5" font-weight="600">${esc(line2)}</text>`
+    : `<text x="${x}" y="${titleY}" text-anchor="middle" fill="var(--text)"
+         font-size="10.5" font-weight="600">${esc(line1)}</text>`;
+  const stroke = c.planned ? 'var(--muted)' : (c.enabled ? 'var(--border-hi)' : 'var(--border)');
+  const dash = c.planned ? ' stroke-dasharray="5 4"' : '';
+  return `<g class="gnode${c.planned?' planned':''}" data-cap="${c.id}" tabindex="0"
+      role="button" aria-label="${esc(c.name)} — ${status}">
+    <circle cx="${x}" cy="${y}" r="${r}" fill="var(--panel2)" stroke="${stroke}"${dash}/>
+    ${title}
+    <text x="${x}" y="${y+18}" text-anchor="middle" fill="var(--muted)"
+      font-size="8.5" letter-spacing=".04em">${esc(status.toUpperCase())}</text>
+    <circle cx="${x}" cy="${y-r+9}" r="3" fill="${dotColor}"/>
+  </g>`;
+}
+
 function renderGraph(d){
   const caps = d.capabilities;
-  const W=680, H=400, cx=W/2, cy=H/2, R=142;
+  // Deterministic radial layout: center node at the exact canvas center,
+  // outer nodes evenly spaced by angle on one invisible ring, first at 12
+  // o'clock. The SVG scales as one unit, so it stays centered responsively.
+  const W=760, H=490, cx=W/2, cy=H/2, RING=168, R_CENTER=82, R_NODE=46;
   const nodes = caps.filter(c => c.id !== 'ai_supervisor');
-  const parts = [];
+  const edges = [], circles = [];
   nodes.forEach((c,i) => {
     const a = (-90 + i*360/nodes.length) * Math.PI/180;
-    const x = cx + R*Math.cos(a), y = cy + R*Math.sin(a);
+    const x = cx + RING*Math.cos(a), y = cy + RING*Math.sin(a);
     const active = c.id==='requirements_bot' && d.project.busy;
-    parts.push(`<line class="gedge${active?' active':''}" x1="${cx}" y1="${cy}" x2="${x}" y2="${y}"/>`);
-    const dash = c.planned ? ' stroke-dasharray="5 4"' : '';
-    const stroke = c.planned ? 'var(--muted)' : (c.enabled ? 'var(--border-hi)' : 'var(--border)');
-    const status = c.planned ? 'Planned — not implemented'
-                 : active ? 'Working' : (c.enabled ? 'Idle' : 'Disabled');
+    // trim edges to the circle borders so lines don't pierce the nodes
+    const x1 = cx + R_CENTER*Math.cos(a), y1 = cy + R_CENTER*Math.sin(a);
+    const x2 = cx + (RING-R_NODE)*Math.cos(a), y2 = cy + (RING-R_NODE)*Math.sin(a);
+    edges.push(`<line class="gedge${active?' active':''}${c.planned?' planned':''}"
+      x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"/>`);
+    const status = c.planned ? 'Planned' : active ? 'Working'
+                 : (c.enabled ? 'Idle' : 'Disabled');
     const dot = c.planned ? 'var(--muted)' : active ? 'var(--accent)'
               : c.enabled ? 'var(--green)' : 'var(--muted)';
-    parts.push(`<g class="gnode${c.planned?' planned':''}" data-cap="${c.id}" tabindex="0"
-        role="button" aria-label="${esc(c.name)} — ${status}">
-      <circle cx="${x}" cy="${y}" r="34" fill="var(--panel2)" stroke="${stroke}"${dash}/>
-      <circle cx="${x}" cy="${y-12}" r="3" fill="${dot}"/>
-      <text x="${x}" y="${y+4}" text-anchor="middle" fill="var(--text)"
-        font-size="10" font-weight="600">${esc(c.name.split(' ')[0])}</text>
-      <text x="${x}" y="${y+16}" text-anchor="middle" fill="var(--muted)"
-        font-size="8.5">${esc(status)}</text>
-      <text x="${x}" y="${y+52}" text-anchor="middle" fill="var(--text2)"
-        font-size="9.5">${esc(c.name)}</text>
-    </g>`);
+    circles.push(graphNode(c, x, y, R_NODE, status, dot));
   });
-  const supTxt = proj.mode==='advisory' ? 'supervisor: advisory' : 'supervisor: disabled';
-  const busyTxt = d.project.busy ? 'controller: executing' : 'controller: idle';
-  parts.push(`<g class="gnode" data-cap="orchestrator" tabindex="0" role="button"
+  const supTxt = 'supervisor: ' + (proj.mode==='advisory' ? 'advisory' : 'disabled');
+  const busyTxt = 'controller: ' + (d.project.busy ? 'executing' : 'idle');
+  const center = `<g class="gnode" data-cap="orchestrator" tabindex="0" role="button"
       aria-label="Orchestrator — controller and AI supervisor">
-    <circle cx="${cx}" cy="${cy}" r="76" fill="var(--panel2)" stroke="var(--accent)" stroke-width="1.4"/>
-    <text x="${cx}" y="${cy-12}" text-anchor="middle" fill="var(--text)"
-      font-size="15" font-weight="700">Orchestrator</text>
-    <text x="${cx}" y="${cy+6}" text-anchor="middle" fill="var(--text2)" font-size="9.5">${busyTxt}</text>
-    <text x="${cx}" y="${cy+20}" text-anchor="middle" fill="var(--muted)" font-size="9.5">${supTxt}</text>
-  </g>`);
+    <circle cx="${cx}" cy="${cy}" r="${R_CENTER}" fill="var(--panel2)"
+      stroke="var(--accent)" stroke-width="1.4"/>
+    <text x="${cx}" y="${cy-10}" text-anchor="middle" fill="var(--text)"
+      font-size="16" font-weight="700">Orchestrator</text>
+    <text x="${cx}" y="${cy+12}" text-anchor="middle" fill="var(--text2)"
+      font-size="9.5">${busyTxt}</text>
+    <text x="${cx}" y="${cy+27}" text-anchor="middle" fill="var(--muted)"
+      font-size="9.5">${supTxt}</text>
+  </g>`;
   const svg = $('#graph');
-  svg.innerHTML = parts.join('');
+  svg.innerHTML = edges.join('') + circles.join('') + center;
   svg.querySelectorAll('.gnode').forEach(g => {
     const go = () => {
       const cap = g.dataset.cap;
       if(cap === 'requirements_bot') $('#nav-chat').click();
-      else if(cap === 'orchestrator') $('#mgmt-input').focus();
+      else if(cap === 'orchestrator') openSupervisor();
     };
     g.onclick = go;
     g.onkeydown = e => { if(e.key==='Enter'||e.key===' '){ e.preventDefault(); go(); } };
@@ -526,6 +574,24 @@ function renderAttention(items){
     loadHome();
   });
 }
+
+/* ---------- floating supervisor chat (drawer) ---------- */
+function openSupervisor(){
+  $('#sup-drawer').classList.add('open');
+  $('#sup-fab').setAttribute('aria-expanded', 'true');
+  loadMgmt();
+  $('#mgmt-input').focus();
+}
+function closeSupervisor(){
+  $('#sup-drawer').classList.remove('open');
+  $('#sup-fab').setAttribute('aria-expanded', 'false');
+}
+$('#sup-fab').onclick = () =>
+  $('#sup-drawer').classList.contains('open') ? closeSupervisor() : openSupervisor();
+$('#sup-close').onclick = closeSupervisor;
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape' && $('#sup-drawer').classList.contains('open')) closeSupervisor();
+});
 
 /* ---------- supervisor management chat ---------- */
 let mgmtCount = -1;
