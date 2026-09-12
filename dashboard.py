@@ -521,8 +521,10 @@ function graphNode(c, x, y, r, lines, status, dotColor, big, ringCls){
       text-anchor="middle" dominant-baseline="central" font-size="${sSize}">
       <tspan fill="${dotColor}">●</tspan><tspan dx="5" fill="var(--text2)">${esc(s)}</tspan></text>`;
   });
-  const stroke = big ? 'var(--accent)'
-    : c.planned ? 'var(--muted)' : (c.enabled ? 'var(--border-hi)' : 'var(--border)');
+  // The static border is neutral on every node — the center included; the
+  // blue belongs to the moving comet ring only.
+  const stroke = c.planned ? 'var(--muted)'
+    : (big || c.enabled) ? 'var(--border-hi)' : 'var(--border)';
   const dash = (!big && c.planned) ? ' stroke-dasharray="6 5"' : '';
   // Rings are HTML overlays (see .gring) — graphNode draws no ring itself;
   // renderGraph collects {x, y, r, cls} and lays the overlays afterwards.
