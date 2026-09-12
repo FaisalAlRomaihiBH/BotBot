@@ -500,23 +500,23 @@ async function loadSystem(){
 /* ---------- one geometry pass for the whole map ---------- */
 // BotNode: body circle + status ring + centered title/status text.
 function graphNode(c, x, y, r, lines, status, dotColor, big, ringCls){
-  // True block centering: measure the whole title+status block, center it
-  // on the circle's midpoint, and place every line by its own center line
-  // (dominant-baseline) — no baseline fudging, no drift.
+  // The BIG title is anchored dead-center of the circle: its line block is
+  // centered exactly on (x, y), every line placed by its own center line
+  // (dominant-baseline). The small status sits tucked below it.
   const tSize = big ? 25 : 15, sSize = big ? 12.5 : 11, lh = big ? 29 : 19;
-  const sLh = sSize + 6, gap = big ? 9 : 6;
+  const sLh = sSize + 6, gap = big ? 10 : 7;
   const rows = Array.isArray(status) ? status : [status];
-  const totalH = lines.length*lh + gap + rows.length*sLh;
-  const top = y - totalH/2;
+  const titleTop = y - (lines.length * lh)/2;
   let title = '';
   lines.forEach((ln, i) => {
-    title += `<text x="${x}" y="${top + lh/2 + i*lh}" text-anchor="middle"
+    title += `<text x="${x}" y="${titleTop + lh/2 + i*lh}" text-anchor="middle"
       dominant-baseline="central" fill="var(--text)"
       font-size="${tSize}" font-weight="600">${esc(ln)}</text>`;
   });
+  const statTop = titleTop + lines.length*lh + gap;
   let stat = '';
   rows.forEach((s, j) => {
-    stat += `<text x="${x}" y="${top + lines.length*lh + gap + sLh/2 + j*sLh}"
+    stat += `<text x="${x}" y="${statTop + sLh/2 + j*sLh}"
       text-anchor="middle" dominant-baseline="central" font-size="${sSize}">
       <tspan fill="${dotColor}">●</tspan><tspan dx="5" fill="var(--text2)">${esc(s)}</tspan></text>`;
   });
@@ -528,10 +528,10 @@ function graphNode(c, x, y, r, lines, status, dotColor, big, ringCls){
   // the edge perfectly at any radius. Planned nodes get none.
   let ring = '';
   if(ringCls){
-    // Long sweeping arc: about half the border when running, a generous
-    // third when idle — a light travelling the whole circle, not a speck.
+    // The light fills ~90% of the border: what moves is the small dark
+    // gap sweeping around the circle, so the whole ring reads as lit.
     const C = 2*Math.PI*r;
-    const L = C * (ringCls.includes('active')||ringCls==='running' ? .55 : .38);
+    const L = C * (ringCls.includes('active')||ringCls==='running' ? .93 : .90);
     ring = `<circle class="ring ${ringCls}" cx="${x}" cy="${y}" r="${r}"
       stroke-dasharray="${L.toFixed(1)} ${(C-L).toFixed(1)}"/>`;
   }
@@ -1429,9 +1429,12 @@ class Handler(BaseHTTPRequestHandler):
         if route in ("/", "/admin"):
             # Owner console served on localhost; sets the owner cookie that
             # every owner API call requires. NOT internet-grade auth.
+            # no-store: a UI update must show on plain refresh, never a
+            # stale cached page.
             self._send(ADMIN_PAGE.encode("utf-8"), "text/html; charset=utf-8",
                        {"Set-Cookie": f"botbot_owner={_owner_token()}; "
-                                      f"Path=/; HttpOnly; SameSite=Lax"})
+                                      f"Path=/; HttpOnly; SameSite=Lax",
+                        "Cache-Control": "no-store"})
             return
         if route == "/chat":
             extra = None
@@ -1445,7 +1448,7 @@ class Handler(BaseHTTPRequestHandler):
                 extra = {"Set-Cookie": "botbot_client=; Path=/; HttpOnly; "
                          "SameSite=Lax; Max-Age=0"}
             self._send(CLIENT_PAGE.encode("utf-8"), "text/html; charset=utf-8",
-                       extra)
+                       (extra or {}) | {"Cache-Control": "no-store"})
             return
 
         # client API (client cookie only; never owner, never project params)
