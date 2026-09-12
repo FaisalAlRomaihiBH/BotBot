@@ -1229,6 +1229,116 @@ load();
 </script></body></html>"""
 
 
+# ============================ RING STYLE SAMPLES ============================
+# Temporary demo at /rings: five candidate border-animation styles rendered
+# on real-size circles so the owner can pick one for the orchestrator map.
+RING_DEMO = r"""<!doctype html><html><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ring Styles — pick one</title>
+<style>
+:root{--bg:#0d0d0d;--panel:#151515;--panel2:#1a1a1a;--border:#2a2a2a;
+  --border-hi:#3f3f46;--text:#f5f5f5;--text2:#a1a1aa;--muted:#71717a;
+  --accent:#6ea8fe;--sans:-apple-system,'Segoe UI',system-ui,sans-serif;
+  --mono:'Cascadia Code',Consolas,monospace}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 var(--sans);
+  padding:26px}
+h1{font-size:19px;margin:0 0 4px}
+p.sub{color:var(--text2);margin:0 0 26px;font-size:12.5px}
+.sample{background:var(--panel);border:1px solid var(--border);border-radius:8px;
+  padding:18px 22px;margin-bottom:18px}
+.sample h2{font-size:15px;margin:0 0 2px}
+.sample .d{color:var(--muted);font-size:12px;margin:0 0 16px}
+.row{display:flex;gap:44px;align-items:center;flex-wrap:wrap}
+.slot{display:flex;flex-direction:column;align-items:center;gap:9px}
+.slot .cap{font:10.5px var(--mono);color:var(--muted)}
+.node{position:relative;width:128px;height:128px}
+.node.big{width:200px;height:200px}
+.node .face{position:absolute;inset:5px;border-radius:50%;background:var(--panel2);
+  border:1px solid var(--border-hi);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:3px}
+.node .t{font-weight:600;font-size:13px;text-align:center;line-height:1.25}
+.node.big .t{font-size:19px}
+.node .s{font-size:10px;color:var(--text2)}
+.ringc{position:absolute;inset:0;border-radius:50%}
+@keyframes rot{to{transform:rotate(360deg)}}
+@keyframes breathe{0%,100%{opacity:.35;filter:drop-shadow(0 0 2px rgba(110,168,254,.3))}
+  50%{opacity:1;filter:drop-shadow(0 0 8px rgba(110,168,254,.8))}}
+/* mask that keeps only a thin ring band at the edge */
+.band{ -webkit-mask:radial-gradient(closest-side,transparent calc(100% - 6px),#000 calc(100% - 5px));
+  mask:radial-gradient(closest-side,transparent calc(100% - 6px),#000 calc(100% - 5px))}
+
+/* 1 — Comet tail: bright head with a long fading tail orbiting */
+.s1 .ringc{background:conic-gradient(from 0deg, transparent 0 12%,
+  rgba(110,168,254,.12) 35%, rgba(110,168,254,.55) 75%, var(--accent) 100%);
+  animation:rot linear infinite}
+.s1.idle .ringc{animation-duration:7s;opacity:.75}
+.s1.run .ringc{animation-duration:1.6s;opacity:1}
+
+/* 2 — Full lit ring with a sweeping gap (current style, tuned) */
+.s2 .ringc{background:conic-gradient(from 0deg, transparent 0 8%, var(--accent) 8% 100%);
+  animation:rot linear infinite;filter:drop-shadow(0 0 4px rgba(110,168,254,.5))}
+.s2.idle .ringc{animation-duration:9s;opacity:.7}
+.s2.run .ringc{animation-duration:2s;opacity:1}
+
+/* 3 — Dual orbit: two symmetric bright arcs chasing each other */
+.s3 .ringc{background:conic-gradient(from 0deg,
+  var(--accent) 0 30%, transparent 30% 50%,
+  var(--accent) 50% 80%, transparent 80% 100%);
+  animation:rot linear infinite;filter:drop-shadow(0 0 3px rgba(110,168,254,.5))}
+.s3.idle .ringc{animation-duration:10s;opacity:.6}
+.s3.run .ringc{animation-duration:2.2s;opacity:1}
+
+/* 4 — Breathing glow: whole border pulses, no rotation */
+.s4 .ringc{background:var(--accent);animation:breathe ease-in-out infinite}
+.s4.idle .ringc{animation-duration:4.5s}
+.s4.run .ringc{animation-duration:1.2s}
+
+/* 5 — Shimmer: faint full ring + one short bright runner on top */
+.s5 .base{position:absolute;inset:0;border-radius:50%;background:var(--accent);
+  opacity:.18}
+.s5 .ringc{background:conic-gradient(from 0deg, transparent 0 82%,
+  var(--accent) 90%, #cfe1ff 96%, var(--accent) 100%);
+  animation:rot linear infinite;filter:drop-shadow(0 0 5px rgba(110,168,254,.7))}
+.s5.idle .ringc{animation-duration:6s;opacity:.85}
+.s5.run .ringc{animation-duration:1.4s;opacity:1}
+
+@media (prefers-reduced-motion:reduce){.ringc{animation:none!important}}
+</style></head><body>
+<h1>Ring style samples</h1>
+<p class="sub">Each shows: small Idle · small Running · the big center circle.
+Tell Claude which number you want on the orchestrator map.</p>
+<div id="list"></div>
+<script>
+const styles=[
+ [1,'Comet tail','A bright head dragging a long fading tail around the border.'],
+ [2,'Lit ring, sweeping gap','The whole border glows; a small dark gap rolls around it (current style, tuned).'],
+ [3,'Dual orbit','Two symmetric bright arcs chasing each other around the border.'],
+ [4,'Breathing glow','No rotation — the whole border softly pulses; faster when running.'],
+ [5,'Shimmer runner','A faint full ring with one short bright light running along it.'],
+];
+document.getElementById('list').innerHTML = styles.map(([n,t,d])=>`
+ <div class="sample"><h2>${n}. ${t}</h2><p class="d">${d}</p>
+  <div class="row">
+   <div class="slot"><div class="node s${n} idle">
+     ${n===5?'<div class="base band"></div>':''}
+     <div class="ringc band"></div>
+     <div class="face"><span class="t">Requirements<br>Bot</span><span class="s">● Idle</span></div>
+   </div><div class="cap">idle</div></div>
+   <div class="slot"><div class="node s${n} run">
+     ${n===5?'<div class="base band"></div>':''}
+     <div class="ringc band"></div>
+     <div class="face"><span class="t">Requirements<br>Bot</span><span class="s">● 2 running tasks</span></div>
+   </div><div class="cap">running</div></div>
+   <div class="slot"><div class="node big s${n} idle">
+     ${n===5?'<div class="base band"></div>':''}
+     <div class="ringc band"></div>
+     <div class="face"><span class="t">BotBot<br>Orchestrator</span><span class="s">● controller: idle</span></div>
+   </div><div class="cap">center, idle</div></div>
+  </div></div>`).join('');
+</script></body></html>"""
+
+
 # ============================ BACKEND ============================
 def _project_of(value) -> str:
     pid = str((value.get("project") if isinstance(value, dict) else value) or "").strip()
@@ -1435,6 +1545,10 @@ class Handler(BaseHTTPRequestHandler):
                        {"Set-Cookie": f"botbot_owner={_owner_token()}; "
                                       f"Path=/; HttpOnly; SameSite=Lax",
                         "Cache-Control": "no-store"})
+            return
+        if route == "/rings":
+            self._send(RING_DEMO.encode("utf-8"), "text/html; charset=utf-8",
+                       {"Cache-Control": "no-store"})
             return
         if route == "/chat":
             extra = None
