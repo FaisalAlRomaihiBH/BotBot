@@ -249,6 +249,16 @@ body.view-home #run-header{display:none}
 @media (prefers-reduced-motion:reduce){
   .gedge.active,.gring{animation:none}
 }
+/* frosted-glass status pill on each node's bottom border (chosen style 5) */
+.gpill{position:absolute;transform:translate(-50%,-50%);z-index:3;
+  pointer-events:none;white-space:nowrap;
+  font:10.5px var(--sans);color:var(--text);
+  background:rgba(16,18,22,.55);
+  backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);
+  border:1px solid rgba(110,168,254,.35);border-radius:99px;
+  padding:2.5px 11px}
+.gpill .dot{font-size:9px}
+
 /* the New Session action pinned under the RequirementsBot node */
 .gbtn{cursor:pointer}
 .gbtn rect{fill:#1d2a3f;stroke:#2b3a52;rx:13}
@@ -518,18 +528,9 @@ function graphNode(c, x, y, r, lines, status, dotColor, big, ringCls){
       dominant-baseline="central" fill="var(--text)"
       font-size="${tSize}" font-weight="600">${esc(ln)}</text>`;
   });
-  const sTxt = rows.join(' · ');
-  const pillH = big ? 22 : 19;
-  const pillW = Math.max(52, sTxt.length * (sSize*0.56) + 30);
-  const py = y + r;   // centered ON the border line
-  const stat = `<g>
-    <rect x="${(x - pillW/2).toFixed(1)}" y="${(py - pillH/2).toFixed(1)}"
-      width="${pillW.toFixed(1)}" height="${pillH}" rx="${pillH/2}"
-      fill="var(--panel)" stroke="var(--border-hi)"/>
-    <text x="${x}" y="${py}" text-anchor="middle" dominant-baseline="central"
-      font-size="${sSize}">
-      <tspan fill="${dotColor}">●</tspan><tspan dx="5" fill="var(--text2)">${esc(sTxt)}</tspan></text>
-  </g>`;
+  // Status pills are frosted-glass HTML overlays (see .gpill) — SVG rects
+  // cannot backdrop-blur. renderGraph collects and lays them.
+  const stat = '';
   // The static border is neutral on every node — the center included; the
   // blue belongs to the moving comet ring only.
   const stroke = c.planned ? 'var(--muted)'
@@ -580,7 +581,7 @@ function renderGraph(){
   }
   const caps = sys.capabilities.filter(c => c.id !== 'ai_supervisor');
   const nActive = sys.active_runs.length;
-  const edges = [], nodes = [], ringsArr = [];
+  const edges = [], nodes = [], ringsArr = [], pillsArr = [];
   let reqPos = null;
   caps.forEach((c,i) => {
     const a = (-90 + i*360/caps.length) * Math.PI/180;
@@ -599,11 +600,15 @@ function renderGraph(){
     const ringCls = c.planned ? null : working ? 'running'
       : c.enabled ? 'idle' : null;
     if(ringCls) ringsArr.push({x, y, r: rN, cls: ringCls});
+    pillsArr.push({x, y: y + rN, text: status, dot});
     nodes.push(graphNode(c, x, y, rN, TITLES[c.id]||[c.name], status, dot,
                          false, ringCls));
   });
   const centerRing = nActive ? 'center-active' : 'center-idle';
   ringsArr.push({x: cx, y: cy, r: rC, cls: centerRing});
+  pillsArr.push({x: cx, y: cy + rC,
+    text: `controller: ${nActive ? 'executing' : 'idle'}`,
+    dot: nActive ? 'var(--accent)' : 'var(--green)'});
   // Supervisor status lives under the AI launcher (bottom-right), not here.
   const center = graphNode({id:'orchestrator', enabled:true}, cx, cy, rC,
     ['BotBot','Orchestrator'],
@@ -636,6 +641,21 @@ function renderGraph(){
     d.style.cssText = `left:${(ox + g.x*s - R).toFixed(1)}px;`
                     + `top:${(oy + g.y*s - R).toFixed(1)}px;`
                     + `width:${(2*R).toFixed(1)}px;height:${(2*R).toFixed(1)}px`;
+    wrap.appendChild(d);
+  }
+  // frosted-glass status pills, centered on each node's bottom border;
+  // font scales with the map (floored for readability) so pills keep
+  // their proportion to the circles on small windows
+  wrap.querySelectorAll('.gpill').forEach(el => el.remove());
+  const pf = Math.max(9, 10.5 * s);
+  for(const g of pillsArr){
+    const d = document.createElement('div');
+    d.className = 'gpill';
+    d.innerHTML = `<span class="dot" style="color:${g.dot}">●</span> ${esc(g.text)}`;
+    d.style.cssText = `left:${(ox + g.x*s).toFixed(1)}px;`
+                    + `top:${(oy + g.y*s).toFixed(1)}px;`
+                    + `font-size:${pf.toFixed(1)}px;`
+                    + `padding:${(2.5*Math.max(.8,s)).toFixed(1)}px ${(11*Math.max(.8,s)).toFixed(1)}px`;
     wrap.appendChild(d);
   }
   svg.querySelectorAll('.gnode').forEach(g => {
