@@ -48,17 +48,12 @@ def capabilities() -> list[dict]:
             "configured": api_key_present,
             "mode": supervisor.mode(),
         },
-        # Testing utilities: registered so the permission model covers them,
-        # never callable from production flows.
-        {
-            "id": "persona_runner",
-            "name": "Persona Runner (testing)",
-            "kind": "testing_utility",
-            "purpose": "Mass persona interviews + judging (evaluation-only by default)",
-            "installed": True, "enabled": True, "planned": False,
-            "configured": api_key_present,
-        },
-        # Roadmap: planned, not implemented, non-executable.
+        # Roadmap: planned, not implemented, non-executable. Testing and
+        # improvement will be their own bots connected to the Orchestrator.
+        {"id": "evaluation_agent", "name": "Evaluation Bot",
+         "kind": "production_specialist", "purpose": "Tests and improves the "
+         "other bots through the Orchestrator", "installed": False,
+         "enabled": False, "planned": True},
         {"id": "architecture_agent", "name": "Architecture Agent",
          "kind": "production_specialist", "purpose": "Designs the chatbot from "
          "an approved brief", "installed": False, "enabled": False,
