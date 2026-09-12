@@ -117,10 +117,9 @@ body{margin:0;background:var(--bg);color:var(--text);font:13px/1.45 var(--sans)}
 @keyframes rot{to{transform:rotate(360deg)}}
 
 /* ---------- views ---------- */
-#chat,#home,#review,#flows{display:none}
+#chat,#home,#flows{display:none}
 body.view-chat #chat{display:flex}
 body.view-home #home{display:flex}
-body.view-review #review{display:flex}
 body.view-flows #flows{display:flex}
 #flows{flex-direction:column;margin:14px 20px 20px;gap:12px;min-height:0}
 
@@ -204,7 +203,6 @@ body.view-flows #flows{display:flex}
   .fc-step::before{display:none}
   .fc-step>div{display:flex;flex-direction:column}
 }
-#review{flex-direction:column;margin:14px 20px 20px;gap:14px;min-height:0}
 /* Home is the full remaining workspace: no narrow card, no page scroll */
 #home{flex:1;flex-direction:column;min-height:0;overflow:hidden}
 body.view-home #main{overflow:hidden}
@@ -228,18 +226,24 @@ body.view-home #run-header{display:none}
 .gedge.planned{stroke-dasharray:2 5;opacity:.5}
 .gedge.active{stroke:var(--accent);stroke-dasharray:6 6;animation:dashmove 1s linear infinite}
 @keyframes dashmove{to{stroke-dashoffset:-12}}
-/* status rings: a dashed perimeter that slowly rolls when idle and runs
-   visibly faster while recorded work is executing */
+/* StatusRing: one illuminated segment travelling ON the node's border.
+   The ring is drawn at the body circle's own radius (dasharray computed
+   from its real circumference in JS), so the light is part of the border —
+   never a detached arc floating outside the node. */
 .ring{fill:none;transform-box:fill-box;transform-origin:center;
-  pointer-events:none}
-.ring.idle{stroke:var(--border-hi);stroke-width:1.4;stroke-dasharray:10 48;
-  opacity:.65;animation:spin 16s linear infinite}
-.ring.running{stroke:var(--accent);stroke-width:1.8;stroke-dasharray:30 26;
-  opacity:.9;animation:spin 2.4s linear infinite}
-.ring.center-idle{stroke:var(--border-hi);stroke-width:1.6;
-  stroke-dasharray:16 72;opacity:.55;animation:spin 22s linear infinite}
-.ring.center-active{stroke:var(--accent);stroke-width:2;
-  stroke-dasharray:44 36;opacity:.9;animation:spin 3.2s linear infinite}
+  pointer-events:none;stroke-linecap:round}
+.ring.idle{stroke:var(--accent);stroke-width:1.6;opacity:.45;
+  animation:spin 14s linear infinite;
+  filter:drop-shadow(0 0 2px rgba(110,168,254,.5))}
+.ring.running{stroke:var(--accent);stroke-width:2;opacity:.95;
+  animation:spin 2.2s linear infinite;
+  filter:drop-shadow(0 0 5px rgba(110,168,254,.7))}
+.ring.center-idle{stroke:var(--accent);stroke-width:1.8;opacity:.4;
+  animation:spin 20s linear infinite;
+  filter:drop-shadow(0 0 3px rgba(110,168,254,.45))}
+.ring.center-active{stroke:var(--accent);stroke-width:2.2;opacity:.95;
+  animation:spin 3s linear infinite;
+  filter:drop-shadow(0 0 6px rgba(110,168,254,.7))}
 @keyframes spin{to{transform:rotate(360deg)}}
 @media (prefers-reduced-motion:reduce){
   .gedge.active,.ring{animation:none}
@@ -345,18 +349,6 @@ body.view-home #run-header{display:none}
 #chat-attach:hover{border-color:var(--border-hi);color:var(--text)}
 #chat-thread.drop{outline:1px dashed var(--accent);outline-offset:-6px}
 
-.rv-card{background:var(--panel);border:1px solid var(--border);border-radius:6px}
-.rv-body{padding:10px 14px;font-size:12.5px;line-height:1.6}
-.rv-body table{width:100%;border-collapse:collapse;font-size:12px}
-.rv-body td,.rv-body th{padding:4px 8px;border-bottom:1px solid var(--border);
-  text-align:left;vertical-align:top}
-.rv-body th{font:600 10px var(--sans);text-transform:uppercase;
-  letter-spacing:.06em;color:var(--muted)}
-#rv-actions{display:flex;gap:8px;padding:10px 14px;border-top:1px solid var(--border);
-  flex-wrap:wrap;align-items:center}
-.stage-chip{font:600 9.5px var(--mono);padding:2px 8px;border-radius:99px;
-  border:1px solid var(--border);color:var(--muted);margin-right:6px}
-.stage-chip.on{color:var(--green);border-color:#234534}
 @media (max-width:760px){
   #sidebar{display:none}
   body.view-home #main{overflow-y:auto}
@@ -371,7 +363,6 @@ body.view-home #run-header{display:none}
     <nav id="sb-nav">
       <div class="nav-item active" id="nav-home" data-view="home"><span class="nav-ico">◎</span><span class="nav-label">Home</span></div>
       <div class="nav-item" id="nav-flows" data-view="flows"><span class="nav-ico">⇶</span><span class="nav-label">Chatbot Flows</span></div>
-      <div class="nav-item" id="nav-review" data-view="review"><span class="nav-ico">☑</span><span class="nav-label">Contracts &amp; Review</span></div>
     </nav>
     <div id="sb-foot">
       <div><span class="dot" id="dot-store"></span><span id="txt-store">store: checking…</span></div>
@@ -409,25 +400,6 @@ body.view-home #run-header{display:none}
         <span id="flows-stale"></span>
       </div>
       <div id="flows-list"></div>
-    </div>
-
-    <div id="review">
-      <div class="rv-card"><div class="op-head">Session
-        <select class="proj-select" id="proj-select-rev" aria-label="Select session"></select>
-        <span style="margin-left:auto"></span></div>
-        <div class="rv-body" id="rv-state"></div></div>
-      <div class="rv-card"><div class="op-head">Readiness (computed rubric — interview completion is not readiness)</div>
-        <div class="rv-body" id="rv-readiness"></div></div>
-      <div class="rv-card"><div class="op-head">Review requests</div>
-        <div class="rv-body" id="rv-reviews"></div></div>
-      <div class="rv-card"><div class="op-head">Revisions &amp; approval</div>
-        <div class="rv-body" id="rv-revisions"></div>
-        <div id="rv-actions">
-          <button class="act" id="rv-approve">Approve head revision</button>
-          <button class="act" id="rv-export-legacy">Export brief (legacy)</button>
-          <button class="act" id="rv-export-ext">Export extended package</button>
-          <span id="rv-msg" style="font:11px var(--mono);color:var(--muted)"></span>
-        </div></div>
     </div>
 
     <div id="chat">
@@ -477,7 +449,7 @@ $('#sb-toggle').onclick = () => {
   if(document.body.className === 'view-home') renderGraph();
 };
 const VIEW_TITLES = {home:'Operations', flows:'Chatbot Flows',
-  review:'Contracts & Review', chat:'Owner Test Chat'};
+  chat:'Owner Test Chat'};
 function showView(view){
   document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('active'));
   document.getElementById('nav-' + (view === 'chat' ? 'flows' : view))
@@ -487,7 +459,6 @@ function showView(view){
   if(view === 'chat' && !chat.loaded) loadChat();
   if(view === 'home') loadSystem();
   if(view === 'flows') loadFlows();
-  if(view === 'review') loadReview();
 }
 document.querySelectorAll('.nav-item[data-view]').forEach(item =>
   item.onclick = () => showView(item.dataset.view));
@@ -549,9 +520,16 @@ function graphNode(c, x, y, r, lines, status, dotColor, big, ringCls){
   const stroke = big ? 'var(--accent)'
     : c.planned ? 'var(--muted)' : (c.enabled ? 'var(--border-hi)' : 'var(--border)');
   const dash = (!big && c.planned) ? ' stroke-dasharray="6 5"' : '';
-  // NodeStatusRing: planned nodes get none; everything else rolls
-  const ring = ringCls
-    ? `<circle class="ring ${ringCls}" cx="${x}" cy="${y}" r="${r+6}"/>` : '';
+  // StatusRing: an illuminated segment ON the border itself. Segment length
+  // is a fraction of this circle's real circumference, so the light hugs
+  // the edge perfectly at any radius. Planned nodes get none.
+  let ring = '';
+  if(ringCls){
+    const C = 2*Math.PI*r;
+    const L = C * (ringCls.includes('active')||ringCls==='running' ? .26 : .10);
+    ring = `<circle class="ring ${ringCls}" cx="${x}" cy="${y}" r="${r}"
+      stroke-dasharray="${L.toFixed(1)} ${(C-L).toFixed(1)}"/>`;
+  }
   return `<g class="gnode${c.planned?' planned':''}" data-cap="${c.id}" tabindex="0"
       role="button" aria-label="${esc(lines.join(' '))} — ${esc(rows.join(', '))}">
     <circle class="body" cx="${x}" cy="${y}" r="${r}" fill="var(--panel2)"
@@ -634,13 +612,10 @@ function renderGraph(){
   });
   const nb = svg.querySelector('#new-session-btn');
   if(nb){
-    const start = async (e) => {
-      e.stopPropagation();
-      const d = await (await fetch('/api/projects', {method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({name: 'Session ' + new Date().toLocaleString()})})).json();
-      if(d.id){ switchProject(d.id); showView('chat'); }
-    };
+    // Opens the CLIENT experience in a fresh tab: /chat?new=1 rotates the
+    // client session cookie so the first message starts a brand-new
+    // interview (the previous client session's records are preserved).
+    const start = (e) => { e.stopPropagation(); window.open('/chat?new=1', '_blank'); };
     nb.onclick = start;
     nb.onkeydown = e => { if(e.key==='Enter'||e.key===' '){ e.preventDefault(); start(e); } };
   }
@@ -888,20 +863,64 @@ function renderFlowDetail(fid){
           <div class="who">${m.role==='human'?'Client':'RequirementsBot'}</div>${esc(m.text)}</div>`).join('')
       : '<span style="color:var(--muted)">No messages yet.</span>';
   }else if(tab === 'Requirements'){
+    // ChatbotFlowReviewPanel: the full review workflow lives here now —
+    // revision + approval state, readiness gaps, open review requests with
+    // dispositions, and the explicit approve action.
     const r = d.review;
+    const open = (r.reviews||[]).filter(x => x.status === 'requested');
+    const done = (r.reviews||[]).filter(x => x.status !== 'requested');
     el.innerHTML =
       `<div style="margin-bottom:6px">Revision: <b>${r.head ? 'r'+r.head : 'none yet'}</b>
-        · State: <b>${esc(r.state||'—')}</b>
-        · ${r.approval ? `<span style="color:var(--green)">approved r${r.approval.revision}</span>`
-                       : 'not approved'}</div>`
+        · State: <b>${esc((r.state||'—').replace(/_/g,' '))}</b>
+        · ${r.approval ? `<span style="color:var(--green)">✓ approved r${r.approval.revision}
+             by ${esc(r.approval.actor)}</span>` : 'not approved'}</div>`
       + ((r.readiness && r.readiness.length)
         ? `<table><tr><th>Gap</th><th>Blocking</th><th>Why</th></tr>` +
           r.readiness.map(g => `<tr><td>${esc(g.name)}</td>
             <td>${g.blocking?'<span style="color:var(--red)">yes</span>':'no'}</td>
             <td>${esc(g.why)}</td></tr>`).join('') + `</table>`
         : '<span style="color:var(--muted)">No readiness gaps computed yet.</span>')
-      + `<div style="margin-top:8px;font-size:11px;color:var(--muted)">
-         Decisions happen in Contracts &amp; Review — this panel is read-only.</div>`;
+      + (open.length
+        ? `<div style="margin:10px 0 4px;font-weight:600">Open review requests</div>`
+          + open.map(x => `<div class="att-item" style="margin:5px 0">
+              <span class="blk b${x.blocking?1:0}">${x.blocking?'blocking':'review'}</span>
+              <span class="txt">${esc(x.decision_needed)}
+                <div class="meta">rev ${x.revision??'—'} · #${x.id}</div></span>
+              <button class="act" data-resolve="${x.id}">Resolve…</button>
+            </div>`).join('')
+        : '')
+      + (done.length
+        ? `<details style="margin-top:8px"><summary style="cursor:pointer;
+             color:var(--muted);font-size:11.5px">${done.length} resolved/older
+             request(s)</summary>` +
+          done.map(x => `<div style="padding:4px 0;color:var(--muted)">
+            #${x.id} ${esc(x.decision_needed)} — ${x.status}
+            ${x.disposition ? '· ' + esc(x.disposition) : ''}</div>`).join('')
+          + `</details>` : '')
+      + `<div style="margin-top:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          ${r.head && !r.approval ? `<button class="act" data-approve="${r.head}">
+            Approve revision r${r.head}</button>` : ''}
+          <span data-rvmsg style="font:11px var(--mono);color:var(--muted)"></span>
+         </div>`;
+    el.querySelectorAll('[data-resolve]').forEach(b => b.onclick = async () => {
+      const disp = prompt('Disposition (what was decided and why):');
+      if(!disp) return;
+      await fetch('/api/review/resolve', {method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({project: fid, review_id: +b.dataset.resolve,
+                              disposition: disp})});
+      loadFlowDetail(fid); loadFlows();
+    });
+    el.querySelectorAll('[data-approve]').forEach(b => b.onclick = async () => {
+      const reason = prompt(`Approve revision r${b.dataset.approve} for handoff? State the reason:`);
+      if(!reason) return;
+      const res = await (await fetch('/api/approve', {method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({project: fid, revision: +b.dataset.approve, reason})})).json();
+      el.querySelector('[data-rvmsg]').textContent =
+        res.error || ('approved r' + res.revision);
+      loadFlowDetail(fid); loadFlows();
+    });
   }else{
     el.innerHTML = (d.artifacts && d.artifacts.length)
       ? d.artifacts.map(a => `<div>📄 ${esc(a.label)} —
@@ -922,7 +941,7 @@ const chat = {loaded:false, busy:false, complete:false};
 async function loadProjects(){
   let list = [];
   try{ list = await (await fetch('/api/projects')).json(); }catch(e){ return; }
-  for(const sel of ['#proj-select-chat', '#proj-select-rev']){
+  for(const sel of ['#proj-select-chat']){
     $(sel).innerHTML = list.map(p =>
       `<option value="${p.id}"${p.id===proj.id?' selected':''}>${esc(p.name)} (${p.state})</option>`).join('');
   }
@@ -931,10 +950,8 @@ function switchProject(id){
   proj.id = id; chat.loaded = false;
   loadProjects();
   if(document.body.className === 'view-chat') loadChat();
-  if(document.body.className === 'view-review') loadReview();
 }
 $('#proj-select-chat').onchange = e => switchProject(e.target.value);
-$('#proj-select-rev').onchange = e => switchProject(e.target.value);
 $('#proj-new').onclick = async () => {
   const name = prompt('New TEST session name (real clients get their own via the client link):');
   if(!name) return;
@@ -1033,54 +1050,6 @@ $('#chat-reset').onclick = async () => {
     body: JSON.stringify({project: proj.id})})).json();
   chat.complete = false; renderChat(d); $('#chat-input').disabled = false;
 };
-
-async function loadReview(){
-  loadProjects();
-  let d;
-  try{ d = await (await fetch('/api/review?project='+proj.id)).json(); }
-  catch(e){ return; }
-  const stages = ['interviewing','interview_closed','review_required','approved'];
-  const idx = stages.indexOf(d.state);
-  $('#rv-state').innerHTML =
-    stages.map((s,i) => `<span class="stage-chip${i<=idx?' on':''}">${s.replace(/_/g,' ')}</span>`).join('')
-    + `<div style="margin-top:8px;color:var(--muted);font-size:11.5px">
-       Interview closed, ready for review, and approved are three different facts —
-       a finished interview is not an approved brief.</div>`;
-  $('#rv-readiness').innerHTML = (d.readiness && d.readiness.length)
-    ? `<table><tr><th>Gap</th><th>Blocking</th><th>Why</th></tr>` +
-      d.readiness.map(g => `<tr><td>${esc(g.name)}</td>
-        <td>${g.blocking?'<span style="color:var(--red)">yes</span>':'no'}</td>
-        <td>${esc(g.why)}</td></tr>`).join('') + `</table>`
-    : `<span style="color:var(--muted)">No revision yet — nothing to evaluate.</span>`;
-  $('#rv-reviews').innerHTML = (d.reviews && d.reviews.length)
-    ? `<table><tr><th>#</th><th>Status</th><th>Decision needed</th><th>Disposition</th></tr>` +
-      d.reviews.map(r => `<tr><td>${r.id}</td><td>${r.status}${r.blocking?' · blocking':''}</td>
-        <td>${esc(r.decision_needed)}</td><td>${esc(r.disposition||'—')}</td></tr>`).join('') + `</table>`
-    : `<span style="color:var(--muted)">No review requests yet.</span>`;
-  $('#rv-revisions').innerHTML =
-    (d.approval ? `<div style="color:var(--green);margin-bottom:8px">✓ rev ${d.approval.revision}
-       approved by ${esc(d.approval.actor)} — ${esc(d.approval.reason||'')}</div>` : '')
-    + ((d.revisions && d.revisions.length)
-      ? `<table><tr><th>Rev</th><th>Size</th><th>Committed</th></tr>` +
-        d.revisions.map(r => `<tr><td>r${r.rev}${r.rev===d.head?' (head)':''}</td>
-          <td>${(r.size/1024).toFixed(1)} kB</td>
-          <td>${new Date(r.created_ts*1000).toLocaleString()}</td></tr>`).join('') + `</table>`
-      : `<span style="color:var(--muted)">No revisions committed yet.</span>`);
-  $('#rv-approve').disabled = !d.head;
-  $('#rv-approve').onclick = async () => {
-    const reason = prompt(`Approve revision r${d.head} for handoff? State the reason:`);
-    if(!reason) return;
-    const res = await (await fetch('/api/approve', {method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({project: proj.id, revision: d.head, reason})})).json();
-    $('#rv-msg').textContent = res.error || ('approved r' + res.revision);
-    loadReview();
-  };
-  $('#rv-export-legacy').onclick = () =>
-    window.open('/api/export?project='+proj.id+'&format=legacy');
-  $('#rv-export-ext').onclick = () =>
-    window.open('/api/export?project='+proj.id+'&format=extended');
-}
 
 loadSystem();
 setInterval(() => {
@@ -1460,7 +1429,18 @@ class Handler(BaseHTTPRequestHandler):
                                       f"Path=/; HttpOnly; SameSite=Lax"})
             return
         if route == "/chat":
-            self._send(CLIENT_PAGE.encode("utf-8"), "text/html; charset=utf-8")
+            extra = None
+            if q.get("new") == "1":
+                # Explicit fresh start: revoke the old client session (its
+                # records are preserved for the owner) and clear the cookie
+                # so the first message creates a brand-new interview.
+                old = self._cookies().get("botbot_client")
+                if old:
+                    store.revoke_client_session(old)
+                extra = {"Set-Cookie": "botbot_client=; Path=/; HttpOnly; "
+                         "SameSite=Lax; Max-Age=0"}
+            self._send(CLIENT_PAGE.encode("utf-8"), "text/html; charset=utf-8",
+                       extra)
             return
 
         # client API (client cookie only; never owner, never project params)
