@@ -652,8 +652,13 @@ if __name__ == "__main__":
     ap.add_argument("--concurrency", type=int, default=None,
                     help="how many run at the same time "
                          "(default: all at once, capped at 25)")
+    ap.add_argument("--improve-and-push", action="store_true",
+                    help="DANGEROUS: after measuring, rewrite the live "
+                         "interviewer_prompt.txt from the findings, commit and "
+                         "push, then let a code-fix agent edit and push. Off by "
+                         "default: a run only measures and saves its findings.")
     ap.add_argument("--no-improve", action="store_true",
-                    help="only measure; don't rewrite the prompt or push")
+                    help="deprecated: measuring only is now the default")
     ap.add_argument("--persona-model", default="claude-sonnet-5",
                     help="model that role-plays the business owners")
     ap.add_argument("--judge-model", default="claude-opus-5",
@@ -670,7 +675,12 @@ if __name__ == "__main__":
                                    persona_model=args.persona_model,
                                    judge_model=args.judge_model)
     run_summary = runner.run()
-    if not args.no_improve:
+    # Mutation of the live prompt/code is opt-in (G0 safety boundary): by
+    # default a run measures and stops, so no unevaluated rewrite can ever
+    # reach interviewer_prompt.txt or origin/main as a side effect.
+    if args.no_improve and args.improve_and_push:
+        sys.exit("--no-improve and --improve-and-push contradict each other")
+    if args.improve_and_push:
         records = [json.loads(p.read_text(encoding="utf-8"))
                    for p in sorted(runner.run_dir.glob("interview_*.json"))]
         improve_and_push(runner, records, run_summary,
