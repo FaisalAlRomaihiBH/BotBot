@@ -543,10 +543,19 @@ function taskLabel(n){
   return n === 0 ? 'Idle' : n === 1 ? '1 running task' : `${n} running tasks`;
 }
 
+let graphSig = '';
 function renderGraph(){
   if(!sys) return;
   const wrap = $('#graph-wrap'), svg = $('#graph');
   const W = Math.max(560, wrap.clientWidth), H = Math.max(380, wrap.clientHeight);
+  // Rebuild ONLY when something visible changed. The page polls every 5s,
+  // and rebuilding the rings restarts their orbit from the top — that was
+  // the "glitch": a smooth roll snapped back on every poll.
+  const sig = JSON.stringify([W, H, sys.active_runs.length,
+    sys.health.supervisor_mode,
+    sys.capabilities.map(c => [c.id, !!c.enabled, !!c.planned])]);
+  if(sig === graphSig) return;
+  graphSig = sig;
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
   const cx = W/2, cy = H/2;
   // measured fit: shrink radii together if the workspace is small
