@@ -209,34 +209,47 @@ body.view-flows #flows{display:flex}
 #home{flex:1;flex-direction:column;min-height:0;overflow:hidden}
 body.view-home #main{overflow:hidden}
 
-/* ---------- ops toolbar (compact, above the map) ---------- */
-#ops-bar{display:flex;align-items:center;gap:18px;padding:9px 20px;
-  border-bottom:1px solid var(--border);background:var(--panel);flex-wrap:wrap}
-.ops{display:flex;flex-direction:column;min-width:0}
-.ops .k{font-size:9.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);
-  white-space:nowrap}
-.ops .v{font:500 13px var(--mono);color:var(--text);white-space:nowrap}
-.ops .v .sub{color:var(--muted);font-size:10.5px}
-#att-chip{cursor:pointer}
-#att-chip .v{color:var(--muted)}
-#att-chip.hot .v{color:var(--amber)}
-#ops-right{margin-left:auto;display:flex;gap:8px;align-items:center}
-#ops-note{font:10px var(--mono);color:var(--muted)}
+/* ---------- Home: header-free, the map IS the page ---------- */
+body.view-home #run-header{display:none}
 
 /* ---------- orchestrator map: fills the workspace ---------- */
 #graph-wrap{flex:1;min-height:0;position:relative;display:flex;
   align-items:center;justify-content:center;background:var(--bg)}
 #graph{display:block;width:100%;height:100%}
+#home-stale{position:absolute;top:10px;right:16px;font:10px var(--mono);
+  color:var(--muted);pointer-events:none}
+#home-stale.bad{color:var(--red)}
 .gnode{cursor:pointer}
 .gnode:focus{outline:none}
-.gnode:focus>circle{stroke:var(--accent)}
+.gnode:focus>circle.body{stroke:var(--accent)}
 .gnode.planned{cursor:default;opacity:.6}
 .gnode text{font-family:var(--sans)}
 .gedge{stroke:var(--border);stroke-width:1.2}
 .gedge.planned{stroke-dasharray:2 5;opacity:.5}
 .gedge.active{stroke:var(--accent);stroke-dasharray:6 6;animation:dashmove 1s linear infinite}
 @keyframes dashmove{to{stroke-dashoffset:-12}}
-@media (prefers-reduced-motion:reduce){.gedge.active{animation:none}}
+/* status rings: a dashed perimeter that slowly rolls when idle and runs
+   visibly faster while recorded work is executing */
+.ring{fill:none;transform-box:fill-box;transform-origin:center;
+  pointer-events:none}
+.ring.idle{stroke:var(--border-hi);stroke-width:1.4;stroke-dasharray:10 48;
+  opacity:.65;animation:spin 16s linear infinite}
+.ring.running{stroke:var(--accent);stroke-width:1.8;stroke-dasharray:30 26;
+  opacity:.9;animation:spin 2.4s linear infinite}
+.ring.center-idle{stroke:var(--border-hi);stroke-width:1.6;
+  stroke-dasharray:16 72;opacity:.55;animation:spin 22s linear infinite}
+.ring.center-active{stroke:var(--accent);stroke-width:2;
+  stroke-dasharray:44 36;opacity:.9;animation:spin 3.2s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){
+  .gedge.active,.ring{animation:none}
+}
+/* the New Session action pinned under the RequirementsBot node */
+.gbtn{cursor:pointer}
+.gbtn rect{fill:#1d2a3f;stroke:#2b3a52;rx:13}
+.gbtn:hover rect,.gbtn:focus rect{stroke:var(--accent)}
+.gbtn:focus{outline:none}
+.gbtn text{fill:var(--text);font:600 11.5px var(--sans)}
 
 /* ---------- floating supervisor (owner-only) ---------- */
 #sup-fab{position:fixed;right:22px;bottom:22px;z-index:60;width:52px;height:52px;
@@ -370,25 +383,13 @@ body.view-home #main{overflow:hidden}
   <div id="main">
     <div id="run-header">
       <div><div id="run-title">Operations Console</div></div>
-      <div id="run-actions">
-        <button class="act" id="client-link" title="Copy the client intake link">Copy client link</button>
-        <span id="ops-note"></span>
-      </div>
+      <div id="run-actions"></div>
     </div>
 
     <div id="home">
-      <div id="ops-bar">
-        <div class="ops"><span class="k">Active runs</span><span class="v" id="op-active">—</span></div>
-        <div class="ops"><span class="k">Interviews</span><span class="v" id="op-interviews">—</span></div>
-        <div class="ops" id="att-chip" role="button" tabindex="0" title="Open review queue">
-          <span class="k">Needs attention</span><span class="v" id="op-attention">—</span></div>
-        <div class="ops"><span class="k">Model calls <span style="text-transform:none">(all time)</span></span>
-          <span class="v" id="op-calls">—</span></div>
-        <div class="ops"><span class="k">Last model call</span><span class="v" id="op-last">—</span></div>
-        <div id="ops-right"><span id="ops-stale" style="font:10px var(--mono);color:var(--muted)"></span></div>
-      </div>
       <div id="graph-wrap" title="Nodes come from the capability registry. Idle means available, not missing. Lines are controller-mediated communication.">
         <svg id="graph" role="img" aria-label="Orchestrator map"></svg>
+        <span id="home-stale"></span>
       </div>
     </div>
 
@@ -403,6 +404,8 @@ body.view-home #main{overflow:hidden}
           <option value="test">Test sessions</option>
         </select>
         <button class="act" id="open-test-chat" title="Owner test mode — talks to the same engine, never a customer's session">Owner test chat</button>
+        <button class="act" id="client-link" title="Copy the client intake link">Copy client link</button>
+        <span id="client-link-note" style="font:10px var(--mono);color:var(--muted)"></span>
         <span id="flows-stale"></span>
       </div>
       <div id="flows-list"></div>
@@ -497,27 +500,14 @@ let sys = null;   // last /api/system payload
 async function loadSystem(){
   try{ sys = await (await fetch('/api/system')).json(); }
   catch(e){
-    $('#ops-stale').textContent = 'stale — server unreachable';
-    $('#ops-stale').style.color = 'var(--red)';
+    $('#home-stale').textContent = 'stale — server unreachable';
+    $('#home-stale').className = 'bad';
     return;
   }
-  $('#ops-stale').textContent = 'updated just now';
-  $('#ops-stale').style.color = '';
+  $('#home-stale').textContent = '';
+  $('#home-stale').className = '';
   const s = sys;
-  $('#op-active').textContent = s.active_runs.length;
-  const ps = s.stats.project_states;
-  const interviewing = (ps.interviewing||0), closed = (ps.interview_closed||0)
-    + (ps.review_required||0), approved = (ps.approved||0);
-  $('#op-interviews').innerHTML =
-    `${interviewing} <span class="sub">open · ${closed} closed · ${approved} approved</span>`;
-  const att = s.stats.open_reviews, blk = s.stats.blocking_reviews;
-  $('#op-attention').textContent = att ? `${att} open (${blk} blocking)` : 'No issues';
-  $('#att-chip').classList.toggle('hot', att > 0);
-  const u = s.stats.usage_all_time;
-  $('#op-calls').innerHTML = `${u.invocations}` +
-    (u.errors ? ` <span class="sub" style="color:var(--red)">${u.errors} failed</span>` : '');
   const lc = s.health.last_call;
-  $('#op-last').textContent = lc ? (lc.purpose + (lc.error ? ' — FAILED' : ' — ok')) : '—';
 
   // honest footer
   $('#dot-store').className = 'dot ' + (s.health.store_ok ? 'ok' : 'bad');
@@ -537,8 +527,9 @@ async function loadSystem(){
 }
 
 /* ---------- one geometry pass for the whole map ---------- */
-function graphNode(c, x, y, r, lines, status, dotColor, big){
-  const tSize = big ? 24 : 15, sSize = big ? 12.5 : 11, lh = big ? 28 : 18;
+// BotNode: body circle + status ring + centered title/status text.
+function graphNode(c, x, y, r, lines, status, dotColor, big, ringCls){
+  const tSize = big ? 25 : 15, sSize = big ? 12.5 : 11, lh = big ? 29 : 18;
   const total = lines.length*lh + (big ? 40 : 26);
   let ty = y - total/2 + lh*0.8;
   let title = '';
@@ -558,17 +549,24 @@ function graphNode(c, x, y, r, lines, status, dotColor, big){
   const stroke = big ? 'var(--accent)'
     : c.planned ? 'var(--muted)' : (c.enabled ? 'var(--border-hi)' : 'var(--border)');
   const dash = (!big && c.planned) ? ' stroke-dasharray="6 5"' : '';
+  // NodeStatusRing: planned nodes get none; everything else rolls
+  const ring = ringCls
+    ? `<circle class="ring ${ringCls}" cx="${x}" cy="${y}" r="${r+6}"/>` : '';
   return `<g class="gnode${c.planned?' planned':''}" data-cap="${c.id}" tabindex="0"
       role="button" aria-label="${esc(lines.join(' '))} — ${esc(rows.join(', '))}">
-    <circle cx="${x}" cy="${y}" r="${r}" fill="var(--panel2)" stroke="${stroke}"
-      stroke-width="${big?1.5:1.2}"${dash}/>
-    ${title}${stat}
+    <circle class="body" cx="${x}" cy="${y}" r="${r}" fill="var(--panel2)"
+      stroke="${stroke}" stroke-width="${big?1.5:1.2}"${dash}/>
+    ${ring}${title}${stat}
   </g>`;
 }
 
 const TITLES = {requirements_bot:['Requirements','Bot'],
   materials_analyzer:['Materials','Analyzer'], builder_agent:['Builder','Bot'],
   architecture_agent:['Architecture','Agent'], evaluation_agent:['Evaluation','Bot']};
+
+function taskLabel(n){
+  return n === 0 ? 'Idle' : n === 1 ? '1 running task' : `${n} running tasks`;
+}
 
 function renderGraph(){
   if(!sys) return;
@@ -577,38 +575,54 @@ function renderGraph(){
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
   const cx = W/2, cy = H/2;
   // measured fit: shrink radii together if the workspace is small
-  let rC = 112, rN = 64, margin = 26;
+  let rC = 134, rN = 64, margin = 30;
   let ring = Math.min(W, H)/2 - rN - margin;
-  const need = rC + rN + 42;
+  const need = rC + rN + 46;
   if(ring < need){
-    const k = Math.max(.55, ring/need);
+    const k = Math.max(.5, ring/need);
     rC *= k; rN *= k;
     ring = Math.min(W, H)/2 - rN - margin;
   }
   const caps = sys.capabilities.filter(c => c.id !== 'ai_supervisor');
   const nActive = sys.active_runs.length;
   const edges = [], nodes = [];
+  let reqPos = null;
   caps.forEach((c,i) => {
     const a = (-90 + i*360/caps.length) * Math.PI/180;
     const x = cx + ring*Math.cos(a), y = cy + ring*Math.sin(a);
     const isReq = c.id === 'requirements_bot';
+    if(isReq) reqPos = {x, y, r: rN};
     const working = isReq && nActive > 0;
     edges.push(`<line class="gedge${working?' active':''}${c.planned?' planned':''}"
       x1="${cx + rC*Math.cos(a)}" y1="${cy + rC*Math.sin(a)}"
       x2="${cx + (ring-rN)*Math.cos(a)}" y2="${cy + (ring-rN)*Math.sin(a)}"/>`);
     const status = c.planned ? 'Planned'
-      : isReq ? (nActive ? `${nActive} active` : 'Idle')
+      : isReq ? taskLabel(nActive)
       : (c.enabled ? 'Idle' : 'Disabled');
     const dot = c.planned ? 'var(--muted)' : working ? 'var(--accent)'
       : c.enabled ? 'var(--green)' : 'var(--muted)';
-    nodes.push(graphNode(c, x, y, rN, TITLES[c.id]||[c.name], status, dot, false));
+    const ringCls = c.planned ? null : working ? 'running'
+      : c.enabled ? 'idle' : null;
+    nodes.push(graphNode(c, x, y, rN, TITLES[c.id]||[c.name], status, dot,
+                         false, ringCls));
   });
   const center = graphNode({id:'orchestrator', enabled:true}, cx, cy, rC,
-    ['Orchestrator'],
+    ['BotBot','Orchestrator'],
     [`controller: ${nActive ? 'executing' : 'idle'}`,
      `supervisor: ${sys.health.supervisor_mode}`],
-    nActive ? 'var(--accent)' : 'var(--green)', true);
-  svg.innerHTML = edges.join('') + nodes.join('') + center;
+    nActive ? 'var(--accent)' : 'var(--green)', true,
+    nActive ? 'center-active' : 'center-idle');
+  // RequirementsBotEntryAction: New Session pill pinned under the node
+  let entry = '';
+  if(reqPos){
+    const bw = 108, bh = 26, bx = reqPos.x - bw/2, by = reqPos.y + reqPos.r + 14;
+    entry = `<g class="gbtn" id="new-session-btn" tabindex="0" role="button"
+        aria-label="Start a new interview session">
+      <rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="13"/>
+      <text x="${reqPos.x}" y="${by + bh/2 + 4}" text-anchor="middle">+ New Session</text>
+    </g>`;
+  }
+  svg.innerHTML = edges.join('') + nodes.join('') + center + entry;
   svg.querySelectorAll('.gnode').forEach(g => {
     const go = () => {
       const cap = g.dataset.cap;
@@ -618,6 +632,18 @@ function renderGraph(){
     g.onclick = go;
     g.onkeydown = e => { if(e.key==='Enter'||e.key===' '){ e.preventDefault(); go(); } };
   });
+  const nb = svg.querySelector('#new-session-btn');
+  if(nb){
+    const start = async (e) => {
+      e.stopPropagation();
+      const d = await (await fetch('/api/projects', {method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({name: 'Session ' + new Date().toLocaleString()})})).json();
+      if(d.id){ switchProject(d.id); showView('chat'); }
+    };
+    nb.onclick = start;
+    nb.onkeydown = e => { if(e.key==='Enter'||e.key===' '){ e.preventDefault(); start(e); } };
+  }
 }
 let rsz;
 window.addEventListener('resize', () => { clearTimeout(rsz); rsz = setTimeout(renderGraph, 120); });
@@ -640,9 +666,6 @@ $('#sup-fab').onclick = () =>
     : openOverlay('#sup-drawer', '#mgmt-input');
 $('#sup-close').onclick = closeOverlays;
 $('#att-close').onclick = closeOverlays;
-$('#att-chip').onclick = () => openOverlay('#att-drawer');
-$('#att-chip').onkeydown = e => {
-  if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openOverlay('#att-drawer'); } };
 document.addEventListener('keydown', e => { if(e.key === 'Escape') closeOverlays(); });
 
 async function loadAttention(){
@@ -717,12 +740,12 @@ $('#sup-toggle').onclick = async () => {
   loadSystem();
 };
 
-/* ---------- client link ---------- */
+/* ---------- client link (lives on the Chatbot Flows toolbar) ---------- */
 $('#client-link').onclick = async () => {
   const url = location.origin + '/chat';
   try{ await navigator.clipboard.writeText(url); }catch(e){}
-  $('#ops-note').textContent = url + ' (local-only)';
-  setTimeout(() => $('#ops-note').textContent = '', 6000);
+  $('#client-link-note').textContent = url + ' (local-only)';
+  setTimeout(() => $('#client-link-note').textContent = '', 6000);
 };
 
 /* ================= Chatbot Flows (monitoring, read-only) ================= */
