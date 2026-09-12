@@ -181,6 +181,112 @@ def reset_interview(pid: str) -> dict:
         lk.release()
 
 
+# ---------------- chatbot-creation flow (versioned display/workflow path) ----
+# The single source of the milestone path the owner console renders. A stage
+# names its responsible capability/authority; whether that capability EXISTS
+# comes from the registry at read time — planned capability and per-flow
+# execution state are separate facts.
+FLOW_TEMPLATE = {
+    "version": "chatbot-flow@1",
+    "stages": [
+        {"id": "interviewing", "label": "Interviewing",
+         "who": "RequirementsBot", "capability": "requirements_bot"},
+        {"id": "requirements_review", "label": "Requirements Review",
+         "who": "Controller + human reviewer", "capability": None},
+        {"id": "architecture", "label": "Architecture",
+         "who": "Architecture Bot", "capability": "architecture_agent"},
+        {"id": "building", "label": "Building",
+         "who": "Builder Bot", "capability": "builder_agent"},
+        {"id": "testing", "label": "Testing",
+         "who": "Evaluation Bot", "capability": "evaluation_agent"},
+        {"id": "final_review", "label": "Final Review",
+         "who": "Authorized human acceptance", "capability": None},
+        {"id": "bot_created", "label": "Bot Created",
+         "who": "Outcome", "capability": None},
+    ],
+}
+
+
+def flow_projection(row: dict, planned_caps: set[str],
+                    is_client: bool) -> dict:
+    """Deterministic read-model for one flow card. Derives stage states ONLY
+    from recorded facts: lifecycle state, the in-process busy flag (actual
+    executing work), review/approval records. Never from transcripts, elapsed
+    time, or model text. Bot Created stays unmet until real deliverable,
+    test, acceptance and finalization records exist — none do today."""
+    state = row["state"]
+    busy = is_busy(row["id"])
+    interview_done = bool(row["interview_complete"]) or state in (
+        "interview_closed", "review_required", "approved")
+    review_done = bool(row["approved"])
+
+    stages, current = [], None
+
+    def add(sid, status, note=None):
+        nonlocal current
+        # A 'blocked' stage (next in line but its capability is not
+        # implemented) is still where the flow currently stands.
+        if status in ("current", "blocked") and current is None:
+            current = sid
+        stages.append({"id": sid, "status": status, "note": note})
+
+    # 1 interviewing
+    if interview_done:
+        note = "Interview closed"
+        if not row["interview_complete"] and state != "approved":
+            note = "Interview closed · partial brief"
+        add("interviewing", "completed", note)
+    elif busy:
+        add("interviewing", "current", "Processing answer")
+    elif row["has_session"]:
+        add("interviewing", "current", "Waiting for client")
+    else:
+        add("interviewing", "current", "Not started — no messages yet")
+    # 2 requirements review
+    if review_done:
+        add("requirements_review", "completed", "Approved")
+    elif interview_done:
+        note = (f"{row['blocking_reviews']} blocking gap(s) · awaiting decision"
+                if row["blocking_reviews"] else "Awaiting approval decision")
+        add("requirements_review", "current", note)
+    else:
+        add("requirements_review", "not_started", None)
+    # 3-5 future specialists: capability availability is separate from flow
+    for sid, cap in (("architecture", "architecture_agent"),
+                     ("building", "builder_agent"),
+                     ("testing", "evaluation_agent")):
+        if cap in planned_caps:
+            if review_done and current is None:
+                add(sid, "blocked",
+                    "Planned capability · not implemented — flow stops here")
+            else:
+                add(sid, "planned", "Planned · Not implemented")
+        else:
+            add(sid, "not_started", None)   # future: real availability
+    # 6-7
+    add("final_review", "not_started" if review_done else "not_started", None)
+    add("bot_created", "unmet",
+        "Requires a real deliverable, its test results, acceptance and a "
+        "recorded finalization — none exist yet")
+
+    return {
+        "flow_id": row["id"], "template_version": FLOW_TEMPLATE["version"],
+        "name": (row.get("business_name")
+                 or (None if is_client else row["name"])
+                 or "New chatbot request"),
+        "contact": row.get("contact_name"),
+        "is_test": not is_client,
+        "state": state, "busy": busy,
+        "interview_complete": bool(row["interview_complete"]),
+        "head_rev": row.get("head_rev"),
+        "open_reviews": row["open_reviews"],
+        "blocking_reviews": row["blocking_reviews"],
+        "approved": review_done,
+        "last_activity_ts": row.get("last_ts") or row.get("created_ts"),
+        "current_stage": current, "stages": stages,
+    }
+
+
 # ---------------- readiness (versioned rubric, computed in code) ----------------
 RUBRIC_VERSION = "readiness-rubric@1"
 

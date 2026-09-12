@@ -42,7 +42,7 @@ def _owner_token() -> str:
 # ============================ OWNER CONSOLE PAGE ============================
 ADMIN_PAGE = r"""<!doctype html><html><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>BotBot — Operations Console</title>
+<title>BotBot Orchestrator — Console</title>
 <style>
 :root{
   --bg:#0d0d0d; --panel:#151515; --panel2:#1a1a1a; --border:#2a2a2a;
@@ -59,13 +59,13 @@ body{margin:0;background:var(--bg);color:var(--text);font:13px/1.45 var(--sans)}
 
 /* ---------- app shell ---------- */
 #shell{display:flex;height:100vh;overflow:hidden}
-#sidebar{width:190px;flex:none;background:var(--panel);border-right:1px solid var(--border);
+#sidebar{width:280px;flex:none;background:var(--panel);border-right:1px solid var(--border);
   display:flex;flex-direction:column;transition:width .15s ease;overflow:hidden}
 #sidebar.collapsed{width:44px}
-#sb-head{display:flex;align-items:center;gap:8px;padding:12px 12px;border-bottom:1px solid var(--border)}
-#sb-logo{width:20px;height:20px;flex:none;border:1px solid var(--border-hi);border-radius:5px;
-  display:grid;place-items:center;font:600 10px var(--mono);color:var(--accent)}
-#sb-title{font-weight:600;font-size:13px;white-space:nowrap}
+#sb-head{display:flex;align-items:center;gap:10px;padding:14px 14px;border-bottom:1px solid var(--border)}
+#sb-logo{width:26px;height:26px;flex:none;border:1px solid var(--border-hi);border-radius:6px;
+  display:grid;place-items:center;font:600 12px var(--mono);color:var(--accent)}
+#sb-title{font-weight:700;font-size:20px;white-space:nowrap;letter-spacing:-.01em}
 #sb-toggle{margin-left:auto;background:none;border:none;color:var(--muted);cursor:pointer;
   font-size:13px;padding:2px 4px;border-radius:4px}
 #sb-toggle:hover{color:var(--text);background:var(--panel2)}
@@ -117,10 +117,93 @@ body{margin:0;background:var(--bg);color:var(--text);font:13px/1.45 var(--sans)}
 @keyframes rot{to{transform:rotate(360deg)}}
 
 /* ---------- views ---------- */
-#chat,#home,#review{display:none}
+#chat,#home,#review,#flows{display:none}
 body.view-chat #chat{display:flex}
 body.view-home #home{display:flex}
 body.view-review #review{display:flex}
+body.view-flows #flows{display:flex}
+#flows{flex-direction:column;margin:14px 20px 20px;gap:12px;min-height:0}
+
+/* ---------- chatbot flow cards ---------- */
+#flows-bar{display:flex;align-items:center;gap:10px;background:var(--panel);
+  border:1px solid var(--border);border-radius:6px;padding:8px 14px;flex-wrap:wrap}
+#flow-search{background:var(--panel2);border:1px solid var(--border);color:var(--text);
+  border-radius:5px;padding:5px 10px;font:12.5px var(--sans);width:220px}
+#flow-search:focus{outline:none;border-color:var(--border-hi)}
+#flow-filter{background:var(--panel2);border:1px solid var(--border);color:var(--text);
+  border-radius:5px;padding:5px 8px;font:12px var(--sans)}
+#flows-stale{margin-left:auto;font:10px var(--mono);color:var(--muted)}
+#flows-list{display:flex;flex-direction:column;gap:12px}
+.flow-card{background:var(--panel);border:1px solid var(--border);border-radius:8px}
+.fc-head{display:flex;align-items:center;gap:10px;padding:11px 16px;cursor:pointer;
+  flex-wrap:wrap}
+.fc-head:hover{background:var(--panel2)}
+.fc-name{font-size:16px;font-weight:600;white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis;max-width:340px}
+.fc-id{font:10.5px var(--mono);color:var(--muted)}
+.fc-test{font:600 9px var(--mono);text-transform:uppercase;letter-spacing:.06em;
+  color:var(--amber);border:1px solid #5c4a1e;border-radius:99px;padding:2px 7px}
+.fc-state{font:12px var(--sans);color:var(--text2)}
+.fc-when{margin-left:auto;font:10.5px var(--mono);color:var(--muted)}
+.fc-path{display:flex;align-items:flex-start;padding:6px 16px 16px;gap:0;
+  overflow-x:auto}
+.fc-step{flex:1;min-width:96px;display:flex;flex-direction:column;
+  align-items:center;text-align:center;position:relative}
+.fc-step .cn{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--border);
+  background:var(--panel2);display:grid;place-items:center;
+  font:600 12px var(--mono);color:var(--muted);z-index:1}
+.fc-step .lbl{margin-top:7px;font-size:13px;color:var(--text2);line-height:1.3}
+.fc-step .who{font-size:11px;color:var(--muted);margin-top:2px}
+.fc-step .st{font:600 10px var(--mono);margin-top:3px;color:var(--muted);
+  max-width:150px;line-height:1.45}
+.fc-step::before{content:'';position:absolute;top:15px;left:calc(-50% + 15px);
+  width:calc(100% - 30px);height:1.5px;background:var(--border)}
+.fc-step:first-child::before{display:none}
+.fc-step.completed .cn{border-color:#234534;color:var(--green)}
+.fc-step.completed::before{background:#234534}
+.fc-step.current .cn{border-color:var(--accent);color:var(--accent)}
+.fc-step.current .lbl{color:var(--text);font-weight:600}
+.fc-step.current .st{color:var(--accent)}
+.fc-step.current.busy .cn{animation:pulse 1.6s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){.fc-step.current.busy .cn{animation:none}}
+.fc-step.blocked .st{color:var(--amber)}
+.fc-step.blocked .cn{border-color:#5c4a1e;color:var(--amber)}
+.fc-step.planned .cn{border-style:dashed;opacity:.65}
+.fc-step.planned .lbl,.fc-step.planned .who,.fc-step.planned .st{opacity:.65}
+.fc-step.unmet .cn{border-style:dashed;opacity:.65}
+.fc-step.unmet .lbl{opacity:.65}
+.fc-detail{display:none;border-top:1px solid var(--border)}
+.flow-card.open .fc-detail{display:block}
+.fd-tabs{display:flex;gap:4px;padding:8px 14px 0}
+.fd-tab{background:none;border:1px solid var(--border);border-bottom:none;
+  color:var(--muted);border-radius:6px 6px 0 0;padding:5px 12px;font-size:12px;
+  cursor:pointer}
+.fd-tab.on{color:var(--text);background:var(--panel2)}
+.fd-body{background:var(--panel2);margin:0 14px 14px;border:1px solid var(--border);
+  border-radius:0 6px 6px 6px;padding:12px 14px;max-height:320px;overflow-y:auto;
+  font-size:12.5px;line-height:1.6}
+.fd-body table{width:100%;border-collapse:collapse;font-size:12px}
+.fd-body td,.fd-body th{padding:4px 8px;border-bottom:1px solid var(--border);
+  text-align:left;vertical-align:top}
+.fd-body th{font:600 10px var(--sans);text-transform:uppercase;
+  letter-spacing:.06em;color:var(--muted)}
+.fd-msg{max-width:78%;border:1px solid var(--border);border-radius:6px;
+  padding:6px 10px;margin:5px 0;white-space:pre-wrap;overflow-wrap:break-word}
+.fd-msg.human{margin-left:auto;background:#161a20;border-color:#2b3a52}
+.fd-msg.ai{background:var(--panel)}
+.fd-msg .who{font:600 9px var(--mono);text-transform:uppercase;
+  letter-spacing:.07em;color:var(--muted);margin-bottom:2px}
+.flow-empty{color:var(--muted);text-align:center;padding:40px;font-size:13px;
+  background:var(--panel);border:1px solid var(--border);border-radius:8px}
+@media (max-width:900px){
+  .fc-path{flex-direction:column;align-items:stretch;gap:10px;overflow:visible}
+  .fc-step{flex-direction:row;text-align:left;gap:12px;min-width:0;
+    align-items:center}
+  .fc-step .lbl{margin-top:0}
+  .fc-step .st{max-width:none}
+  .fc-step::before{display:none}
+  .fc-step>div{display:flex;flex-direction:column}
+}
 #review{flex-direction:column;margin:14px 20px 20px;gap:14px;min-height:0}
 /* Home is the full remaining workspace: no narrow card, no page scroll */
 #home{flex:1;flex-direction:column;min-height:0;overflow:hidden}
@@ -270,11 +353,11 @@ body.view-home #main{overflow:hidden}
 </style></head><body class="view-home">
 <div id="shell">
   <aside id="sidebar">
-    <div id="sb-head"><div id="sb-logo">B</div><span id="sb-title">BotBot Ops</span>
+    <div id="sb-head"><div id="sb-logo" title="BotBot Orchestrator" aria-label="BotBot Orchestrator">B</div><span id="sb-title">BotBot Orchestrator</span>
       <button id="sb-toggle" title="Collapse">⟨⟩</button></div>
     <nav id="sb-nav">
       <div class="nav-item active" id="nav-home" data-view="home"><span class="nav-ico">◎</span><span class="nav-label">Home</span></div>
-      <div class="nav-item" id="nav-chat" data-view="chat"><span class="nav-ico">▶</span><span class="nav-label">Sessions</span></div>
+      <div class="nav-item" id="nav-flows" data-view="flows"><span class="nav-ico">⇶</span><span class="nav-label">Chatbot Flows</span></div>
       <div class="nav-item" id="nav-review" data-view="review"><span class="nav-ico">☑</span><span class="nav-label">Contracts &amp; Review</span></div>
     </nav>
     <div id="sb-foot">
@@ -309,6 +392,22 @@ body.view-home #main{overflow:hidden}
       </div>
     </div>
 
+    <div id="flows">
+      <div id="flows-bar">
+        <input id="flow-search" type="search" placeholder="Search flows…" aria-label="Search flows">
+        <select id="flow-filter" aria-label="Filter flows">
+          <option value="all">All</option>
+          <option value="active">Interviewing</option>
+          <option value="review">Needs review</option>
+          <option value="approved">Approved</option>
+          <option value="test">Test sessions</option>
+        </select>
+        <button class="act" id="open-test-chat" title="Owner test mode — talks to the same engine, never a customer's session">Owner test chat</button>
+        <span id="flows-stale"></span>
+      </div>
+      <div id="flows-list"></div>
+    </div>
+
     <div id="review">
       <div class="rv-card"><div class="op-head">Session
         <select class="proj-select" id="proj-select-rev" aria-label="Select session"></select>
@@ -329,10 +428,12 @@ body.view-home #main{overflow:hidden}
     </div>
 
     <div id="chat">
-      <div id="chat-head"><span class="t">Session</span>
-        <select class="proj-select" id="proj-select-chat" aria-label="Select session"></select>
+      <div id="chat-head">
+        <button class="act" id="chat-back" title="Back to Chatbot Flows">←</button>
+        <span class="t" style="color:var(--amber)">Owner Test Mode</span>
+        <select class="proj-select" id="proj-select-chat" aria-label="Select test session"></select>
         <button class="act" id="proj-new">+ New test session</button>
-        <span class="m">owner testing uses the same engine as the client link</span>
+        <span class="m">same engine as the client link · test sessions only</span>
         <button class="act" id="chat-reset" title="Start a new interview">↺ New interview</button></div>
       <div id="chat-thread"></div>
       <div id="chat-bar">
@@ -372,14 +473,23 @@ $('#sb-toggle').onclick = () => {
   $('#sidebar').classList.toggle('collapsed');
   if(document.body.className === 'view-home') renderGraph();
 };
-document.querySelectorAll('.nav-item[data-view]').forEach(item => item.onclick = () => {
+const VIEW_TITLES = {home:'Operations', flows:'Chatbot Flows',
+  review:'Contracts & Review', chat:'Owner Test Chat'};
+function showView(view){
   document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('active'));
-  item.classList.add('active');
-  document.body.className = 'view-' + item.dataset.view;
-  if(item.dataset.view === 'chat' && !chat.loaded) loadChat();
-  if(item.dataset.view === 'home') loadSystem();
-  if(item.dataset.view === 'review') loadReview();
-});
+  document.getElementById('nav-' + (view === 'chat' ? 'flows' : view))
+    ?.classList.add('active');
+  document.body.className = 'view-' + view;
+  $('#run-title').textContent = VIEW_TITLES[view] || 'Operations';
+  if(view === 'chat' && !chat.loaded) loadChat();
+  if(view === 'home') loadSystem();
+  if(view === 'flows') loadFlows();
+  if(view === 'review') loadReview();
+}
+document.querySelectorAll('.nav-item[data-view]').forEach(item =>
+  item.onclick = () => showView(item.dataset.view));
+$('#open-test-chat').onclick = () => showView('chat');
+$('#chat-back').onclick = () => showView('flows');
 
 /* ================= system-wide Home ================= */
 let sys = null;   // last /api/system payload
@@ -502,7 +612,7 @@ function renderGraph(){
   svg.querySelectorAll('.gnode').forEach(g => {
     const go = () => {
       const cap = g.dataset.cap;
-      if(cap === 'requirements_bot') $('#nav-chat').click();
+      if(cap === 'requirements_bot') showView('flows');
       else if(cap === 'orchestrator') openOverlay('#sup-drawer', '#mgmt-input');
     };
     g.onclick = go;
@@ -614,6 +724,173 @@ $('#client-link').onclick = async () => {
   $('#ops-note').textContent = url + ' (local-only)';
   setTimeout(() => $('#ops-note').textContent = '', 6000);
 };
+
+/* ================= Chatbot Flows (monitoring, read-only) ================= */
+const flowsUI = {data:null, expanded:new Set(), tab:{}, detail:{}};
+
+function ago(ts){
+  if(!ts) return 'Unknown';
+  const s = Math.max(0, Math.floor(Date.now()/1000 - ts));
+  if(s < 60) return s + 's ago';
+  if(s < 3600) return Math.floor(s/60) + 'm ago';
+  if(s < 86400) return Math.floor(s/3600) + 'h ago';
+  return Math.floor(s/86400) + 'd ago';
+}
+
+async function loadFlows(){
+  try{ flowsUI.data = await (await fetch('/api/flows')).json(); }
+  catch(e){
+    $('#flows-stale').textContent = 'stale — server unreachable';
+    $('#flows-stale').style.color = 'var(--red)';
+    return;
+  }
+  $('#flows-stale').textContent = 'updated just now';
+  $('#flows-stale').style.color = '';
+  renderFlows();
+  // refresh any open detail panels from records (read-only, no side effects)
+  flowsUI.expanded.forEach(pid => loadFlowDetail(pid));
+}
+
+function flowMatches(f, q, filt){
+  if(filt === 'active' && f.current_stage !== 'interviewing') return false;
+  if(filt === 'review' && !(f.current_stage === 'requirements_review')) return false;
+  if(filt === 'approved' && !f.approved) return false;
+  if(filt === 'test' && !f.is_test) return false;
+  if(q){
+    const hay = (f.name + ' ' + (f.contact||'') + ' ' + f.flow_id).toLowerCase();
+    if(!hay.includes(q)) return false;
+  }
+  return true;
+}
+
+function renderFlows(){
+  if(!flowsUI.data) return;
+  const q = ($('#flow-search').value||'').trim().toLowerCase();
+  const filt = $('#flow-filter').value;
+  const tpl = flowsUI.data.template.stages;
+  const flows = flowsUI.data.flows.filter(f => flowMatches(f, q, filt));
+  const list = $('#flows-list');
+  if(!flows.length){
+    list.innerHTML = `<div class="flow-empty">${flowsUI.data.flows.length
+      ? 'No flows match the current search/filter.'
+      : 'No chatbot requests yet. Share the client link to start one, or open the owner test chat.'}</div>`;
+    return;
+  }
+  list.innerHTML = flows.map(f => {
+    const steps = tpl.map((t, i) => {
+      const s = f.stages.find(x => x.id === t.id) || {status:'not_started'};
+      const busyCls = (s.status==='current' && f.busy) ? ' busy' : '';
+      const mark = s.status==='completed' ? '✓' : (i+1);
+      const showWho = s.status==='current' || s.status==='blocked'
+        || t.id==='interviewing';
+      return `<div class="fc-step ${s.status}${busyCls}">
+        <span class="cn" aria-hidden="true">${mark}</span>
+        <div><span class="lbl">${esc(t.label)}</span>
+        ${showWho ? `<span class="who">${esc(t.who)}</span>` : ''}
+        ${s.note ? `<span class="st">${
+          s.status==='current' ? 'CURRENT · ' : ''}${esc(s.note)}</span>`
+          : s.status==='planned' ? `<span class="st">Planned · Not implemented</span>` : ''}
+        </div></div>`;
+    }).join('');
+    const cur = tpl.find(t => t.id === f.current_stage);
+    const curStage = f.stages.find(x => x.id === f.current_stage) || {};
+    return `<div class="flow-card${flowsUI.expanded.has(f.flow_id)?' open':''}" data-fid="${f.flow_id}">
+      <div class="fc-head" role="button" tabindex="0"
+        aria-expanded="${flowsUI.expanded.has(f.flow_id)}"
+        aria-label="Flow ${esc(f.name)} — expand details">
+        <span class="fc-name" title="${esc(f.name)}">${esc(f.name)}</span>
+        ${f.contact ? `<span class="fc-id">· ${esc(f.contact)}</span>` : ''}
+        <span class="fc-id">${esc(f.flow_id)}</span>
+        ${f.is_test ? `<span class="fc-test">Test</span>` : ''}
+        <span class="fc-state">Current: ${esc(cur ? cur.label : '—')}${
+          curStage.note ? ' · ' + esc(curStage.note) : ''}</span>
+        <span class="fc-when">${ago(f.last_activity_ts)}</span>
+      </div>
+      <div class="fc-path">${steps}</div>
+      <div class="fc-detail">
+        <div class="fd-tabs">
+          ${['Activity','Conversation','Requirements','Artifacts'].map(t =>
+            `<button class="fd-tab${(flowsUI.tab[f.flow_id]||'Activity')===t?' on':''}"
+               data-tab="${t}">${t}</button>`).join('')}
+        </div>
+        <div class="fd-body" id="fd-${f.flow_id}">Loading…</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  list.querySelectorAll('.fc-head').forEach(h => {
+    const card = h.parentElement, fid = card.dataset.fid;
+    const toggle = () => {
+      if(flowsUI.expanded.has(fid)){ flowsUI.expanded.delete(fid); card.classList.remove('open'); }
+      else{ flowsUI.expanded.add(fid); card.classList.add('open'); loadFlowDetail(fid); }
+      h.setAttribute('aria-expanded', card.classList.contains('open'));
+    };
+    h.onclick = toggle;
+    h.onkeydown = e => { if(e.key==='Enter'||e.key===' '){ e.preventDefault(); toggle(); } };
+  });
+  list.querySelectorAll('.fd-tab').forEach(b => b.onclick = () => {
+    const fid = b.closest('.flow-card').dataset.fid;
+    flowsUI.tab[fid] = b.dataset.tab;
+    b.parentElement.querySelectorAll('.fd-tab').forEach(x =>
+      x.classList.toggle('on', x === b));
+    renderFlowDetail(fid);
+  });
+  flowsUI.expanded.forEach(fid => renderFlowDetail(fid));
+}
+
+async function loadFlowDetail(fid){
+  try{
+    flowsUI.detail[fid] = await (await fetch('/api/flow?project='+fid)).json();
+    renderFlowDetail(fid);
+  }catch(e){}
+}
+
+function renderFlowDetail(fid){
+  const el = document.getElementById('fd-' + fid);
+  const d = flowsUI.detail[fid];
+  if(!el) return;
+  if(!d){ el.textContent = 'Loading…'; return; }
+  const tab = flowsUI.tab[fid] || 'Activity';
+  if(tab === 'Activity'){
+    el.innerHTML = (d.events && d.events.length)
+      ? `<table><tr><th>When</th><th>Event</th><th>Actor</th></tr>` +
+        d.events.map(e => `<tr><td>${new Date(e.ts*1000).toLocaleString()}</td>
+          <td>${esc(e.type)}</td><td>${esc(e.actor)}</td></tr>`).join('') + `</table>`
+      : '<span style="color:var(--muted)">No recorded events.</span>';
+  }else if(tab === 'Conversation'){
+    el.innerHTML = (d.transcript && d.transcript.length)
+      ? `<div style="color:var(--muted);font:10px var(--mono);margin-bottom:6px">
+           Read-only transcript — inspection never sends a message as the customer.</div>`
+        + d.transcript.map(m => `<div class="fd-msg ${m.role==='human'?'human':'ai'}">
+          <div class="who">${m.role==='human'?'Client':'RequirementsBot'}</div>${esc(m.text)}</div>`).join('')
+      : '<span style="color:var(--muted)">No messages yet.</span>';
+  }else if(tab === 'Requirements'){
+    const r = d.review;
+    el.innerHTML =
+      `<div style="margin-bottom:6px">Revision: <b>${r.head ? 'r'+r.head : 'none yet'}</b>
+        · State: <b>${esc(r.state||'—')}</b>
+        · ${r.approval ? `<span style="color:var(--green)">approved r${r.approval.revision}</span>`
+                       : 'not approved'}</div>`
+      + ((r.readiness && r.readiness.length)
+        ? `<table><tr><th>Gap</th><th>Blocking</th><th>Why</th></tr>` +
+          r.readiness.map(g => `<tr><td>${esc(g.name)}</td>
+            <td>${g.blocking?'<span style="color:var(--red)">yes</span>':'no'}</td>
+            <td>${esc(g.why)}</td></tr>`).join('') + `</table>`
+        : '<span style="color:var(--muted)">No readiness gaps computed yet.</span>')
+      + `<div style="margin-top:8px;font-size:11px;color:var(--muted)">
+         Decisions happen in Contracts &amp; Review — this panel is read-only.</div>`;
+  }else{
+    el.innerHTML = (d.artifacts && d.artifacts.length)
+      ? d.artifacts.map(a => `<div>📄 ${esc(a.label)} —
+          ${a.formats.map(fm => `<a href="/api/export?project=${fid}&format=${fm}"
+            style="color:var(--accent)">${fm}</a>`).join(' · ')}</div>`).join('')
+      : `<span style="color:var(--muted)">No artifacts exist yet. Architecture,
+         build and test outputs will appear here once those capabilities are
+         implemented — nothing is fabricated in the meantime.</span>`;
+  }
+}
+$('#flow-search').oninput = () => renderFlows();
+$('#flow-filter').onchange = () => renderFlows();
 
 /* ================= sessions (owner testing) & review ================= */
 const proj = {id:'default'};
@@ -783,7 +1060,10 @@ async function loadReview(){
 }
 
 loadSystem();
-setInterval(() => { if(document.body.className === 'view-home') loadSystem(); }, 5000);
+setInterval(() => {
+  if(document.body.className === 'view-home') loadSystem();
+  if(document.body.className === 'view-flows') loadFlows();
+}, 5000);
 </script></body></html>"""
 
 
@@ -987,6 +1267,42 @@ def system_payload() -> dict:
     }
 
 
+def flows_payload() -> dict:
+    """Read-model for the Chatbot Flows monitor: one deterministic projection
+    per journey, driven by recorded state only. Reading it never calls a
+    model, creates an interview, or advances anything."""
+    store.ensure_default_project()
+    client_ids = store.client_project_ids()
+    planned = {c["id"] for c in registry.capabilities() if c.get("planned")}
+    rows = [r for r in store.flows_summary()
+            # the auto-created default placeholder is not a journey until
+            # someone has actually used it
+            if not (r["id"] == store.DEFAULT_PROJECT
+                    and not r["has_session"] and not r["head_rev"])]
+    return {
+        "template": controller.FLOW_TEMPLATE,
+        "flows": [controller.flow_projection(r, planned, r["id"] in client_ids)
+                  for r in rows],
+    }
+
+
+def flow_detail(pid: str) -> dict:
+    """Read-only inspection of one flow: recorded events, the clean display
+    transcript (no composer, no raw JSON), the exact revision/approval state,
+    and artifacts that actually exist."""
+    rp = review_payload(pid)
+    return {
+        "flow_id": pid,
+        "events": store.recent_events(pid, 30),
+        "transcript": controller.chat_payload(pid)["messages"],
+        "review": rp,
+        "artifacts": ([{"kind": "requirements_brief",
+                        "label": f"Requirements brief · rev r{rp['head']}",
+                        "available": True, "formats": ["legacy", "extended"]}]
+                      if rp["head"] else []),
+    }
+
+
 def review_payload(pid: str) -> dict:
     head = store.get_revision(pid)
     project = store.get_project(pid) or {}
@@ -1136,6 +1452,10 @@ class Handler(BaseHTTPRequestHandler):
         pid = _project_of(q.get("project"))
         if route == "/api/system":
             self._json(system_payload())
+        elif route == "/api/flows":
+            self._json(flows_payload())
+        elif route == "/api/flow":
+            self._json(flow_detail(pid))
         elif route == "/api/projects":
             self._json([{"id": p["id"], "name": p["name"], "state": p["state"]}
                         for p in store.list_projects()])

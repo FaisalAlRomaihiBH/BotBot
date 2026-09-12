@@ -343,6 +343,44 @@ def open_reviews(pid: str) -> list[dict]:
     return [dict(r) for r in rows]
 
 
+def client_project_ids() -> set[str]:
+    """Projects created through the client link (vs owner test sessions)."""
+    with _connect() as con:
+        rows = con.execute("SELECT DISTINCT project_id FROM client_sessions "
+                           "WHERE revoked=0").fetchall()
+    return {r["project_id"] for r in rows}
+
+
+def flows_summary() -> list[dict]:
+    """One row per chatbot-creation journey: the read-model behind the
+    Chatbot Flows cards. Names come from the stored interview record
+    (json_extract on the head revision); everything else is recorded state."""
+    with _connect() as con:
+        rows = con.execute(
+            "SELECT p.id, p.name, p.state, p.created_ts,"
+            " s.complete AS interview_complete,"
+            " s.bot_state IS NOT NULL AS has_session,"
+            " (SELECT MAX(ts) FROM events e WHERE e.project_id=p.id) AS last_ts,"
+            " (SELECT COUNT(*) FROM reviews r WHERE r.project_id=p.id AND"
+            "   r.status='requested') AS open_reviews,"
+            " (SELECT COUNT(*) FROM reviews r WHERE r.project_id=p.id AND"
+            "   r.status='requested' AND r.blocking=1) AS blocking_reviews,"
+            " (SELECT COUNT(*) FROM approvals a WHERE a.project_id=p.id AND"
+            "   a.status='active') AS approved,"
+            " (SELECT MAX(rev) FROM revisions v WHERE v.project_id=p.id) AS head_rev,"
+            " (SELECT json_extract(v.requirements,'$.business_name')"
+            "   FROM revisions v WHERE v.project_id=p.id"
+            "   ORDER BY v.rev DESC LIMIT 1) AS business_name,"
+            " (SELECT json_extract(v.requirements,'$.contact_name')"
+            "   FROM revisions v WHERE v.project_id=p.id"
+            "   ORDER BY v.rev DESC LIMIT 1) AS contact_name"
+            " FROM projects p LEFT JOIN sessions s ON s.project_id=p.id"
+            " WHERE p.id != ? ORDER BY COALESCE("
+            " (SELECT MAX(ts) FROM events e WHERE e.project_id=p.id),"
+            " p.created_ts) DESC", (SYSTEM_SCOPE,)).fetchall()
+    return [dict(r) for r in rows]
+
+
 def open_reviews_all() -> list[dict]:
     """Every open review request across all projects, for the owner console."""
     with _connect() as con:
