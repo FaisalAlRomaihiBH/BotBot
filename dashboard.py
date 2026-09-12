@@ -499,18 +499,17 @@ async function loadSystem(){
   $('#sup-mode-txt').textContent = mode==='advisory' ? 'Advisory' : 'Disabled';
   $('#sup-toggle').textContent = mode==='advisory' ? 'Disable' : 'Enable advisory mode';
   $('#fab-dot').className = 'fab-dot' + (mode==='advisory' ? ' on' : '');
-  $('#sup-fab-label').textContent = 'supervisor: ' + mode;
+  $('#sup-fab-label').textContent = mode;   // "disabled" | "advisory"
+  $('#sup-fab-label').title = 'AI supervisor mode';
   renderGraph();
 }
 
 /* ---------- one geometry pass for the whole map ---------- */
 // BotNode: body circle + status ring + centered title/status text.
 function graphNode(c, x, y, r, lines, status, dotColor, big, ringCls){
-  // The BIG title is anchored dead-center of the circle: its line block is
-  // centered exactly on (x, y), every line placed by its own center line
-  // (dominant-baseline). The small status sits tucked below it.
-  const tSize = big ? 25 : 15, sSize = big ? 12.5 : 11, lh = big ? 29 : 19;
-  const sLh = sSize + 6, gap = big ? 10 : 7;
+  // Title dead-center of the circle; the status is a small pill badge
+  // overlapping the bottom border — half in, half out (chosen style 4).
+  const tSize = big ? 25 : 15, sSize = big ? 12 : 10.5, lh = big ? 29 : 19;
   const rows = Array.isArray(status) ? status : [status];
   const titleTop = y - (lines.length * lh)/2;
   let title = '';
@@ -519,13 +518,18 @@ function graphNode(c, x, y, r, lines, status, dotColor, big, ringCls){
       dominant-baseline="central" fill="var(--text)"
       font-size="${tSize}" font-weight="600">${esc(ln)}</text>`;
   });
-  const statTop = titleTop + lines.length*lh + gap;
-  let stat = '';
-  rows.forEach((s, j) => {
-    stat += `<text x="${x}" y="${statTop + sLh/2 + j*sLh}"
-      text-anchor="middle" dominant-baseline="central" font-size="${sSize}">
-      <tspan fill="${dotColor}">●</tspan><tspan dx="5" fill="var(--text2)">${esc(s)}</tspan></text>`;
-  });
+  const sTxt = rows.join(' · ');
+  const pillH = big ? 22 : 19;
+  const pillW = Math.max(52, sTxt.length * (sSize*0.56) + 30);
+  const py = y + r;   // centered ON the border line
+  const stat = `<g>
+    <rect x="${(x - pillW/2).toFixed(1)}" y="${(py - pillH/2).toFixed(1)}"
+      width="${pillW.toFixed(1)}" height="${pillH}" rx="${pillH/2}"
+      fill="var(--panel)" stroke="var(--border-hi)"/>
+    <text x="${x}" y="${py}" text-anchor="middle" dominant-baseline="central"
+      font-size="${sSize}">
+      <tspan fill="${dotColor}">●</tspan><tspan dx="5" fill="var(--text2)">${esc(sTxt)}</tspan></text>
+  </g>`;
   // The static border is neutral on every node — the center included; the
   // blue belongs to the moving comet ring only.
   const stroke = c.planned ? 'var(--muted)'
@@ -608,7 +612,8 @@ function renderGraph(){
   // RequirementsBotEntryAction: New Session pill pinned under the node
   let entry = '';
   if(reqPos){
-    const bw = 108, bh = 26, bx = reqPos.x - bw/2, by = reqPos.y + reqPos.r + 14;
+    // sits below the status pill (which overlaps the border at y + r)
+    const bw = 108, bh = 26, bx = reqPos.x - bw/2, by = reqPos.y + reqPos.r + 20;
     entry = `<g class="gbtn" id="new-session-btn" tabindex="0" role="button"
         aria-label="Start a new interview session">
       <rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="13"/>
