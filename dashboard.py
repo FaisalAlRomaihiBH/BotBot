@@ -226,27 +226,28 @@ body.view-home #run-header{display:none}
 .gedge.planned{stroke-dasharray:2 5;opacity:.5}
 .gedge.active{stroke:var(--accent);stroke-dasharray:6 6;animation:dashmove 1s linear infinite}
 @keyframes dashmove{to{stroke-dashoffset:-12}}
-/* StatusRing: one illuminated segment travelling ON the node's border.
-   The ring is drawn at the body circle's own radius (dasharray computed
-   from its real circumference in JS), so the light is part of the border —
-   never a detached arc floating outside the node. */
-.ring{fill:none;transform-box:fill-box;transform-origin:center;
-  pointer-events:none;stroke-linecap:round}
-.ring.idle{stroke:var(--accent);stroke-width:1.8;opacity:.7;
-  animation:spin 9s linear infinite;
-  filter:drop-shadow(0 0 3px rgba(110,168,254,.6))}
-.ring.running{stroke:var(--accent);stroke-width:2.2;opacity:1;
-  animation:spin 2.2s linear infinite;
-  filter:drop-shadow(0 0 6px rgba(110,168,254,.8))}
-.ring.center-idle{stroke:var(--accent);stroke-width:2;opacity:.7;
-  animation:spin 12s linear infinite;
-  filter:drop-shadow(0 0 4px rgba(110,168,254,.6))}
-.ring.center-active{stroke:var(--accent);stroke-width:2.6;opacity:1;
-  animation:spin 3s linear infinite;
-  filter:drop-shadow(0 0 7px rgba(110,168,254,.8))}
+/* StatusRing — "Comet tail": a bright head dragging a fading gradient tail
+   around the node border. Implemented as HTML overlay rings (rotating
+   conic-gradient masked to a thin edge band) positioned 1:1 over the SVG
+   nodes — this animates reliably everywhere, including the big center
+   circle where CSS-rotated SVG strokes could stay frozen. */
+.gring{position:absolute;border-radius:50%;pointer-events:none;
+  background:conic-gradient(from 0deg, transparent 0 12%,
+    rgba(110,168,254,.12) 35%, rgba(110,168,254,.55) 75%, var(--accent) 100%);
+  -webkit-mask:radial-gradient(closest-side,transparent calc(100% - 6px),
+    #000 calc(100% - 5px));
+  mask:radial-gradient(closest-side,transparent calc(100% - 6px),
+    #000 calc(100% - 5px));
+  animation:spin linear infinite}
+.gring.idle{animation-duration:7s;opacity:.75}
+.gring.running{animation-duration:1.6s;opacity:1;
+  filter:drop-shadow(0 0 5px rgba(110,168,254,.6))}
+.gring.center-idle{animation-duration:9s;opacity:.8}
+.gring.center-active{animation-duration:2.2s;opacity:1;
+  filter:drop-shadow(0 0 6px rgba(110,168,254,.6))}
 @keyframes spin{to{transform:rotate(360deg)}}
 @media (prefers-reduced-motion:reduce){
-  .gedge.active,.ring{animation:none}
+  .gedge.active,.gring{animation:none}
 }
 /* the New Session action pinned under the RequirementsBot node */
 .gbtn{cursor:pointer}
@@ -523,18 +524,9 @@ function graphNode(c, x, y, r, lines, status, dotColor, big, ringCls){
   const stroke = big ? 'var(--accent)'
     : c.planned ? 'var(--muted)' : (c.enabled ? 'var(--border-hi)' : 'var(--border)');
   const dash = (!big && c.planned) ? ' stroke-dasharray="6 5"' : '';
-  // StatusRing: an illuminated segment ON the border itself. Segment length
-  // is a fraction of this circle's real circumference, so the light hugs
-  // the edge perfectly at any radius. Planned nodes get none.
-  let ring = '';
-  if(ringCls){
-    // The light fills ~90% of the border: what moves is the small dark
-    // gap sweeping around the circle, so the whole ring reads as lit.
-    const C = 2*Math.PI*r;
-    const L = C * (ringCls.includes('active')||ringCls==='running' ? .93 : .90);
-    ring = `<circle class="ring ${ringCls}" cx="${x}" cy="${y}" r="${r}"
-      stroke-dasharray="${L.toFixed(1)} ${(C-L).toFixed(1)}"/>`;
-  }
+  // Rings are HTML overlays (see .gring) — graphNode draws no ring itself;
+  // renderGraph collects {x, y, r, cls} and lays the overlays afterwards.
+  const ring = '';
   return `<g class="gnode${c.planned?' planned':''}" data-cap="${c.id}" tabindex="0"
       role="button" aria-label="${esc(lines.join(' '))} — ${esc(rows.join(', '))}">
     <circle class="body" cx="${x}" cy="${y}" r="${r}" fill="var(--panel2)"
@@ -568,7 +560,7 @@ function renderGraph(){
   }
   const caps = sys.capabilities.filter(c => c.id !== 'ai_supervisor');
   const nActive = sys.active_runs.length;
-  const edges = [], nodes = [];
+  const edges = [], nodes = [], ringsArr = [];
   let reqPos = null;
   caps.forEach((c,i) => {
     const a = (-90 + i*360/caps.length) * Math.PI/180;
@@ -586,15 +578,17 @@ function renderGraph(){
       : c.enabled ? 'var(--green)' : 'var(--muted)';
     const ringCls = c.planned ? null : working ? 'running'
       : c.enabled ? 'idle' : null;
+    if(ringCls) ringsArr.push({x, y, r: rN, cls: ringCls});
     nodes.push(graphNode(c, x, y, rN, TITLES[c.id]||[c.name], status, dot,
                          false, ringCls));
   });
+  const centerRing = nActive ? 'center-active' : 'center-idle';
+  ringsArr.push({x: cx, y: cy, r: rC, cls: centerRing});
   const center = graphNode({id:'orchestrator', enabled:true}, cx, cy, rC,
     ['BotBot','Orchestrator'],
     [`controller: ${nActive ? 'executing' : 'idle'}`,
      `supervisor: ${sys.health.supervisor_mode}`],
-    nActive ? 'var(--accent)' : 'var(--green)', true,
-    nActive ? 'center-active' : 'center-idle');
+    nActive ? 'var(--accent)' : 'var(--green)', true, centerRing);
   // RequirementsBotEntryAction: New Session pill pinned under the node
   let entry = '';
   if(reqPos){
@@ -606,6 +600,23 @@ function renderGraph(){
     </g>`;
   }
   svg.innerHTML = edges.join('') + nodes.join('') + center + entry;
+  // Lay the comet-tail overlay rings over the SVG nodes, mapping viewBox
+  // units through the SVG's actual on-screen scale and letterbox offset
+  // (preserveAspectRatio "meet"), so rings stay glued to their circles at
+  // every pane size.
+  wrap.querySelectorAll('.gring').forEach(el => el.remove());
+  const ew = svg.clientWidth || W, eh = svg.clientHeight || H;
+  const s = Math.min(ew/W, eh/H);
+  const ox = (ew - W*s)/2, oy = (eh - H*s)/2;
+  for(const g of ringsArr){
+    const R = (g.r + 4) * s;   // band hugs the border just outside the stroke
+    const d = document.createElement('div');
+    d.className = 'gring ' + g.cls;
+    d.style.cssText = `left:${(ox + g.x*s - R).toFixed(1)}px;`
+                    + `top:${(oy + g.y*s - R).toFixed(1)}px;`
+                    + `width:${(2*R).toFixed(1)}px;height:${(2*R).toFixed(1)}px`;
+    wrap.appendChild(d);
+  }
   svg.querySelectorAll('.gnode').forEach(g => {
     const go = () => {
       const cap = g.dataset.cap;
