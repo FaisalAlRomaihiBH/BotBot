@@ -232,18 +232,18 @@ body.view-home #run-header{display:none}
    never a detached arc floating outside the node. */
 .ring{fill:none;transform-box:fill-box;transform-origin:center;
   pointer-events:none;stroke-linecap:round}
-.ring.idle{stroke:var(--accent);stroke-width:1.6;opacity:.45;
-  animation:spin 14s linear infinite;
-  filter:drop-shadow(0 0 2px rgba(110,168,254,.5))}
-.ring.running{stroke:var(--accent);stroke-width:2;opacity:.95;
+.ring.idle{stroke:var(--accent);stroke-width:1.8;opacity:.7;
+  animation:spin 9s linear infinite;
+  filter:drop-shadow(0 0 3px rgba(110,168,254,.6))}
+.ring.running{stroke:var(--accent);stroke-width:2.2;opacity:1;
   animation:spin 2.2s linear infinite;
-  filter:drop-shadow(0 0 5px rgba(110,168,254,.7))}
-.ring.center-idle{stroke:var(--accent);stroke-width:1.8;opacity:.4;
-  animation:spin 20s linear infinite;
-  filter:drop-shadow(0 0 3px rgba(110,168,254,.45))}
-.ring.center-active{stroke:var(--accent);stroke-width:2.2;opacity:.95;
+  filter:drop-shadow(0 0 6px rgba(110,168,254,.8))}
+.ring.center-idle{stroke:var(--accent);stroke-width:2;opacity:.7;
+  animation:spin 12s linear infinite;
+  filter:drop-shadow(0 0 4px rgba(110,168,254,.6))}
+.ring.center-active{stroke:var(--accent);stroke-width:2.6;opacity:1;
   animation:spin 3s linear infinite;
-  filter:drop-shadow(0 0 6px rgba(110,168,254,.7))}
+  filter:drop-shadow(0 0 7px rgba(110,168,254,.8))}
 @keyframes spin{to{transform:rotate(360deg)}}
 @media (prefers-reduced-motion:reduce){
   .gedge.active,.ring{animation:none}
@@ -500,23 +500,26 @@ async function loadSystem(){
 /* ---------- one geometry pass for the whole map ---------- */
 // BotNode: body circle + status ring + centered title/status text.
 function graphNode(c, x, y, r, lines, status, dotColor, big, ringCls){
-  const tSize = big ? 25 : 15, sSize = big ? 12.5 : 11, lh = big ? 29 : 18;
-  const total = lines.length*lh + (big ? 40 : 26);
-  let ty = y - total/2 + lh*0.8;
-  let title = '';
-  for(const ln of lines){
-    title += `<text x="${x}" y="${ty}" text-anchor="middle" fill="var(--text)"
-      font-size="${tSize}" font-weight="600">${esc(ln)}</text>`;
-    ty += lh;
-  }
-  ty += big ? 6 : 3;
+  // True block centering: measure the whole title+status block, center it
+  // on the circle's midpoint, and place every line by its own center line
+  // (dominant-baseline) — no baseline fudging, no drift.
+  const tSize = big ? 25 : 15, sSize = big ? 12.5 : 11, lh = big ? 29 : 19;
+  const sLh = sSize + 6, gap = big ? 9 : 6;
   const rows = Array.isArray(status) ? status : [status];
+  const totalH = lines.length*lh + gap + rows.length*sLh;
+  const top = y - totalH/2;
+  let title = '';
+  lines.forEach((ln, i) => {
+    title += `<text x="${x}" y="${top + lh/2 + i*lh}" text-anchor="middle"
+      dominant-baseline="central" fill="var(--text)"
+      font-size="${tSize}" font-weight="600">${esc(ln)}</text>`;
+  });
   let stat = '';
-  for(const s of rows){
-    stat += `<text x="${x}" y="${ty}" text-anchor="middle" font-size="${sSize}">
+  rows.forEach((s, j) => {
+    stat += `<text x="${x}" y="${top + lines.length*lh + gap + sLh/2 + j*sLh}"
+      text-anchor="middle" dominant-baseline="central" font-size="${sSize}">
       <tspan fill="${dotColor}">●</tspan><tspan dx="5" fill="var(--text2)">${esc(s)}</tspan></text>`;
-    ty += sSize + 5;
-  }
+  });
   const stroke = big ? 'var(--accent)'
     : c.planned ? 'var(--muted)' : (c.enabled ? 'var(--border-hi)' : 'var(--border)');
   const dash = (!big && c.planned) ? ' stroke-dasharray="6 5"' : '';
@@ -525,8 +528,10 @@ function graphNode(c, x, y, r, lines, status, dotColor, big, ringCls){
   // the edge perfectly at any radius. Planned nodes get none.
   let ring = '';
   if(ringCls){
+    // Long sweeping arc: about half the border when running, a generous
+    // third when idle — a light travelling the whole circle, not a speck.
     const C = 2*Math.PI*r;
-    const L = C * (ringCls.includes('active')||ringCls==='running' ? .26 : .10);
+    const L = C * (ringCls.includes('active')||ringCls==='running' ? .55 : .38);
     ring = `<circle class="ring ${ringCls}" cx="${x}" cy="${y}" r="${r}"
       stroke-dasharray="${L.toFixed(1)} ${(C-L).toFixed(1)}"/>`;
   }
