@@ -742,7 +742,11 @@ body.view-clients #main{overflow:hidden}
             pinned to one level of one dimension (isolates a variable)</option>
           <option value="regression_pin">Regression pin — re-run the EXACT
             personas of a previous test against the current bot and diff the
-            scores</option></select>
+            scores</option>
+          <option value="feature_check">Feature checks — one persona per
+            selected feature (everything else plain), each as its own test,
+            run in parallel; the analyzer answers YES/NO per feature</option>
+          </select>
         <span id="simt-f-count"><label>How many different business
           personas</label>
         <input id="simt-count" type="number" min="2" max="8" value="4"
@@ -767,6 +771,44 @@ body.view-clients #main{overflow:hidden}
         <span id="simt-f-base" style="display:none">
           <label>Base test number to re-run</label>
           <input id="simt-base" type="number" min="1" style="width:90px"></span>
+        <span id="simt-f-features" style="display:none">
+          <label>Features to check (each becomes its own test — use
+            Ctrl/Cmd-click to pick several)</label>
+          <select id="simt-features" multiple size="10">
+            <optgroup label="Industries">
+              <option value="industry=Automotive repair &amp; detailing">industry: Automotive repair &amp; detailing</option>
+              <option value="industry=Restaurant">industry: Restaurant</option>
+              <option value="industry=Beauty salon">industry: Beauty salon</option>
+              <option value="industry=Law firm">industry: Law firm</option>
+              <option value="industry=Manufacturing workshop">industry: Manufacturing workshop</option>
+              <option value="industry=Photography studio">industry: Photography studio</option>
+              <option value="industry=Private tutoring">industry: Private tutoring</option>
+              <option value="industry=Gym / fitness studio">industry: Gym / fitness studio</option>
+            </optgroup>
+            <optgroup label="Hardest ladder rungs">
+              <option value="patience=0.15">patience 15% (wants it over)</option>
+              <option value="knowledge=0.25">knowledge 25% (knows little)</option>
+              <option value="consistency=0.15">consistency 15% (contradicts)</option>
+              <option value="clarity=0.15">clarity 15% (rambling/vague)</option>
+              <option value="trust=0.15">trust 15% (suspicious)</option>
+              <option value="language_mix=0.15">language mix 15% (mostly Arabic/Spanish)</option>
+              <option value="typing=0.15">typing 15% (fragments/typos)</option>
+              <option value="focus=0.15">focus 15% (asks questions back)</option>
+            </optgroup>
+            <optgroup label="Business setups">
+              <option value="business_model=B2B accounts">B2B accounts</option>
+              <option value="business_model=online orders">online orders</option>
+              <option value="data_situation=all on paper">data all on paper</option>
+              <option value="requested_scope=booking">scope: booking</option>
+              <option value="requested_scope=ordering">scope: ordering</option>
+              <option value="decision_structure=skeptical partner in background">skeptical partner</option>
+            </optgroup>
+            <optgroup label="Special behaviors">
+              <option value="behavior=drops_out">drops out mid-interview</option>
+              <option value="behavior=asks_meta">asks about the bot itself</option>
+              <option value="behavior=corrects_later">corrects a fact later</option>
+            </optgroup>
+          </select></span>
         <div class="row"><button class="act" id="simt-start">Start test</button>
           <button class="act" id="simt-cancel">Cancel</button>
           <span class="m" id="simt-note">estimated cost: ~$0.20-0.40 per
@@ -1244,14 +1286,19 @@ $('#sim-addtest').onclick = () => $('#simt-form').classList.add('open');
 $('#simt-cancel').onclick = () => $('#simt-form').classList.remove('open');
 $('#simt-kind').onchange = () => {
   const k = $('#simt-kind').value;
-  $('#simt-f-count').style.display = k === 'regression_pin' ? 'none' : '';
+  $('#simt-f-count').style.display =
+    (k === 'regression_pin' || k === 'feature_check') ? 'none' : '';
   $('#simt-f-stress').style.display = k === 'stress' ? '' : 'none';
   $('#simt-f-base').style.display = k === 'regression_pin' ? '' : 'none';
+  $('#simt-f-features').style.display = k === 'feature_check' ? '' : 'none';
 };
 $('#simt-start').onclick = async () => {
   const kind = $('#simt-kind').value;
   const body = {kind};
-  if(kind === 'regression_pin'){
+  if(kind === 'feature_check'){
+    body.features = [...$('#simt-features').selectedOptions].map(o => o.value);
+    if(!body.features.length) return;
+  } else if(kind === 'regression_pin'){
     body.base_test_id = +$('#simt-base').value || 0;
     if(!body.base_test_id) return;
   } else {
@@ -1500,7 +1547,12 @@ function simtCard(t){
             Math.round((t.params.level||0)*100)}%, ${t.params.count} personas)`
         : t.kind === 'regression_pin'
         ? `Regression vs Test ${t.params.base_test_id}`
+        : t.kind === 'feature_check'
+        ? `Feature Check · ${esc(t.params.feature||'')}`
         : `Persona Sweep &amp; Analysis (${t.params.count} personas)`}</span>
+      ${t.params.verdict ? `<span class="sim-st ${t.params.verdict === 'YES'
+        ? 'completed' : 'failed'}" style="font-size:12px">${
+        t.params.verdict}</span>` : ''}
       <span class="ts">${new Date(t.started_ts*1000).toLocaleString()}</span>
       ${avgScore != null ? `<span class="ts" style="color:var(--green);
         font-weight:600" title="Average extraction score: of what each persona
@@ -2772,8 +2824,11 @@ class Handler(BaseHTTPRequestHandler):
             out = simlab.start_run(int(req.get("persona_id") or 0))
         elif self.path == "/api/sim/test":
             from orchestrator import simlab
-            out = simlab.start_test(str(req.get("kind", "")),
-                                    {"count": req.get("count")})
+            kind = str(req.get("kind", ""))
+            if kind == "feature_check":
+                out = simlab.start_feature_checks(req.get("features") or [])
+            else:
+                out = simlab.start_test(kind, req)
         elif self.path == "/api/review/resolve":
             ok = store.resolve_review(pid, int(req.get("review_id") or 0),
                                       str(req.get("disposition", ""))[:500]

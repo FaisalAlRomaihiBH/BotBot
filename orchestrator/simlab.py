@@ -275,6 +275,188 @@ def _coverage_summary() -> tuple[str, dict]:
     return text, counts
 
 
+# ---------------- feature checks: one feature, one persona, one verdict ---
+NL = chr(10)   # newline, named so generated strings stay readable
+#
+# Every check is its OWN test (own milestone path). The persona is built
+# deliberately PLAIN on every dimension except the single feature under
+# test. The judge answers YES/NO: did the persona actually EXHIBIT the
+# feature it was assigned? (validates that the test tested what it claims).
+# Checks launched together run in parallel and share the interviewer prompt
+# cache (identical bytes), so a batch costs barely more than a lone run.
+FEATURE_NEUTRAL = {
+    "knowledge": 1.0, "patience": 0.7,
+    "cats": {"business_model": "walk-in", "data_situation": "phone notes",
+             "requested_scope": "FAQ only",
+             "decision_structure": "sole decider"},
+    "behavior": "none",
+}
+
+VERDICT_PROMPT = """You are a strict test judge. A fake business-owner
+persona was interviewed by a requirements chatbot. The persona was ASSIGNED
+one single defining feature: {feature}.
+Everything else about the persona was supposed to be plain and typical.
+
+Below: the full transcript and the final requirements brief. Judge STRICTLY
+whether the PERSONA actually exhibited that assigned feature throughout the
+conversation — did it truly behave/exist as {feature}, consistently, and
+keep everything else unremarkable?
+
+First line of your answer: exactly YES or NO.
+Then 2-5 sentences of concrete evidence quoted from the transcript.
+
+=== TRANSCRIPT ===
+{transcript}
+
+=== FINAL BRIEF ===
+{brief}"""
+
+
+def start_feature_checks(features: list) -> dict:
+    """features: list of 'dimension=value' strings; one separate test each,
+    all running in parallel."""
+    ids = []
+    for f in features[:12]:
+        dim, _, value = str(f).partition("=")
+        if not dim or not value:
+            continue
+        test_id = store.sim_create_test(
+            "feature_check", {"count": 1, "feature": f"{dim}={value}"})
+        threading.Thread(target=_run_feature_check,
+                         args=(test_id, dim.strip(), value.strip()),
+                         daemon=True).start()
+        ids.append(test_id)
+    return {"test_ids": ids}
+
+
+def _run_feature_check(test_id: int, dim: str, value: str) -> None:
+    try:
+        from langchain_anthropic import ChatAnthropic
+        from langchain_core.messages import HumanMessage
+        from requirements_bot import RequirementsBot, _blocks_to_text
+        from models import BusinessRequirements
+        feature = f"{dim} = {value}"
+        bot_model = RequirementsBot.__init__.__defaults__[0]
+        store.sim_update_test(test_id, status="generating", params={
+            "count": 1, "feature": feature,
+            "models": {"generator": GENERATOR_MODEL, "bot": bot_model,
+                       "persona": PERSONA_MODEL, "analyst": ANALYST_MODEL}})
+
+        level = FEATURE_NEUTRAL["knowledge"]
+        patience = FEATURE_NEUTRAL["patience"]
+        ladders = {n: 1.0 for n in EXTRA_LADDERS}
+        cats = dict(FEATURE_NEUTRAL["cats"])
+        behavior = FEATURE_NEUTRAL["behavior"]
+        industry_line = "a plain, typical small local service business"
+        try:
+            num = float(value)
+        except ValueError:
+            num = None
+        if dim == "industry":
+            industry_line = value
+        elif dim == "knowledge" and num is not None:
+            level = num
+        elif dim == "patience" and num is not None:
+            patience = num
+        elif dim in ladders and num is not None:
+            ladders[dim] = num
+        elif dim in cats:
+            cats[dim] = value
+        elif dim == "behavior":
+            behavior = value
+        assigned = NL.join(
+            [f"- industry: {industry_line}"]
+            + [f"- {n}: {o}" for n, o in cats.items()]
+            + [f"- {n} level {int(r*100)}% ({EXTRA_LADDERS[n]})"
+               for n, r in ladders.items()]
+            + ([f"- special behavior: {behavior}"]
+               if behavior != "none" else [])
+            + [f"- SINGLE-FEATURE ISOLATION: the ONLY distinctive thing "
+               f"about this persona is {feature}. Keep absolutely "
+               f"everything else plain, typical, and unremarkable."])
+        field_names = ", ".join(BusinessRequirements.model_fields)
+        gen = ChatAnthropic(model=GENERATOR_MODEL, max_tokens=8000)
+        g_usage = {"fresh_in": 0, "cache_read": 0, "cache_write": 0, "out": 0}
+        prompt = (GENERATOR_PROMPT
+                  .replace("{previous}", "(none)")
+                  .replace("{coverage}", "(not used for feature checks)")
+                  .replace("{assigned}", assigned)
+                  .replace("{fields}", field_names)
+                  .replace("{pct}", str(int(level * 100))))
+        p, last_err, msgs = None, None, [HumanMessage(content=prompt)]
+        for _ in range(3):
+            reply = gen.invoke(msgs)
+            _acc(g_usage, _usage_of(reply))
+            text = _blocks_to_text(reply.content)
+            try:
+                p = json.loads(text[text.index("{"):text.rindex("}") + 1])
+                break
+            except (ValueError, json.JSONDecodeError) as e:
+                last_err = e
+                from langchain_core.messages import AIMessage
+                msgs = [HumanMessage(content=prompt),
+                        AIMessage(content=text or "(empty)"),
+                        HumanMessage(content="FORMAT ERROR: resend as ONE "
+                                     "valid JSON object only.")]
+        if p is None:
+            raise RuntimeError(f"persona generation failed: {last_err}")
+        identity = p.get("identity") or {}
+        content = (
+            "GROUND-TRUTH IDENTITY (JSON):" + NL
+            + json.dumps(identity, ensure_ascii=False, indent=1)
+            + NL + NL + "FIELDS THIS OWNER GENUINELY DOES NOT KNOW:" + NL
+            + (", ".join(p.get("unknown_fields") or []) or "(none)")
+            + NL + PATIENCE_RULE.replace("{pct}", str(int(patience * 100)))
+            + NL + NL + "BEHAVIORAL LADDERS (follow each at its level):" + NL
+            + NL.join(f"- {n} {int(r*100)}%: {EXTRA_LADDERS[n]}"
+                      for n, r in ladders.items())
+            + ((NL + NL + BEHAVIOR_RULES[behavior])
+               if BEHAVIOR_RULES.get(behavior) else ""))
+        pid = store.sim_add_persona(
+            p.get("name", "Feature check persona"), "ai", content,
+            industry=p.get("industry"), company_size=p.get("company_size"),
+            traits=p.get("traits"), identity=identity,
+            completeness=level, patience=patience,
+            features={"ladders": ladders, **cats, "behavior": behavior,
+                      "feature_check": feature})
+        store.sim_update_test(test_id, status="running", usage={
+            "generator": g_usage | {"model": GENERATOR_MODEL}})
+        run_id = store.sim_create_run(pid)
+        store.sim_update_test(test_id, run_ids=[run_id])
+        _execute(run_id, store.sim_persona(pid))
+
+        # verdict: did the persona actually exhibit its assigned feature?
+        store.sim_update_test(test_id, status="analyzing")
+        r = store.sim_run(run_id)
+        convo = NL.join(
+            f"{'BOT' if x['who'] == 'bot' else 'OWNER'}: {x['text']}"
+            for x in (r["transcript"] or []))
+        brief = (json.dumps(r["brief"], ensure_ascii=False)
+                 if r["brief"] else "(none)")
+        judge = ChatAnthropic(model=ANALYST_MODEL, max_tokens=1000)
+        v_reply = judge.invoke([HumanMessage(content=(
+            VERDICT_PROMPT.replace("{feature}", feature)
+            .replace("{transcript}", convo).replace("{brief}", brief)))])
+        v_usage = _usage_of(v_reply)
+        report = (_blocks_to_text(v_reply.content).strip()
+                  or "NO" + NL + "(empty verdict)")
+        verdict = "YES" if report.upper().startswith("YES") else "NO"
+        t = store.sim_test(test_id)
+        params = t["params"] | {"verdict": verdict}
+        total = ((r.get("cost_usd") or 0)
+                 + _cost_of(GENERATOR_MODEL, g_usage)
+                 + _cost_of(ANALYST_MODEL, v_usage))
+        store.sim_update_test(
+            test_id, status="completed", report=report, params=params,
+            usage={"generator": g_usage | {"model": GENERATOR_MODEL},
+                   "analyst": v_usage | {"model": ANALYST_MODEL}},
+            cost_usd=round(total, 4), finished_ts=time.time())
+    except Exception as e:
+        store.sim_update_test(test_id, status="failed",
+                              error=f"{type(e).__name__}: {e}",
+                              finished_ts=time.time())
+
+
 def start_test(kind: str, params: dict) -> dict:
     if kind in ("persona_sweep", "stress"):
         count = max(2, min(8, int(params.get("count") or 4)))
