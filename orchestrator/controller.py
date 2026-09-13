@@ -85,6 +85,7 @@ def send_interview_message(pid: str, message: str) -> dict:
 
         bot = _make_bot(pid)
         usage_before = dict(bot.usage)
+        started = time.time()
         try:
             msgs, turn = bot.send(message)
         except RuntimeError as e:  # materials gate — surfaced, not a crash
@@ -99,7 +100,8 @@ def send_interview_message(pid: str, message: str) -> dict:
             return {"error": f"{type(e).__name__}: {e}"}
 
         turn_usage = {k: bot.usage[k] - usage_before.get(k, 0) for k in bot.usage}
-        store.add_invocation(pid, "interview_turn", bot.model, turn_usage)
+        store.add_invocation(pid, "interview_turn", bot.model, turn_usage,
+                             duration=time.time() - started)
 
         for m in msgs:
             store.add_message(pid, "interview", "bot", m)

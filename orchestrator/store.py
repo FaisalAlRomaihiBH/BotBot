@@ -53,8 +53,25 @@ CREATE TABLE IF NOT EXISTS client_sessions(
 CREATE TABLE IF NOT EXISTS invocations(
   id INTEGER PRIMARY KEY AUTOINCREMENT, project_id TEXT, purpose TEXT NOT NULL,
   model TEXT, fresh_in INTEGER, cache_read INTEGER, cache_write INTEGER,
-  out_tokens INTEGER, error TEXT, ts REAL NOT NULL);
+  out_tokens INTEGER, error TEXT, ts REAL NOT NULL, duration REAL);
 """
+
+# $ per 1M tokens (input, output). Cache writes bill 1.25x input, cache
+# reads 0.10x. Configuration, not verified live prices; unknown models get
+# no cost rather than a silently borrowed rate.
+PRICING = {
+    "claude-sonnet-5": (2.00, 10.00),
+    "claude-opus-5": (5.00, 25.00),
+    "claude-haiku-4-5": (1.00, 5.00),
+}
+
+
+def _cost_usd(model, fresh, cread, cwrite, out) -> float | None:
+    if model not in PRICING:
+        return None
+    inp, outp = PRICING[model]
+    return ((fresh or 0) * inp + (cwrite or 0) * inp * 1.25
+            + (cread or 0) * inp * 0.10 + (out or 0) * outp) / 1_000_000
 
 
 def _connect() -> sqlite3.Connection:
@@ -64,6 +81,11 @@ def _connect() -> sqlite3.Connection:
     con.execute("PRAGMA journal_mode=WAL")
     con.execute("PRAGMA foreign_keys=ON")
     con.executescript(_SCHEMA)
+    # additive migration: duration on invocations for older databases
+    try:
+        con.execute("ALTER TABLE invocations ADD COLUMN duration REAL")
+    except sqlite3.OperationalError:
+        pass  # already present
     return con
 
 
@@ -315,14 +337,44 @@ def last_provider_event() -> dict | None:
 
 # ---------------- invocations (usage accounting) ----------------
 def add_invocation(pid: str | None, purpose: str, model: str | None,
-                   usage: dict | None, error: str | None = None) -> None:
+                   usage: dict | None, error: str | None = None,
+                   duration: float | None = None) -> None:
     u = usage or {}
     with _connect() as con:
         con.execute(
             "INSERT INTO invocations(project_id, purpose, model, fresh_in, "
-            "cache_read, cache_write, out_tokens, error, ts) VALUES(?,?,?,?,?,?,?,?,?)",
+            "cache_read, cache_write, out_tokens, error, ts, duration) "
+            "VALUES(?,?,?,?,?,?,?,?,?,?)",
             (pid, purpose, model, u.get("fresh_in"), u.get("cache_read"),
-             u.get("cache_write"), u.get("out"), error, time.time()))
+             u.get("cache_write"), u.get("out"), error, time.time(), duration))
+
+
+def interviewing_metrics(pid: str) -> dict:
+    """Real spend of the Interviewing stage for one flow: tokens, cost,
+    active model time, turn count, model. Unknowns are None, never zero."""
+    with _connect() as con:
+        r = con.execute(
+            "SELECT COALESCE(SUM(fresh_in),0) f, COALESCE(SUM(cache_read),0) cr,"
+            " COALESCE(SUM(cache_write),0) cw, COALESCE(SUM(out_tokens),0) o,"
+            " SUM(duration) dur, COUNT(*) n, MAX(model) model"
+            " FROM invocations WHERE project_id=? AND purpose='interview_turn'",
+            (pid,)).fetchone()
+        models = [m["model"] for m in con.execute(
+            "SELECT DISTINCT model FROM invocations WHERE project_id=? AND "
+            "purpose='interview_turn'", (pid,))]
+        turns = con.execute(
+            "SELECT COUNT(*) n FROM messages WHERE project_id=? AND "
+            "conversation='interview' AND role='owner'", (pid,)).fetchone()["n"]
+    if not r["n"]:
+        return {"calls": 0}
+    # a single unpriced/unknown model makes the whole cost unknown — never
+    # silently price it as something else
+    cost = (None if any(m not in PRICING for m in models)
+            else _cost_usd(r["model"], r["f"], r["cr"], r["cw"], r["o"]))
+    return {"calls": r["n"], "turns": turns,
+            "tokens_in": r["f"] + r["cr"] + r["cw"], "tokens_out": r["o"],
+            "cost_usd": cost, "active_seconds": r["dur"],
+            "model": (r["model"] or "").replace("claude-", "") or None}
 
 
 def usage_totals(pid: str) -> dict:

@@ -146,17 +146,27 @@ body.view-flows #flows{display:flex}
 .fc-when{margin-left:auto;font:10.5px var(--mono);color:var(--muted)}
 .fc-path{display:flex;align-items:flex-start;padding:6px 16px 16px;gap:0;
   overflow-x:auto}
-.fc-step{flex:1;min-width:96px;display:flex;flex-direction:column;
+.fc-step{flex:1;min-width:150px;display:flex;flex-direction:column;
   align-items:center;text-align:center;position:relative}
-.fc-step .cn{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--border);
+.fc-step .cn{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--border);
   background:var(--panel2);display:grid;place-items:center;
-  font:600 12px var(--mono);color:var(--muted);z-index:1}
+  font:600 12px var(--mono);color:var(--muted);z-index:1;position:relative}
+.fc-step .cn .ico{font-size:15px;line-height:1;filter:grayscale(35%)}
+.fc-step.planned .cn .ico,.fc-step.unmet .cn .ico{filter:grayscale(90%);opacity:.8}
+.fc-step .cn .numb{position:absolute;top:-5px;right:-7px;width:15px;height:15px;
+  border-radius:50%;background:var(--panel);border:1px solid var(--border-hi);
+  font:600 9px var(--mono);color:var(--text2);display:grid;place-items:center}
+.fc-step.completed .cn .numb{color:var(--green);border-color:#234534}
+.fc-step.current .cn .numb{color:var(--accent);border-color:var(--accent)}
+.fc-step .mline{font:10px var(--mono);color:var(--text2);margin-top:4px;
+  line-height:1.5}
+.fc-step .mline b{color:var(--text);font-weight:500}
 .fc-step .lbl{margin-top:7px;font-size:13px;color:var(--text2);line-height:1.3}
 .fc-step .who{font-size:11px;color:var(--muted);margin-top:2px}
 .fc-step .st{font:600 10px var(--mono);margin-top:3px;color:var(--muted);
   max-width:150px;line-height:1.45}
-.fc-step::before{content:'';position:absolute;top:15px;left:calc(-50% + 15px);
-  width:calc(100% - 30px);height:1.5px;background:var(--border)}
+.fc-step::before{content:'';position:absolute;top:17px;left:calc(-50% + 17px);
+  width:calc(100% - 34px);height:1.5px;background:var(--border)}
 .fc-step:first-child::before{display:none}
 .fc-step.completed .cn{border-color:#234534;color:var(--green)}
 .fc-step.completed::before{background:#234534}
@@ -790,6 +800,19 @@ $('#client-link').onclick = async () => {
 /* ================= Chatbot Flows (monitoring, read-only) ================= */
 const flowsUI = {data:null, expanded:new Set(), tab:{}, detail:{}};
 
+const STAGE_ICONS = {interviewing:'💬', architecture:'📐', building:'🔨',
+  testing_repair:'🧪', bot_created:'🏁'};
+function fmtTok(n){
+  if(n==null) return '—';
+  if(n >= 1e6) return (n/1e6).toFixed(1)+'M';
+  if(n >= 1e3) return (n/1e3).toFixed(1)+'k';
+  return String(n);
+}
+function fmtSecs(s){
+  if(s==null) return 'time —';
+  s = Math.round(s);
+  return s >= 60 ? `${Math.floor(s/60)}m ${s%60}s` : `${s}s`;
+}
 function ago(ts){
   if(!ts) return 'Unknown';
   const s = Math.max(0, Math.floor(Date.now()/1000 - ts));
@@ -843,16 +866,22 @@ function renderFlows(){
     const steps = tpl.map((t, i) => {
       const s = f.stages.find(x => x.id === t.id) || {status:'not_started'};
       const busyCls = (s.status==='current' && f.busy) ? ' busy' : '';
-      const mark = s.status==='completed' ? '✓' : (i+1);
+      const badge = s.status==='completed' ? '✓' : (i+1);
       const showWho = s.status==='current' || s.status==='blocked'
         || t.id==='interviewing';
+      const m = (f.stage_metrics||{})[t.id];
       return `<div class="fc-step ${s.status}${busyCls}">
-        <span class="cn" aria-hidden="true">${mark}</span>
+        <span class="cn" aria-hidden="true"><span class="ico">${STAGE_ICONS[t.id]||'•'}</span>
+          <span class="numb">${badge}</span></span>
         <div><span class="lbl">${esc(t.label)}</span>
         ${showWho ? `<span class="who">${esc(t.who)}</span>` : ''}
         ${s.note ? `<span class="st">${
           s.status==='current' ? 'CURRENT · ' : ''}${esc(s.note)}</span>`
           : s.status==='planned' ? `<span class="st">Planned · Not implemented</span>` : ''}
+        ${m && m.calls ? `<span class="mline">
+          <b>${m.cost_usd!=null ? '$'+m.cost_usd.toFixed(2) : 'cost —'}</b>
+          · ${fmtTok(m.tokens_in)} in · ${fmtTok(m.tokens_out)} out
+          · ${fmtSecs(m.active_seconds)} · ${esc(m.model||'—')}</span>` : ''}
         </div></div>`;
     }).join('');
     const cur = tpl.find(t => t.id === f.current_stage);
@@ -1289,121 +1318,6 @@ load();
 </script></body></html>"""
 
 
-# ============================ FLOW CARD SAMPLES ============================
-# Demo at /flowcards: ten flow-card layout candidates with per-stage bot,
-# tokens, cost, time, attempts, model + header identity/totals. Sample data
-# is clearly mocked; the chosen layout will be wired to real records.
-FLOWCARD_DEMO = r"""<!doctype html><html><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Flow Card Icons — pick one</title>
-<style>
-:root{--bg:#0d0d0d;--panel:#151515;--panel2:#1a1a1a;--border:#2a2a2a;
-  --border-hi:#3f3f46;--text:#f5f5f5;--text2:#a1a1aa;--muted:#71717a;
-  --accent:#6ea8fe;--green:#4ade80;--amber:#fbbf24;
-  --sans:-apple-system,'Segoe UI',system-ui,sans-serif;
-  --mono:'Cascadia Code',Consolas,monospace}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font:13px/1.5 var(--sans);padding:26px}
-h1{font-size:19px;margin:0 0 4px}
-p.sub{color:var(--text2);margin:0 0 24px;font-size:12.5px}
-.sample{background:var(--panel);border:1px solid var(--border);border-radius:8px;
-  padding:16px 20px;margin-bottom:20px;overflow-x:auto}
-.sample h2{font-size:15px;margin:0 0 2px}
-.sample .d{color:var(--muted);font-size:12px;margin:0 0 14px}
-.hd{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
-.hd .nm{font-size:16px;font-weight:600}
-.hd .id{font:10.5px var(--mono);color:var(--muted)}
-.hd .badge{font:600 9px var(--mono);text-transform:uppercase;letter-spacing:.06em;
-  border:1px solid var(--border-hi);border-radius:99px;padding:2px 8px;color:var(--text2)}
-.hd .badge.att{color:var(--amber);border-color:#5c4a1e}
-.hd .tot{margin-left:auto;font:11px var(--mono);color:var(--text2)}
-.hd .tot b{color:var(--text)}
-.mut{color:var(--muted)}
-.plan{opacity:.55}
-.stage-name{font-weight:600;font-size:13px;margin-top:7px}
-.bot{font-size:11px;color:var(--muted)}
-.note{font:10px var(--mono)}
-.note.cur{color:var(--accent)}
-.note.done{color:var(--green)}
-.path{display:flex}
-.st{flex:1;min-width:158px;display:flex;flex-direction:column;align-items:center;
-  text-align:center;position:relative;padding:0 7px}
-.st::before{content:'';position:absolute;top:17px;left:calc(-50% + 18px);
-  width:calc(100% - 36px);height:1.5px;background:var(--border)}
-.st:first-child::before{display:none}
-.st.done::before{background:#234534}
-.cn{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--border);
-  background:var(--panel2);display:grid;place-items:center;z-index:1;
-  font:600 12px var(--mono);color:var(--muted);position:relative}
-.st.done .cn{border-color:#234534;color:var(--green)}
-.st.cur .cn{border-color:var(--accent);color:var(--accent);
-  box-shadow:0 0 10px rgba(110,168,254,.35)}
-.st.plan .cn{border-style:dashed}
-.cn .ico{font-size:15px;line-height:1;filter:grayscale(35%)}
-.st.plan .cn .ico{filter:grayscale(90%);opacity:.8}
-.numb{position:absolute;top:-5px;right:-7px;width:15px;height:15px;border-radius:50%;
-  background:var(--panel);border:1px solid var(--border-hi);
-  font:600 9px var(--mono);color:var(--text2);display:grid;place-items:center}
-.st.done .numb{color:var(--green);border-color:#234534}
-.st.cur .numb{color:var(--accent);border-color:var(--accent)}
-.kv{display:flex;flex-direction:column;padding:2px 9px;min-width:0}
-.kv em{font:600 8px var(--sans);font-style:normal;text-transform:uppercase;
-  letter-spacing:.07em;color:var(--muted)}
-.kv b{font:500 10.5px var(--mono);color:var(--text);white-space:nowrap}
-.kvgrid{display:grid;grid-template-columns:repeat(3,auto);justify-content:center;
-  margin-top:6px}
-.kvgrid .kv{border-right:1px solid var(--border)}
-.kvgrid .kv:nth-child(3n){border-right:none}
-.kvgrid .kv:nth-child(-n+3){border-bottom:1px solid var(--border)}
-.oneline{font:10px var(--mono);color:var(--text2);margin-top:5px}
-.oneline b{color:var(--text)}
-</style></head><body>
-<h1>Icon treatments — your chosen card</h1>
-<p class="sub">Same layout, five icon ideas. Some circles carry numbers, some
-carry stage icons, and the detail under each varies. Data is mocked.
-Tell Claude which number you want.</p>
-<div id="list"></div>
-<script>
-const S=[
- {n:'Interviewing', bot:'RequirementsBot', st:'done', note:'Interview closed', ico:'💬',
-  tin:'182.4k', tout:'41.2k', cost:'$1.24', time:'6m 12s', turns:'14', model:'sonnet-5'},
- {n:'Architecture', bot:'Architect Bot', st:'cur', note:'Awaiting approval · 2 gaps', ico:'📐'},
- {n:'Building', bot:'Builder Bot', st:'plan', note:'Planned', ico:'🔨'},
- {n:'Testing & Repair', bot:'Tester/Fixer Bot', st:'plan', note:'Planned', ico:'🧪'},
- {n:'Bot Created', bot:'Outcome', st:'plan', note:'Unmet', ico:'🏁'},
-];
-const HD = `<div class="hd"><span class="nm">Shiny Wheels Car Wash</span>
-  <span class="id">proj_a374880d50</span><span class="badge">Client</span>
-  <span class="badge att">2 gaps</span><span class="badge">rev r14 · not approved</span>
-  <span class="tot">total <b>$1.24</b> · 182.4k in / 41.2k out · updated 2m ago</span></div>`;
-const has = s => !!s.cost;
-const KV = s => ['in','out','cost','time','turns','model'].map(k =>
-  `<span class="kv"><em>${k}</em><b>${
-    {in:s.tin,out:s.tout,cost:s.cost,time:s.time,turns:s.turns,model:s.model}[k]
-  }</b></span>`).join('');
-const numCn = (s,i) => `<span class="cn">${s.st==='done'?'✓':(i+1)}</span>`;
-const icoCn = s => `<span class="cn"><span class="ico">${s.st==='done'?'✓':s.ico}</span></span>`;
-const icoNumCn = (s,i) => `<span class="cn"><span class="ico">${s.ico}</span>
-  <span class="numb">${s.st==='done'?'✓':(i+1)}</span></span>`;
-const under = s => `<span class="stage-name">${s.n}</span><span class="bot">${s.bot}</span>
-  <span class="note ${s.st}" style="margin-top:2px">${s.note}</span>`;
-const grid = s => has(s)?`<div class="kvgrid">${KV(s)}</div>`:'';
-const line = s => has(s)?`<div class="oneline"><b>${s.cost}</b> · ${s.tin} in · ${s.tout} out · ${s.time}</div>`:'';
-const V={};
-V[1]=['Numbers + full metrics','Numbered circles (your current baseline) with the separated metric grid.',
- ()=>S.map((s,i)=>`<div class="st ${s.st}">${numCn(s,i)}${under(s)}${grid(s)}</div>`).join('')];
-V[2]=['Stage icons + full metrics','Each stage gets its own icon in the circle; the full metric grid stays.',
- ()=>S.map((s,i)=>`<div class="st ${s.st}">${icoCn(s)}${under(s)}${grid(s)}</div>`).join('')];
-V[3]=['Icon + number badge + full metrics','Icon in the circle with a tiny step number on its shoulder; full metric grid.',
- ()=>S.map((s,i)=>`<div class="st ${s.st}">${icoNumCn(s,i)}${under(s)}${grid(s)}</div>`).join('')];
-V[4]=['Numbers, minimal underneath','Numbered circles; the grid collapses into one compact metrics line.',
- ()=>S.map((s,i)=>`<div class="st ${s.st}">${numCn(s,i)}${under(s)}${line(s)}</div>`).join('')];
-V[5]=['Icons, minimal underneath','Stage icons; one compact metrics line — the lightest of the five.',
- ()=>S.map((s,i)=>`<div class="st ${s.st}">${icoCn(s)}${under(s)}${line(s)}</div>`).join('')];
-document.getElementById('list').innerHTML =
-  Object.keys(V).map(k=>`<div class="sample"><h2>${k}. ${V[k][0]}</h2>
-   <p class="d">${V[k][1]}</p>${HD}<div class="path">${V[k][2]()}</div></div>`).join('');
-</script></body></html>"""
 # ============================ BACKEND ============================
 def _project_of(value) -> str:
     pid = str((value.get("project") if isinstance(value, dict) else value) or "").strip()
@@ -1451,11 +1365,13 @@ def flows_payload() -> dict:
             # someone has actually used it
             if not (r["id"] == store.DEFAULT_PROJECT
                     and not r["has_session"] and not r["head_rev"])]
-    return {
-        "template": controller.FLOW_TEMPLATE,
-        "flows": [controller.flow_projection(r, planned, r["id"] in client_ids)
-                  for r in rows],
-    }
+    flows = []
+    for r in rows:
+        f = controller.flow_projection(r, planned, r["id"] in client_ids)
+        # real spend of the stages that actually run today
+        f["stage_metrics"] = {"interviewing": store.interviewing_metrics(r["id"])}
+        flows.append(f)
+    return {"template": controller.FLOW_TEMPLATE, "flows": flows}
 
 
 def flow_detail(pid: str) -> dict:
@@ -1610,10 +1526,6 @@ class Handler(BaseHTTPRequestHandler):
                        {"Set-Cookie": f"botbot_owner={_owner_token()}; "
                                       f"Path=/; HttpOnly; SameSite=Lax",
                         "Cache-Control": "no-store"})
-            return
-        if route == "/flowcards":
-            self._send(FLOWCARD_DEMO.encode("utf-8"), "text/html; charset=utf-8",
-                       {"Cache-Control": "no-store"})
             return
         if route == "/chat":
             extra = None
