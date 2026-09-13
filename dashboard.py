@@ -118,12 +118,57 @@ body{margin:0;background:var(--bg);color:var(--text);font:13px/1.45 var(--sans)}
 @keyframes rot{to{transform:rotate(360deg)}}
 
 /* ---------- views ---------- */
-#chat,#home,#flows,#log,#clients{display:none}
+#chat,#home,#flows,#log,#clients,#sim{display:none}
+body.view-sim #sim{display:flex}
+body.view-sim #main{overflow:hidden}
 body.view-chat #chat{display:flex}
 body.view-home #home{display:flex}
 body.view-flows #flows{display:flex}
 body.view-log #log{display:flex}
 body.view-clients #clients{display:flex}
+
+/* ---------- simulation lab ---------- */
+#sim{flex:1;flex-direction:column;margin:14px 20px 20px;min-height:0;gap:12px}
+.sim-head{display:flex;align-items:center;gap:10px}
+.sim-head .t{font:600 13px var(--sans);color:var(--text)}
+.sim-head .m{font:11px var(--sans);color:var(--muted)}
+#sim-form{background:var(--panel);border:1px solid var(--border);
+  border-radius:8px;padding:14px;display:none;flex-direction:column;gap:9px}
+#sim-form.open{display:flex}
+#sim-form label{font:600 10px var(--sans);text-transform:uppercase;
+  letter-spacing:.06em;color:var(--muted)}
+#sim-form input,#sim-form select,#sim-form textarea{background:var(--panel2);
+  border:1px solid var(--border);color:var(--text);border-radius:6px;
+  padding:7px 10px;font:12.5px var(--sans)}
+#sim-form textarea{min-height:130px;font:12px var(--mono);resize:vertical}
+#sim-form .row{display:flex;gap:8px}
+#sim-personas{display:grid;grid-template-columns:repeat(auto-fill,
+  minmax(250px,1fr));gap:10px}
+.sim-card{background:var(--panel);border:1px solid var(--border);
+  border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:7px}
+.sim-card .n{font:600 13.5px var(--sans);color:var(--text);display:flex;
+  align-items:center;gap:8px}
+.sim-card .k{font:600 9px var(--mono);text-transform:uppercase;
+  letter-spacing:.06em;color:var(--accent);border:1px solid #28405f;
+  border-radius:99px;padding:1px 8px}
+.sim-card .p{font:11px var(--sans);color:var(--muted);line-height:1.5;
+  max-height:48px;overflow:hidden}
+.sim-card .b{display:flex;gap:6px;align-items:center;margin-top:2px}
+.sim-card .rc{font:10.5px var(--mono);color:var(--muted);margin-left:auto}
+#sim-runs{flex:1;min-height:0;overflow-y:auto;background:var(--panel);
+  border:1px solid var(--border);border-radius:8px}
+#sim-runs table{width:100%;border-collapse:collapse;font-size:12px}
+#sim-runs th{position:sticky;top:0;background:var(--panel);z-index:1;
+  font:600 10px var(--sans);text-transform:uppercase;letter-spacing:.06em;
+  color:var(--muted);text-align:left;padding:9px 12px;
+  border-bottom:1px solid var(--border)}
+#sim-runs td{padding:7px 12px;border-bottom:1px solid var(--border);
+  color:var(--text2);vertical-align:middle}
+#sim-runs td.mono{font:11px var(--mono);white-space:nowrap}
+.sim-st{font:600 10.5px var(--mono)}
+.sim-st.running{color:var(--accent)}
+.sim-st.completed{color:var(--green)}
+.sim-st.failed{color:var(--red)}
 
 /* ---------- clients ---------- */
 #clients{flex-direction:column;margin:14px 20px 20px;min-height:0;
@@ -571,6 +616,7 @@ body.view-clients #main{overflow:hidden}
       <div class="nav-item" id="nav-log" data-view="log"><span class="nav-ico">&gt;_</span><span class="nav-label">Terminal</span></div>
       <div class="nav-item" id="nav-flows" data-view="flows"><span class="nav-ico">⇶</span><span class="nav-label">Workflows</span></div>
       <div class="nav-item" id="nav-clients" data-view="clients"><span class="nav-ico">◉</span><span class="nav-label">Clients</span></div>
+      <div class="nav-item" id="nav-sim" data-view="sim"><span class="nav-ico">⚗</span><span class="nav-label">Simulation Lab</span></div>
     </nav>
     <div id="sb-foot">
       <div><span class="dot" id="dot-api"></span><span id="txt-api">Claude API: checking…</span></div>
@@ -597,6 +643,30 @@ body.view-clients #main{overflow:hidden}
 
     <div id="clients">
       <div id="clients-body">Loading…</div>
+    </div>
+
+    <div id="sim">
+      <div class="sim-head"><span class="t">Simulation Lab</span>
+        <span class="m">fake personas interview the real bot · every run is
+        archived and re-runnable</span>
+        <button class="act" id="sim-new" style="margin-left:auto">+ New persona</button></div>
+      <div id="sim-form">
+        <label>Persona name</label>
+        <input id="simf-name" placeholder="Impatient taco stand owner" spellcheck="false">
+        <div class="row" style="align-items:center">
+          <label style="margin:0">Kind</label>
+          <select id="simf-kind">
+            <option value="ai">AI persona — profile roleplayed live (answers whatever the bot asks)</option>
+            <option value="scripted">Scripted — fixed lines replayed in order (deterministic)</option>
+          </select></div>
+        <label id="simf-content-label">Persona profile</label>
+        <textarea id="simf-content" spellcheck="false"></textarea>
+        <div class="row"><button class="act" id="simf-save">Save persona</button>
+          <button class="act" id="simf-cancel">Cancel</button>
+          <span class="m" id="simf-err" style="color:var(--red)"></span></div>
+      </div>
+      <div id="sim-personas"></div>
+      <div id="sim-runs">Loading…</div>
     </div>
 
     <div id="log">
@@ -710,7 +780,8 @@ $('#sb-toggle').onclick = () => {
   if(document.body.className === 'view-home') renderGraph();
 };
 const VIEW_TITLES = {home:'Operations', flows:'Workflows',
-  chat:'Operator Test Chat', log:'Terminal', clients:'Clients'};
+  chat:'Operator Test Chat', log:'Terminal', clients:'Clients',
+  sim:'Simulation Lab'};
 function showView(view){
   document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('active'));
   document.getElementById('nav-' + (view === 'chat' ? 'flows' : view))
@@ -722,6 +793,7 @@ function showView(view){
   if(view === 'flows') loadFlows();
   if(view === 'log') loadLog();
   if(view === 'clients') loadClients();
+  if(view === 'sim') loadSim();
 }
 document.querySelectorAll('.nav-item[data-view]').forEach(item =>
   item.onclick = () => showView(item.dataset.view));
@@ -1018,6 +1090,104 @@ $('#sup-toggle').onclick = async () => {
 };
 
 /* (owner test chat + copy link removed from sidebar) */
+
+/* ================= Simulation Lab ================= */
+const simUI = {personas: [], runs: []};
+const SIMF_HINTS = {
+  ai: ['Persona profile',
+    'Describe the owner: business, services and prices, hours, team, ' +
+    'personality, how they text.\n\nExample:\nFatima, 52, runs a small ' +
+    'bakery in Muharraq. Sells bread (500 fils), cakes from BD 12. Open ' +
+    '6am-2pm, closed Fridays. Types short messages, sometimes impatient, ' +
+    'mixes Arabic words in. Wants a WhatsApp bot for orders. Budget around ' +
+    'BD 150. No website, everything on paper.'],
+  scripted: ['Script (one owner message per line)',
+    'One message per line, sent in order regardless of what the bot asks. ' +
+    'Deterministic - ideal for before/after regression comparisons.'],
+};
+$('#sim-new').onclick = () => {
+  $('#sim-form').classList.add('open');
+  $('#simf-name').focus();
+};
+$('#simf-cancel').onclick = () => $('#sim-form').classList.remove('open');
+$('#simf-kind').onchange = () => {
+  const [label, ph] = SIMF_HINTS[$('#simf-kind').value];
+  $('#simf-content-label').textContent = label;
+  $('#simf-content').placeholder = ph;
+};
+$('#simf-kind').onchange();
+$('#simf-save').onclick = async () => {
+  const name = $('#simf-name').value.trim();
+  const content = $('#simf-content').value.trim();
+  if(!name || !content){
+    $('#simf-err').textContent = 'Name and content are both required.';
+    return;
+  }
+  $('#simf-err').textContent = '';
+  await fetch('/api/sim/personas', {method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({name, kind: $('#simf-kind').value, content})});
+  $('#simf-name').value = ''; $('#simf-content').value = '';
+  $('#sim-form').classList.remove('open');
+  loadSim();
+};
+async function simRun(pid){
+  await fetch('/api/sim/run', {method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({persona_id: pid})});
+  loadSim();
+}
+async function simView(id, what){
+  const d = await (await fetch('/api/sim/run_detail?id='+id)).json();
+  $('#viewer-dl').innerHTML = '';
+  if(what === 'transcript'){
+    $('#viewer-title').textContent = `Run #${id} — transcript · ${d.persona_name}`;
+    $('#viewer-pre').textContent = (d.transcript||[]).map(t =>
+      (t.who === 'bot' ? 'RequirementBot:  ' : 'Persona:         ') + t.text)
+      .join('\n\n');
+  } else {
+    $('#viewer-title').textContent = `Run #${id} — final brief · ${d.persona_name}`;
+    $('#viewer-pre').textContent = d.brief
+      ? JSON.stringify(d.brief, null, 2) : '(no brief — run did not complete)';
+  }
+  $('#viewer').classList.add('open');
+}
+async function loadSim(){
+  try{
+    [simUI.personas, simUI.runs] = await Promise.all([
+      (await fetch('/api/sim/personas')).json(),
+      (await fetch('/api/sim/runs')).json()]);
+  }catch(e){ return; }
+  $('#sim-personas').innerHTML = simUI.personas.map(p => `
+    <div class="sim-card">
+      <span class="n">${esc(p.name)} <span class="k">${
+        p.kind === 'ai' ? 'AI persona' : 'Scripted'}</span></span>
+      <span class="p">${esc(p.content.slice(0, 160))}</span>
+      <span class="b"><button class="act" onclick="simRun(${p.id})">▶ Run</button>
+        <span class="rc">${p.runs} run${p.runs === 1 ? '' : 's'}</span></span>
+    </div>`).join('')
+    || `<div class="empty-state" style="min-height:120px"><b>No personas yet</b>
+        <span>Create a persona to simulate a client interview.</span></div>`;
+  $('#sim-runs').innerHTML = simUI.runs.length
+    ? `<table><tr><th>Run</th><th>Persona</th><th>Started</th><th>Status</th>
+        <th>Interview</th><th>Turns</th><th>Cost</th><th></th></tr>`
+      + simUI.runs.map(r => `<tr>
+        <td class="mono">#${r.id}</td>
+        <td>${esc(r.persona_name)}</td>
+        <td class="mono">${new Date(r.started_ts*1000).toLocaleString()}</td>
+        <td><span class="sim-st ${r.status}">${r.status === 'running'
+          ? '<span class="spin"></span> running' : r.status}</span>${
+          r.error ? ` <span title="${esc(r.error)}">⚠</span>` : ''}</td>
+        <td>${r.interview_complete ? '✓ completed' : '—'}</td>
+        <td class="mono">${r.turns ?? 0}</td>
+        <td class="mono">${r.cost_usd != null ? '$'+r.cost_usd.toFixed(2) : '—'}</td>
+        <td><button class="act" onclick="simView(${r.id},'transcript')">Transcript</button>
+          <button class="act" onclick="simView(${r.id},'brief')">Brief</button>
+          <button class="act" onclick="simRun(${r.persona_id})" title="Run this persona again against the current bot">Re-run</button></td>
+      </tr>`).join('') + '</table>'
+    : `<div class="empty-state"><b>No runs yet</b><span>Run a persona and its
+       full conversation, brief, and cost will be archived here permanently.</span></div>`;
+}
 
 /* ================= Clients ================= */
 async function loadClients(){
@@ -1576,6 +1746,9 @@ setInterval(() => {
 setInterval(() => {
   if(document.body.className === 'view-clients') loadClients();
 }, 5000);
+setInterval(() => {
+  if(document.body.className === 'view-sim') loadSim();
+}, 3000);
 </script></body></html>"""
 
 
@@ -2059,6 +2232,12 @@ class Handler(BaseHTTPRequestHandler):
             self._json(store.recent_terminal_feed())
         elif route == "/api/clients":
             self._json(store.list_clients())
+        elif route == "/api/sim/personas":
+            self._json(store.sim_personas())
+        elif route == "/api/sim/runs":
+            self._json(store.sim_runs())
+        elif route == "/api/sim/run_detail":
+            self._json(store.sim_run(int(q.get("id") or 0)) or {"error": "unknown run"})
         elif route == "/chat/history":
             self._json(chat_history(pid))
         elif route == "/api/review":
@@ -2157,6 +2336,17 @@ class Handler(BaseHTTPRequestHandler):
                                {"label": str(req.get("label", ""))[:80],
                                 "view": str(req.get("view", ""))[:40]})
             out = {"ok": True}
+        elif self.path == "/api/sim/personas":
+            name = str(req.get("name", "")).strip()[:80]
+            kind = req.get("kind") if req.get("kind") in ("ai", "scripted") else "ai"
+            content = str(req.get("content", "")).strip()[:8000]
+            if not name or not content:
+                out = {"error": "name and content required"}
+            else:
+                out = {"id": store.sim_add_persona(name, kind, content)}
+        elif self.path == "/api/sim/run":
+            from orchestrator import simlab
+            out = simlab.start_run(int(req.get("persona_id") or 0))
         elif self.path == "/api/review/resolve":
             ok = store.resolve_review(pid, int(req.get("review_id") or 0),
                                       str(req.get("disposition", ""))[:500]

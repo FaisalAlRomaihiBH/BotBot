@@ -54,6 +54,21 @@ CREATE TABLE IF NOT EXISTS clients(
   id INTEGER PRIMARY KEY AUTOINCREMENT,   -- Client ID: 1, 2, 3, ...
   project_id TEXT NOT NULL UNIQUE REFERENCES projects(id),
   created_ts REAL NOT NULL);
+CREATE TABLE IF NOT EXISTS sim_personas(
+  id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL,
+  kind TEXT NOT NULL,             -- 'scripted' (fixed lines) | 'ai' (roleplayed)
+  content TEXT NOT NULL,          -- script lines / persona profile
+  created_ts REAL NOT NULL);
+CREATE TABLE IF NOT EXISTS sim_runs(
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  persona_id INTEGER NOT NULL REFERENCES sim_personas(id),
+  status TEXT NOT NULL DEFAULT 'running',   -- running | completed | failed
+  interview_complete INTEGER NOT NULL DEFAULT 0,
+  transcript TEXT NOT NULL DEFAULT '[]',    -- [{who, text}] persona|bot
+  brief TEXT,                     -- the final requirements form (JSON)
+  usage TEXT,                     -- {bot:{...}, persona:{...}}
+  cost_usd REAL, error TEXT,
+  started_ts REAL NOT NULL, finished_ts REAL);
 CREATE TABLE IF NOT EXISTS busy(
   project_id TEXT PRIMARY KEY,     -- a model turn is executing for this project
   started_ts REAL NOT NULL);
@@ -422,6 +437,76 @@ def last_provider_event() -> dict | None:
         r = con.execute("SELECT purpose, model, ts, error FROM invocations "
                         "ORDER BY id DESC LIMIT 1").fetchone()
     return dict(r) if r else None
+
+
+# ---------------- simulation lab (personas + permanent run archive) ---------
+def sim_add_persona(name: str, kind: str, content: str) -> int:
+    with _connect() as con:
+        cur = con.execute(
+            "INSERT INTO sim_personas(name, kind, content, created_ts) "
+            "VALUES(?,?,?,?)", (name, kind, content, time.time()))
+        return cur.lastrowid
+
+
+def sim_personas() -> list[dict]:
+    with _connect() as con:
+        rows = con.execute(
+            "SELECT p.*, (SELECT COUNT(*) FROM sim_runs r WHERE "
+            "r.persona_id=p.id) AS runs FROM sim_personas p ORDER BY p.id"
+        ).fetchall()
+    return [dict(r) for r in rows]
+
+
+def sim_persona(pid: int) -> dict | None:
+    with _connect() as con:
+        r = con.execute("SELECT * FROM sim_personas WHERE id=?", (pid,)).fetchone()
+    return dict(r) if r else None
+
+
+def sim_create_run(persona_id: int) -> int:
+    with _connect() as con:
+        cur = con.execute(
+            "INSERT INTO sim_runs(persona_id, started_ts) VALUES(?,?)",
+            (persona_id, time.time()))
+        return cur.lastrowid
+
+
+def sim_update_run(run_id: int, **fields) -> None:
+    keys, vals = [], []
+    for k, v in fields.items():
+        keys.append(f"{k}=?")
+        vals.append(json.dumps(v, ensure_ascii=False)
+                    if k in ("transcript", "brief", "usage") else v)
+    with _connect() as con:
+        con.execute(f"UPDATE sim_runs SET {', '.join(keys)} WHERE id=?",
+                    (*vals, run_id))
+
+
+def sim_runs(limit: int = 200) -> list[dict]:
+    with _connect() as con:
+        rows = con.execute(
+            "SELECT r.id, r.persona_id, r.status, r.interview_complete,"
+            " r.cost_usd, r.error, r.started_ts, r.finished_ts,"
+            " json_array_length(r.transcript) AS turns,"
+            " p.name AS persona_name, p.kind AS persona_kind"
+            " FROM sim_runs r JOIN sim_personas p ON p.id=r.persona_id"
+            " ORDER BY r.id DESC LIMIT ?", (limit,)).fetchall()
+    return [dict(r) for r in rows]
+
+
+def sim_run(run_id: int) -> dict | None:
+    with _connect() as con:
+        r = con.execute(
+            "SELECT r.*, p.name AS persona_name, p.kind AS persona_kind,"
+            " p.content AS persona_content"
+            " FROM sim_runs r JOIN sim_personas p ON p.id=r.persona_id"
+            " WHERE r.id=?", (run_id,)).fetchone()
+    if not r:
+        return None
+    d = dict(r)
+    for k in ("transcript", "brief", "usage"):
+        d[k] = json.loads(d[k]) if d[k] else None
+    return d
 
 
 # ---------------- busy markers (cross-process worker activity) ----------------
