@@ -172,6 +172,15 @@ body.view-log #main{overflow:hidden}
 #log-body .who.client{color:#e5c07b}
 #log-body .who.bot{color:#56b6c2}
 #log-body .mt{color:#dcdcdc}
+#log-body .log-table{width:100%;border-collapse:collapse;font-size:12px;
+  font-family:var(--sans)}
+#log-body .log-table th{position:sticky;top:-12px;background:#111;z-index:1;
+  font:600 10px var(--sans);text-transform:uppercase;letter-spacing:.06em;
+  color:var(--muted);text-align:left;padding:8px 10px;
+  border-bottom:1px solid var(--border)}
+#log-body .log-table td{padding:6px 10px;border-bottom:1px solid #1c1c1c;
+  color:var(--text2);vertical-align:top}
+#log-body .log-table td.cmono{font:11px var(--mono);white-space:nowrap}
 #log-body .cursor{display:inline-block;width:7px;height:13px;
   background:#98c379;vertical-align:-2px;animation:blink 1.1s step-end infinite}
 @keyframes blink{50%{opacity:0}}
@@ -548,14 +557,18 @@ body.view-clients #main{overflow:hidden}
         <span class="dot" style="background:#fbbf24"></span>
         <span class="dot" style="background:#4ade80"></span>
         <span class="t">botbot — terminal (live event log)</span>
-        <select class="log-filter" id="lf-proj" aria-label="Filter by project">
-          <option value="">All projects</option></select>
-        <select class="log-filter" id="lf-client" aria-label="Filter by client">
-          <option value="">All clients</option></select>
+        <input class="log-filter" id="lf-proj" type="text" inputmode="numeric"
+          placeholder="Project #" aria-label="Filter by project number"
+          spellcheck="false">
+        <input class="log-filter" id="lf-client" type="text" inputmode="numeric"
+          placeholder="Client #" aria-label="Filter by client number"
+          spellcheck="false">
         <select class="log-filter" id="lf-bot" aria-label="Filter by bot">
           <option value="">All bots</option>
           <option value="RequirementBot">RequirementBot</option></select>
-        <span class="m" id="log-meta">connecting…</span></div>
+        <span class="m" id="log-meta">connecting…</span>
+        <button class="act" id="log-mode" style="margin-left:10px"
+          title="Switch between raw terminal and a structured table">Structured log</button></div>
       <div id="log-body">Loading…</div>
     </div>
 
@@ -955,44 +968,71 @@ async function loadClients(){
        Client ID, starting at 1.</div>`;
 }
 
+function renderLogTable(events){
+  const rows = events.map(e => {
+    const t = new Date(e.ts*1000).toLocaleTimeString('en-GB');
+    const proj = e.project_id === '__system__' ? 'system'
+      : !e.project_id ? 'console' : `#${e.project_num ?? '?'}`;
+    const client = e.client_id != null ? `Client${e.client_id}` : '—';
+    if(e.kind === 'msg'){
+      const dir = e.role === 'owner' ? 'Client → Bot' : 'Bot → Client';
+      return `<tr><td class="cmono">${t}</td><td class="cmono">${esc(proj)}</td>
+        <td class="cmono">${esc(client)}</td><td>Message</td>
+        <td>${dir}</td><td>${esc(e.text.slice(0, 160))}${
+        e.text.length > 160 ? '…' : ''}</td></tr>`;
+    }
+    const detail = Object.entries(e.payload||{})
+      .map(([k,v]) => `${k}=${typeof v==='object'?JSON.stringify(v):v}`).join(' · ');
+    const actor = (e.actor === 'client' || e.actor === 'owner')
+      && e.client_id != null ? `Client${e.client_id}` : e.actor;
+    return `<tr><td class="cmono">${t}</td><td class="cmono">${esc(proj)}</td>
+      <td class="cmono">${esc(client)}</td><td>Event</td>
+      <td class="cmono">${esc(e.type)} (${esc(actor)})</td>
+      <td>${esc(detail.slice(0, 160))}</td></tr>`;
+  }).join('');
+  $('#log-body').innerHTML = `<table class="log-table"><tr><th>Time</th>
+    <th>Project</th><th>Client</th><th>Kind</th><th>What</th>
+    <th>Details</th></tr>${rows
+    || '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:24px">Nothing matches the filters.</td></tr>'}</table>`;
+}
+
 /* ================= Live Log (system-wide event feed) ================= */
 let logSig = '';
 const logFilter = {proj: '', client: '', bot: ''};
-for(const [id, key] of [['#lf-proj','proj'], ['#lf-client','client'],
-                        ['#lf-bot','bot']]){
-  $(id).onchange = e => { logFilter[key] = e.target.value; logSig = ''; loadLog(); };
+// Project/client are TYPE-AHEAD prefix filters: type 8 and every number
+// starting with 8 stays; type 84 and it narrows to 84, 842, ... Digits only.
+for(const [id, key] of [['#lf-proj','proj'], ['#lf-client','client']]){
+  $(id).oninput = e => {
+    e.target.value = e.target.value.replace(/\D/g, '');
+    logFilter[key] = e.target.value; logSig = ''; loadLog();
+  };
 }
-function fillFilter(sel, values, fmt){
-  const el = $(sel), cur = el.value;
-  const opts = el.querySelectorAll('option:not(:first-child)');
-  if(opts.length === values.length) return;
-  opts.forEach(o => o.remove());
-  values.forEach(v => el.insertAdjacentHTML('beforeend',
-    `<option value="${v}">${fmt(v)}</option>`));
-  el.value = cur;
-}
+$('#lf-bot').onchange = e => {
+  logFilter.bot = e.target.value; logSig = ''; loadLog();
+};
+let logMode = 'term';
+$('#log-mode').onclick = () => {
+  logMode = logMode === 'term' ? 'table' : 'term';
+  $('#log-mode').textContent = logMode === 'term' ? 'Structured log' : 'Terminal view';
+  logSig = ''; loadLog();
+};
 async function loadLog(){
   let events = [];
   try{ events = await (await fetch('/api/log')).json(); }
   catch(e){ $('#log-meta').textContent = 'disconnected'; return; }
   $('#log-meta').textContent = 'live · refreshes every 3s';
-  // filter dropdown choices come from the data itself
-  fillFilter('#lf-proj',
-    [...new Set(events.map(e => e.project_num).filter(n => n != null))]
-      .sort((a,b) => a-b), n => `PROJECT${n}`);
-  fillFilter('#lf-client',
-    [...new Set(events.map(e => e.client_id).filter(n => n != null))]
-      .sort((a,b) => a-b), n => `Client${n}`);
   events = events.filter(e =>
-    (!logFilter.proj || String(e.project_num) === logFilter.proj)
-    && (!logFilter.client || String(e.client_id) === logFilter.client)
+    (!logFilter.proj || String(e.project_num ?? '').startsWith(logFilter.proj))
+    && (!logFilter.client
+        || String(e.client_id ?? '').startsWith(logFilter.client))
     && (!logFilter.bot || e.kind === 'msg'));
   const sig = (events.length
     ? events[0].kind + events[0].seq + ':' + events.length : '0')
-    + JSON.stringify(logFilter);
+    + JSON.stringify(logFilter) + logMode;
   if(sig === logSig) return;   // nothing new — don't disturb the scroll
   logSig = sig;
   const body = $('#log-body');
+  if(logMode === 'table'){ renderLogTable(events); return; }
   // terminal semantics: oldest at the top, newest at the prompt line; stick
   // to the bottom unless the user has scrolled up to read history
   const stick = body.scrollHeight - body.scrollTop - body.clientHeight < 40
@@ -1003,7 +1043,7 @@ async function loadLog(){
     const ts = `<span class="ts">[${
       new Date(e.ts*1000).toLocaleTimeString('en-GB')}]</span>`;
     const proj = e.project_id === '__system__' ? 'system'
-      : `PROJECT${e.project_num ?? '?'}`;
+      : !e.project_id ? 'console' : `PROJECT${e.project_num ?? '?'}`;
     if(e.kind === 'msg'){
       // conversation messages, ops-log style with a direction arrow:
       //   [ts] PROJECT13 Client1 → RequirementBot   (the client writing)
@@ -1023,7 +1063,8 @@ async function loadLog(){
       .map(([k,v]) => `${k}=${typeof v==='object'?JSON.stringify(v):v}`).join(' ');
     const cls = /fail|error/.test(e.type) ? ' err'
       : /review.requested|reset/.test(e.type) ? ' warn' : '';
-    const dim = e.type === 'revision.committed' ? ' dim' : '';
+    const dim = (e.type === 'revision.committed' || e.type === 'ui.click')
+      ? ' dim' : '';
     // 'client'/'owner' role actors resolve to the real Client ID when known
     const actor = (e.actor === 'client' || e.actor === 'owner')
       && e.client_id != null ? `Client${e.client_id}` : e.actor;
@@ -1108,13 +1149,17 @@ function renderFlows(){
       const showWho = s.status==='current' || s.status==='blocked'
         || t.id==='interviewing';
       const m = (f.stage_metrics||{})[t.id];
-      // three simple statuses: the CURRENT step reads Running (with its
-      // spinner) for the whole time the flow sits on it; the comet ring
-      // still marks actual model execution. Details stay in the tooltip
-      // and detail tabs.
+      // state-aware statuses: the Interview step says what is actually
+      // happening (the bot computing vs. waiting on the person); the
+      // architecture gate reads Under Review; other current steps Running.
       const simple = s.status==='completed' ? 'Completed'
-        : (s.status==='current' || s.status==='blocked') ? 'Running' : 'Pending';
+        : (s.status==='current' || s.status==='blocked')
+          ? (t.id==='interviewing'
+              ? (f.busy ? 'Preparing Message' : 'Waiting for Response')
+              : t.id==='architecture' ? 'Under Review' : 'Running')
+          : 'Pending';
       const stSpin = (s.status==='current' || s.status==='blocked')
+        && (t.id!=='interviewing' || f.busy)
         ? '<span class="spin"></span>' : '';
       return `<div class="fc-step ${s.status}${busyCls}">
         <span class="cn" aria-hidden="true"><span class="ico">${STAGE_ICONS[t.id]||'•'}</span>
@@ -1384,6 +1429,18 @@ $('#chat-reset').onclick = async () => {
   chat.complete = false; renderChat(d); $('#chat-input').disabled = false;
 };
 
+/* ---------- UI click telemetry: every console click lands in the log ---- */
+document.addEventListener('click', e => {
+  const t = e.target.closest(
+    'button, a, .nav-item, select, .fc-head, .gnode, .gbtn, input');
+  if(!t) return;
+  const label = (t.getAttribute('aria-label') || t.title
+    || t.textContent || t.placeholder || t.tagName).trim().slice(0, 80);
+  try{ fetch('/api/ui-event', {method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({label, view: document.body.className})}); }catch(_){}
+}, true);
+
 loadSystem();
 setInterval(() => {
   if(document.body.className === 'view-home') loadSystem();
@@ -1546,6 +1603,15 @@ async function upload(fileList){
   $('#thread').scrollTop = $('#thread').scrollHeight;
   $('#file').value = '';
 }
+document.addEventListener('click', e => {
+  const t = e.target.closest('button, a, input, textarea');
+  if(!t) return;
+  const label = (t.getAttribute('aria-label') || t.title || t.textContent
+    || t.placeholder || t.tagName).trim().slice(0, 80);
+  try{ fetch('/client/ui-event', {method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({label})}); }catch(_){}
+}, true);
 $('#send').onclick = send;
 $('#inp').addEventListener('keydown', e => {
   if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); send(); }
@@ -1870,6 +1936,13 @@ class Handler(BaseHTTPRequestHandler):
             req = {}
 
         # ----- client routes: authorized ONLY by the client session cookie
+        if self.path == "/client/ui-event":
+            pid = self._client_pid()
+            if pid is not None:
+                store.append_event(pid, "ui.click", "client",
+                                   {"label": str(req.get("label", ""))[:80]})
+            self._json({"ok": True})
+            return
         if self.path == "/client/send":
             pid = self._client_pid()
             extra = None
@@ -1912,6 +1985,11 @@ class Handler(BaseHTTPRequestHandler):
             out = supervisor.ask(scope, str(req.get("text", "")).strip()[:4000])
         elif self.path == "/api/supervisor/enable":
             out = supervisor.set_enabled(bool(req.get("enabled")))
+        elif self.path == "/api/ui-event":
+            store.append_event(None, "ui.click", "operator",
+                               {"label": str(req.get("label", ""))[:80],
+                                "view": str(req.get("view", ""))[:40]})
+            out = {"ok": True}
         elif self.path == "/api/review/resolve":
             ok = store.resolve_review(pid, int(req.get("review_id") or 0),
                                       str(req.get("disposition", ""))[:500]
