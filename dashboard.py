@@ -566,6 +566,43 @@ body.view-clients #main{overflow:hidden}
         <select class="log-filter" id="lf-bot" aria-label="Filter by bot">
           <option value="">All bots</option>
           <option value="RequirementBot">RequirementBot</option></select>
+        <select class="log-filter" id="lf-kind" aria-label="Filter by activity type">
+          <option value="">All activity</option>
+          <optgroup label="Conversations">
+            <option value="cat:conversations">All conversations</option>
+            <option value="msg:owner">Client → Bot</option>
+            <option value="msg:bot">Bot → Client</option>
+          </optgroup>
+          <optgroup label="Clicks">
+            <option value="cat:clicks">All clicks</option>
+            <option value="click:operator">Operator clicks</option>
+            <option value="click:client">Client clicks</option>
+          </optgroup>
+          <optgroup label="Milestones">
+            <option value="cat:milestones">All milestones</option>
+            <option value="type:project.created">project.created</option>
+            <option value="type:materials.uploaded">materials.uploaded</option>
+            <option value="type:interview.closed">interview.closed</option>
+            <option value="type:readiness.evaluated">readiness.evaluated</option>
+            <option value="type:review.resolved">review.resolved</option>
+            <option value="type:approval.recorded">approval.recorded</option>
+            <option value="type:approval.invalidated">approval.invalidated</option>
+            <option value="type:export.created">export.created</option>
+          </optgroup>
+          <optgroup label="Needs attention">
+            <option value="cat:attention">All needs-attention</option>
+            <option value="type:review.requested">review.requested</option>
+            <option value="type:interview.reset">interview.reset</option>
+          </optgroup>
+          <optgroup label="Failures">
+            <option value="cat:failures">All failures</option>
+            <option value="type:run.failed">run.failed</option>
+            <option value="type:supervisor.failed">supervisor.failed</option>
+          </optgroup>
+          <optgroup label="Housekeeping">
+            <option value="type:revision.committed">revision.committed</option>
+          </optgroup>
+        </select>
         <span class="m" id="log-meta">connecting…</span>
         <button class="act" id="log-mode" style="margin-left:10px"
           title="Switch between raw terminal and a structured table">Structured log</button></div>
@@ -998,7 +1035,7 @@ function renderLogTable(events){
 
 /* ================= Live Log (system-wide event feed) ================= */
 let logSig = '';
-const logFilter = {proj: '', client: '', bot: ''};
+const logFilter = {proj: '', client: '', bot: '', kind: ''};
 // Project/client are TYPE-AHEAD prefix filters: type 8 and every number
 // starting with 8 stays; type 84 and it narrows to 84, 842, ... Digits only.
 for(const [id, key] of [['#lf-proj','proj'], ['#lf-client','client']]){
@@ -1009,6 +1046,30 @@ for(const [id, key] of [['#lf-proj','proj'], ['#lf-client','client']]){
 }
 $('#lf-bot').onchange = e => {
   logFilter.bot = e.target.value; logSig = ''; loadLog();
+};
+const LOG_CATS = {
+  conversations: e => e.kind === 'msg',
+  clicks: e => e.type === 'ui.click',
+  milestones: e => ['project.created','materials.uploaded','interview.closed',
+    'readiness.evaluated','review.resolved','approval.recorded',
+    'approval.invalidated','export.created'].includes(e.type),
+  attention: e => ['review.requested','interview.reset'].includes(e.type),
+  failures: e => /fail|error/.test(e.type || ''),
+};
+function matchKind(e){
+  const v = logFilter.kind;
+  if(!v) return true;
+  const [k, x] = v.split(':');
+  if(k === 'cat') return !!(LOG_CATS[x] && LOG_CATS[x](e));
+  if(k === 'msg') return e.kind === 'msg'
+    && (x === 'owner' ? e.role === 'owner' : e.role !== 'owner');
+  if(k === 'click') return e.type === 'ui.click'
+    && (x === 'operator' ? e.actor === 'operator' : e.actor !== 'operator');
+  if(k === 'type') return e.kind === 'event' && e.type === x;
+  return true;
+}
+$('#lf-kind').onchange = e => {
+  logFilter.kind = e.target.value; logSig = ''; loadLog();
 };
 let logMode = 'term';
 $('#log-mode').onclick = () => {
@@ -1025,7 +1086,8 @@ async function loadLog(){
     (!logFilter.proj || String(e.project_num ?? '').startsWith(logFilter.proj))
     && (!logFilter.client
         || String(e.client_id ?? '').startsWith(logFilter.client))
-    && (!logFilter.bot || e.kind === 'msg'));
+    && (!logFilter.bot || e.kind === 'msg')
+    && matchKind(e));
   const sig = (events.length
     ? events[0].kind + events[0].seq + ':' + events.length : '0')
     + JSON.stringify(logFilter) + logMode;
