@@ -13,6 +13,7 @@ import base64
 import json
 import os
 import re
+import time
 from pathlib import Path
 from typing import Optional
 
@@ -27,6 +28,12 @@ from models import (BusinessRequirements, ConversationAnalysis, InterviewTurn,
 load_dotenv()
 
 ROOT = Path(__file__).parent
+
+# Reply gap beyond which an owner is treated as a slow replier and the
+# conversation's cache breakpoints escalate from 5-minute to 1-hour TTL.
+# 3 minutes: past that, the NEXT gap has a real chance of outliving a
+# 5-minute cache entry, and one expiry costs more than the 1h premium.
+SLOW_GAP_SECONDS = 180
 
 
 class MaterialsAnalyzer:
@@ -234,6 +241,15 @@ class RequirementsBot:
         # Token accounting across the whole interview (cache_read tokens are
         # billed at 10% of the fresh-input price).
         self.usage = {"fresh_in": 0, "cache_read": 0, "cache_write": 0, "out": 0}
+        # ADAPTIVE CACHE TTL. Everyone starts on the cheap 5-minute cache,
+        # which renews itself for free on every hit. A cache entry's lifetime
+        # cannot be extended after it is written, so the first time THIS
+        # owner shows they reply slower than the 5-minute window can survive
+        # (a gap past SLOW_GAP_SECONDS), the conversation escalates to
+        # 1-hour writes and stays there: fast typists never pay the premium,
+        # slow ones stop re-buying the whole prefix every turn.
+        self.cache_ttl: str = "5m"
+        self.last_reply_ts: Optional[float] = None
 
     # ---------------- public API ----------------
     def send(self, message: str) -> tuple[list[str], InterviewTurn]:
@@ -241,6 +257,14 @@ class RequirementsBot:
 
         Returns (messages_to_show, final_turn). Two messages come back when
         the bot paused to analyze the owner's uploaded materials."""
+        # Escalate the cache plan BEFORE this turn's requests are built: a
+        # reply gap the 5-minute cache cannot have survived means the cheap
+        # plan already cost a full rewrite this turn — switch so it is the
+        # last one. One-way: reply rhythm is too noisy to keep flip-flopping,
+        # and a switch itself re-pays the prefix write.
+        if (self.cache_ttl == "5m" and self.last_reply_ts is not None
+                and time.time() - self.last_reply_ts > SLOW_GAP_SECONDS):
+            self.cache_ttl = "1h"
         messages = []
         # Ingest whatever is in uploads/ BEFORE asking anything. Owners say "I
         # have nothing" while a full message log sits in the folder; that used
@@ -291,6 +315,7 @@ class RequirementsBot:
             messages.append(turn.next_message)
 
         self.complete = turn.interview_complete
+        self.last_reply_ts = time.time()   # the owner's reply clock starts now
         return messages, turn
 
     def brief(self, turn: InterviewTurn) -> dict:
@@ -313,6 +338,8 @@ class RequirementsBot:
             "essentials_swept": self.essentials_swept,
             "deferred_nudged": self.deferred_nudged,
             "usage": self.usage,
+            "cache_ttl": self.cache_ttl,
+            "last_reply_ts": self.last_reply_ts,
         }
 
     @classmethod
@@ -341,6 +368,8 @@ class RequirementsBot:
         bot.essentials_swept = state.get("essentials_swept", False)
         bot.deferred_nudged = state.get("deferred_nudged", False)  # likewise
         bot.usage = state.get("usage", bot.usage)  # older sessions lack it
+        bot.cache_ttl = state.get("cache_ttl", "5m")
+        bot.last_reply_ts = state.get("last_reply_ts")
         return bot
 
     # ---------------- internals ----------------
@@ -574,10 +603,11 @@ class RequirementsBot:
         turn. The prompt file is read FRESH so edits take effect on the very
         next turn, not on the next process restart.
 
-        The 1-hour cache TTL (cost solution 2) exists for real owners, who
-        type slower than the default 5-minute cache lives: one expired-cache
-        turn rewrites the whole prefix at full write price, which costs more
-        than many turns of the 1h premium.
+        The cache TTL is ADAPTIVE (cost solution 2): 5-minute breakpoints
+        (which renew for free on every hit) until this owner's reply gaps
+        prove too slow for them, then 1-hour ones — one expired-cache turn
+        rewrites the whole prefix at full write price, which costs more than
+        many turns of the 1h premium. send() owns the escalation decision.
 
         The CURRENT RECORDED FORM STATE block (cost solution 1) rides on the
         final, never-cached user message: state changes every turn, so
@@ -586,7 +616,10 @@ class RequirementsBot:
                        .replace("{analysis}", self.analysis_text)
                        .replace("{format_instructions}",
                                 _compact_format_instructions()))
-        cached = {"cache_control": {"type": "ephemeral", "ttl": "1h"}}
+        cc = {"type": "ephemeral"}
+        if self.cache_ttl == "1h":
+            cc["ttl"] = "1h"
+        cached = {"cache_control": cc}
         messages = [SystemMessage(
             content=[{"type": "text", "text": system_text, **cached}])]
         for i, (role, text) in enumerate(self.chat_history):

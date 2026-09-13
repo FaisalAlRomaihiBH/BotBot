@@ -56,16 +56,18 @@ CREATE TABLE IF NOT EXISTS invocations(
   out_tokens INTEGER, error TEXT, ts REAL NOT NULL, duration REAL);
 """
 
-# $ per 1M tokens (input, output). Cache writes bill 2x input (the bot uses
-# 1-hour cache TTL breakpoints; the 5-minute rate would be 1.25x), cache
-# reads 0.10x. Configuration, not verified live prices; unknown models get
-# no cost rather than a silently borrowed rate.
+# $ per 1M tokens (input, output). Cache reads bill 0.10x input; cache
+# writes 1.25x (5-minute TTL) or 2x (1-hour TTL) — the bot picks the TTL
+# adaptively per conversation and the invocation record does not say which,
+# so writes are priced at the conservative 1h rate: dashboard costs are an
+# upper bound, never an understatement. Configuration, not verified live
+# prices; unknown models get no cost rather than a silently borrowed rate.
 PRICING = {
     "claude-sonnet-5": (2.00, 10.00),
     "claude-opus-5": (5.00, 25.00),
     "claude-haiku-4-5": (1.00, 5.00),
 }
-CACHE_WRITE_MULT = 2.0   # 1h-TTL write premium
+CACHE_WRITE_MULT = 2.0   # 1h-TTL write premium (conservative upper bound)
 
 
 def _cost_usd(model, fresh, cread, cwrite, out) -> float | None:
