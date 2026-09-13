@@ -378,6 +378,49 @@ body.view-clients #main{overflow:hidden}
 @media (prefers-reduced-motion:reduce){
   .gedge.active,.gring{animation:none}
 }
+/* ---------- hierarchical map nodes (HTML circles, animated) ---------- */
+.hnode{position:absolute;border-radius:50%;background:var(--panel2);
+  border:1.2px solid var(--border-hi);display:flex;align-items:center;
+  justify-content:center;text-align:center;cursor:pointer;z-index:2;
+  transition:left .5s ease,top .5s ease,width .5s ease,height .5s ease,
+    opacity .45s ease}
+.hnode:focus{outline:none;border-color:var(--accent)}
+.hnode.planned{border-style:dashed;cursor:default}
+.hnode .ttl{font-weight:600;color:var(--text);line-height:1.18;
+  transition:font-size .5s ease;pointer-events:none}
+.hnode .npill{position:absolute;bottom:-12px;left:50%;
+  transform:translateX(-50%);white-space:nowrap;pointer-events:none;
+  font:10.5px var(--sans);color:var(--text);background:rgba(16,18,22,.55);
+  backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);
+  border:1px solid rgba(110,168,254,.35);border-radius:99px;padding:2.5px 11px}
+.hnode .npill .dot{font-size:9px}
+.hnode .nring{position:absolute;inset:-5px;border-radius:50%;
+  pointer-events:none;display:none;
+  background:conic-gradient(from 0deg, transparent 0 12%,
+    rgba(110,168,254,.12) 35%, rgba(110,168,254,.55) 75%, var(--accent) 100%);
+  -webkit-mask:radial-gradient(closest-side,transparent calc(100% - 6px),
+    #000 calc(100% - 5px));
+  mask:radial-gradient(closest-side,transparent calc(100% - 6px),
+    #000 calc(100% - 5px));
+  animation:spin linear infinite}
+.hnode .nring.idle{display:block;animation-duration:7s;opacity:.75}
+.hnode .nring.running{display:block;animation-duration:1.6s;opacity:1;
+  filter:drop-shadow(0 0 5px rgba(110,168,254,.6))}
+.hnode .nring.center-idle{display:block;animation-duration:9s;opacity:.8}
+.hnode .nring.center-active{display:block;animation-duration:2.2s;opacity:1;
+  filter:drop-shadow(0 0 6px rgba(110,168,254,.6))}
+.hbtn{position:absolute;transform:translateX(-50%);z-index:2;cursor:pointer;
+  background:#1d2a3f;border:1px solid #2b3a52;color:var(--text);
+  border-radius:13px;padding:5px 14px;font:600 11.5px var(--sans);
+  transition:left .5s ease,top .5s ease,opacity .45s ease}
+.hbtn:hover,.hbtn:focus{border-color:var(--accent)}
+.gedge.fadein{animation:edgein .35s ease}
+@keyframes edgein{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){
+  .hnode,.hbtn,.hnode .ttl{transition:none}
+  .hnode .nring{animation:none}
+}
+
 /* frosted-glass status pill on each node's bottom border (chosen style 5) */
 .gpill{position:absolute;transform:translate(-50%,-50%);z-index:3;
   pointer-events:none;white-space:nowrap;
@@ -720,39 +763,12 @@ async function loadSystem(){
   renderGraph();
 }
 
-/* ---------- one geometry pass for the whole map ---------- */
-// BotNode: body circle + status ring + centered title/status text.
-function graphNode(c, x, y, r, lines, status, dotColor, big, ringCls){
-  // Title dead-center of the circle; the status is a small pill badge
-  // overlapping the bottom border — half in, half out (chosen style 4).
-  const tSize = big ? 25 : 15, sSize = big ? 12 : 10.5, lh = big ? 29 : 19;
-  const rows = Array.isArray(status) ? status : [status];
-  const titleTop = y - (lines.length * lh)/2;
-  let title = '';
-  lines.forEach((ln, i) => {
-    title += `<text x="${x}" y="${titleTop + lh/2 + i*lh}" text-anchor="middle"
-      dominant-baseline="central" fill="var(--text)"
-      font-size="${tSize}" font-weight="600">${esc(ln)}</text>`;
-  });
-  // Status pills are frosted-glass HTML overlays (see .gpill) — SVG rects
-  // cannot backdrop-blur. renderGraph collects and lays them.
-  const stat = '';
-  // The static border is neutral on every node — the center included; the
-  // blue belongs to the moving comet ring only.
-  const stroke = c.planned ? 'var(--muted)'
-    : (big || c.enabled) ? 'var(--border-hi)' : 'var(--border)';
-  const dash = (!big && c.planned) ? ' stroke-dasharray="6 5"' : '';
-  // Rings are HTML overlays (see .gring) — graphNode draws no ring itself;
-  // renderGraph collects {x, y, r, cls} and lays the overlays afterwards.
-  const ring = '';
-  return `<g class="gnode${c.planned?' planned':''}" data-cap="${c.id}" tabindex="0"
-      role="button" aria-label="${esc(lines.join(' '))} — ${esc(rows.join(', '))}">
-    <circle class="body" cx="${x}" cy="${y}" r="${r}" fill="var(--panel2)"
-      stroke="${stroke}" stroke-width="${big?1.5:1.2}"${dash}/>
-    ${ring}${title}${stat}
-  </g>`;
-}
-
+/* ---------- hierarchical orchestrator map ----------
+   Two orchestrators: BotBot (platform) owns Chatbot Orchestrator, which owns
+   the four bots. The focused orchestrator sits big in the middle; pressing a
+   small outer orchestrator glides it to the middle, grows it, and its own
+   child nodes emerge from it. Nodes are HTML circles so CSS transitions
+   animate position/size; edges are redrawn after the glide settles. */
 const TITLES = {requirements_bot:['Requirements','Bot'],
   architecture_agent:['Architect','Bot'], builder_agent:['Builder','Bot'],
   evaluation_agent:['Tester/Fixer','Bot']};
@@ -761,22 +777,20 @@ function taskLabel(n){
   return n === 0 ? 'Idle' : n === 1 ? '1 running task' : `${n} running tasks`;
 }
 
+let graphFocus = 'botbot';
+const nodeEls = new Map();
 let graphSig = '';
 function renderGraph(){
   if(!sys) return;
   const wrap = $('#graph-wrap'), svg = $('#graph');
   const W = Math.max(560, wrap.clientWidth), H = Math.max(380, wrap.clientHeight);
-  // Rebuild ONLY when something visible changed. The page polls every 5s,
-  // and rebuilding the rings restarts their orbit from the top — that was
-  // the "glitch": a smooth roll snapped back on every poll.
-  const sig = JSON.stringify([W, H, sys.active_runs.length,
-    sys.health.supervisor_mode,
+  const sig = JSON.stringify([W, H, graphFocus, sys.active_runs.length,
+    (sys.stats.project_states || {}).interviewing || 0,
     sys.capabilities.map(c => [c.id, !!c.enabled, !!c.planned])]);
   if(sig === graphSig) return;
   graphSig = sig;
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
   const cx = W/2, cy = H/2;
-  // measured fit: shrink radii together if the workspace is small
   let rC = 134, rN = 64, margin = 30;
   let ring = Math.min(W, H)/2 - rN - margin;
   const need = rC + rN + 46;
@@ -787,100 +801,120 @@ function renderGraph(){
   }
   const caps = sys.capabilities.filter(c => c.id !== 'ai_supervisor' && !c.hidden);
   const nActive = sys.active_runs.length;
-  const edges = [], nodes = [], ringsArr = [], pillsArr = [];
-  let reqPos = null;
-  caps.forEach((c,i) => {
-    const a = (-90 + i*360/caps.length) * Math.PI/180;
-    const x = cx + ring*Math.cos(a), y = cy + ring*Math.sin(a);
-    const isReq = c.id === 'requirements_bot';
-    if(isReq) reqPos = {x, y, r: rN};
-    const working = isReq && nActive > 0;
-    edges.push(`<line class="gedge${working?' active':''}${c.planned?' planned':''}"
-      x1="${cx + rC*Math.cos(a)}" y1="${cy + rC*Math.sin(a)}"
-      x2="${cx + (ring-rN)*Math.cos(a)}" y2="${cy + (ring-rN)*Math.sin(a)}"/>`);
-    const status = c.planned ? 'Planned'
-      : isReq ? taskLabel(nActive)
-      : (c.enabled ? 'Idle' : 'Disabled');
-    const dot = c.planned ? 'var(--muted)' : working ? 'var(--accent)'
-      : c.enabled ? 'var(--green)' : 'var(--muted)';
-    const ringCls = c.planned ? null : working ? 'running'
-      : c.enabled ? 'idle' : null;
-    if(ringCls) ringsArr.push({x, y, r: rN, cls: ringCls});
-    pillsArr.push({x, y: y + rN, text: status, dot});
-    nodes.push(graphNode(c, x, y, rN, TITLES[c.id]||[c.name], status, dot,
-                         false, ringCls));
-  });
-  const centerRing = nActive ? 'center-active' : 'center-idle';
-  ringsArr.push({x: cx, y: cy, r: rC, cls: centerRing});
-  pillsArr.push({x: cx, y: cy + rC,
-    text: nActive ? 'Working' : 'Idle',
-    dot: nActive ? 'var(--accent)' : 'var(--green)'});
-  // Supervisor status lives under the AI launcher (bottom-right), not here.
-  const center = graphNode({id:'orchestrator', enabled:true}, cx, cy, rC,
-    ['Chatbot','Orchestrator'],
-    [`Chatbot_Orchestrator_Controller: ${nActive ? 'executing' : 'idle'}`],
-    nActive ? 'var(--accent)' : 'var(--green)', true, centerRing);
-  // RequirementsBotEntryAction: New Session pill pinned under the node
-  let entry = '';
-  if(reqPos){
-    // sits below the status pill (which overlaps the border at y + r)
-    const bw = 108, bh = 26, bx = reqPos.x - bw/2, by = reqPos.y + reqPos.r + 20;
-    entry = `<g class="gbtn" id="new-session-btn" tabindex="0" role="button"
-        aria-label="Start a new interview session">
-      <rect x="${bx}" y="${by}" width="${bw}" height="${bh}" rx="13"/>
-      <text x="${reqPos.x}" y="${by + bh/2 + 4}" text-anchor="middle">+ New Session</text>
-    </g>`;
+  // "tasks" = open interviews (a person mid-conversation counts as work in
+  // progress even while the bot waits for their reply); the spinning ring
+  // still marks a model call actually executing this second.
+  const nTasks = (sys.stats.project_states || {}).interviewing || 0;
+  const busy = nActive > 0;
+  const oDot = busy ? 'var(--accent)' : 'var(--green)';
+  const oPill = busy ? 'Working' : 'Idle';
+  const specs = [];
+  if(graphFocus === 'botbot'){
+    specs.push({id:'botbot', title:['BotBot','Orchestrator'], x:cx, y:cy, r:rC,
+      big:true, pill:oPill, dot:oDot, ring: busy ? 'center-active' : 'center-idle'});
+    specs.push({id:'chatbot', title:['Chatbot','Orchestrator'], x:cx, y:cy-ring,
+      r:rN, pill:oPill, dot:oDot, ring: busy ? 'running' : 'idle'});
+  } else {
+    specs.push({id:'chatbot', title:['Chatbot','Orchestrator'], x:cx, y:cy, r:rC,
+      big:true, pill:oPill, dot:oDot, ring: busy ? 'center-active' : 'center-idle'});
+    specs.push({id:'botbot', title:['BotBot','Orchestrator'], x:cx, y:cy-ring,
+      r:rN, pill:'Idle', dot:'var(--green)', ring:'idle'});
+    caps.forEach((c, i) => {
+      const a = (-90 + (i+1)*360/(caps.length+1)) * Math.PI/180;
+      const x = cx + ring*Math.cos(a), y = cy + ring*Math.sin(a);
+      const isReq = c.id === 'requirements_bot';
+      const working = isReq && busy;
+      specs.push({id:c.id, title:TITLES[c.id]||[c.name], x, y, r:rN,
+        planned: !!c.planned,
+        pill: c.planned ? 'Planned'
+          : isReq ? taskLabel(nTasks) : (c.enabled ? 'Idle' : 'Disabled'),
+        dot: c.planned ? 'var(--muted)' : working ? 'var(--accent)'
+          : c.enabled ? 'var(--green)' : 'var(--muted)',
+        ring: c.planned ? null : working ? 'running' : (c.enabled ? 'idle' : null)});
+    });
   }
-  svg.innerHTML = edges.join('') + nodes.join('') + center + entry;
-  // Lay the comet-tail overlay rings over the SVG nodes, mapping viewBox
-  // units through the SVG's actual on-screen scale and letterbox offset
-  // (preserveAspectRatio "meet"), so rings stay glued to their circles at
-  // every pane size.
-  wrap.querySelectorAll('.gring').forEach(el => el.remove());
-  const ew = svg.clientWidth || W, eh = svg.clientHeight || H;
-  const s = Math.min(ew/W, eh/H);
-  const ox = (ew - W*s)/2, oy = (eh - H*s)/2;
-  for(const g of ringsArr){
-    const R = (g.r + 4) * s;   // band hugs the border just outside the stroke
-    const d = document.createElement('div');
-    d.className = 'gring ' + g.cls;
-    d.style.cssText = `left:${(ox + g.x*s - R).toFixed(1)}px;`
-                    + `top:${(oy + g.y*s - R).toFixed(1)}px;`
-                    + `width:${(2*R).toFixed(1)}px;height:${(2*R).toFixed(1)}px`;
-    wrap.appendChild(d);
-  }
-  // frosted-glass status pills, centered on each node's bottom border;
-  // font scales with the map (floored for readability) so pills keep
-  // their proportion to the circles on small windows
-  wrap.querySelectorAll('.gpill').forEach(el => el.remove());
-  const pf = Math.max(9, 10.5 * s);
-  for(const g of pillsArr){
-    const d = document.createElement('div');
-    d.className = 'gpill';
-    d.innerHTML = `<span class="dot" style="color:${g.dot}">●</span> ${esc(g.text)}`;
-    d.style.cssText = `left:${(ox + g.x*s).toFixed(1)}px;`
-                    + `top:${(oy + g.y*s).toFixed(1)}px;`
-                    + `font-size:${pf.toFixed(1)}px;`
-                    + `padding:${(2.5*Math.max(.8,s)).toFixed(1)}px ${(11*Math.max(.8,s)).toFixed(1)}px`;
-    wrap.appendChild(d);
-  }
-  svg.querySelectorAll('.gnode').forEach(g => {
-    const go = () => {
-      const cap = g.dataset.cap;
-      if(cap === 'requirements_bot') showView('flows');
-      else if(cap === 'orchestrator') openOverlay('#sup-drawer', '#mgmt-input');
+  // edges appear once the glide settles
+  const center = specs[0], others = specs.slice(1);
+  clearTimeout(renderGraph._et);
+  svg.innerHTML = '';
+  renderGraph._et = setTimeout(() => {
+    svg.innerHTML = others.map(s => {
+      const dx = s.x-center.x, dy = s.y-center.y, d = Math.hypot(dx,dy)||1;
+      const active = s.id === 'requirements_bot' && busy;
+      return `<line class="gedge fadein${active?' active':''}${s.planned?' planned':''}"
+        x1="${center.x+dx/d*center.r}" y1="${center.y+dy/d*center.r}"
+        x2="${s.x-dx/d*s.r}" y2="${s.y-dy/d*s.r}"/>`;
+    }).join('');
+  }, 540);
+  // nodes: persistent divs so CSS transitions animate the moves
+  const seen = new Set();
+  for(const s of specs){
+    seen.add(s.id);
+    let el = nodeEls.get(s.id);
+    if(!el){
+      el = document.createElement('div');
+      el.className = 'hnode';
+      el.tabIndex = 0;
+      el.setAttribute('role', 'button');
+      el.innerHTML = '<span class="nring"></span><span class="ttl"></span>'
+        + '<span class="npill"></span>';
+      wrap.appendChild(el);
+      nodeEls.set(s.id, el);
+      // emerge from the center of the focused node
+      el.style.left = (center.x-16)+'px'; el.style.top = (center.y-16)+'px';
+      el.style.width = '32px'; el.style.height = '32px'; el.style.opacity = '0';
+      void el.offsetWidth;
+    }
+    el.classList.toggle('planned', !!s.planned);
+    el.style.left = (s.x-s.r)+'px'; el.style.top = (s.y-s.r)+'px';
+    el.style.width = (2*s.r)+'px'; el.style.height = (2*s.r)+'px';
+    el.style.opacity = s.planned ? '.65' : '1';
+    const ttl = el.querySelector('.ttl');
+    ttl.style.fontSize = (s.big ? 25 : 15) + 'px';
+    ttl.innerHTML = s.title.map(esc).join('<br>');
+    el.querySelector('.npill').innerHTML =
+      `<span class="dot" style="color:${s.dot}">●</span> ${esc(s.pill)}`;
+    el.querySelector('.nring').className = 'nring' + (s.ring ? ' '+s.ring : '');
+    el.setAttribute('aria-label', s.title.join(' ') + ' — ' + s.pill);
+    el.onclick = () => {
+      if(s.id === 'botbot' || s.id === 'chatbot'){
+        if(graphFocus !== s.id){ graphFocus = s.id; graphSig = ''; renderGraph(); }
+        else openOverlay('#sup-drawer', '#mgmt-input');
+      } else if(s.id === 'requirements_bot') showView('flows');
     };
-    g.onclick = go;
-    g.onkeydown = e => { if(e.key==='Enter'||e.key===' '){ e.preventDefault(); go(); } };
-  });
-  const nb = svg.querySelector('#new-session-btn');
-  if(nb){
-    // Opens the CLIENT experience in a fresh tab: /chat?new=1 rotates the
-    // client session cookie so the first message starts a brand-new
-    // interview (the previous client session's records are preserved).
-    const start = (e) => { e.stopPropagation(); window.open('/chat?new=1', '_blank'); };
-    nb.onclick = start;
-    nb.onkeydown = e => { if(e.key==='Enter'||e.key===' '){ e.preventDefault(); start(e); } };
+    el.onkeydown = e => {
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); el.onclick(); }
+    };
+  }
+  // exiting nodes retreat into the center and fade
+  for(const [id, el] of [...nodeEls]){
+    if(seen.has(id)) continue;
+    nodeEls.delete(id);
+    el.style.left = (center.x-10)+'px'; el.style.top = (center.y-10)+'px';
+    el.style.width = '20px'; el.style.height = '20px'; el.style.opacity = '0';
+    setTimeout(() => el.remove(), 540);
+  }
+  // New Session action rides under the Requirements Bot node
+  const rspec = specs.find(s => s.id === 'requirements_bot');
+  let nb = document.getElementById('new-session-btn');
+  if(rspec){
+    if(!nb){
+      nb = document.createElement('button');
+      nb.id = 'new-session-btn';
+      nb.className = 'hbtn';
+      nb.textContent = '+ New Session';
+      nb.setAttribute('aria-label', 'Start a new interview session');
+      nb.onclick = e => { e.stopPropagation(); window.open('/chat?new=1', '_blank'); };
+      wrap.appendChild(nb);
+      nb.style.opacity = '0';
+      void nb.offsetWidth;
+    }
+    nb.style.left = rspec.x+'px';
+    nb.style.top = (rspec.y+rspec.r+22)+'px';
+    nb.style.opacity = '1';
+  } else if(nb){
+    nb.style.opacity = '0';
+    setTimeout(() => { if(graphFocus === 'botbot') nb.remove(); }, 540);
   }
 }
 let rsz;
