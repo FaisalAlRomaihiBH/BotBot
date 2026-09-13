@@ -161,6 +161,8 @@ body.view-flows #flows{display:flex}
 .fc-step .mline{font:10px var(--mono);color:var(--text2);margin-top:4px;
   line-height:1.5}
 .fc-step .mline b{color:var(--text);font-weight:500}
+/* label / bot / status / metrics stack under each other */
+.fc-step>div{display:flex;flex-direction:column;align-items:center;min-width:0}
 .fc-step .lbl{margin-top:7px;font-size:13px;color:var(--text2);line-height:1.3}
 .fc-step .who{font-size:11px;color:var(--muted);margin-top:2px}
 .fc-step .st{font:600 10px var(--mono);margin-top:3px;color:var(--muted);
@@ -211,7 +213,7 @@ body.view-flows #flows{display:flex}
   .fc-step .lbl{margin-top:0}
   .fc-step .st{max-width:none}
   .fc-step::before{display:none}
-  .fc-step>div{display:flex;flex-direction:column}
+  .fc-step>div{align-items:flex-start}
 }
 /* Home is the full remaining workspace: no narrow card, no page scroll */
 #home{flex:1;flex-direction:column;min-height:0;overflow:hidden}
