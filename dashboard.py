@@ -574,9 +574,7 @@ body.view-clients #main{overflow:hidden}
     </nav>
     <div id="sb-foot">
       <div><span class="dot" id="dot-api"></span><span id="txt-api">Claude API: checking…</span></div>
-      <div><span class="dot" id="dot-store"></span><span id="txt-store">store: checking…</span></div>
-      <div><span class="dot" id="dot-provider"></span><span id="txt-provider">model: no calls yet</span></div>
-      <div><span class="dot" id="dot-sup"></span><span id="txt-sup">supervisor: —</span></div>
+      <div><span class="dot" id="dot-store"></span><span id="txt-store">Database: checking…</span></div>
     </div>
   </aside>
 
@@ -754,14 +752,9 @@ async function loadSystem(){
   $('#txt-api').textContent = 'Claude API: ' + api.status;
   $('#txt-api').title = api.detail || '';
   $('#dot-store').className = 'dot ' + (s.health.store_ok ? 'ok' : 'bad');
-  $('#txt-store').textContent = 'store: ' + (s.health.store_ok ? 'writable' : 'ERROR');
-  $('#dot-provider').className = 'dot ' + (lc ? (lc.error ? 'bad' : 'ok') : '');
-  $('#txt-provider').textContent = lc
-    ? 'model: last ' + lc.purpose + (lc.error ? ' FAILED' : ' ok')
-    : 'model: no calls yet';
+  $('#txt-store').textContent = 'Database: ' + (s.health.store_ok ? 'connected' : 'error');
+  $('#txt-store').title = s.health.error || '';
   const mode = s.health.supervisor_mode;
-  $('#dot-sup').className = 'dot ' + (mode==='advisory' ? 'ok' : '');
-  $('#txt-sup').textContent = 'supervisor: ' + mode;
   $('#sup-mode').className = 'badge ' + (mode==='advisory' ? 'completed' : 'idle');
   $('#sup-mode-txt').textContent = mode==='advisory' ? 'Advisory' : 'Disabled';
   $('#sup-toggle').textContent = mode==='advisory' ? 'Disable' : 'Enable advisory mode';
