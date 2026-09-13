@@ -194,6 +194,7 @@ body.view-flows #flows{display:flex}
 .fc-step.current .lbl{color:var(--text);font-weight:600}
 .fc-step.current .st{color:var(--accent)}
 .fc-step.completed .st{color:var(--green)}
+.fc-step .st .spin{width:9px;height:9px;margin-right:5px;vertical-align:-1px}
 .fc-step.current.busy .cn::after{content:'';position:absolute;inset:-5px;
   border-radius:50%;pointer-events:none;
   background:conic-gradient(from 0deg, transparent 0 12%,
@@ -902,16 +903,20 @@ function renderFlows(){
       const showWho = s.status==='current' || s.status==='blocked'
         || t.id==='interviewing';
       const m = (f.stage_metrics||{})[t.id];
-      // three simple statuses; the detailed reason lives in the card's
-      // detail tabs (aria keeps it for screen readers)
+      // three simple statuses: the CURRENT step reads Running (with its
+      // spinner) for the whole time the flow sits on it; the comet ring
+      // still marks actual model execution. Details stay in the tooltip
+      // and detail tabs.
       const simple = s.status==='completed' ? 'Completed'
-        : (s.status==='current' && f.busy) ? 'Running' : 'Pending';
+        : (s.status==='current' || s.status==='blocked') ? 'Running' : 'Pending';
+      const stSpin = (s.status==='current' || s.status==='blocked')
+        ? '<span class="spin"></span>' : '';
       return `<div class="fc-step ${s.status}${busyCls}">
         <span class="cn" aria-hidden="true"><span class="ico">${STAGE_ICONS[t.id]||'•'}</span>
           <span class="numb">${badge}</span></span>
         <div><span class="lbl">${esc(t.label)}</span>
         ${showWho ? `<span class="who">${esc(t.who)}</span>` : ''}
-        <span class="st" title="${esc(s.note||'')}">${simple}</span>
+        <span class="st" title="${esc(s.note||'')}">${stSpin}${simple}</span>
         ${m && m.calls ? `<span class="mline">
           <b>${m.cost_usd!=null ? '$'+m.cost_usd.toFixed(2) : 'cost —'}</b>
           · ${fmtTok(m.tokens_in)} in · ${fmtTok(m.tokens_out)} out
@@ -931,14 +936,15 @@ function renderFlows(){
         aria-expanded="${flowsUI.expanded.has(f.flow_id)}"
         aria-label="Flow ${esc(f.name)} — expand details">
         <div class="fc-left">
+          <span class="fc-flowstate">${f.finished
+            ? `<span class="fs-done">✓</span> Completed`
+            : `<span class="spin"></span>${esc(FLOW_STATE[f.current_stage]||'—')}`}</span>
           <span class="fc-idbig" title="${esc(f.flow_id)}">Project #${f.num ?? '—'}
             ${f.is_test ? `<span class="fc-test">Test</span>` : ''}</span>
           <span class="fc-ts">${f.created_ts
             ? new Date(f.created_ts*1000).toLocaleString([], {month:'short',
-                day:'numeric', hour:'2-digit', minute:'2-digit'}) : '—'}</span>
-          <span class="fc-flowstate">${f.finished
-            ? `<span class="fs-done">✓</span> Completed`
-            : `<span class="spin"></span>${esc(FLOW_STATE[f.current_stage]||'—')}`}</span>
+                day:'numeric', hour:'2-digit', minute:'2-digit',
+                second:'2-digit'}) : '—'}</span>
         </div>
         <span class="fc-cost"><em>${f.finished ? 'Total Cost' : 'Running cost'}</em>
           <b>${f.total_cost_usd != null ? '$'+f.total_cost_usd.toFixed(2) : '—'}</b></span>
