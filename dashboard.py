@@ -1325,11 +1325,9 @@ p.sub{color:var(--text2);margin:0 0 24px;font-size:12.5px}
 .note{font:10px var(--mono)}
 .note.cur{color:var(--accent)}
 .note.done{color:var(--green)}
-.metrics{font:10px var(--mono);color:var(--text2);line-height:1.7}
-.metrics b{color:var(--text);font-weight:500}
 .path{display:flex}
-.st{flex:1;min-width:132px;display:flex;flex-direction:column;align-items:center;
-  text-align:center;position:relative;padding:0 6px}
+.st{flex:1;min-width:158px;display:flex;flex-direction:column;align-items:center;
+  text-align:center;position:relative;padding:0 7px}
 .st::before{content:'';position:absolute;top:15px;left:calc(-50% + 16px);
   width:calc(100% - 32px);height:1.5px;background:var(--border)}
 .st:first-child::before{display:none}
@@ -1342,42 +1340,56 @@ p.sub{color:var(--text2);margin:0 0 24px;font-size:12.5px}
   box-shadow:0 0 10px rgba(110,168,254,.35)}
 .st.plan .cn{border-style:dashed}
 
+/* the shared metric unit: each metric is its OWN labeled segment */
+.kv{display:flex;flex-direction:column;padding:2px 9px;min-width:0}
+.kv em{font:600 8px var(--sans);font-style:normal;text-transform:uppercase;
+  letter-spacing:.07em;color:var(--muted)}
+.kv b{font:500 10.5px var(--mono);color:var(--text);white-space:nowrap}
+.kvgrid{display:grid;grid-template-columns:repeat(3,auto);justify-content:center;
+  margin-top:6px}
+.kvgrid .kv{border-right:1px solid var(--border)}
+.kvgrid .kv:nth-child(3n){border-right:none}
+.kvgrid .kv:nth-child(-n+3){border-bottom:1px solid var(--border)}
+
 /* B — frosted metric chip */
 .vB .chip{margin-top:6px;background:rgba(16,18,22,.55);
-  border:1px solid rgba(110,168,254,.22);border-radius:10px;padding:5px 10px;
+  border:1px solid rgba(110,168,254,.22);border-radius:10px;padding:4px 4px;
   backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
+.vB .chip .kvgrid{margin-top:0}
 .vB .st.cur .chip{border-color:rgba(110,168,254,.55)}
 
 /* C — micro-table */
-.vC .mt{margin-top:6px;width:100%;max-width:150px;font:10px var(--mono)}
+.vC .mt{margin-top:6px;width:100%;max-width:158px;font:10px var(--mono)}
 .vC .mt .r{display:flex;justify-content:space-between;
-  border-bottom:1px dashed var(--border);padding:2px 2px}
+  border-bottom:1px dashed var(--border);padding:2.5px 2px}
 .vC .mt .r:last-child{border-bottom:none}
-.vC .mt .k{color:var(--muted)}
+.vC .mt .k{color:var(--muted);text-transform:uppercase;font-size:8.5px;
+  letter-spacing:.06em;align-self:center}
 .vC .mt .v{color:var(--text)}
 
 /* D — cost in the circle */
-.vD .cn{width:54px;height:54px;font:600 11px var(--mono);flex-direction:column;
-  display:flex;align-items:center;justify-content:center}
+.vD .cn{width:54px;height:54px;font:600 11px var(--mono);
+  display:flex;flex-direction:column;align-items:center;justify-content:center}
 .vD .st::before{top:27px}
-.vD .cn small{font-size:8px;color:var(--muted);font-weight:400;line-height:1}
+.vD .cn small{font-size:8px;color:var(--muted);font-weight:400;line-height:1.4}
 
 /* E — unified metric band */
 .vE .band{display:flex;border:1px solid var(--border);border-radius:7px;
   margin-top:12px;background:var(--panel2)}
-.vE .cell{flex:1;min-width:132px;padding:7px 10px;border-right:1px solid var(--border);
-  text-align:center}
+.vE .cell{flex:1;min-width:158px;padding:6px 6px;border-right:1px solid var(--border)}
 .vE .cell:last-child{border-right:none}
 .vE .cell.cur{box-shadow:inset 0 2px 0 var(--accent)}
+.vE .cell .kvgrid{margin-top:0}
 </style></head><body>
 <h1>Style 1 variants — circles + metrics</h1>
-<p class="sub">Five treatments of the layout you liked. Data is mocked.
-Tell Claude which letter you want.</p>
+<p class="sub">Five treatments of the layout you liked. Every stage that ran
+shows all six metrics — model, turns, time, in, out, cost — each in its own
+separated segment. Data is mocked. Tell Claude which letter you want.</p>
 <div id="list"></div>
 <script>
 const S=[
  {n:'Interviewing', bot:'RequirementsBot', st:'done', note:'Interview closed',
-  tin:'182.4k', tout:'41.2k', cost:'$1.24', time:'6m 12s', tries:'14 turns', model:'sonnet-5'},
+  tin:'182.4k', tout:'41.2k', cost:'$1.24', time:'6m 12s', turns:'14', model:'sonnet-5'},
  {n:'Architecture', bot:'Architect Bot', st:'cur', note:'Awaiting approval · 2 gaps'},
  {n:'Building', bot:'Builder Bot', st:'plan', note:'Planned'},
  {n:'Testing & Repair', bot:'Tester/Fixer Bot', st:'plan', note:'Planned'},
@@ -1392,41 +1404,44 @@ const head = (s,i) => `<span class="cn">${mark(s,i)}</span>
   <span class="stage-name">${s.n}</span><span class="bot">${s.bot}</span>
   <span class="note ${s.st}" style="margin-top:2px">${s.note}</span>`;
 const has = s => !!s.cost;
+const KV = (s, skip) => ['in','out','cost','time','turns','model']
+  .filter(k => k !== skip)
+  .map(k => `<span class="kv"><em>${k}</em><b>${
+    {in:s.tin,out:s.tout,cost:s.cost,time:s.time,turns:s.turns,model:s.model}[k]
+  }</b></span>`).join('');
 const V={};
-V['A']=['Classic stack','Plain metric lines under each bot — exactly the sample you picked.',
+V['A']=['Classic stack','The sample you picked, with each metric in its own labeled, divided segment.',
  ()=>`<div class="path vA">${S.map((s,i)=>`<div class="st ${s.st}">${head(s,i)}
-   ${has(s)?`<div class="metrics">in <b>${s.tin}</b> · out <b>${s.tout}</b> · <b>${s.cost}</b><br>
-   <span class="mut">${s.time} · ${s.tries} · ${s.model}</span></div>`:''}</div>`).join('')}</div>`];
-V['B']=['Frosted metric chip','Metrics live in a small glass chip under each stage — matches your status pills.',
+   ${has(s)?`<div class="kvgrid">${KV(s)}</div>`:''}</div>`).join('')}</div>`];
+V['B']=['Frosted metric chip','The same separated segments inside a glass chip — matches your status pills.',
  ()=>`<div class="path vB">${S.map((s,i)=>`<div class="st ${s.st}">${head(s,i)}
-   ${has(s)?`<div class="chip"><div class="metrics">in <b>${s.tin}</b> · out <b>${s.tout}</b><br>
-   <b>${s.cost}</b> · ${s.time}</div></div>`:''}</div>`).join('')}</div>`];
-V['C']=['Micro-table','Tiny label/value rows with dashed separators — the most readable numbers.',
+   ${has(s)?`<div class="chip"><div class="kvgrid">${KV(s)}</div></div>`:''}</div>`).join('')}</div>`];
+V['C']=['Micro-table','Six label/value rows with dashed separators — the most readable numbers.',
  ()=>`<div class="path vC">${S.map((s,i)=>`<div class="st ${s.st}">${head(s,i)}
    ${has(s)?`<div class="mt">
      <div class="r"><span class="k">in</span><span class="v">${s.tin}</span></div>
      <div class="r"><span class="k">out</span><span class="v">${s.tout}</span></div>
      <div class="r"><span class="k">cost</span><span class="v">${s.cost}</span></div>
      <div class="r"><span class="k">time</span><span class="v">${s.time}</span></div>
+     <div class="r"><span class="k">turns</span><span class="v">${s.turns}</span></div>
+     <div class="r"><span class="k">model</span><span class="v">${s.model}</span></div>
    </div>`:''}</div>`).join('')}</div>`];
-V['D']=['Cost in the circle','Bigger circles carry the cost itself; tokens and time in one line below.',
+V['D']=['Cost in the circle','Bigger circles carry the cost; the other five metrics in separated segments below.',
  ()=>`<div class="path vD">${S.map((s,i)=>`<div class="st ${s.st}">
    ${has(s)?`<span class="cn"><span>${s.cost}</span><small>spent</small></span>`
      :`<span class="cn">${mark(s,i)}</span>`}
    <span class="stage-name">${s.n}</span><span class="bot">${s.bot}</span>
    <span class="note ${s.st}" style="margin-top:2px">${s.note}</span>
-   ${has(s)?`<div class="metrics">in <b>${s.tin}</b> · out <b>${s.tout}</b> · ${s.time}</div>`:''}</div>`).join('')}</div>`];
-V['E']=['Unified metric band','Clean circle row on top; one bordered band beneath with a metrics column per stage.',
+   ${has(s)?`<div class="kvgrid">${KV(s,'cost')}</div>`:''}</div>`).join('')}</div>`];
+V['E']=['Unified metric band','Clean circle row on top; a bordered band beneath with a separated-metrics column per stage.',
  ()=>`<div class="vE"><div class="path">${S.map((s,i)=>`<div class="st ${s.st}">${head(s,i)}</div>`).join('')}</div>
   <div class="band">${S.map(s=>`<div class="cell ${s.st==='cur'?'cur':''}${s.st==='plan'?' plan':''}">
-    ${has(s)?`<div class="metrics">in <b>${s.tin}</b> · out <b>${s.tout}</b><br>
-    <b>${s.cost}</b> · ${s.time} · ${s.tries}</div>`
-    :`<div class="metrics mut">—</div>`}</div>`).join('')}</div></div>`];
+    ${has(s)?`<div class="kvgrid">${KV(s)}</div>`
+    :`<div class="mut" style="text-align:center;font:10px var(--mono);padding:8px 0">—</div>`}</div>`).join('')}</div></div>`];
 document.getElementById('list').innerHTML =
   Object.keys(V).map(k=>`<div class="sample"><h2>${k}. ${V[k][0]}</h2>
    <p class="d">${V[k][1]}</p>${HD}${V[k][2]()}</div>`).join('');
 </script></body></html>"""
-
 # ============================ BACKEND ============================
 def _project_of(value) -> str:
     pid = str((value.get("project") if isinstance(value, dict) else value) or "").strip()
