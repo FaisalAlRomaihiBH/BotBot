@@ -506,17 +506,23 @@ def sim_update_run(run_id: int, **fields) -> None:
                     (*vals, run_id))
 
 
-def sim_runs(limit: int = 200) -> list[dict]:
+def sim_runs(limit: int = 300) -> list[dict]:
     with _connect() as con:
         rows = con.execute(
             "SELECT r.id, r.persona_id, r.status, r.interview_complete,"
-            " r.cost_usd, r.error, r.started_ts, r.finished_ts,"
+            " r.cost_usd, r.error, r.started_ts, r.finished_ts, r.usage,"
+            " r.brief IS NOT NULL AS has_brief,"
             " json_array_length(r.transcript) AS turns,"
             " p.name AS persona_name, p.kind AS persona_kind,"
-            " p.industry, p.company_size"
+            " p.industry, p.company_size, p.traits"
             " FROM sim_runs r JOIN sim_personas p ON p.id=r.persona_id"
             " ORDER BY r.id DESC LIMIT ?", (limit,)).fetchall()
-    return [dict(r) for r in rows]
+    out = []
+    for r in rows:
+        d = dict(r)
+        d["usage"] = json.loads(d["usage"]) if d["usage"] else None
+        out.append(d)
+    return out
 
 
 def sim_run(run_id: int) -> dict | None:

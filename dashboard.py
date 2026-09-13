@@ -211,6 +211,20 @@ body.view-clients #clients{display:flex}
 .sim-meta span{font:10px var(--mono);color:var(--text2);
   border:1px solid var(--border);border-radius:99px;padding:1px 8px}
 
+.simr-grid{display:grid;grid-template-columns:repeat(auto-fill,
+  minmax(235px,1fr));gap:10px;margin-top:4px}
+.simr-card{background:var(--panel2);border:1px solid var(--border);
+  border-radius:8px;padding:11px 13px;display:flex;flex-direction:column;
+  gap:6px;align-items:center;text-align:center}
+.simr-card .n{font:600 13px var(--sans);color:var(--text)}
+.simr-card .p{font:10.5px var(--sans);color:var(--muted);line-height:1.45}
+.simr-card .rtotal{font:600 13px var(--mono);color:var(--text);
+  border:1px solid var(--border-hi);border-radius:99px;padding:2px 14px}
+.simr-card .kv{display:flex;justify-content:space-between;width:100%;
+  font:10.5px var(--mono);color:var(--muted)}
+.simr-card .kv b{color:var(--text2);font-weight:500;white-space:nowrap}
+.simr-card .b{display:flex;gap:6px;margin-top:3px}
+
 /* ---------- clients ---------- */
 #clients{flex-direction:column;margin:14px 20px 20px;min-height:0;
   background:var(--panel);border:1px solid var(--border);border-radius:8px}
@@ -704,27 +718,7 @@ body.view-clients #main{overflow:hidden}
           <span class="m" id="simt-note">estimated cost: ~$0.20-0.40 per
             persona + ~$0.40-0.90 for the Opus analysis</span></div>
       </div>
-      <div id="sim-tests"></div>
-      <div class="sim-head" style="margin-top:4px">
-        <span class="t">Personas</span>
-        <button class="act" id="sim-new" style="margin-left:auto">+ New persona</button></div>
-      <div id="sim-form">
-        <label>Persona name</label>
-        <input id="simf-name" placeholder="Impatient taco stand owner" spellcheck="false">
-        <div class="row" style="align-items:center">
-          <label style="margin:0">Kind</label>
-          <select id="simf-kind">
-            <option value="ai">AI persona — profile roleplayed live (answers whatever the bot asks)</option>
-            <option value="scripted">Scripted — fixed lines replayed in order (deterministic)</option>
-          </select></div>
-        <label id="simf-content-label">Persona profile</label>
-        <textarea id="simf-content" spellcheck="false"></textarea>
-        <div class="row"><button class="act" id="simf-save">Save persona</button>
-          <button class="act" id="simf-cancel">Cancel</button>
-          <span class="m" id="simf-err" style="color:var(--red)"></span></div>
-      </div>
-      <div id="sim-personas"></div>
-      <div id="sim-runs">Loading…</div>
+      <div id="sim-tests" style="flex:1;min-height:0;overflow-y:auto"></div>
     </div>
 
     <div id="log">
@@ -1150,23 +1144,7 @@ $('#sup-toggle').onclick = async () => {
 /* (owner test chat + copy link removed from sidebar) */
 
 /* ================= Simulation Lab ================= */
-const simUI = {personas: [], runs: []};
-const SIMF_HINTS = {
-  ai: ['Persona profile',
-    'Describe the owner: business, services and prices, hours, team, ' +
-    'personality, how they text.\n\nExample:\nFatima, 52, runs a small ' +
-    'bakery in Muharraq. Sells bread (500 fils), cakes from BD 12. Open ' +
-    '6am-2pm, closed Fridays. Types short messages, sometimes impatient, ' +
-    'mixes Arabic words in. Wants a WhatsApp bot for orders. Budget around ' +
-    'BD 150. No website, everything on paper.'],
-  scripted: ['Script (one owner message per line)',
-    'One message per line, sent in order regardless of what the bot asks. ' +
-    'Deterministic - ideal for before/after regression comparisons.'],
-};
-$('#sim-new').onclick = () => {
-  $('#sim-form').classList.add('open');
-  $('#simf-name').focus();
-};
+const simUI = {runs: [], tests: []};
 $('#sim-addtest').onclick = () => $('#simt-form').classList.add('open');
 $('#simt-cancel').onclick = () => $('#simt-form').classList.remove('open');
 $('#simt-start').onclick = async () => {
@@ -1181,12 +1159,56 @@ const SIMT_STEPS = [
   ['starting', 'Start'], ['generating', 'Generate Personas'],
   ['running', 'Run Interviews'], ['analyzing', 'Analyze'],
   ['completed', 'Report Ready']];
+
+function simRunCard(r){
+  if(!r) return '';
+  const u = (r.usage || {});
+  const bu = u.bot || {}, pu = u.persona || {};
+  const inTok = (bu.fresh_in||0) + (bu.cache_read||0) + (bu.cache_write||0);
+  const dur = r.finished_ts ? fmtSecs(r.finished_ts - r.started_ts)
+    : fmtSecs(Date.now()/1000 - r.started_ts);
+  const st = r.status === 'running'
+    ? '<span class="sim-st running"><span class="spin"></span> Interviewing</span>'
+    : r.status === 'failed'
+      ? `<span class="sim-st failed" title="${esc(r.error||'')}">failed</span>`
+      : `<span class="sim-st completed">${r.interview_complete
+          ? 'completed ✓' : 'ended (incomplete)'}</span>`;
+  return `<div class="simr-card">
+    <span class="n">${esc(r.persona_name)}</span>
+    <span class="sim-meta">
+      ${r.industry ? `<span>${esc(r.industry)}</span>` : ''}
+      ${r.company_size ? `<span>${esc(r.company_size)}</span>` : ''}
+    </span>
+    ${r.traits ? `<span class="p">${esc(r.traits)}</span>` : ''}
+    ${st}
+    <b class="rtotal">${r.cost_usd != null ? '$'+r.cost_usd.toFixed(2) : '—'}</b>
+    <span class="kv"><span>Bot Cost · Persona Cost</span><b>${
+      fmtPairCost(bu, 'claude')} · ${fmtPairCost(pu, 'haiku')}</b></span>
+    <span class="kv"><span>In · Out Tokens</span><b>${fmtTok(inTok)} · ${
+      fmtTok(bu.out||0)}</b></span>
+    <span class="kv"><span>Cache Read · Write</span><b>${
+      fmtTok(bu.cache_read||0)} · ${fmtTok(bu.cache_write||0)}</b></span>
+    <span class="kv"><span>Turns</span><b>${r.turns ?? 0}</b></span>
+    <span class="kv"><span>Duration</span><b>${dur}</b></span>
+    <span class="b">
+      <button class="act" onclick="simView(${r.id},'transcript')">View Input</button>
+      ${r.has_brief ? `<button class="act" onclick="simView(${r.id},'brief')">View Output</button>` : ''}
+    </span>
+  </div>`;
+}
+function fmtPairCost(u, fam){
+  const p = fam === 'haiku' ? [1.0, 5.0] : [2.0, 10.0];
+  const c = ((u.fresh_in||0)*p[0] + (u.cache_write||0)*p[0]*2
+    + (u.cache_read||0)*p[0]*0.10 + (u.out||0)*p[1]) / 1e6;
+  return '$' + c.toFixed(2);
+}
 function simtCard(t){
   const order = SIMT_STEPS.map(s => s[0]);
   const failed = t.status === 'failed';
   const idx = failed ? order.length : order.indexOf(t.status);
-  const doneRuns = simUI.runs.filter(r =>
-    t.run_ids.includes(r.id) && r.status !== 'running').length;
+  const runs = t.run_ids.map(id => simUI.runs.find(r => r.id === id))
+    .filter(Boolean);
+  const doneRuns = runs.filter(r => r.status !== 'running').length;
   const steps = SIMT_STEPS.slice(1).map(([key, label], i) => {
     const pos = i + 1;
     const cls = failed && pos >= idx ? 'fail'
@@ -1203,12 +1225,17 @@ function simtCard(t){
       cls === 'done' ? '✓' : pos}</span><span class="lbl">${label}</span>
       <span class="st">${st}</span></div>`;
   }).join('');
+  // identity coverage line: what kinds of businesses this test exercised
+  const coverage = [...new Set(runs.map(r => r.industry).filter(Boolean))];
   return `<div class="simt-card">
     <div class="simt-top"><span class="n">Test ${t.id} · Persona Sweep &amp;
       Analysis (${t.params.count} personas)</span>
       <span class="ts">${new Date(t.started_ts*1000).toLocaleString()}</span>
       <span class="cost">${t.cost_usd != null ? '$'+t.cost_usd.toFixed(2) : ''}</span></div>
+    ${coverage.length ? `<span class="sim-meta" style="margin-top:8px">${
+      coverage.map(c => `<span>${esc(c)}</span>`).join('')}</span>` : ''}
     <div class="simt-path">${steps}</div>
+    <div class="simr-grid">${runs.map(simRunCard).join('')}</div>
     <div class="simt-actions">
       ${t.has_report ? `<button class="act" onclick="simReport(${t.id})">View Report</button>` : ''}
       ${t.status === 'completed' ? `<button class="act"
@@ -1224,39 +1251,11 @@ async function simReport(id){
   $('#viewer-pre').textContent = d.report || '(no report)';
   $('#viewer').classList.add('open');
 }
-$('#simf-cancel').onclick = () => $('#sim-form').classList.remove('open');
-$('#simf-kind').onchange = () => {
-  const [label, ph] = SIMF_HINTS[$('#simf-kind').value];
-  $('#simf-content-label').textContent = label;
-  $('#simf-content').placeholder = ph;
-};
-$('#simf-kind').onchange();
-$('#simf-save').onclick = async () => {
-  const name = $('#simf-name').value.trim();
-  const content = $('#simf-content').value.trim();
-  if(!name || !content){
-    $('#simf-err').textContent = 'Name and content are both required.';
-    return;
-  }
-  $('#simf-err').textContent = '';
-  await fetch('/api/sim/personas', {method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({name, kind: $('#simf-kind').value, content})});
-  $('#simf-name').value = ''; $('#simf-content').value = '';
-  $('#sim-form').classList.remove('open');
-  loadSim();
-};
-async function simRun(pid){
-  await fetch('/api/sim/run', {method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({persona_id: pid})});
-  loadSim();
-}
 async function simView(id, what){
   const d = await (await fetch('/api/sim/run_detail?id='+id)).json();
   $('#viewer-dl').innerHTML = '';
   if(what === 'transcript'){
-    $('#viewer-title').textContent = `Run #${id} — transcript · ${d.persona_name}`;
+    $('#viewer-title').textContent = `Run #${id} — conversation · ${d.persona_name}`;
     $('#viewer-pre').textContent = (d.transcript||[]).map(t =>
       (t.who === 'bot' ? 'RequirementBot:  ' : 'Persona:         ') + t.text)
       .join('\n\n');
@@ -1269,50 +1268,15 @@ async function simView(id, what){
 }
 async function loadSim(){
   try{
-    [simUI.personas, simUI.runs, simUI.tests] = await Promise.all([
-      (await fetch('/api/sim/personas')).json(),
+    [simUI.runs, simUI.tests] = await Promise.all([
       (await fetch('/api/sim/runs')).json(),
       (await fetch('/api/sim/tests')).json()]);
   }catch(e){ return; }
   $('#sim-tests').innerHTML = simUI.tests.map(simtCard).join('')
-    || `<div class="empty-state" style="min-height:90px"><b>No tests yet</b>
+    || `<div class="empty-state"><b>No tests yet</b>
         <span>Add Test runs a batch of fake businesses through the bot and
-        analyzes every input and output for problems and fixes.</span></div>`;
-  $('#sim-personas').innerHTML = simUI.personas.map(p => `
-    <div class="sim-card">
-      <span class="n">${esc(p.name)} <span class="k">${
-        p.kind === 'ai' ? 'AI persona' : 'Scripted'}</span></span>
-      ${p.industry || p.company_size || p.traits ? `<span class="sim-meta">
-        ${p.industry ? `<span>${esc(p.industry)}</span>` : ''}
-        ${p.company_size ? `<span>${esc(p.company_size)}</span>` : ''}
-        ${p.traits ? `<span>${esc(p.traits.slice(0, 60))}</span>` : ''}
-      </span>` : ''}
-      <span class="p">${esc(p.content.slice(0, 160))}</span>
-      <span class="b"><button class="act" onclick="simRun(${p.id})">▶ Run</button>
-        <span class="rc">${p.runs} run${p.runs === 1 ? '' : 's'}</span></span>
-    </div>`).join('')
-    || `<div class="empty-state" style="min-height:120px"><b>No personas yet</b>
-        <span>Create a persona to simulate a client interview.</span></div>`;
-  $('#sim-runs').innerHTML = simUI.runs.length
-    ? `<table><tr><th>Run</th><th>Persona</th><th>Industry</th><th>Started</th><th>Status</th>
-        <th>Interview</th><th>Turns</th><th>Cost</th><th></th></tr>`
-      + simUI.runs.map(r => `<tr>
-        <td class="mono">#${r.id}</td>
-        <td>${esc(r.persona_name)}</td>
-        <td>${esc(r.industry || '—')}${r.company_size ? ` · ${esc(r.company_size)}` : ''}</td>
-        <td class="mono">${new Date(r.started_ts*1000).toLocaleString()}</td>
-        <td><span class="sim-st ${r.status}">${r.status === 'running'
-          ? '<span class="spin"></span> running' : r.status}</span>${
-          r.error ? ` <span title="${esc(r.error)}">⚠</span>` : ''}</td>
-        <td>${r.interview_complete ? '✓ completed' : '—'}</td>
-        <td class="mono">${r.turns ?? 0}</td>
-        <td class="mono">${r.cost_usd != null ? '$'+r.cost_usd.toFixed(2) : '—'}</td>
-        <td><button class="act" onclick="simView(${r.id},'transcript')">Transcript</button>
-          <button class="act" onclick="simView(${r.id},'brief')">Brief</button>
-          <button class="act" onclick="simRun(${r.persona_id})" title="Run this persona again against the current bot">Re-run</button></td>
-      </tr>`).join('') + '</table>'
-    : `<div class="empty-state"><b>No runs yet</b><span>Run a persona and its
-       full conversation, brief, and cost will be archived here permanently.</span></div>`;
+        analyzes every input and output for problems and fixes. Every test,
+        conversation, and brief is archived here permanently.</span></div>`;
 }
 
 /* ================= Clients ================= */
