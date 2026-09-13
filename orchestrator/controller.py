@@ -187,24 +187,24 @@ def reset_interview(pid: str) -> dict:
 # comes from the registry at read time — planned capability and per-flow
 # execution state are separate facts.
 FLOW_TEMPLATE = {
-    "version": "chatbot-flow@1",
+    "version": "chatbot-flow@2",
     "stages": [
         {"id": "interviewing", "label": "Interviewing",
          "who": "RequirementsBot", "capability": "requirements_bot"},
-        {"id": "requirements_review", "label": "Requirements Review",
-         "who": "Controller + human reviewer", "capability": None},
         {"id": "architecture", "label": "Architecture",
-         "who": "Architecture Bot", "capability": "architecture_agent"},
+         "who": "Architect Bot", "capability": "architecture_agent"},
         {"id": "building", "label": "Building",
          "who": "Builder Bot", "capability": "builder_agent"},
-        {"id": "testing", "label": "Testing",
-         "who": "Evaluation Bot", "capability": "evaluation_agent"},
-        {"id": "final_review", "label": "Final Review",
-         "who": "Authorized human acceptance", "capability": None},
+        {"id": "testing_repair", "label": "Testing & Repair",
+         "who": "Tester/Fixer Bot", "capability": "evaluation_agent"},
         {"id": "bot_created", "label": "Bot Created",
          "who": "Outcome", "capability": None},
     ],
 }
+# Requirements review/approval is no longer its own milestone: it is the
+# handoff gate INTO Architecture. The gap/review/approve workflow lives in
+# the flow detail's Requirements tab, and Architecture will not accept work
+# until the exact revision is approved.
 
 
 def flow_projection(row: dict, planned_caps: set[str],
@@ -242,29 +242,28 @@ def flow_projection(row: dict, planned_caps: set[str],
         add("interviewing", "current", "Waiting for client")
     else:
         add("interviewing", "current", "Not started — no messages yet")
-    # 2 requirements review
-    if review_done:
-        add("requirements_review", "completed", "Approved")
-    elif interview_done:
-        note = (f"{row['blocking_reviews']} blocking gap(s) · awaiting decision"
-                if row["blocking_reviews"] else "Awaiting approval decision")
-        add("requirements_review", "current", note)
+    # 2 architecture — its entry gate is requirements approval (the review
+    # workflow lives in the flow detail's Requirements tab)
+    if not interview_done:
+        add("architecture", "not_started", None)
+    elif not review_done:
+        note = (f"Awaiting requirements approval — {row['blocking_reviews']} "
+                f"blocking gap(s)" if row["blocking_reviews"]
+                else "Awaiting requirements approval")
+        add("architecture", "current", note)
+    elif "architecture_agent" in planned_caps:
+        add("architecture", "blocked",
+            "Planned capability · not implemented — flow stops here")
     else:
-        add("requirements_review", "not_started", None)
-    # 3-5 future specialists: capability availability is separate from flow
-    for sid, cap in (("architecture", "architecture_agent"),
-                     ("building", "builder_agent"),
-                     ("testing", "evaluation_agent")):
+        add("architecture", "not_started", None)   # future: real availability
+    # 3-4 future specialists
+    for sid, cap in (("building", "builder_agent"),
+                     ("testing_repair", "evaluation_agent")):
         if cap in planned_caps:
-            if review_done and current is None:
-                add(sid, "blocked",
-                    "Planned capability · not implemented — flow stops here")
-            else:
-                add(sid, "planned", "Planned · Not implemented")
+            add(sid, "planned", "Planned · Not implemented")
         else:
-            add(sid, "not_started", None)   # future: real availability
-    # 6-7
-    add("final_review", "not_started" if review_done else "not_started", None)
+            add(sid, "not_started", None)
+    # 5
     add("bot_created", "unmet",
         "Requires a real deliverable, its test results, acceptance and a "
         "recorded finalization — none exist yet")

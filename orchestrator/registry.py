@@ -30,11 +30,13 @@ def capabilities() -> list[dict]:
                                        "error": last["error"], "ts": last["ts"]},
         },
         {
+            # Internal helper inside RequirementsBot's Interviewing stage —
+            # real and enabled, but hidden from the orchestrator map.
             "id": "materials_analyzer",
             "name": "Materials Analyzer",
             "kind": "internal_helper",
             "purpose": "Distills uploaded chat exports/screenshots for the interviewer",
-            "installed": True, "enabled": True, "planned": False,
+            "installed": True, "enabled": True, "planned": False, "hidden": True,
             "configured": api_key_present,
         },
         {
@@ -48,13 +50,9 @@ def capabilities() -> list[dict]:
             "configured": api_key_present,
             "mode": supervisor.mode(),
         },
-        # Roadmap: planned, not implemented, non-executable. Testing and
-        # improvement will be their own bots connected to the Orchestrator.
-        {"id": "evaluation_agent", "name": "Evaluation Bot",
-         "kind": "production_specialist", "purpose": "Tests and improves the "
-         "other bots through the Orchestrator", "installed": False,
-         "enabled": False, "planned": True},
-        {"id": "architecture_agent", "name": "Architecture Agent",
+        # Roadmap: planned, not implemented, non-executable — the three
+        # future specialists around the Orchestrator (map order).
+        {"id": "architecture_agent", "name": "Architect Bot",
          "kind": "production_specialist", "purpose": "Designs the chatbot from "
          "an approved brief", "installed": False, "enabled": False,
          "planned": True},
@@ -62,5 +60,9 @@ def capabilities() -> list[dict]:
          "kind": "production_specialist", "purpose": "Builds the chatbot from "
          "the architecture", "installed": False, "enabled": False,
          "planned": True},
+        {"id": "evaluation_agent", "name": "Tester/Fixer Bot",
+         "kind": "production_specialist", "purpose": "Tests the built chatbot "
+         "against its requirements and repairs what fails", "installed": False,
+         "enabled": False, "planned": True},
     ]
     return caps

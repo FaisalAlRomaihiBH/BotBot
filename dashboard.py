@@ -555,8 +555,8 @@ function graphNode(c, x, y, r, lines, status, dotColor, big, ringCls){
 }
 
 const TITLES = {requirements_bot:['Requirements','Bot'],
-  materials_analyzer:['Materials','Analyzer'], builder_agent:['Builder','Bot'],
-  architecture_agent:['Architecture','Agent'], evaluation_agent:['Evaluation','Bot']};
+  architecture_agent:['Architect','Bot'], builder_agent:['Builder','Bot'],
+  evaluation_agent:['Tester/Fixer','Bot']};
 
 function taskLabel(n){
   return n === 0 ? 'Idle' : n === 1 ? '1 running task' : `${n} running tasks`;
@@ -586,7 +586,7 @@ function renderGraph(){
     rC *= k; rN *= k;
     ring = Math.min(W, H)/2 - rN - margin;
   }
-  const caps = sys.capabilities.filter(c => c.id !== 'ai_supervisor');
+  const caps = sys.capabilities.filter(c => c.id !== 'ai_supervisor' && !c.hidden);
   const nActive = sys.active_runs.length;
   const edges = [], nodes = [], ringsArr = [], pillsArr = [];
   let reqPos = null;
@@ -815,7 +815,8 @@ async function loadFlows(){
 
 function flowMatches(f, q, filt){
   if(filt === 'active' && f.current_stage !== 'interviewing') return false;
-  if(filt === 'review' && !(f.current_stage === 'requirements_review')) return false;
+  if(filt === 'review' && !(f.open_reviews > 0
+      || (f.current_stage === 'architecture' && !f.approved))) return false;
   if(filt === 'approved' && !f.approved) return false;
   if(filt === 'test' && !f.is_test) return false;
   if(q){
