@@ -342,38 +342,32 @@ def _run_feature_check(test_id: int, dim: str, value: str) -> None:
             "models": {"generator": GENERATOR_MODEL, "bot": bot_model,
                        "persona": PERSONA_MODEL, "analyst": ANALYST_MODEL}})
 
-        level = FEATURE_NEUTRAL["knowledge"]
-        patience = FEATURE_NEUTRAL["patience"]
-        ladders = {n: 1.0 for n in EXTRA_LADDERS}
-        cats = dict(FEATURE_NEUTRAL["cats"])
-        behavior = FEATURE_NEUTRAL["behavior"]
-        industry_line = "a plain, typical small local service business"
+        # PURE ISOLATION: the single feature is the persona's ONLY defined
+        # characteristic. Nothing else is assigned at all — no neutral
+        # matrix, no other traits — so the test never carries a hidden
+        # combination.
+        level, patience, ladder_line, behavior = 1.0, None, None, None
         try:
             num = float(value)
         except ValueError:
             num = None
-        if dim == "industry":
-            industry_line = value
-        elif dim == "knowledge" and num is not None:
+        if dim == "knowledge" and num is not None:
             level = num
         elif dim == "patience" and num is not None:
             patience = num
-        elif dim in ladders and num is not None:
-            ladders[dim] = num
-        elif dim in cats:
-            cats[dim] = value
+        elif dim in EXTRA_LADDERS and num is not None:
+            ladder_line = (f"- {dim} at level {int(num*100)}%: "
+                           f"{EXTRA_LADDERS[dim]}")
         elif dim == "behavior":
             behavior = value
-        assigned = NL.join(
-            [f"- industry: {industry_line}"]
-            + [f"- {n}: {o}" for n, o in cats.items()]
-            + [f"- {n} level {int(r*100)}% ({EXTRA_LADDERS[n]})"
-               for n, r in ladders.items()]
-            + ([f"- special behavior: {behavior}"]
-               if behavior != "none" else [])
-            + [f"- SINGLE-FEATURE ISOLATION: the ONLY distinctive thing "
-               f"about this persona is {feature}. Keep absolutely "
-               f"everything else plain, typical, and unremarkable."])
+        feature_line = (f"- industry: {value}" if dim == "industry"
+                        else f"- {dim}: {value}")
+        assigned = NL.join([
+            "- THE ONE FEATURE UNDER TEST (the persona's ONLY defined "
+            "characteristic):", feature_line,
+            "- EVERYTHING ELSE: an ordinary, unremarkable small-business "
+            "owner. Do NOT give them any other notable trait, quirk, "
+            "personality, language habit, or unusual attribute of any kind."])
         field_names = ", ".join(BusinessRequirements.model_fields)
         gen = ChatAnthropic(model=GENERATOR_MODEL, max_tokens=8000)
         g_usage = {"fresh_in": 0, "cache_read": 0, "cache_write": 0, "out": 0}
@@ -401,24 +395,27 @@ def _run_feature_check(test_id: int, dim: str, value: str) -> None:
         if p is None:
             raise RuntimeError(f"persona generation failed: {last_err}")
         identity = p.get("identity") or {}
+        # roleplay rules carry ONLY what the feature demands — nothing else
         content = (
             "GROUND-TRUTH IDENTITY (JSON):" + NL
             + json.dumps(identity, ensure_ascii=False, indent=1)
             + NL + NL + "FIELDS THIS OWNER GENUINELY DOES NOT KNOW:" + NL
             + (", ".join(p.get("unknown_fields") or []) or "(none)")
-            + NL + PATIENCE_RULE.replace("{pct}", str(int(patience * 100)))
-            + NL + NL + "BEHAVIORAL LADDERS (follow each at its level):" + NL
-            + NL.join(f"- {n} {int(r*100)}%: {EXTRA_LADDERS[n]}"
-                      for n, r in ladders.items())
+            + NL + NL + "THE ONE FEATURE UNDER TEST — exhibit it "
+            "consistently; stay ordinary in every other way: " + feature
+            + ((NL + PATIENCE_RULE.replace(
+                "{pct}", str(int(patience * 100))))
+               if patience is not None else "")
+            + ((NL + ladder_line) if ladder_line else "")
             + ((NL + NL + BEHAVIOR_RULES[behavior])
-               if BEHAVIOR_RULES.get(behavior) else ""))
+               if behavior and BEHAVIOR_RULES.get(behavior) else ""))
         pid = store.sim_add_persona(
             p.get("name", "Feature check persona"), "ai", content,
             industry=p.get("industry"), company_size=p.get("company_size"),
             traits=p.get("traits"), identity=identity,
-            completeness=level, patience=patience,
-            features={"ladders": ladders, **cats, "behavior": behavior,
-                      "feature_check": feature})
+            completeness=level if dim == "knowledge" else None,
+            patience=patience,
+            features={"feature_check": feature})
         store.sim_update_test(test_id, status="running", usage={
             "generator": g_usage | {"model": GENERATOR_MODEL}})
         run_id = store.sim_create_run(pid)
