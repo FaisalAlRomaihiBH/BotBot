@@ -144,6 +144,10 @@ body.view-log #main{overflow:hidden}
 #log-body .ev.warn{color:#e5c07b}
 #log-body .ac{color:#c678dd}
 #log-body .dt{color:#7f848e}
+#log-body .who{font-weight:600}
+#log-body .who.client{color:#e5c07b}
+#log-body .who.bot{color:#56b6c2}
+#log-body .mt{color:#dcdcdc}
 #log-body .cursor{display:inline-block;width:7px;height:13px;
   background:#98c379;vertical-align:-2px;animation:blink 1.1s step-end infinite}
 @keyframes blink{50%{opacity:0}}
@@ -890,7 +894,8 @@ async function loadLog(){
   try{ events = await (await fetch('/api/log')).json(); }
   catch(e){ $('#log-meta').textContent = 'disconnected'; return; }
   $('#log-meta').textContent = 'live · refreshes every 3s';
-  const sig = events.length ? String(events[0].seq) + ':' + events.length : '0';
+  const sig = events.length
+    ? events[0].kind + events[0].seq + ':' + events.length : '0';
   if(sig === logSig) return;   // nothing new — don't disturb the scroll
   logSig = sig;
   const body = $('#log-body');
@@ -899,15 +904,24 @@ async function loadLog(){
   const stick = body.scrollHeight - body.scrollTop - body.clientHeight < 40
     || !body.dataset.filled;
   const lines = events.slice().reverse().map(e => {
-    const detail = Object.entries(e.payload||{})
-      .map(([k,v]) => `${k}=${typeof v==='object'?JSON.stringify(v):v}`).join(' ');
+    const ts = `<span class="ts">[${
+      new Date(e.ts*1000).toLocaleTimeString('en-GB')}]</span>`;
     const proj = e.project_id === '__system__' ? 'system'
       : e.project_num != null
         ? `#${e.project_num}${e.project_name ? ':'+e.project_name : ''}` : '?';
+    if(e.kind === 'msg'){
+      // an actual conversation message between the client and the bot
+      const who = e.role === 'owner' ? 'client' : 'bot';
+      const text = e.text.length > 300 ? e.text.slice(0, 300) + '…' : e.text;
+      return `<div class="ln">${ts} <span class="pr">${esc(proj)}</span> ` +
+        `<span class="who ${who}">${who}&gt;</span> <span class="mt" title="${
+        esc(e.text.slice(0, 1000))}">${esc(text)}</span></div>`;
+    }
+    const detail = Object.entries(e.payload||{})
+      .map(([k,v]) => `${k}=${typeof v==='object'?JSON.stringify(v):v}`).join(' ');
     const cls = /fail|error/.test(e.type) ? ' err'
       : /review.requested|reset/.test(e.type) ? ' warn' : '';
-    return `<div class="ln"><span class="ts">[${
-      new Date(e.ts*1000).toLocaleTimeString('en-GB')}]</span> <span class="pr">${
+    return `<div class="ln">${ts} <span class="pr">${
       esc(proj)}</span> <span class="ev${cls}">${esc(e.type)}</span> <span class="ac">(${
       esc(e.actor)})</span>${detail ? ` <span class="dt">${esc(detail)}</span>` : ''}</div>`;
   }).join('');
@@ -1690,7 +1704,7 @@ class Handler(BaseHTTPRequestHandler):
         elif route == "/api/attention":
             self._json(store.open_reviews_all())
         elif route == "/api/log":
-            self._json(store.recent_events_all())
+            self._json(store.recent_terminal_feed())
         elif route == "/chat/history":
             self._json(chat_history(pid))
         elif route == "/api/review":

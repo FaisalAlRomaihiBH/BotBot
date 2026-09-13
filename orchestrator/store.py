@@ -345,7 +345,7 @@ def recent_events(pid: str, limit: int = 40) -> list[dict]:
 
 
 def recent_events_all(limit: int = 120) -> list[dict]:
-    """Newest recorded events across every project, for the Live Log view.
+    """Newest recorded events across every project, for the Terminal view.
     Pure read of the events audit table — no models, no side effects."""
     with _connect() as con:
         rows = con.execute(
@@ -354,6 +354,23 @@ def recent_events_all(limit: int = 120) -> list[dict]:
             " FROM events e LEFT JOIN projects p ON p.id = e.project_id"
             " ORDER BY e.seq DESC LIMIT ?", (limit,)).fetchall()
     return [dict(r) | {"payload": json.loads(r["payload"] or "{}")} for r in rows]
+
+
+def recent_terminal_feed(limit: int = 150) -> list[dict]:
+    """The Terminal's combined live feed: recorded events AND the actual
+    interview messages between clients and the bot, merged in time order,
+    newest first. Pure read — no models, no side effects."""
+    events = [e | {"kind": "event"} for e in recent_events_all(limit)]
+    with _connect() as con:
+        rows = con.execute(
+            "SELECT m.id AS seq, m.project_id, m.role, m.text, m.ts,"
+            " p.name AS project_name, p.num AS project_num"
+            " FROM messages m LEFT JOIN projects p ON p.id = m.project_id"
+            " WHERE m.conversation='interview'"
+            " ORDER BY m.id DESC LIMIT ?", (limit,)).fetchall()
+    msgs = [dict(r) | {"kind": "msg"} for r in rows]
+    feed = sorted(events + msgs, key=lambda x: (x["ts"], x["seq"]), reverse=True)
+    return feed[:limit]
 
 
 def last_provider_event() -> dict | None:
