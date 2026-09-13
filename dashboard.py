@@ -117,11 +117,37 @@ body{margin:0;background:var(--bg);color:var(--text);font:13px/1.45 var(--sans)}
 @keyframes rot{to{transform:rotate(360deg)}}
 
 /* ---------- views ---------- */
-#chat,#home,#flows{display:none}
+#chat,#home,#flows,#log{display:none}
 body.view-chat #chat{display:flex}
 body.view-home #home{display:flex}
 body.view-flows #flows{display:flex}
+body.view-log #log{display:flex}
 #flows{flex-direction:column;margin:14px 20px 20px;gap:12px;min-height:0}
+
+/* ---------- live log ---------- */
+body.view-log #main{overflow:hidden}
+#log{flex:1;flex-direction:column;margin:14px 20px 20px;min-height:0;
+  background:var(--panel);border:1px solid var(--border);border-radius:8px}
+#log-head{display:flex;align-items:center;gap:10px;padding:10px 16px;
+  border-bottom:1px solid var(--border)}
+#log-head .t{font:600 11px var(--sans);text-transform:uppercase;
+  letter-spacing:.07em;color:var(--text2)}
+#log-head .m{font:10.5px var(--mono);color:var(--muted);margin-left:auto}
+#log-body{flex:1;overflow-y:auto;min-height:0}
+#log-body table{width:100%;border-collapse:collapse;font-size:12px}
+#log-body th{position:sticky;top:0;background:var(--panel);z-index:1;
+  font:600 10px var(--sans);text-transform:uppercase;letter-spacing:.06em;
+  color:var(--muted);text-align:left;padding:8px 14px;
+  border-bottom:1px solid var(--border)}
+#log-body td{padding:6px 14px;border-bottom:1px solid var(--border);
+  vertical-align:top;color:var(--text2)}
+#log-body td.lt{font:10.5px var(--mono);color:var(--muted);white-space:nowrap}
+#log-body td.lp{white-space:nowrap;color:var(--text)}
+#log-body td.le{font:11.5px var(--mono);color:var(--accent)}
+#log-body td.le.err{color:var(--red)}
+#log-body td.la{font:11px var(--mono)}
+#log-body td.ld{font:10.5px var(--mono);max-width:340px;overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap}
 
 /* ---------- chatbot flow cards ---------- */
 #flows-list{display:flex;flex-direction:column;gap:12px}
@@ -153,6 +179,9 @@ body.view-flows #flows{display:flex}
   overflow-x:auto}
 .fc-step{flex:1;min-width:150px;display:flex;flex-direction:column;
   align-items:center;text-align:center;position:relative}
+/* the Interview step carries the two fixed 200px metric cards: reserve the
+   room for them, otherwise the centered overflow clips the left card */
+.fc-step:first-child{min-width:430px}
 .fc-step .cn{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--border);
   background:var(--panel2);display:grid;place-items:center;
   font:600 12px var(--mono);color:var(--muted);z-index:1;position:relative}
@@ -176,13 +205,15 @@ body.view-flows #flows{display:flex}
 .fc-step .mcol .msub{font:9.5px var(--mono);color:var(--muted)}
 .fc-step .mcard{display:flex;flex-direction:column;align-items:center;gap:7px;
   border:1px solid var(--border);border-radius:10px;background:var(--panel2);
-  padding:10px;flex:1 1 0;min-width:0}
-/* both pair rows share one 2-column grid, so the lower pair's columns sit
-   exactly centered under the upper pair's columns; cells center both ways,
-   so a short block (Sent) sits vertically centered beside a taller one
-   (Average Send Time) */
+  padding:10px;width:200px;flex:none}
+/* FIXED layout: both cards are the same size and stack the same centered
+   rows — cost on top, tokens under it, then messages + average speed, then
+   View ('—' when unknown) — so the Human Cost and Bot Cost boxes align
+   cell for cell whether the interview is live or finished */
+.fc-step .mcard>.mcol{min-height:34px;justify-content:center}
+.fc-step .mcard>.mhead b{font-size:15px}
 .fc-step .mpair{display:grid;grid-template-columns:1fr 1fr;width:100%;gap:4px;
-  align-items:center;justify-items:center}
+  align-items:center;justify-items:center;min-height:46px}
 .fc-step .mpair .mcol{padding:0 3px;min-width:0;justify-content:center}
 /* View pins to the card bottom; cards stretch to equal height */
 .fc-step .mcard .mjson{margin-top:auto}
@@ -256,7 +287,8 @@ body.view-flows #flows{display:flex}
 body.view-home #main{overflow:hidden}
 
 /* ---------- Home: header-free, the map IS the page ---------- */
-body.view-home #run-header,body.view-flows #run-header{display:none}
+body.view-home #run-header,body.view-flows #run-header,
+body.view-log #run-header{display:none}
 
 /* ---------- orchestrator map: fills the workspace ---------- */
 #graph-wrap{flex:1;min-height:0;position:relative;display:flex;
@@ -443,6 +475,7 @@ body.view-home #run-header,body.view-flows #run-header{display:none}
       <button id="sb-toggle" title="Collapse">⟨⟩</button></div>
     <nav id="sb-nav">
       <div class="nav-item active" id="nav-home" data-view="home"><span class="nav-ico">◎</span><span class="nav-label">Home</span></div>
+      <div class="nav-item" id="nav-log" data-view="log"><span class="nav-ico">≡</span><span class="nav-label">Live Log</span></div>
       <div class="nav-item" id="nav-flows" data-view="flows"><span class="nav-ico">⇶</span><span class="nav-label">Chatbot Flows</span></div>
     </nav>
     <div id="sb-foot">
@@ -467,6 +500,12 @@ body.view-home #run-header,body.view-flows #run-header{display:none}
 
     <div id="flows">
       <div id="flows-list"></div>
+    </div>
+
+    <div id="log">
+      <div id="log-head"><span class="t">Live Log</span>
+        <span class="m" id="log-meta">refreshes every 3s</span></div>
+      <div id="log-body">Loading…</div>
     </div>
 
     <div id="chat">
@@ -526,7 +565,7 @@ $('#sb-toggle').onclick = () => {
   if(document.body.className === 'view-home') renderGraph();
 };
 const VIEW_TITLES = {home:'Operations', flows:'Chatbot Flows',
-  chat:'Owner Test Chat'};
+  chat:'Owner Test Chat', log:'Live Log'};
 function showView(view){
   document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('active'));
   document.getElementById('nav-' + (view === 'chat' ? 'flows' : view))
@@ -536,6 +575,7 @@ function showView(view){
   if(view === 'chat' && !chat.loaded) loadChat();
   if(view === 'home') loadSystem();
   if(view === 'flows') loadFlows();
+  if(view === 'log') loadLog();
 }
 document.querySelectorAll('.nav-item[data-view]').forEach(item =>
   item.onclick = () => showView(item.dataset.view));
@@ -839,6 +879,33 @@ $('#sup-toggle').onclick = async () => {
 
 /* (owner test chat + copy link removed from sidebar) */
 
+/* ================= Live Log (system-wide event feed) ================= */
+let logSig = '';
+async function loadLog(){
+  let events = [];
+  try{ events = await (await fetch('/api/log')).json(); }
+  catch(e){ $('#log-meta').textContent = 'server unreachable'; return; }
+  $('#log-meta').textContent = 'refreshes every 3s · newest first';
+  const sig = events.length ? String(events[0].seq) + ':' + events.length : '0';
+  if(sig === logSig) return;   // nothing new — don't disturb the scroll
+  logSig = sig;
+  const rows = events.map(e => {
+    const detail = Object.entries(e.payload||{})
+      .map(([k,v]) => `${k}=${typeof v==='object'?JSON.stringify(v):v}`).join(' · ');
+    const proj = e.project_id === '__system__' ? '(system)'
+      : e.project_num != null
+        ? `#${e.project_num}${e.project_name ? ' · '+e.project_name : ''}` : '—';
+    const err = /fail|error/.test(e.type) ? ' err' : '';
+    return `<tr><td class="lt">${new Date(e.ts*1000).toLocaleTimeString()}</td>
+      <td class="lp">${esc(proj)}</td><td class="le${err}">${esc(e.type)}</td>
+      <td class="la">${esc(e.actor)}</td><td class="ld" title="${esc(detail)}">${esc(detail)}</td></tr>`;
+  }).join('');
+  $('#log-body').innerHTML = events.length
+    ? `<table><tr><th>Time</th><th>Project</th><th>Event</th><th>Actor</th>
+        <th>Detail</th></tr>${rows}</table>`
+    : '<div style="padding:30px;text-align:center;color:var(--muted)">No recorded events yet.</div>';
+}
+
 /* ================= Chatbot Flows (monitoring, read-only) ================= */
 const flowsUI = {data:null, expanded:new Set(), tab:{}, detail:{}};
 
@@ -934,6 +1001,11 @@ function renderFlows(){
 
         ${t.id==='interviewing' && (f.head_rev || (m && m.calls)) ? `<span class="mrow">
           ${m && m.calls ? `<span class="mcard">
+            <span class="mcol mhead" title="Cost of the input side (conversation fed into the model)">
+              <em>Human Cost</em><b>${m.cost_in_usd!=null
+                ? '$'+m.cost_in_usd.toFixed(2) : '—'}</b></span>
+            <span class="mcol" title="Tokens fed into the model">
+              <em>Input Tokens</em><b>${fmtTok(m.tokens_in)}</b></span>
             <span class="mpair">
               <span class="mcol" title="Messages received from the client">
                 <em>Received</em><b>${m.msgs_received ?? '—'}</b></span>
@@ -941,28 +1013,21 @@ function renderFlows(){
                 <em>Average Receive Time</em><b>${m.avg_client_seconds!=null
                   ? fmtSecs(m.avg_client_seconds) : '—'}</b></span>
             </span>
-            <span class="mpair">
-              <span class="mcol" title="Cost of the input side (conversation fed into the model)">
-                <em>Human Cost</em><b>${m.cost_in_usd!=null
-                  ? '$'+m.cost_in_usd.toFixed(2) : '—'}</b></span>
-              <span class="mcol"><em>Input Tokens</em><b>${fmtTok(m.tokens_in)}</b></span>
-            </span>
             <span class="mjson"><a href="#" data-viewer="input"
               data-pid="${f.flow_id}">View</a></span>
           </span>` : ''}
           ${f.head_rev ? `<span class="mcard">
-            ${m && m.calls ? `<span class="mpair">
-              <span class="mcol" title="Messages the bot sent">
-                <em>Sent</em><b>${m.msgs_sent ?? '—'}</b></span>
-              <span class="mcol" title="How long the bot takes to send its reply on average">
-                <em>Average Send Time</em><b>${m.avg_bot_seconds!=null
-                  ? fmtSecs(m.avg_bot_seconds) : '—'}</b></span>
-            </span>` : ''}
+            <span class="mcol mhead" title="Cost of the output side (what the bot generated)">
+              <em>Bot Cost</em><b>${m && m.calls && m.cost_out_usd!=null
+                ? '$'+m.cost_out_usd.toFixed(2) : '—'}</b></span>
+            <span class="mcol" title="Tokens the model generated">
+              <em>Output Tokens</em><b>${m && m.calls ? fmtTok(m.tokens_out) : '—'}</b></span>
             <span class="mpair">
-              <span class="mcol" title="Cost of the output side (what the bot generated)">
-                <em>Bot Cost</em><b>${m && m.calls && m.cost_out_usd!=null
-                  ? '$'+m.cost_out_usd.toFixed(2) : '—'}</b></span>
-              <span class="mcol"><em>Output Tokens</em><b>${m && m.calls ? fmtTok(m.tokens_out) : '—'}</b></span>
+              <span class="mcol" title="Messages the bot sent">
+                <em>Sent</em><b>${m && m.calls ? (m.msgs_sent ?? '—') : '—'}</b></span>
+              <span class="mcol" title="How long the bot takes to send its reply on average">
+                <em>Average Send Time</em><b>${m && m.calls && m.avg_bot_seconds!=null
+                  ? fmtSecs(m.avg_bot_seconds) : '—'}</b></span>
             </span>
             <span class="mjson"><a href="#" data-viewer="output"
               data-pid="${f.flow_id}" data-rev="${f.head_rev}">View</a></span>
@@ -1183,6 +1248,9 @@ setInterval(() => {
   if(document.body.className === 'view-home') loadSystem();
   if(document.body.className === 'view-flows') loadFlows();
 }, 5000);
+setInterval(() => {
+  if(document.body.className === 'view-log') loadLog();
+}, 3000);
 </script></body></html>"""
 
 
@@ -1609,6 +1677,8 @@ class Handler(BaseHTTPRequestHandler):
                         for p in store.list_projects()])
         elif route == "/api/attention":
             self._json(store.open_reviews_all())
+        elif route == "/api/log":
+            self._json(store.recent_events_all())
         elif route == "/chat/history":
             self._json(chat_history(pid))
         elif route == "/api/review":

@@ -344,6 +344,18 @@ def recent_events(pid: str, limit: int = 40) -> list[dict]:
     return [dict(r) | {"payload": json.loads(r["payload"] or "{}")} for r in rows]
 
 
+def recent_events_all(limit: int = 120) -> list[dict]:
+    """Newest recorded events across every project, for the Live Log view.
+    Pure read of the events audit table — no models, no side effects."""
+    with _connect() as con:
+        rows = con.execute(
+            "SELECT e.seq, e.project_id, e.type, e.actor, e.payload, e.ts,"
+            " p.name AS project_name, p.num AS project_num"
+            " FROM events e LEFT JOIN projects p ON p.id = e.project_id"
+            " ORDER BY e.seq DESC LIMIT ?", (limit,)).fetchall()
+    return [dict(r) | {"payload": json.loads(r["payload"] or "{}")} for r in rows]
+
+
 def last_provider_event() -> dict | None:
     """The most recent model call: its purpose, when, and whether it errored.
     This is what the status footer shows instead of a hardcoded green dot."""
