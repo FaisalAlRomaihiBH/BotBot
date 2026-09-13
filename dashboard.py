@@ -220,6 +220,12 @@ body.view-clients #clients{display:flex}
 .simt-step.fail .cn{border-color:#552b2b;color:var(--red)}
 .simt-step.fail .st{color:var(--red)}
 .simt-step .stc{font:600 10px var(--mono);color:var(--text);margin-top:3px}
+.simt-det{margin-top:8px;width:100%;max-width:170px;display:flex;
+  flex-direction:column;gap:3px;border:1px solid var(--border);
+  border-radius:8px;background:var(--panel2);padding:7px 9px}
+.simt-det .sdk{display:flex;justify-content:space-between;gap:8px;
+  font:9.5px var(--mono);color:var(--muted)}
+.simt-det .sdk b{color:var(--text2);font-weight:500;white-space:nowrap}
 .simt-actions{display:flex;gap:6px;margin-top:10px}
 .sim-meta{display:flex;gap:5px;flex-wrap:wrap}
 .sim-meta span{font:10px var(--mono);color:var(--text2);
@@ -1349,6 +1355,39 @@ function simtCard(t){
   };
   const liveTotal = t.cost_usd != null ? t.cost_usd
     : (stageCost.generating || 0) + runsCost + (stageCost.analyzing || 0);
+  // per-milestone detail boxes (same idea as the Workflows interview box)
+  const short = m => (m || '').replace('claude-', '') || '—';
+  const sumB = k => runs.reduce((s, r) => s + (((r.usage||{}).bot||{})[k]||0), 0);
+  const totTurns = runs.reduce((s, r) => s + (r.turns||0), 0);
+  const kv = rows => `<span class="simt-det">${rows.filter(r => r).map(
+    ([k, v]) => `<span class="sdk"><span>${k}</span><b>${v}</b></span>`)
+    .join('')}</span>`;
+  const stageDet = {
+    generating: u.generator ? kv([
+      ['Model', esc(short(u.generator.model))],
+      ['Personas', t.run_ids.length || t.params.count],
+      ['In · Out', `${fmtTok(u.generator.fresh_in||0)} · ${
+        fmtTok(u.generator.out||0)}`],
+      stageCost.generating != null
+        && ['Cost', '$'+stageCost.generating.toFixed(2)]]) : '',
+    running: runs.length ? kv([
+      ['Interviews', `${doneRuns}/${t.run_ids.length}`],
+      ['Turns', totTurns],
+      ['In · Out', `${fmtTok(sumB('fresh_in')+sumB('cache_read')
+        +sumB('cache_write'))} · ${fmtTok(sumB('out'))}`],
+      ['Cache R · W', `${fmtTok(sumB('cache_read'))} · ${
+        fmtTok(sumB('cache_write'))}`],
+      ['Cost', '$'+runsCost.toFixed(2)]]) : '',
+    analyzing: u.analyst ? kv([
+      ['Model', esc(short(u.analyst.model))],
+      ['In · Out', `${fmtTok(u.analyst.fresh_in||0)} · ${
+        fmtTok(u.analyst.out||0)}`],
+      stageCost.analyzing != null
+        && ['Cost', '$'+stageCost.analyzing.toFixed(2)]]) : '',
+    completed: t.has_report ? `<span class="simt-det"><button class="act"
+      onclick="event.stopPropagation();simReport(${t.id})"
+      style="margin-top:4px">View Report</button></span>` : '',
+  };
   const steps = SIMT_STEPS.slice(1).map(([key, label], i) => {
     const pos = i + 1;
     const cls = failed ? 'fail'
@@ -1361,11 +1400,9 @@ function simtCard(t){
             ? `<span class="spin"></span> ${doneRuns}/${t.run_ids.length || t.params.count}`
             : '<span class="spin"></span> Running')
         : 'Pending';
-    const sc = stageCost[key];
     return `<div class="simt-step ${cls}"><span class="cn">${
       cls === 'done' ? '✓' : pos}</span><span class="lbl">${label}</span>
-      <span class="st">${st}</span>${sc != null
-        ? `<span class="stc">$${sc.toFixed(2)}</span>` : ''}</div>`;
+      <span class="st">${st}</span>${stageDet[key] || ''}</div>`;
   }).join('');
   const agg = simAgg(runs);
   const n = runs.length || 1;
@@ -1404,7 +1441,6 @@ function simtCard(t){
     ${bars}
     ${table}
     <div class="simt-actions">
-      ${t.has_report ? `<button class="act" onclick="simReport(${t.id})">View Report</button>` : ''}
       ${t.status === 'completed' ? `<button class="act"
         onclick="fetch('/api/sim/test',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({kind:'persona_sweep',count:${t.params.count}})}).then(loadSim)"
         title="Run a fresh sweep of the same size against the current bot">Re-run</button>` : ''}
