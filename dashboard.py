@@ -205,11 +205,6 @@ body.view-flows #flows{display:flex}
 .fc-step.unmet .lbl{opacity:.65}
 .fc-detail{display:none;border-top:1px solid var(--border)}
 .flow-card.open .fc-detail{display:block}
-.fd-tabs{display:flex;gap:4px;padding:8px 14px 0}
-.fd-tab{background:none;border:1px solid var(--border);border-bottom:none;
-  color:var(--muted);border-radius:6px 6px 0 0;padding:5px 12px;font-size:12px;
-  cursor:pointer}
-.fd-tab.on{color:var(--text);background:var(--panel2)}
 .fd-body{background:var(--panel2);margin:0 14px 14px;border:1px solid var(--border);
   border-radius:0 6px 6px 6px;padding:12px 14px;max-height:320px;overflow-y:auto;
   font-size:12.5px;line-height:1.6}
@@ -895,6 +890,11 @@ function renderFlows(){
           <b>${m.cost_usd!=null ? '$'+m.cost_usd.toFixed(2) : 'cost —'}</b>
           · ${fmtTok(m.tokens_in)} in · ${fmtTok(m.tokens_out)} out
           · ${fmtSecs(m.active_seconds)} · ${esc(m.model||'—')}</span>` : ''}
+        ${t.id==='interviewing' && m && m.calls ? `<span class="mjson"
+          title="The interview conversation the bot works from">
+          ⤓ Input ·
+          <a href="/api/transcript?project=${f.flow_id}" target="_blank">TXT</a>
+        </span>` : ''}
         ${t.id==='interviewing' && f.head_rev ? `<span class="mjson"
           title="The requirements the bot has produced so far (revision r${f.head_rev})">
           ⤓ Output r${f.head_rev} ·
@@ -925,12 +925,8 @@ function renderFlows(){
       </div>
       <div class="fc-path">${steps}</div>
       <div class="fc-detail">
-        <div class="fd-tabs">
-          ${['Activity','Conversation','Requirements','Artifacts'].map(t =>
-            `<button class="fd-tab${(flowsUI.tab[f.flow_id]||'Activity')===t?' on':''}"
-               data-tab="${t}">${t}</button>`).join('')}
-        </div>
-        <div class="fd-body" id="fd-${f.flow_id}">Loading…</div>
+        <div class="fd-body" id="fd-${f.flow_id}" style="border-radius:6px;
+          margin-top:12px">Loading…</div>
       </div>
     </div>`;
   }).join('');
@@ -945,13 +941,6 @@ function renderFlows(){
     h.onclick = toggle;
     h.onkeydown = e => { if(e.key==='Enter'||e.key===' '){ e.preventDefault(); toggle(); } };
   });
-  list.querySelectorAll('.fd-tab').forEach(b => b.onclick = () => {
-    const fid = b.closest('.flow-card').dataset.fid;
-    flowsUI.tab[fid] = b.dataset.tab;
-    b.parentElement.querySelectorAll('.fd-tab').forEach(x =>
-      x.classList.toggle('on', x === b));
-    renderFlowDetail(fid);
-  });
   flowsUI.expanded.forEach(fid => renderFlowDetail(fid));
 }
 
@@ -963,92 +952,16 @@ async function loadFlowDetail(fid){
 }
 
 function renderFlowDetail(fid){
+  // Activity only: the recorded events and attempts for this flow.
   const el = document.getElementById('fd-' + fid);
   const d = flowsUI.detail[fid];
   if(!el) return;
   if(!d){ el.textContent = 'Loading…'; return; }
-  const tab = flowsUI.tab[fid] || 'Activity';
-  if(tab === 'Activity'){
-    el.innerHTML = (d.events && d.events.length)
-      ? `<table><tr><th>When</th><th>Event</th><th>Actor</th></tr>` +
-        d.events.map(e => `<tr><td>${new Date(e.ts*1000).toLocaleString()}</td>
-          <td>${esc(e.type)}</td><td>${esc(e.actor)}</td></tr>`).join('') + `</table>`
-      : '<span style="color:var(--muted)">No recorded events.</span>';
-  }else if(tab === 'Conversation'){
-    el.innerHTML = (d.transcript && d.transcript.length)
-      ? `<div style="color:var(--muted);font:10px var(--mono);margin-bottom:6px">
-           Read-only transcript — inspection never sends a message as the customer.</div>`
-        + d.transcript.map(m => `<div class="fd-msg ${m.role==='human'?'human':'ai'}">
-          <div class="who">${m.role==='human'?'Client':'Requirements Bot'}</div>${esc(m.text)}</div>`).join('')
-      : '<span style="color:var(--muted)">No messages yet.</span>';
-  }else if(tab === 'Requirements'){
-    // ChatbotFlowReviewPanel: the full review workflow lives here now —
-    // revision + approval state, readiness gaps, open review requests with
-    // dispositions, and the explicit approve action.
-    const r = d.review;
-    const open = (r.reviews||[]).filter(x => x.status === 'requested');
-    const done = (r.reviews||[]).filter(x => x.status !== 'requested');
-    el.innerHTML =
-      `<div style="margin-bottom:6px">Revision: <b>${r.head ? 'r'+r.head : 'none yet'}</b>
-        · State: <b>${esc((r.state||'—').replace(/_/g,' '))}</b>
-        · ${r.approval ? `<span style="color:var(--green)">✓ approved r${r.approval.revision}
-             by ${esc(r.approval.actor)}</span>` : 'not approved'}</div>`
-      + ((r.readiness && r.readiness.length)
-        ? `<table><tr><th>Gap</th><th>Blocking</th><th>Why</th></tr>` +
-          r.readiness.map(g => `<tr><td>${esc(g.name)}</td>
-            <td>${g.blocking?'<span style="color:var(--red)">yes</span>':'no'}</td>
-            <td>${esc(g.why)}</td></tr>`).join('') + `</table>`
-        : '<span style="color:var(--muted)">No readiness gaps computed yet.</span>')
-      + (open.length
-        ? `<div style="margin:10px 0 4px;font-weight:600">Open review requests</div>`
-          + open.map(x => `<div class="att-item" style="margin:5px 0">
-              <span class="blk b${x.blocking?1:0}">${x.blocking?'blocking':'review'}</span>
-              <span class="txt">${esc(x.decision_needed)}
-                <div class="meta">rev ${x.revision??'—'} · #${x.id}</div></span>
-              <button class="act" data-resolve="${x.id}">Resolve…</button>
-            </div>`).join('')
-        : '')
-      + (done.length
-        ? `<details style="margin-top:8px"><summary style="cursor:pointer;
-             color:var(--muted);font-size:11.5px">${done.length} resolved/older
-             request(s)</summary>` +
-          done.map(x => `<div style="padding:4px 0;color:var(--muted)">
-            #${x.id} ${esc(x.decision_needed)} — ${x.status}
-            ${x.disposition ? '· ' + esc(x.disposition) : ''}</div>`).join('')
-          + `</details>` : '')
-      + `<div style="margin-top:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-          ${r.head && !r.approval ? `<button class="act" data-approve="${r.head}">
-            Approve revision r${r.head}</button>` : ''}
-          <span data-rvmsg style="font:11px var(--mono);color:var(--muted)"></span>
-         </div>`;
-    el.querySelectorAll('[data-resolve]').forEach(b => b.onclick = async () => {
-      const disp = prompt('Disposition (what was decided and why):');
-      if(!disp) return;
-      await fetch('/api/review/resolve', {method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({project: fid, review_id: +b.dataset.resolve,
-                              disposition: disp})});
-      loadFlowDetail(fid); loadFlows();
-    });
-    el.querySelectorAll('[data-approve]').forEach(b => b.onclick = async () => {
-      const reason = prompt(`Approve revision r${b.dataset.approve} for handoff? State the reason:`);
-      if(!reason) return;
-      const res = await (await fetch('/api/approve', {method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({project: fid, revision: +b.dataset.approve, reason})})).json();
-      el.querySelector('[data-rvmsg]').textContent =
-        res.error || ('approved r' + res.revision);
-      loadFlowDetail(fid); loadFlows();
-    });
-  }else{
-    el.innerHTML = (d.artifacts && d.artifacts.length)
-      ? d.artifacts.map(a => `<div>📄 ${esc(a.label)} —
-          ${a.formats.map(fm => `<a href="/api/export?project=${fid}&format=${fm}"
-            style="color:var(--accent)">${fm}</a>`).join(' · ')}</div>`).join('')
-      : `<span style="color:var(--muted)">No artifacts exist yet. Architecture,
-         build and test outputs will appear here once those capabilities are
-         implemented — nothing is fabricated in the meantime.</span>`;
-  }
+  el.innerHTML = (d.events && d.events.length)
+    ? `<table><tr><th>When</th><th>Event</th><th>Actor</th></tr>` +
+      d.events.map(e => `<tr><td>${new Date(e.ts*1000).toLocaleString()}</td>
+        <td>${esc(e.type)}</td><td>${esc(e.actor)}</td></tr>`).join('') + `</table>`
+    : '<span style="color:var(--muted)">No recorded events.</span>';
 }
 
 /* ================= sessions (owner testing) & review ================= */
@@ -1606,6 +1519,14 @@ class Handler(BaseHTTPRequestHandler):
         elif route == "/api/management":
             scope = (store.SYSTEM_SCOPE if q.get("scope") == "system" else pid)
             self._json(supervisor.management_payload(scope))
+        elif route == "/api/transcript":
+            # the interview conversation (the bot's INPUT) as a plain text file
+            lines = [f"{'Client' if m['role']=='human' else 'Requirements Bot'}: "
+                     f"{m['text']}" for m in controller.chat_payload(pid)["messages"]]
+            self._send(("\n\n".join(lines) + "\n").encode("utf-8"),
+                       "text/plain; charset=utf-8",
+                       {"Content-Disposition":
+                        f'attachment; filename="{pid}_conversation.txt"'})
         elif route == "/api/export":
             out = controller.export_package(pid, q.get("format", "legacy"))
             body = json.dumps(out, indent=2, ensure_ascii=False,
