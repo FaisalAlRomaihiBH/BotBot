@@ -163,6 +163,7 @@ body.view-log #main{overflow:hidden}
 #log-body .ac{color:#c678dd}
 #log-body .dt{color:#7f848e}
 #log-body .prj{color:#d19a66;font-weight:600}
+#log-body .ln.dim span{color:#4b5263}
 #log-body .who{font-weight:600}
 #log-body .who.client{color:#e5c07b}
 #log-body .who.bot{color:#56b6c2}
@@ -959,12 +960,13 @@ async function loadLog(){
   // to the bottom unless the user has scrolled up to read history
   const stick = body.scrollHeight - body.scrollTop - body.clientHeight < 40
     || !body.dataset.filled;
-  const lines = events.slice().reverse().map(e => {
+  const lines = events.slice().reverse()
+    .filter(e => e.type !== 'message.received')
+    .map(e => {
     const ts = `<span class="ts">[${
       new Date(e.ts*1000).toLocaleTimeString('en-GB')}]</span>`;
     const proj = e.project_id === '__system__' ? 'system'
-      : e.project_num != null
-        ? `#${e.project_num}${e.project_name ? ':'+e.project_name : ''}` : '?';
+      : `PROJECT${e.project_num ?? '?'}`;
     if(e.kind === 'msg'){
       // conversation messages, ops-log style with a direction arrow:
       //   [ts] PROJECT13 Client1 → RequirementBot   (the client writing)
@@ -984,7 +986,8 @@ async function loadLog(){
       .map(([k,v]) => `${k}=${typeof v==='object'?JSON.stringify(v):v}`).join(' ');
     const cls = /fail|error/.test(e.type) ? ' err'
       : /review.requested|reset/.test(e.type) ? ' warn' : '';
-    return `<div class="ln">${ts} <span class="pr">${
+    const dim = e.type === 'revision.committed' ? ' dim' : '';
+    return `<div class="ln${dim}">${ts} <span class="prj">${
       esc(proj)}</span> <span class="ev${cls}">${esc(e.type)}</span> <span class="ac">(${
       esc(e.actor)})</span>${detail ? ` <span class="dt">${esc(detail)}</span>` : ''}</div>`;
   }).join('');
