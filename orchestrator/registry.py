@@ -50,6 +50,14 @@ def capabilities() -> list[dict]:
             "configured": api_key_present,
             "mode": supervisor.mode(),
         },
+        # Roadmap: planned, not implemented, non-executable — the second
+        # orchestrator under the BotBot platform (renders on the BotBot ring
+        # next to Chatbot Orchestrator, not among the specialist bots).
+        {"id": "qualification_orchestrator", "name": "Qualification Orchestrator",
+         "kind": "orchestrator", "purpose": "Qualifies incoming leads before "
+         "the chatbot pipeline: decides whether a business is ready for a "
+         "project and routes it to the Chatbot Orchestrator",
+         "installed": False, "enabled": False, "planned": True},
         # Roadmap: planned, not implemented, non-executable — the three
         # future specialists around the Orchestrator (map order).
         {"id": "architecture_agent", "name": "Architect Bot",

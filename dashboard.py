@@ -1233,7 +1233,9 @@ function renderGraph(){
     rC *= k; rN *= k;
     ring = Math.min(W, H)/2 - rN - margin;
   }
-  const caps = sys.capabilities.filter(c => c.id !== 'ai_supervisor' && !c.hidden);
+  const caps = sys.capabilities.filter(c => c.id !== 'ai_supervisor'
+    && !c.hidden && c.kind !== 'orchestrator');
+  const orchs = sys.capabilities.filter(c => c.kind === 'orchestrator');
   const nActive = sys.active_runs.length;
   // "tasks" = open interviews (a person mid-conversation counts as work in
   // progress even while the bot waits for their reply); the spinning ring
@@ -1246,8 +1248,21 @@ function renderGraph(){
   if(graphFocus === 'botbot'){
     specs.push({id:'botbot', title:['BotBot','Orchestrator'], x:cx, y:cy, r:rC,
       big:true, pill:oPill, dot:oDot, ring: busy ? 'center-active' : 'center-idle'});
+    // BotBot's children share its ring: the live Chatbot Orchestrator plus
+    // any planned orchestrators from the registry (e.g. Qualification).
+    const kids = 1 + orchs.length;
     specs.push({id:'chatbot', title:['Chatbot','Orchestrator'], x:cx, y:cy-ring,
       r:rN, pill:oPill, dot:oDot, ring: busy ? 'running' : 'idle'});
+    orchs.forEach((c, i) => {
+      const a = (-90 + (i+1)*360/kids) * Math.PI/180;
+      specs.push({id:c.id, title:c.name.split(' '),
+        x:cx + ring*Math.cos(a), y:cy + ring*Math.sin(a), r:rN,
+        planned: !!c.planned,
+        pill: c.planned ? 'Planned' : (c.enabled ? 'Idle' : 'Disabled'),
+        dot: c.planned ? 'var(--muted)'
+          : c.enabled ? 'var(--green)' : 'var(--muted)',
+        ring: c.planned ? null : (c.enabled ? 'idle' : null)});
+    });
   } else {
     specs.push({id:'chatbot', title:['Chatbot','Orchestrator'], x:cx, y:cy, r:rC,
       big:true, pill:oPill, dot:oDot, ring: busy ? 'center-active' : 'center-idle'});
