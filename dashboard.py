@@ -143,7 +143,13 @@ body.view-flows #flows{display:flex}
 .fc-test{font:600 9px var(--mono);text-transform:uppercase;letter-spacing:.06em;
   color:var(--amber);border:1px solid #5c4a1e;border-radius:99px;padding:2px 7px}
 .fc-state{font:12px var(--sans);color:var(--text2)}
-.fc-when{margin-left:auto;font:10.5px var(--mono);color:var(--muted)}
+.fc-left{display:flex;flex-direction:column;min-width:0;margin-right:4px}
+.fc-ts{font:10px var(--mono);color:var(--muted);white-space:nowrap}
+.fc-cost{margin-left:auto;display:flex;flex-direction:column;
+  align-items:flex-end;white-space:nowrap}
+.fc-cost em{font:600 8.5px var(--sans);font-style:normal;text-transform:uppercase;
+  letter-spacing:.07em;color:var(--muted)}
+.fc-cost b{font:600 13px var(--mono);color:var(--text)}
 .fc-path{display:flex;align-items:flex-start;padding:6px 16px 16px;gap:0;
   overflow-x:auto}
 .fc-step{flex:1;min-width:150px;display:flex;flex-direction:column;
@@ -903,13 +909,18 @@ function renderFlows(){
       <div class="fc-head" role="button" tabindex="0"
         aria-expanded="${flowsUI.expanded.has(f.flow_id)}"
         aria-label="Flow ${esc(f.name)} — expand details">
+        <div class="fc-left">
+          <span class="fc-ts">${f.created_ts
+            ? new Date(f.created_ts*1000).toLocaleString([], {month:'short',
+                day:'numeric', hour:'2-digit', minute:'2-digit'}) : '—'}</span>
+          <span class="fc-id">${esc(f.flow_id)}</span>
+        </div>
         <span class="fc-name" title="${esc(f.name)}">${esc(f.name)}</span>
         ${f.contact ? `<span class="fc-id">· ${esc(f.contact)}</span>` : ''}
-        <span class="fc-id">${esc(f.flow_id)}</span>
         ${f.is_test ? `<span class="fc-test">Test</span>` : ''}
-        <span class="fc-state">Current: ${esc(cur ? cur.label : '—')}${
-          curStage.note ? ' · ' + esc(curStage.note) : ''}</span>
-        <span class="fc-when">${ago(f.last_activity_ts)}</span>
+        <span class="fc-state">Current: ${esc(cur ? cur.label : '—')}</span>
+        <span class="fc-cost"><em>${f.finished ? 'Total Cost' : 'Running cost'}</em>
+          <b>${f.total_cost_usd != null ? '$'+f.total_cost_usd.toFixed(2) : '—'}</b></span>
       </div>
       <div class="fc-path">${steps}</div>
       <div class="fc-detail">
@@ -1382,7 +1393,15 @@ def flows_payload() -> dict:
     for r in rows:
         f = controller.flow_projection(r, planned, r["id"] in client_ids)
         # real spend of the stages that actually run today
-        f["stage_metrics"] = {"interviewing": store.interviewing_metrics(r["id"])}
+        metrics = {"interviewing": store.interviewing_metrics(r["id"])}
+        f["stage_metrics"] = metrics
+        # flow-level cost: sum of known stage costs; a stage that ran on an
+        # unpriced model makes the total unknown rather than understated
+        costs = [m.get("cost_usd") for m in metrics.values() if m.get("calls")]
+        f["total_cost_usd"] = (None if any(c is None for c in costs)
+                               else round(sum(costs), 4) if costs else 0.0)
+        f["finished"] = any(s["id"] == "bot_created" and s["status"] == "completed"
+                            for s in f["stages"])
         flows.append(f)
     return {"template": controller.FLOW_TEMPLATE, "flows": flows}
 
