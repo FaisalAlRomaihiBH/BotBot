@@ -167,17 +167,22 @@ body.view-flows #flows{display:flex}
   line-height:1.5}
 .fc-step .mline b{color:var(--text);font-weight:500}
 .fc-step .mrow{display:flex;gap:5px;margin-top:4px;flex-wrap:nowrap;
-  justify-content:center}
+  justify-content:center;align-items:stretch}
 .fc-step .mcol{display:flex;flex-direction:column;align-items:center;gap:3px;
   padding:0 6px}
 .fc-step .mcol em{font:600 8px var(--sans);font-style:normal;
   text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
 .fc-step .mcol>b{font:500 11px var(--mono);color:var(--text)}
 .fc-step .mcol .msub{font:9.5px var(--mono);color:var(--muted)}
-.fc-step .mcard{display:flex;flex-direction:column;align-items:center;gap:5px;
+.fc-step .mcard{display:flex;flex-direction:column;align-items:center;gap:6px;
   border:1px solid var(--border);border-radius:10px;background:var(--panel2);
   padding:8px 10px;flex:1 1 0;min-width:0}
-.fc-step .mpair{display:flex;gap:2px}
+/* both pair rows share one 2-column grid, so the lower pair's columns sit
+   exactly centered under the upper pair's columns */
+.fc-step .mpair{display:grid;grid-template-columns:1fr 1fr;width:100%;gap:2px}
+.fc-step .mpair .mcol{padding:0 3px;justify-self:center;min-width:0}
+/* View pins to the card bottom; cards stretch to equal height */
+.fc-step .mcard .mjson{margin-top:auto}
 .fc-step .mjson{font:9.5px var(--mono);color:var(--text2);
   border:1px solid var(--border);border-radius:99px;padding:2px 7px;
   white-space:nowrap}
