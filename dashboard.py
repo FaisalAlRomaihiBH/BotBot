@@ -1063,9 +1063,11 @@ async function loadLog(){
     const actor = (e.actor === 'client' || e.actor === 'owner')
       && e.client_id != null ? `Client${e.client_id}` : e.actor;
     if(e.type === 'ui.click'){
-      // clicks read as an action, not a raw event record
+      // clicks read as an action; operator clicks carry no location prefix
       const label = (e.payload.label || '?').replace(/^[>_◎⇶◉≡\s]+/, '');
-      return `<div class="ln dim">${ts} <span class="prj">${esc(proj)}</span> ` +
+      const loc = proj === 'console' ? ''
+        : `<span class="prj">${esc(proj)}</span> `;
+      return `<div class="ln dim">${ts} ${loc}` +
         `<span class="ac">${esc(actor)}</span> <span class="dt">→ clicked</span> ` +
         `<span class="mt">"${esc(label)}"</span>${e.payload.view
           ? ` <span class="dt">in ${esc(String(e.payload.view).replace('view-',''))}</span>` : ''}</div>`;
