@@ -133,8 +133,8 @@ body{margin:0;background:var(--bg);color:var(--text);font:13px/1.45 var(--sans)}
 
 /* ---------- views ---------- */
 #chat,#home,#flows,#log,#clients,#sim,#queue,#costs{display:none}
-body.view-sim #sim{display:flex}
-body.view-sim #main{overflow:hidden}
+body.view-simtrain #sim,body.view-simtest #sim{display:flex}
+body.view-simtrain #main,body.view-simtest #main{overflow:hidden}
 body.view-chat #chat{display:flex}
 body.view-home #home{display:flex}
 body.view-flows #flows{display:flex}
@@ -243,16 +243,6 @@ body.view-costs #costs{display:flex}
   border-radius:10px;padding:12px 16px;display:flex;align-items:center;
   gap:12px;flex-wrap:wrap;font:12.5px var(--sans);color:var(--text2)}
 #sim-newfeat b{color:var(--amber);font-weight:600}
-#sim-types{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.sim-type{background:var(--panel);border:1px solid var(--border);
-  border-radius:10px;padding:18px 20px;display:flex;flex-direction:column;
-  gap:7px;cursor:pointer;text-align:center;align-items:center}
-.sim-type:hover,.sim-type:focus{border-color:var(--accent);outline:none}
-.sim-type .ico{font-size:26px;color:var(--accent);line-height:1}
-.sim-type .tt{font:600 14.5px var(--sans);color:var(--text)}
-.sim-type .td{font:12px var(--sans);color:var(--muted);line-height:1.55;
-  max-width:340px}
-@media (max-width:900px){#sim-types{grid-template-columns:1fr}}
 #simt-form{background:var(--panel);border:1px solid var(--border);
   border-radius:8px;padding:14px;display:none;flex-direction:column;gap:9px}
 #simt-form.open{display:flex}
@@ -767,7 +757,8 @@ body.view-clients #main{overflow:hidden}
       <div class="nav-item active" id="nav-home" data-view="home"><span class="nav-ico">◎</span><span class="nav-label">Home</span></div>
       <div class="nav-item" id="nav-log" data-view="log"><span class="nav-ico">&gt;_</span><span class="nav-label">Terminal</span></div>
       <div class="nav-item" id="nav-flows" data-view="flows"><span class="nav-ico">⇶</span><span class="nav-label">Workflows</span></div>
-      <div class="nav-item" id="nav-sim" data-view="sim"><span class="nav-ico">⚗</span><span class="nav-label">Simulation Lab</span></div>
+      <div class="nav-item" id="nav-simtrain" data-view="simtrain"><span class="nav-ico">⚗</span><span class="nav-label">Training Lab</span></div>
+      <div class="nav-item" id="nav-simtest" data-view="simtest"><span class="nav-ico">⌖</span><span class="nav-label">Testing Lab</span></div>
       <div class="nav-item" id="nav-clients" data-view="clients"><span class="nav-ico">◉</span><span class="nav-label">Clients</span></div>
       <div class="nav-item" id="nav-queue" data-view="queue"><span class="nav-ico">⇅</span><span class="nav-label">Rate Limiting</span></div>
       <div class="nav-item" id="nav-costs" data-view="costs"><span class="nav-ico">$</span><span class="nav-label">Costs</span></div>
@@ -810,26 +801,8 @@ body.view-clients #main{overflow:hidden}
     </div>
 
     <div id="sim">
-      <div class="row" id="simt-backrow" style="display:none">
-        <button class="act" id="simt-back" title="Back to test types">← Back</button>
-        <span class="m" id="simt-mode-label"></span>
-      </div>
-      <div id="sim-types">
-        <div class="sim-type" id="simtype-training" role="button" tabindex="0">
-          <span class="ico">◎</span>
-          <span class="tt">Requirement Bot Training</span>
-          <span class="td">Persona sweeps, stress tests and regression pins —
-            batches of fake businesses interview the bot, an analyst finds
-            problems and drafts fixes.</span>
-        </div>
-        <div class="sim-type" id="simtype-feature" role="button" tabindex="0">
-          <span class="ico">⌖</span>
-          <span class="tt">Feature Testing</span>
-          <span class="td">One persona per feature, nothing else defined —
-            each feature its own parallel test with a strict YES/NO
-            verdict.</span>
-        </div>
-      </div>
+      <div class="sim-head"><span class="t" id="simt-mode-label"></span>
+        <span class="m" id="simt-mode-desc"></span></div>
       <div id="sim-newfeat" style="display:none"></div>
       <div id="simt-form">
         <span id="simt-f-kind"><label>Test type</label>
@@ -872,7 +845,6 @@ body.view-clients #main{overflow:hidden}
             becomes its own parallel test with a YES/NO verdict</label>
           <div id="simt-featchips">Loading feature catalog…</div></span>
         <div class="row"><button class="act" id="simt-start">Start test</button>
-          <button class="act" id="simt-cancel">Cancel</button>
           <span class="m" id="simt-note">estimated cost: ~$0.20-0.40 per
             persona, plus the analysis (Haiku ~$0.10; regression pins skip
             AI analysis entirely)</span></div>
@@ -992,7 +964,8 @@ $('#sb-toggle').onclick = () => {
 };
 const VIEW_TITLES = {home:'Operations', flows:'Workflows',
   chat:'Operator Test Chat', log:'Terminal', clients:'Clients',
-  sim:'Simulation Lab', queue:'Rate Limiting', costs:'Costs'};
+  simtrain:'Training Lab', simtest:'Testing Lab',
+  queue:'Rate Limiting', costs:'Costs'};
 function showView(view){
   document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('active'));
   document.getElementById('nav-' + (view === 'chat' ? 'flows' : view))
@@ -1004,7 +977,8 @@ function showView(view){
   if(view === 'flows') loadFlows();
   if(view === 'log') loadLog();
   if(view === 'clients') loadClients();
-  if(view === 'sim') loadSim();
+  if(view === 'simtrain') openSimTab('training');
+  if(view === 'simtest') openSimTab('feature_check');
   if(view === 'queue') loadQueue();
   if(view === 'costs') loadCosts();
 }
@@ -1478,7 +1452,7 @@ $('#sup-toggle').onclick = async () => {
 /* (owner test chat + copy link removed from sidebar) */
 
 /* ================= Simulation Lab ================= */
-const simUI = {runs: [], tests: [], expanded: new Set(), mode: null};
+const simUI = {runs: [], tests: [], expanded: new Set(), mode: 'training'};
 async function loadFeatureCatalog(){
   if(loadFeatureCatalog.done) return;
   try{
@@ -1510,35 +1484,26 @@ async function loadFeatureCatalog(){
     loadFeatureCatalog.done = true;
   }catch(e){}
 }
-/* Picking a test-type box REPLACES the boxes with the form (back arrow to
-   return) — the boxes stacking behind the open form read as clutter. */
-function openSimForm(mode){
+/* Two labs, two tabs: Training (sweeps, stress, regression) and Testing
+   (feature checks). Same engine and archive underneath — each tab shows its
+   own form and only its own tests. */
+function openSimTab(mode){
   simUI.mode = mode;
+  simUI.sig = '';   // the tests list filters by tab — force a re-render
   if(mode === 'feature_check') loadFeatureCatalog();
-  $('#sim-types').style.display = 'none';
-  $('#simt-backrow').style.display = 'flex';
-  $('#simt-mode-label').textContent = mode === 'feature_check'
+  const feat = mode === 'feature_check';
+  $('#simt-mode-label').textContent = feat
     ? 'Feature Testing' : 'Requirement Bot Training';
+  $('#simt-mode-desc').textContent = feat
+    ? 'One persona per ticked feature, nothing else defined — each feature '
+      + 'its own parallel test with a strict YES/NO verdict.'
+    : 'Persona sweeps, stress tests and regression pins — batches of fake '
+      + 'businesses interview the bot, an analyst finds problems and drafts '
+      + 'fixes.';
   $('#simt-kind').onchange();
   $('#simt-form').classList.add('open');
-  $('#simt-form').scrollIntoView({behavior: 'smooth', block: 'nearest'});
+  loadSim();
 }
-function closeSimForm(){
-  simUI.mode = null;
-  $('#simt-form').classList.remove('open');
-  $('#simt-backrow').style.display = 'none';
-  $('#sim-types').style.display = '';
-}
-for(const [id, mode] of [['#simtype-training', 'training'],
-                         ['#simtype-feature', 'feature_check']]){
-  const el = $(id);
-  el.onclick = () => openSimForm(mode);
-  el.onkeydown = e => {
-    if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); el.onclick(); }
-  };
-}
-$('#simt-back').onclick = closeSimForm;
-$('#simt-cancel').onclick = closeSimForm;
 $('#simt-kind').onchange = () => {
   const feat = simUI.mode === 'feature_check';
   const k = feat ? 'feature_check' : $('#simt-kind').value;
@@ -1569,7 +1534,6 @@ $('#simt-start').onclick = async () => {
       body.level = +$('#simt-level').value;
     }
   }
-  closeSimForm();
   await fetch('/api/sim/test', {method:'POST',
     headers:{'Content-Type':'application/json'},
     body: JSON.stringify(body)});
@@ -1872,13 +1836,19 @@ async function loadSim(){
       (await fetch('/api/sim/runs')).json(),
       (await fetch('/api/sim/tests')).json()]);
   }catch(e){ return; }
-  const sig = JSON.stringify([simUI.tests, simUI.runs.map(r =>
+  const feat = simUI.mode === 'feature_check';
+  // Each lab tab lists only its own tests (one shared archive underneath).
+  const shown = simUI.tests.filter(t => (t.kind === 'feature_check') === feat);
+  const sig = JSON.stringify([simUI.mode, shown, simUI.runs.map(r =>
     [r.id, r.status, r.turns]), [...simUI.expanded]]);
   if(sig === simUI.sig) return;   // nothing changed — don't disturb clicks
   simUI.sig = sig;
-  // NEW-FEATURE BUBBLE: schema fields that exist in the requirements form
-  // but have never been feature-tested get flagged for one-click testing
+  // NEW-FEATURE BUBBLE (Testing Lab only): schema fields that exist in the
+  // requirements form but have never been feature-tested get flagged for
+  // one-click testing
   try{
+    if(!feat) $('#sim-newfeat').style.display = 'none';
+    else{
     if(!simUI.catalog)
       simUI.catalog = await (await fetch('/api/sim/feature_catalog')).json();
     const tested = new Set(simUI.tests
@@ -1906,12 +1876,18 @@ async function loadSim(){
         loadSim();
       };
     } else box.style.display = 'none';
+    }
   }catch(e){}
-  $('#sim-tests').innerHTML = simUI.tests.map(simtCard).join('')
-    || `<div class="empty-state"><b>No tests yet</b>
-        <span>Add Test runs a batch of fake businesses through the bot and
-        analyzes every input and output for problems and fixes. Every test,
-        conversation, and brief is archived here permanently.</span></div>`;
+  $('#sim-tests').innerHTML = shown.map(simtCard).join('')
+    || (feat
+      ? `<div class="empty-state"><b>No feature tests yet</b>
+          <span>Tick features above and start — each ticked feature runs as
+          its own parallel test with a YES/NO verdict, archived here
+          permanently.</span></div>`
+      : `<div class="empty-state"><b>No training tests yet</b>
+          <span>Start test runs a batch of fake businesses through the bot and
+          analyzes every input and output for problems and fixes. Every test,
+          conversation, and brief is archived here permanently.</span></div>`);
   document.querySelectorAll('.simt-card .simt-top').forEach(h => {
     const tid = +h.parentElement.dataset.tid;
     const toggle = () => {
@@ -2498,7 +2474,8 @@ setInterval(() => {
   if(document.body.className === 'view-clients') loadClients();
 }, 5000);
 setInterval(() => {
-  if(document.body.className === 'view-sim') loadSim();
+  if(['view-simtrain', 'view-simtest'].includes(document.body.className))
+    loadSim();
 }, 3000);
 </script></body></html>"""
 
