@@ -117,11 +117,29 @@ body{margin:0;background:var(--bg);color:var(--text);font:13px/1.45 var(--sans)}
 @keyframes rot{to{transform:rotate(360deg)}}
 
 /* ---------- views ---------- */
-#chat,#home,#flows,#log{display:none}
+#chat,#home,#flows,#log,#clients{display:none}
 body.view-chat #chat{display:flex}
 body.view-home #home{display:flex}
 body.view-flows #flows{display:flex}
 body.view-log #log{display:flex}
+body.view-clients #clients{display:flex}
+
+/* ---------- clients ---------- */
+#clients{flex-direction:column;margin:14px 20px 20px;min-height:0;
+  background:var(--panel);border:1px solid var(--border);border-radius:8px}
+#clients-body{flex:1;overflow-y:auto;min-height:0}
+#clients-body table{width:100%;border-collapse:collapse;font-size:12.5px}
+#clients-body th{position:sticky;top:0;background:var(--panel);z-index:1;
+  font:600 10px var(--sans);text-transform:uppercase;letter-spacing:.06em;
+  color:var(--muted);text-align:left;padding:9px 14px;
+  border-bottom:1px solid var(--border)}
+#clients-body td{padding:8px 14px;border-bottom:1px solid var(--border);
+  color:var(--text2);vertical-align:top}
+#clients-body td.cid{font:600 13px var(--mono);color:var(--accent);
+  white-space:nowrap}
+#clients-body td.cname{color:var(--text)}
+#clients-body td.cmono{font:11px var(--mono);white-space:nowrap}
+.clients-empty{padding:30px;text-align:center;color:var(--muted)}
 #flows{flex-direction:column;margin:14px 20px 20px;gap:12px;min-height:0}
 
 /* ---------- live log: a terminal ---------- */
@@ -221,6 +239,8 @@ body.view-log #main{overflow:hidden}
 .fc-step .mpair .mcol{padding:0;min-width:0}
 .fc-step .mpill{border:1px solid var(--border-hi);border-radius:99px;
   padding:1px 11px}
+.fc-step .mtotal{font:600 12px var(--mono);color:var(--text);
+  padding:2px 14px}
 .fc-step .mmodel{font:9.5px var(--mono);color:var(--muted);margin-top:2px;
   border:1px solid var(--border);border-radius:99px;padding:1px 8px}
 /* View pins to the card bottom; cards stretch to equal height */
@@ -297,6 +317,7 @@ body.view-home #main{overflow:hidden}
 /* ---------- Home: header-free, the map IS the page ---------- */
 body.view-home #run-header,body.view-flows #run-header,
 body.view-log #run-header{display:none}
+body.view-clients #main{overflow:hidden}
 
 /* ---------- orchestrator map: fills the workspace ---------- */
 #graph-wrap{flex:1;min-height:0;position:relative;display:flex;
@@ -485,6 +506,7 @@ body.view-log #run-header{display:none}
       <div class="nav-item active" id="nav-home" data-view="home"><span class="nav-ico">◎</span><span class="nav-label">Home</span></div>
       <div class="nav-item" id="nav-log" data-view="log"><span class="nav-ico">&gt;_</span><span class="nav-label">Terminal</span></div>
       <div class="nav-item" id="nav-flows" data-view="flows"><span class="nav-ico">⇶</span><span class="nav-label">Chatbot Flows</span></div>
+      <div class="nav-item" id="nav-clients" data-view="clients"><span class="nav-ico">◉</span><span class="nav-label">Clients</span></div>
     </nav>
     <div id="sb-foot">
       <div><span class="dot" id="dot-store"></span><span id="txt-store">store: checking…</span></div>
@@ -508,6 +530,10 @@ body.view-log #run-header{display:none}
 
     <div id="flows">
       <div id="flows-list"></div>
+    </div>
+
+    <div id="clients">
+      <div id="clients-body">Loading…</div>
     </div>
 
     <div id="log">
@@ -577,7 +603,7 @@ $('#sb-toggle').onclick = () => {
   if(document.body.className === 'view-home') renderGraph();
 };
 const VIEW_TITLES = {home:'Operations', flows:'Chatbot Flows',
-  chat:'Owner Test Chat', log:'Terminal'};
+  chat:'Owner Test Chat', log:'Terminal', clients:'Clients'};
 function showView(view){
   document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('active'));
   document.getElementById('nav-' + (view === 'chat' ? 'flows' : view))
@@ -588,6 +614,7 @@ function showView(view){
   if(view === 'home') loadSystem();
   if(view === 'flows') loadFlows();
   if(view === 'log') loadLog();
+  if(view === 'clients') loadClients();
 }
 document.querySelectorAll('.nav-item[data-view]').forEach(item =>
   item.onclick = () => showView(item.dataset.view));
@@ -891,6 +918,30 @@ $('#sup-toggle').onclick = async () => {
 
 /* (owner test chat + copy link removed from sidebar) */
 
+/* ================= Clients ================= */
+async function loadClients(){
+  let clients = [];
+  try{ clients = await (await fetch('/api/clients')).json(); }
+  catch(e){ return; }
+  $('#clients-body').innerHTML = clients.length
+    ? `<table><tr><th>Client ID</th><th>Name</th><th>Business</th>
+        <th>Project</th><th>State</th><th>Messages</th><th>Registered</th>
+        <th>Last seen</th></tr>` + clients.map(c => `<tr>
+        <td class="cid">Client ${c.client_id}</td>
+        <td class="cname">${esc(c.contact_name || '—')}</td>
+        <td class="cname">${esc(c.business_name || '—')}</td>
+        <td class="cmono">#${c.project_num ?? '—'}</td>
+        <td>${esc(c.state || '—')}${c.interview_complete ? ' ✓' : ''}</td>
+        <td class="cmono">${c.msgs ?? 0}</td>
+        <td class="cmono">${c.created_ts
+          ? new Date(c.created_ts*1000).toLocaleString() : '—'}</td>
+        <td class="cmono">${c.last_seen_ts ? ago(c.last_seen_ts) : '—'}</td>
+      </tr>`).join('') + `</table>`
+    : `<div class="clients-empty">No clients registered yet — every person
+       who starts an interview through the client link gets the next
+       Client ID, starting at 1.</div>`;
+}
+
 /* ================= Live Log (system-wide event feed) ================= */
 let logSig = '';
 async function loadLog(){
@@ -914,11 +965,18 @@ async function loadLog(){
       : e.project_num != null
         ? `#${e.project_num}${e.project_name ? ':'+e.project_name : ''}` : '?';
     if(e.kind === 'msg'){
-      // an actual conversation message between the client and the bot
-      const who = e.role === 'owner' ? 'client' : 'bot';
+      // conversation messages carry their DIRECTIONAL path:
+      //   project23>Client23>RequirementBot:  (the client writing to the bot)
+      //   RequirementBot>project23>Client23:  (the bot answering the client)
+      const client = e.client_id != null ? `Client${e.client_id}` : 'owner';
+      const projPart = e.project_num != null ? `project${e.project_num}` : 'project?';
+      const P = `<span class="pr">${projPart}</span>`;
+      const C = `<span class="who client">${client}</span>`;
+      const B = `<span class="who bot">RequirementBot</span>`;
+      const path = e.role === 'owner'
+        ? `${P}&gt;${C}&gt;${B}:` : `${B}&gt;${P}&gt;${C}:`;
       const text = e.text.length > 300 ? e.text.slice(0, 300) + '…' : e.text;
-      return `<div class="ln">${ts} <span class="pr">${esc(proj)}</span> ` +
-        `<span class="who ${who}">${who}&gt;</span> <span class="mt" title="${
+      return `<div class="ln">${ts} ${path} <span class="mt" title="${
         esc(e.text.slice(0, 1000))}">${esc(text)}</span></div>`;
     }
     const detail = Object.entries(e.payload||{})
@@ -953,6 +1011,7 @@ function fmtTok(n){
 function fmtSecs(s){
   if(s==null) return 'time —';
   s = Math.round(s);
+  if(s >= 3600) return `${Math.floor(s/3600)}h ${Math.floor(s%3600/60)}m`;
   return s >= 60 ? `${Math.floor(s/60)}m ${s%60}s` : `${s}s`;
 }
 function ago(ts){
@@ -1033,6 +1092,8 @@ function renderFlows(){
 
         ${t.id==='interviewing' && m && m.calls ? `<span class="mrow mstack">
           <span class="mcard">
+            <b class="mpill mtotal" title="Total cost of this stage so far">${
+              m.cost_usd!=null ? '$'+m.cost_usd.toFixed(2) : '—'}</b>
             <span class="mpair">
               <span class="mcol" title="Input side (conversation fed into the model)">
                 <em>Human Cost</em><b>${m.cost_in_usd!=null
@@ -1052,8 +1113,8 @@ function renderFlows(){
                 <em>Sent</em><b class="mpill">${m.msgs_sent ?? '—'}</b></span>
             </span>
             <span class="mpair mtime">
-              <span class="mcol" title="Active model processing time">
-                <em>Total</em><b>${fmtSecs(m.active_seconds)}</b></span>
+              <span class="mcol" title="Conversation duration: first message to the last (to now while the interview is still open)">
+                <em>Total</em><b>${fmtSecs(m.elapsed_seconds ?? m.active_seconds)}</b></span>
               <span class="mcol" title="Average client reply gap">
                 <em>Avg Receive</em><b>${m.avg_client_seconds!=null
                   ? fmtSecs(m.avg_client_seconds) : '—'}</b></span>
@@ -1287,6 +1348,9 @@ setInterval(() => {
 setInterval(() => {
   if(document.body.className === 'view-log') loadLog();
 }, 3000);
+setInterval(() => {
+  if(document.body.className === 'view-clients') loadClients();
+}, 5000);
 </script></body></html>"""
 
 
@@ -1715,6 +1779,8 @@ class Handler(BaseHTTPRequestHandler):
             self._json(store.open_reviews_all())
         elif route == "/api/log":
             self._json(store.recent_terminal_feed())
+        elif route == "/api/clients":
+            self._json(store.list_clients())
         elif route == "/chat/history":
             self._json(chat_history(pid))
         elif route == "/api/review":

@@ -50,6 +50,10 @@ CREATE TABLE IF NOT EXISTS client_sessions(
   project_id TEXT NOT NULL REFERENCES projects(id),
   created_ts REAL NOT NULL, last_seen_ts REAL NOT NULL,
   revoked INTEGER NOT NULL DEFAULT 0);
+CREATE TABLE IF NOT EXISTS clients(
+  id INTEGER PRIMARY KEY AUTOINCREMENT,   -- Client ID: 1, 2, 3, ...
+  project_id TEXT NOT NULL UNIQUE REFERENCES projects(id),
+  created_ts REAL NOT NULL);
 CREATE TABLE IF NOT EXISTS busy(
   project_id TEXT PRIMARY KEY,     -- a model turn is executing for this project
   started_ts REAL NOT NULL);
@@ -203,7 +207,35 @@ def create_client_session(project_id: str) -> str:
         con.execute("INSERT INTO client_sessions(token, project_id, created_ts, "
                     "last_seen_ts) VALUES(?,?,?,?)",
                     (token, project_id, time.time(), time.time()))
+        # Register the client: every person who comes in through the client
+        # link gets the next sequential Client ID, starting at 1.
+        con.execute("INSERT OR IGNORE INTO clients(project_id, created_ts) "
+                    "VALUES(?,?)", (project_id, time.time()))
     return token
+
+
+def list_clients() -> list[dict]:
+    """Every registered client (people who came in via the client link),
+    Client ID ascending, with their project and interview facts."""
+    with _connect() as con:
+        rows = con.execute(
+            "SELECT c.id AS client_id, c.project_id, c.created_ts,"
+            " p.name AS project_name, p.num AS project_num, p.state,"
+            " s.complete AS interview_complete,"
+            " (SELECT MAX(last_seen_ts) FROM client_sessions cs"
+            "   WHERE cs.project_id = c.project_id) AS last_seen_ts,"
+            " (SELECT COUNT(*) FROM messages m WHERE m.project_id=c.project_id"
+            "   AND m.conversation='interview' AND m.role='owner') AS msgs,"
+            " (SELECT json_extract(v.requirements,'$.contact_name')"
+            "   FROM revisions v WHERE v.project_id=c.project_id"
+            "   ORDER BY v.rev DESC LIMIT 1) AS contact_name,"
+            " (SELECT json_extract(v.requirements,'$.business_name')"
+            "   FROM revisions v WHERE v.project_id=c.project_id"
+            "   ORDER BY v.rev DESC LIMIT 1) AS business_name"
+            " FROM clients c JOIN projects p ON p.id = c.project_id"
+            " LEFT JOIN sessions s ON s.project_id = c.project_id"
+            " ORDER BY c.id").fetchall()
+    return [dict(r) for r in rows]
 
 
 def resolve_client_session(token: str) -> str | None:
@@ -367,7 +399,9 @@ def recent_terminal_feed(limit: int = 150) -> list[dict]:
     with _connect() as con:
         rows = con.execute(
             "SELECT m.id AS seq, m.project_id, m.role, m.text, m.ts,"
-            " p.name AS project_name, p.num AS project_num"
+            " p.name AS project_name, p.num AS project_num,"
+            " (SELECT id FROM clients c WHERE c.project_id=m.project_id)"
+            "   AS client_id"
             " FROM messages m LEFT JOIN projects p ON p.id = m.project_id"
             " WHERE m.conversation='interview'"
             " ORDER BY m.id DESC LIMIT ?", (limit,)).fetchall()
@@ -455,6 +489,16 @@ def interviewing_metrics(pid: str) -> dict:
             (pid,)).fetchone()["a"]
     sent = sum(1 for m in msgs if m["role"] == "bot")
     received = sum(1 for m in msgs if m["role"] == "owner")
+    # Wall-clock conversation duration: first message to the last one once
+    # the interview is complete, to NOW while it is still open (an open
+    # interview is still running — waiting for the client counts).
+    elapsed = None
+    if msgs:
+        with _connect() as con:
+            done = con.execute("SELECT complete FROM sessions WHERE project_id=?",
+                               (pid,)).fetchone()
+        end = msgs[-1]["ts"] if (done and done["complete"]) else time.time()
+        elapsed = max(0.0, end - msgs[0]["ts"])
     gaps, prev_bot = [], None
     for m in msgs:
         if m["role"] == "bot":
@@ -478,6 +522,7 @@ def interviewing_metrics(pid: str) -> dict:
             "cost_in_usd": cost_in, "cost_out_usd": cost_out,
             "tokens_in": r["f"] + r["cr"] + r["cw"], "tokens_out": r["o"],
             "cost_usd": cost, "active_seconds": r["dur"],
+            "elapsed_seconds": elapsed,
             "msgs_sent": sent, "msgs_received": received,
             "avg_client_seconds": avg_client, "avg_bot_seconds": avg_bot,
             "model": (r["model"] or "").replace("claude-", "") or None}
