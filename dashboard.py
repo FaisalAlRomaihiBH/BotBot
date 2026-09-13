@@ -174,10 +174,11 @@ body.view-flows #flows{display:flex}
 .fc-step .mline{font:10px var(--mono);color:var(--text2);margin-top:4px;
   line-height:1.5}
 .fc-step .mline b{color:var(--text);font-weight:500}
-.fc-step .mjson{font:10px var(--mono);color:var(--accent);margin-top:4px;
-  text-decoration:none;border:1px solid var(--border);border-radius:99px;
-  padding:2px 9px}
-.fc-step .mjson:hover{border-color:var(--accent)}
+.fc-step .mjson{font:10px var(--mono);color:var(--text2);margin-top:4px;
+  border:1px solid var(--border);border-radius:99px;padding:2px 9px;
+  white-space:nowrap}
+.fc-step .mjson a{color:var(--accent);text-decoration:none}
+.fc-step .mjson a:hover{text-decoration:underline}
 /* label / bot / status / metrics stack under each other */
 .fc-step>div{display:flex;flex-direction:column;align-items:center;min-width:0}
 .fc-step .lbl{margin-top:7px;font-size:13px;color:var(--text2);line-height:1.3}
@@ -915,10 +916,12 @@ function renderFlows(){
           <b>${m.cost_usd!=null ? '$'+m.cost_usd.toFixed(2) : 'cost —'}</b>
           · ${fmtTok(m.tokens_in)} in · ${fmtTok(m.tokens_out)} out
           · ${fmtSecs(m.active_seconds)} · ${esc(m.model||'—')}</span>` : ''}
-        ${t.id==='interviewing' && f.head_rev ? `<a class="mjson"
-          href="/api/export?project=${f.flow_id}&format=legacy" target="_blank"
-          title="The requirements JSON the bot has produced so far (revision r${f.head_rev})">
-          ⤓ Output JSON · r${f.head_rev}</a>` : ''}
+        ${t.id==='interviewing' && f.head_rev ? `<span class="mjson"
+          title="The requirements the bot has produced so far (revision r${f.head_rev})">
+          ⤓ Output r${f.head_rev} ·
+          <a href="/api/export?project=${f.flow_id}&format=legacy" target="_blank">JSON</a> /
+          <a href="/api/export?project=${f.flow_id}&format=legacy&as=txt" target="_blank">TXT</a>
+        </span>` : ''}
         </div></div>`;
     }).join('');
     const cur = tpl.find(t => t.id === f.current_stage);
@@ -1627,11 +1630,15 @@ class Handler(BaseHTTPRequestHandler):
             self._json(supervisor.management_payload(scope))
         elif route == "/api/export":
             out = controller.export_package(pid, q.get("format", "legacy"))
-            self._send(json.dumps(out, indent=2, ensure_ascii=False,
-                                  default=str).encode("utf-8"),
-                       "application/json",
-                       {"Content-Disposition":
-                        f'attachment; filename="{pid}_brief.json"'})
+            body = json.dumps(out, indent=2, ensure_ascii=False,
+                              default=str).encode("utf-8")
+            # same JSON content, downloadable as .json or .txt (as=txt)
+            as_txt = q.get("as") == "txt"
+            self._send(body,
+                       "text/plain; charset=utf-8" if as_txt
+                       else "application/json",
+                       {"Content-Disposition": f'attachment; filename='
+                        f'"{pid}_brief.{"txt" if as_txt else "json"}"'})
         else:
             self._json({"error": "unknown endpoint"}, status=404)
 
