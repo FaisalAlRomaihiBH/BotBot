@@ -1220,7 +1220,7 @@ function renderGraph(){
   const W = Math.max(560, wrap.clientWidth), H = Math.max(380, wrap.clientHeight);
   const sig = JSON.stringify([W, H, graphFocus, sys.active_runs.length,
     (sys.stats.project_states || {}).interviewing || 0,
-    sys.capabilities.map(c => [c.id, !!c.enabled, !!c.planned])]);
+    sys.capabilities.map(c => [c.id, !!c.enabled, !!c.planned, c.tasks || 0])]);
   if(sig === graphSig) return;
   graphSig = sig;
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
@@ -1243,31 +1243,43 @@ function renderGraph(){
   const nTasks = (sys.stats.project_states || {}).interviewing || 0;
   const busy = nActive > 0;
   const oDot = busy ? 'var(--accent)' : 'var(--green)';
-  const oPill = busy ? 'Working' : 'Idle';
+  // TASK ROLL-UP: every orchestrator's pill shows the TOTAL running tasks
+  // of all nodes inside it, and the parent shows the sum over its children —
+  // so Home answers "how much is going on?" without clicking in. A future
+  // orchestrator (or a future bot inside one) contributes by adding its
+  // count to its orchestrator's entry here; planned nodes contribute 0.
+  const orchTasks = {chatbot: nTasks};   // chatbot = its bots' tasks summed
+  for(const c of orchs) orchTasks[c.id] = c.planned ? 0 : (c.tasks || 0);
+  const totalTasks = Object.values(orchTasks).reduce((a, b) => a + b, 0);
+  const rollup = n => busy && n === 0 ? 'Working' : taskLabel(n);
   const specs = [];
   if(graphFocus === 'botbot'){
     specs.push({id:'botbot', title:['BotBot','Orchestrator'], x:cx, y:cy, r:rC,
-      big:true, pill:oPill, dot:oDot, ring: busy ? 'center-active' : 'center-idle'});
+      big:true, pill:rollup(totalTasks), dot:oDot,
+      ring: busy ? 'center-active' : 'center-idle'});
     // BotBot's children share its ring: the live Chatbot Orchestrator plus
     // any planned orchestrators from the registry (e.g. Qualification).
     const kids = 1 + orchs.length;
     specs.push({id:'chatbot', title:['Chatbot','Orchestrator'], x:cx, y:cy-ring,
-      r:rN, pill:oPill, dot:oDot, ring: busy ? 'running' : 'idle'});
+      r:rN, pill:rollup(orchTasks.chatbot), dot:oDot,
+      ring: busy ? 'running' : 'idle'});
     orchs.forEach((c, i) => {
       const a = (-90 + (i+1)*360/kids) * Math.PI/180;
       specs.push({id:c.id, title:c.name.split(' '),
         x:cx + ring*Math.cos(a), y:cy + ring*Math.sin(a), r:rN,
         planned: !!c.planned,
-        pill: c.planned ? 'Planned' : (c.enabled ? 'Idle' : 'Disabled'),
+        pill: c.planned ? 'Planned'
+          : c.enabled ? taskLabel(orchTasks[c.id]) : 'Disabled',
         dot: c.planned ? 'var(--muted)'
           : c.enabled ? 'var(--green)' : 'var(--muted)',
         ring: c.planned ? null : (c.enabled ? 'idle' : null)});
     });
   } else {
     specs.push({id:'chatbot', title:['Chatbot','Orchestrator'], x:cx, y:cy, r:rC,
-      big:true, pill:oPill, dot:oDot, ring: busy ? 'center-active' : 'center-idle'});
+      big:true, pill:rollup(orchTasks.chatbot), dot:oDot,
+      ring: busy ? 'center-active' : 'center-idle'});
     specs.push({id:'botbot', title:['BotBot','Orchestrator'], x:cx, y:cy-ring,
-      r:rN, pill:'Idle', dot:'var(--green)', ring:'idle'});
+      r:rN, pill:rollup(totalTasks), dot:oDot, ring: busy ? 'running' : 'idle'});
     caps.forEach((c, i) => {
       const a = (-90 + (i+1)*360/(caps.length+1)) * Math.PI/180;
       const x = cx + ring*Math.cos(a), y = cy + ring*Math.sin(a);
