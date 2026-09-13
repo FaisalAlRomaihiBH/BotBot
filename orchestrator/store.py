@@ -403,9 +403,17 @@ def interviewing_metrics(pid: str) -> dict:
     avg_client = (sum(gaps) / len(gaps)) if gaps else None
     # a single unpriced/unknown model makes the whole cost unknown — never
     # silently price it as something else
-    cost = (None if any(m not in PRICING for m in models)
+    unpriced = any(m not in PRICING for m in models)
+    cost = (None if unpriced
             else _cost_usd(r["model"], r["f"], r["cr"], r["cw"], r["o"]))
+    cost_in = cost_out = None
+    if not unpriced:
+        inp, outp = PRICING[r["model"]]
+        cost_in = (r["f"] * inp + r["cw"] * inp * 1.25
+                   + r["cr"] * inp * 0.10) / 1_000_000
+        cost_out = r["o"] * outp / 1_000_000
     return {"calls": r["n"], "turns": turns,
+            "cost_in_usd": cost_in, "cost_out_usd": cost_out,
             "tokens_in": r["f"] + r["cr"] + r["cw"], "tokens_out": r["o"],
             "cost_usd": cost, "active_seconds": r["dur"],
             "msgs_sent": sent, "msgs_received": received,
