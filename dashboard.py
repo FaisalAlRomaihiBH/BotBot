@@ -585,7 +585,7 @@ body.view-clients #main{overflow:hidden}
     </div>
 
     <div id="home">
-      <div id="graph-wrap" title="Nodes come from the capability registry. Idle means available, not missing. Lines are controller-mediated communication.">
+      <div id="graph-wrap">
         <svg id="graph" role="img" aria-label="Orchestrator map"></svg>
         <span id="home-stale"></span>
       </div>
