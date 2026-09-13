@@ -219,10 +219,7 @@ body.view-clients #clients{display:flex}
 .fbar .fb{display:flex;height:7px;border-radius:99px;overflow:hidden;
   margin:5px 0 6px;background:var(--panel2)}
 .fbar .fb span{min-width:3px}
-.fbar .fls{display:flex;flex-wrap:wrap;gap:3px 12px}
-.fbar .fl{font:10px var(--mono);color:var(--text2);white-space:nowrap}
-.fbar .fd{display:inline-block;width:7px;height:7px;border-radius:50%;
-  margin-right:5px;vertical-align:0}
+.fbar .fls{font:10px var(--mono);color:var(--text2);line-height:1.6}
 .simt-top{cursor:pointer}
 .simt-top .chev{color:var(--muted);font-size:12px}
 .simt-table{margin-top:12px;border:1px solid var(--border);border-radius:6px;
@@ -1211,8 +1208,9 @@ function simAgg(runs){
       if(new RegExp('\\b' + w + '\\b').test(t)) count(traits, w);
     if(/language|arabic|spanish|mixes/.test(t)) count(traits, 'mixes languages');
     const id = r.identity || {};
-    for(const l of (id.languages || [])) count(langs, String(l).slice(0, 16));
-    for(const c of (id.channels || [])) count(chans, String(c).slice(0, 18));
+    const asList = v => Array.isArray(v) ? v : (v == null ? [] : [v]);
+    for(const l of asList(id.languages)) count(langs, String(l).slice(0, 16));
+    for(const c of asList(id.channels)) count(chans, String(c).slice(0, 18));
     count(outcome, r.status === 'running' ? 'running'
       : r.status === 'failed' ? 'failed'
       : r.interview_complete ? 'completed' : 'incomplete');
@@ -1225,10 +1223,8 @@ function fbar(title, map, denom, overlapping){
   const total = entries.reduce((s, e) => s + e[1], 0);
   const segs = entries.map(([k, v], i) =>
     `<span style="flex:${v};background:${FBAR_COLORS[i % 8]}"></span>`).join('');
-  const lbls = entries.map(([k, v], i) =>
-    `<span class="fl"><span class="fd" style="background:${
-      FBAR_COLORS[i % 8]}"></span>${esc(k)} ${Math.round(v / denom * 100)}%</span>`)
-    .join('');
+  const lbls = entries.map(([k, v]) =>
+    `${esc(k)} ${Math.round(v / denom * 100)}%`).join(' · ');
   return `<div class="fbar"><em>${title}${overlapping
       ? ' <span class="fo">(overlapping)</span>' : ''}</em>
     <div class="fb">${segs}</div><div class="fls">${lbls}</div></div>`;
@@ -1274,7 +1270,7 @@ function simtCard(t){
   const open = simUI.expanded.has(t.id);
   const steps = SIMT_STEPS.slice(1).map(([key, label], i) => {
     const pos = i + 1;
-    const cls = failed && pos >= idx ? 'fail'
+    const cls = failed ? 'fail'
       : pos < idx || t.status === 'completed' ? 'done'
       : pos === idx ? 'cur' : '';
     const st = cls === 'done' ? 'Completed'
@@ -1302,7 +1298,6 @@ function simtCard(t){
       ${fbar('Personality', agg.traits, n, true)}
       ${fbar('Languages', agg.langs, n, true)}
       ${fbar('Channels wanted', agg.chans, n, true)}
-      ${fbar('Interview outcome', agg.outcome, n, false)}
     </div>` : '';
   const table = open && runs.length ? `<div class="simt-table">
     <table><tr><th>Persona</th><th>Industry</th><th>Size</th><th>Knows</th>
@@ -1319,8 +1314,8 @@ function simtCard(t){
         actually knew, how much the interview captured">score ${avgScore}%</span>` : ''}
       <span class="cost">${t.cost_usd != null ? '$'+t.cost_usd.toFixed(2) : ''}</span>
       <span class="chev">${open ? '▾' : '▸'}</span></div>
-    ${bars}
     <div class="simt-path">${steps}</div>
+    ${bars}
     ${table}
     <div class="simt-actions">
       ${t.has_report ? `<button class="act" onclick="simReport(${t.id})">View Report</button>` : ''}

@@ -157,6 +157,74 @@ def _cost_of(model: str, u: dict) -> float:
                            u["cache_write"], u["out"]) or 0.0
 
 
+def _analyze(cases: list, prompt_text: str, schema_text: str) -> tuple[str, dict]:
+    """The Opus analysis call. On this input size the model's invisible
+    reasoning can eat a small max_tokens whole and leave an empty report
+    (that is exactly what happened once), so: generous budget first, and a
+    thinking-disabled retry as the fallback."""
+    from langchain_anthropic import ChatAnthropic
+    from langchain_core.messages import HumanMessage
+    from requirements_bot import _blocks_to_text
+    content = (ANALYST_PROMPT.replace("{n}", str(len(cases)))
+               + f"\n\n=== CURRENT INTERVIEWER PROMPT ===\n{prompt_text}\n"
+               + f"\n=== CURRENT OUTPUT SCHEMA (models.py) ===\n{schema_text}\n\n"
+               + "\n".join(cases))
+    usage = {"fresh_in": 0, "cache_read": 0, "cache_write": 0, "out": 0}
+    for llm in (ChatAnthropic(model=ANALYST_MODEL, max_tokens=30000),
+                ChatAnthropic(model=ANALYST_MODEL, max_tokens=16000,
+                              thinking={"type": "disabled"})):
+        reply = llm.invoke([HumanMessage(content=content)])
+        _acc(usage, _usage_of(reply))
+        report = _blocks_to_text(reply.content).strip()
+        if report:
+            return report, usage
+    raise RuntimeError("analyst returned an empty report twice")
+
+
+def reanalyze(test_id: int) -> dict:
+    """Redo ONLY the analysis stage of a finished test (its interviews are
+    archived and paid for — never re-run them for a failed/empty report)."""
+    t = store.sim_test(test_id)
+    if not t or not t.get("run_ids"):
+        return {"error": f"test {test_id} has no runs"}
+    threading.Thread(target=_reanalyze_exec, args=(test_id,), daemon=True).start()
+    return {"test_id": test_id}
+
+
+def _reanalyze_exec(test_id: int) -> None:
+    try:
+        t = store.sim_test(test_id)
+        store.sim_update_test(test_id, status="analyzing")
+        root = Path(__file__).parent.parent
+        prompt_text = (root / "interviewer_prompt.txt").read_text(encoding="utf-8")
+        schema_text = (root / "models.py").read_text(encoding="utf-8")
+        cases = []
+        for rid in t["run_ids"]:
+            r = store.sim_run(rid)
+            convo = "\n".join(
+                f"{'BOT' if x['who'] == 'bot' else 'OWNER'}: {x['text']}"
+                for x in (r["transcript"] or []))
+            brief = json.dumps(r["brief"], ensure_ascii=False) if r["brief"] else "(none)"
+            p = store.sim_persona(r["persona_id"]) or {}
+            cases.append(
+                f"=== CASE {rid}: {r['persona_name']} — {p.get('industry')} — "
+                f"{p.get('company_size')} — {p.get('traits')} ===\n"
+                f"--- TRANSCRIPT (INPUT) ---\n{convo}\n"
+                f"--- FINAL BRIEF (OUTPUT) ---\n{brief}\n")
+        report, a_usage = _analyze(cases, prompt_text, schema_text)
+        usage = t.get("usage") or {}
+        usage["analyst"] = a_usage
+        extra = _cost_of(ANALYST_MODEL, a_usage)
+        store.sim_update_test(
+            test_id, status="completed", report=report, usage=usage,
+            cost_usd=round((t.get("cost_usd") or 0) + extra, 4),
+            finished_ts=time.time())
+    except Exception as e:
+        store.sim_update_test(test_id, status="failed",
+                              error=f"reanalysis: {type(e).__name__}: {e}",
+                              finished_ts=time.time())
+
+
 def _run_sweep(test_id: int, count: int) -> None:
     from concurrent.futures import ThreadPoolExecutor
     try:
@@ -175,14 +243,32 @@ def _run_sweep(test_id: int, count: int) -> None:
         for i in range(count):
             level = COMPLETENESS_LADDER[i % len(COMPLETENESS_LADDER)]
             patience = PATIENCE_LADDER[i % len(PATIENCE_LADDER)]
-            reply = gen.invoke([HumanMessage(content=(
-                GENERATOR_PROMPT
-                .replace("{previous}", "; ".join(summaries) or "(none yet)")
-                .replace("{fields}", field_names)
-                .replace("{pct}", str(int(level * 100)))))])
-            _acc(g_usage, _usage_of(reply))
-            text = _blocks_to_text(reply.content)
-            p = json.loads(text[text.index("{"):text.rindex("}") + 1])
+            prompt = (GENERATOR_PROMPT
+                      .replace("{previous}", "; ".join(summaries) or "(none yet)")
+                      .replace("{fields}", field_names)
+                      .replace("{pct}", str(int(level * 100))))
+            # a reply without valid JSON must not kill the whole sweep:
+            # retry, telling the model what went wrong
+            p, last_err, msgs = None, None, [HumanMessage(content=prompt)]
+            for _ in range(3):
+                reply = gen.invoke(msgs)
+                _acc(g_usage, _usage_of(reply))
+                text = _blocks_to_text(reply.content)
+                try:
+                    p = json.loads(text[text.index("{"):text.rindex("}") + 1])
+                    break
+                except (ValueError, json.JSONDecodeError) as e:
+                    last_err = e
+                    from langchain_core.messages import AIMessage
+                    msgs = [HumanMessage(content=prompt),
+                            AIMessage(content=text or "(empty)"),
+                            HumanMessage(content=(
+                                "FORMAT ERROR: that was not one valid JSON "
+                                "object. Resend the same persona as ONE valid "
+                                "JSON object only, no other text."))]
+            if p is None:
+                raise RuntimeError(
+                    f"persona generation failed after 3 attempts: {last_err}")
             identity = p.get("identity") or {}
             unknown = p.get("unknown_fields") or []
             content = (
@@ -227,14 +313,7 @@ def _run_sweep(test_id: int, count: int) -> None:
                 f"{p.get('company_size')} — {p.get('traits')} ===\n"
                 f"--- TRANSCRIPT (INPUT) ---\n{convo}\n"
                 f"--- FINAL BRIEF (OUTPUT) ---\n{brief}\n")
-        analyst = ChatAnthropic(model=ANALYST_MODEL, max_tokens=16000)
-        a_reply = analyst.invoke([HumanMessage(content=(
-            ANALYST_PROMPT.replace("{n}", str(len(cases)))
-            + f"\n\n=== CURRENT INTERVIEWER PROMPT ===\n{prompt_text}\n"
-            + f"\n=== CURRENT OUTPUT SCHEMA (models.py) ===\n{schema_text}\n\n"
-            + "\n".join(cases)))])
-        a_usage = _usage_of(a_reply)
-        report = _blocks_to_text(a_reply.content)
+        report, a_usage = _analyze(cases, prompt_text, schema_text)
 
         runs_cost = sum((store.sim_run(rid) or {}).get("cost_usd") or 0
                         for rid in run_ids)
