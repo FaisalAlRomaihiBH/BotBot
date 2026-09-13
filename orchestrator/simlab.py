@@ -82,6 +82,12 @@ professional services, retail, beauty, automotive, events, manufacturing,
 health...), company size (solo up to ~30 staff), personality, language style
 (some mix Arabic or Spanish words in).
 
+GLOBAL COVERAGE SO FAR (every persona ever tested, across all tests):
+{coverage}
+BALANCE RULE: pick an industry, company size, language mix, and requested
+channels that are UNDER-represented or absent above, so total coverage
+across all tests stays balanced. Never repeat the most-tested industry.
+
 Build the persona's GROUND-TRUTH IDENTITY as a JSON object using EXACTLY
 these field names (this is the interviewer's output schema):
 {fields}
@@ -132,6 +138,53 @@ The five changes with the highest payoff, ranked, one line each.
 
 Only report REAL problems with evidence — an empty section with "no issues
 found" is a valid finding. Never invent problems to fill space."""
+
+
+def _bucket(v: float | None, edges: list) -> str | None:
+    if v is None:
+        return None
+    for hi, label in edges:
+        if v >= hi:
+            return label
+    return edges[-1][1]
+
+
+def _coverage_summary() -> tuple[str, dict, dict]:
+    """What the whole archive has already tested, so a new sweep can balance
+    against it. Returns (text for the generator prompt, completeness-rung
+    counts, patience-rung counts)."""
+    personas = store.sim_personas()
+    ind, size, langs, chans = {}, {}, {}, {}
+    know_counts = {r: 0 for r in COMPLETENESS_LADDER}
+    pat_counts = {r: 0 for r in PATIENCE_LADDER}
+    for p in personas:
+        if p.get("industry"):
+            ind[p["industry"]] = ind.get(p["industry"], 0) + 1
+        s = p.get("company_size")
+        if s:
+            size[s] = size.get(s, 0) + 1
+        if p.get("completeness") in know_counts:
+            know_counts[p["completeness"]] += 1
+        if p.get("patience") in pat_counts:
+            pat_counts[p["patience"]] += 1
+        try:
+            identity = json.loads(p.get("identity") or "{}")
+        except Exception:
+            identity = {}
+        for key, m in (("languages", langs), ("channels", chans)):
+            v = identity.get(key)
+            for item in (v if isinstance(v, list) else [v] if v else []):
+                item = str(item)[:24]
+                m[item] = m.get(item, 0) + 1
+
+    def fmt(name, m):
+        if not m:
+            return f"{name}: (nothing tested yet)"
+        return name + ": " + ", ".join(
+            f"{k} x{v}" for k, v in sorted(m.items(), key=lambda e: -e[1])[:15])
+    text = "\n".join([fmt("Industries", ind), fmt("Company sizes", size),
+                      fmt("Languages", langs), fmt("Channels", chans)])
+    return text, know_counts, pat_counts
 
 
 def start_test(kind: str, params: dict) -> dict:
@@ -239,12 +292,20 @@ def _run_sweep(test_id: int, count: int) -> None:
         store.sim_update_test(test_id, status="generating")
         gen = ChatAnthropic(model=GENERATOR_MODEL, max_tokens=8000)
         g_usage = {"fresh_in": 0, "cache_read": 0, "cache_write": 0, "out": 0}
+        # BALANCING: the archive's cumulative coverage steers this sweep —
+        # the generator is told what is over/under-tested, and the ladder
+        # rungs are handed out least-tested-first so knowledge/patience
+        # levels stay even across ALL tests, not just within one.
+        coverage_text, know_counts, pat_counts = _coverage_summary()
         persona_ids, summaries = [], []
         for i in range(count):
-            level = COMPLETENESS_LADDER[i % len(COMPLETENESS_LADDER)]
-            patience = PATIENCE_LADDER[i % len(PATIENCE_LADDER)]
+            level = min(know_counts, key=lambda r: (know_counts[r], -r))
+            patience = min(pat_counts, key=lambda r: (pat_counts[r], -r))
+            know_counts[level] += 1
+            pat_counts[patience] += 1
             prompt = (GENERATOR_PROMPT
                       .replace("{previous}", "; ".join(summaries) or "(none yet)")
+                      .replace("{coverage}", coverage_text)
                       .replace("{fields}", field_names)
                       .replace("{pct}", str(int(level * 100))))
             # a reply without valid JSON must not kill the whole sweep:
