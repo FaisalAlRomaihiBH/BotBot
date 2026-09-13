@@ -924,17 +924,14 @@ function renderFlows(){
             <em>Model</em><b>${esc(m.model||'—')}</b></span>
         </span>` : ''}
 
-        ${t.id==='interviewing' && m && m.calls ? `<span class="mrow">
-          <span class="mcol" title="Cost of the input side (conversation fed into the model)">
-            <em>Human Cost</em><b>${m.cost_in_usd!=null
-              ? '$'+m.cost_in_usd.toFixed(2) : '—'}</b></span>
-          <span class="mcol" title="Cost of the output side (what the bot generated)">
-            <em>Bot Cost</em><b>${m.cost_out_usd!=null
-              ? '$'+m.cost_out_usd.toFixed(2) : '—'}</b></span>
-        </span>` : ''}
         ${t.id==='interviewing' && (f.head_rev || (m && m.calls)) ? `<span class="mrow">
           ${m && m.calls ? `<span class="mcard">
-            <span class="mcol"><em>Input Tokens</em><b>${fmtTok(m.tokens_in)}</b></span>
+            <span class="mpair">
+              <span class="mcol" title="Cost of the input side (conversation fed into the model)">
+                <em>Human Cost</em><b>${m.cost_in_usd!=null
+                  ? '$'+m.cost_in_usd.toFixed(2) : '—'}</b></span>
+              <span class="mcol"><em>Input Tokens</em><b>${fmtTok(m.tokens_in)}</b></span>
+            </span>
             ${s.status==='current' ? `<span class="mpair">
               <span class="mcol" title="Messages received from the client">
                 <em>Received</em><b>${m.msgs_received ?? '—'}</b></span>
@@ -946,7 +943,12 @@ function renderFlows(){
               data-pid="${f.flow_id}">View</a></span>
           </span>` : ''}
           ${f.head_rev ? `<span class="mcard">
-            <span class="mcol"><em>Output Tokens</em><b>${m && m.calls ? fmtTok(m.tokens_out) : '—'}</b></span>
+            <span class="mpair">
+              <span class="mcol" title="Cost of the output side (what the bot generated)">
+                <em>Bot Cost</em><b>${m && m.calls && m.cost_out_usd!=null
+                  ? '$'+m.cost_out_usd.toFixed(2) : '—'}</b></span>
+              <span class="mcol"><em>Output Tokens</em><b>${m && m.calls ? fmtTok(m.tokens_out) : '—'}</b></span>
+            </span>
             ${s.status==='current' && m && m.calls ? `<span class="mpair">
               <span class="mcol" title="Messages the bot sent">
                 <em>Sent</em><b>${m.msgs_sent ?? '—'}</b></span>
