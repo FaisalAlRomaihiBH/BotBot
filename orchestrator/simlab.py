@@ -24,7 +24,12 @@ import threading
 import time
 from pathlib import Path
 
+import api_gate
 from orchestrator import store
+
+# Every model call the lab makes is BACKGROUND: it queues behind live
+# conversations at the api_gate and never outruns a waiting human.
+_BG = api_gate.BACKGROUND
 
 MAX_BOT_TURNS = 45          # hard stop: no interview runs forever
 NUDGE = ("That's really everything I can tell you. Please finish and close "
@@ -362,7 +367,6 @@ def start_feature_checks(features: list) -> dict:
 
 def _run_feature_check(test_id: int, dim: str, value: str) -> None:
     try:
-        from langchain_anthropic import ChatAnthropic
         from langchain_core.messages import HumanMessage
         from requirements_bot import RequirementsBot, _blocks_to_text
         from models import BusinessRequirements
@@ -408,7 +412,7 @@ def _run_feature_check(test_id: int, dim: str, value: str) -> None:
             "owner. Do NOT give them any other notable trait, quirk, "
             "personality, language habit, or unusual attribute of any kind."])
         field_names = ", ".join(BusinessRequirements.model_fields)
-        gen = ChatAnthropic(model=GENERATOR_MODEL, max_tokens=8000)
+        gen = api_gate.make_llm(GENERATOR_MODEL, max_tokens=8000)
         g_usage = {"fresh_in": 0, "cache_read": 0, "cache_write": 0, "out": 0}
         prompt = (GENERATOR_PROMPT
                   .replace("{previous}", "(none)")
@@ -418,7 +422,8 @@ def _run_feature_check(test_id: int, dim: str, value: str) -> None:
                   .replace("{pct}", str(int(level * 100))))
         p, last_err, msgs = None, None, [HumanMessage(content=prompt)]
         for _ in range(3):
-            reply = gen.invoke(msgs)
+            reply = api_gate.invoke(gen, msgs, priority=_BG,
+                                    label="lab: persona generator")
             _acc(g_usage, _usage_of(reply))
             text = _blocks_to_text(reply.content)
             try:
@@ -469,10 +474,11 @@ def _run_feature_check(test_id: int, dim: str, value: str) -> None:
             for x in (r["transcript"] or []))
         brief = (json.dumps(r["brief"], ensure_ascii=False)
                  if r["brief"] else "(none)")
-        judge = ChatAnthropic(model=ANALYST_MODEL, max_tokens=1000)
-        v_reply = judge.invoke([HumanMessage(content=(
+        judge = api_gate.make_llm(ANALYST_MODEL, max_tokens=1000)
+        v_reply = api_gate.invoke(judge, [HumanMessage(content=(
             VERDICT_PROMPT.replace("{feature}", feature)
-            .replace("{transcript}", convo).replace("{brief}", brief)))])
+            .replace("{transcript}", convo).replace("{brief}", brief)))],
+            priority=_BG, label="lab: feature verdict")
         v_usage = _usage_of(v_reply)
         report = (_blocks_to_text(v_reply.content).strip()
                   or "NO" + NL + "(empty verdict)")
@@ -586,7 +592,6 @@ def _analyze(cases: list, prompt_text: str, schema_text: str) -> tuple[str, dict
     reasoning can eat a small max_tokens whole and leave an empty report
     (that is exactly what happened once), so: generous budget first, and a
     thinking-disabled retry as the fallback."""
-    from langchain_anthropic import ChatAnthropic
     from langchain_core.messages import HumanMessage
     from requirements_bot import _blocks_to_text
     content = (ANALYST_PROMPT.replace("{n}", str(len(cases)))
@@ -595,14 +600,15 @@ def _analyze(cases: list, prompt_text: str, schema_text: str) -> tuple[str, dict
                + "\n".join(cases))
     usage = {"fresh_in": 0, "cache_read": 0, "cache_write": 0, "out": 0}
     if "haiku" in ANALYST_MODEL:   # no adaptive thinking to eat the budget
-        attempts = (ChatAnthropic(model=ANALYST_MODEL, max_tokens=8000),
-                    ChatAnthropic(model=ANALYST_MODEL, max_tokens=8000))
+        attempts = (api_gate.make_llm(ANALYST_MODEL, max_tokens=8000),
+                    api_gate.make_llm(ANALYST_MODEL, max_tokens=8000))
     else:
-        attempts = (ChatAnthropic(model=ANALYST_MODEL, max_tokens=30000),
-                    ChatAnthropic(model=ANALYST_MODEL, max_tokens=16000,
-                                  thinking={"type": "disabled"}))
+        attempts = (api_gate.make_llm(ANALYST_MODEL, max_tokens=30000),
+                    api_gate.make_llm(ANALYST_MODEL, max_tokens=16000,
+                                      thinking={"type": "disabled"}))
     for llm in attempts:
-        reply = llm.invoke([HumanMessage(content=content)])
+        reply = api_gate.invoke(llm, [HumanMessage(content=content)],
+                                priority=_BG, label="lab: analyst report")
         _acc(usage, _usage_of(reply))
         report = _blocks_to_text(reply.content).strip()
         if report:
@@ -657,7 +663,6 @@ def _reanalyze_exec(test_id: int) -> None:
 def _run_sweep(test_id: int, count: int, pin: tuple | None = None) -> None:
     from concurrent.futures import ThreadPoolExecutor
     try:
-        from langchain_anthropic import ChatAnthropic
         from langchain_core.messages import HumanMessage
         from requirements_bot import _blocks_to_text
 
@@ -677,7 +682,7 @@ def _run_sweep(test_id: int, count: int, pin: tuple | None = None) -> None:
         from models import BusinessRequirements
         field_names = ", ".join(BusinessRequirements.model_fields)
         store.sim_update_test(test_id, status="generating")
-        gen = ChatAnthropic(model=GENERATOR_MODEL, max_tokens=8000)
+        gen = api_gate.make_llm(GENERATOR_MODEL, max_tokens=8000)
         g_usage = {"fresh_in": 0, "cache_read": 0, "cache_write": 0, "out": 0}
         # BALANCING: the archive's cumulative coverage steers this sweep —
         # the generator is told what is over/under-tested, and the ladder
@@ -730,7 +735,8 @@ def _run_sweep(test_id: int, count: int, pin: tuple | None = None) -> None:
             # retry, telling the model what went wrong
             p, last_err, msgs = None, None, [HumanMessage(content=prompt)]
             for _ in range(3):
-                reply = gen.invoke(msgs)
+                reply = api_gate.invoke(gen, msgs, priority=_BG,
+                                        label="lab: persona generator")
                 _acc(g_usage, _usage_of(reply))
                 text = _blocks_to_text(reply.content)
                 try:
@@ -840,7 +846,8 @@ def _persona_reply(llm, profile: str, transcript: list) -> tuple[str, dict]:
                    if i == len(turns) - 1 else t["text"])
         cls = HumanMessage if t["who"] == "bot" else AIMessage
         msgs.append(cls(content=content))
-    reply = llm.invoke(msgs)
+    reply = api_gate.invoke(llm, msgs, priority=_BG,
+                            label="lab: persona roleplay")
     u = reply.response_metadata.get("usage") or {}
     usage = {"fresh_in": u.get("input_tokens") or 0,
              "cache_read": u.get("cache_read_input_tokens") or 0,
@@ -887,6 +894,7 @@ def _execute(run_id: int, persona: dict) -> None:
         # isolated empty uploads dir: lab runs never touch real materials
         updir = Path(tempfile.mkdtemp(prefix="simlab_"))
         bot = RequirementsBot(uploads_dir=updir)
+        bot.priority = _BG   # a test interview never outranks a live one
         transcript.append({"who": "bot", "text": RequirementsBot.GREETING})
 
         scripted = persona["kind"] == "scripted"
@@ -895,8 +903,7 @@ def _execute(run_id: int, persona: dict) -> None:
                      if ln.strip()]
             lines += [NUDGE] * 3
         else:
-            from langchain_anthropic import ChatAnthropic
-            persona_llm = ChatAnthropic(model=PERSONA_MODEL, max_tokens=400)
+            persona_llm = api_gate.make_llm(PERSONA_MODEL, max_tokens=400)
 
         turn = None
         for i in range(MAX_BOT_TURNS):

@@ -27,6 +27,7 @@ from pathlib import Path
 ROOT = Path(__file__).parent
 PORT = int(__import__("os").environ.get("PORT", 8500))
 
+import api_gate  # noqa: E402
 from orchestrator import controller, registry, store, supervisor  # noqa: E402
 
 OWNER_TOKEN_FILE = store.DATA_DIR / "owner_token.txt"
@@ -131,7 +132,7 @@ body{margin:0;background:var(--bg);color:var(--text);font:13px/1.45 var(--sans)}
 @keyframes rot{to{transform:rotate(360deg)}}
 
 /* ---------- views ---------- */
-#chat,#home,#flows,#log,#clients,#sim{display:none}
+#chat,#home,#flows,#log,#clients,#sim,#queue,#costs{display:none}
 body.view-sim #sim{display:flex}
 body.view-sim #main{overflow:hidden}
 body.view-chat #chat{display:flex}
@@ -139,6 +140,61 @@ body.view-home #home{display:flex}
 body.view-flows #flows{display:flex}
 body.view-log #log{display:flex}
 body.view-clients #clients{display:flex}
+body.view-queue #queue{display:flex}
+body.view-costs #costs{display:flex}
+
+/* ---------- rate limiting + costs tabs ---------- */
+#queue,#costs{flex:1;flex-direction:column;margin:14px 20px 20px;
+  min-height:0;overflow-y:auto;gap:12px}
+.qc-cards{display:grid;grid-template-columns:repeat(auto-fit,
+  minmax(170px,1fr));gap:10px}
+.qc-card{background:var(--panel);border:1px solid var(--border);
+  border-radius:8px;padding:12px 14px}
+.qc-card .v{font:600 20px var(--mono);color:var(--text)}
+.qc-card .l{font:10.5px var(--sans);text-transform:uppercase;
+  letter-spacing:.06em;color:var(--muted);margin-top:3px}
+.qc-card.warn .v{color:var(--amber)}
+.qc-banner{background:rgba(251,191,36,.08);border:1px solid #5c4a1e;
+  border-radius:8px;padding:10px 14px;color:var(--amber);
+  font:12.5px var(--sans)}
+.qc-sec{background:var(--panel);border:1px solid var(--border);
+  border-radius:8px;overflow:hidden}
+.qc-sec .h{font:600 10.5px var(--sans);text-transform:uppercase;
+  letter-spacing:.06em;color:var(--muted);padding:9px 12px;
+  border-bottom:1px solid var(--border)}
+.qc-sec table{width:100%;border-collapse:collapse;font-size:12px}
+.qc-sec th{font:600 10px var(--sans);text-transform:uppercase;
+  letter-spacing:.06em;color:var(--muted);text-align:left;
+  padding:8px 12px;border-bottom:1px solid var(--border)}
+.qc-sec td{padding:7px 12px;border-bottom:1px solid var(--border);
+  color:var(--text2)}
+.qc-sec td.mono,.qc-sec th.r{font:11px var(--mono);white-space:nowrap}
+.qc-sec td.r,.qc-sec th.r{text-align:right}
+.qc-st{font:600 10.5px var(--mono)}
+.qc-st.running{color:var(--accent)}
+.qc-st.queued{color:var(--muted)}
+.qc-st.waiting_capacity{color:var(--amber)}
+.qc-st.done{color:var(--green)}
+.qc-st.failed{color:var(--red)}
+.qc-pri{font:600 9px var(--mono);text-transform:uppercase;
+  letter-spacing:.05em;border-radius:99px;padding:1px 7px}
+.qc-pri.interactive{color:var(--accent);border:1px solid #28405f}
+.qc-pri.background{color:var(--muted);border:1px solid var(--border)}
+
+/* feature-check tick chips */
+#simt-featchips{display:flex;flex-direction:column;gap:10px;
+  max-height:340px;overflow-y:auto;background:var(--panel2);
+  border:1px solid var(--border);border-radius:6px;padding:10px 12px}
+.fgroup .fg-t{font:600 10px var(--sans);text-transform:uppercase;
+  letter-spacing:.06em;color:var(--muted);margin-bottom:6px}
+.fgroup .fg-c{display:flex;flex-wrap:wrap;gap:6px}
+.fchip{font:11.5px var(--sans);color:var(--text2);background:var(--panel);
+  border:1px solid var(--border);border-radius:99px;padding:3px 11px;
+  cursor:pointer;user-select:none}
+.fchip:hover{border-color:var(--border-hi)}
+.fchip.on{color:var(--accent);border-color:var(--accent);
+  background:rgba(110,168,254,.08)}
+.fchip.on::before{content:"✓ ";font-weight:600}
 
 /* ---------- simulation lab ---------- */
 #sim{flex:1;flex-direction:column;margin:14px 20px 20px;min-height:0;gap:12px}
@@ -713,10 +769,13 @@ body.view-clients #main{overflow:hidden}
       <div class="nav-item" id="nav-flows" data-view="flows"><span class="nav-ico">⇶</span><span class="nav-label">Workflows</span></div>
       <div class="nav-item" id="nav-sim" data-view="sim"><span class="nav-ico">⚗</span><span class="nav-label">Simulation Lab</span></div>
       <div class="nav-item" id="nav-clients" data-view="clients"><span class="nav-ico">◉</span><span class="nav-label">Clients</span></div>
+      <div class="nav-item" id="nav-queue" data-view="queue"><span class="nav-ico">⇅</span><span class="nav-label">Rate Limiting</span></div>
+      <div class="nav-item" id="nav-costs" data-view="costs"><span class="nav-ico">$</span><span class="nav-label">Costs</span></div>
     </nav>
     <div id="sb-foot">
       <div><span class="dot" id="dot-store"></span><span id="txt-store">Database: checking…</span></div>
       <div><span class="dot" id="dot-api"></span><span id="txt-api">Claude API: checking…</span></div>
+      <div><span class="dot" id="dot-queue"></span><span id="txt-queue">API queue: checking…</span></div>
       <div id="rl-bars"></div>
     </div>
   </aside>
@@ -742,7 +801,19 @@ body.view-clients #main{overflow:hidden}
       <div id="clients-body">Loading…</div>
     </div>
 
+    <div id="queue">
+      <div id="queue-body">Loading…</div>
+    </div>
+
+    <div id="costs">
+      <div id="costs-body">Loading…</div>
+    </div>
+
     <div id="sim">
+      <div class="row" id="simt-backrow" style="display:none">
+        <button class="act" id="simt-back" title="Back to test types">← Back</button>
+        <span class="m" id="simt-mode-label"></span>
+      </div>
       <div id="sim-types">
         <div class="sim-type" id="simtype-training" role="button" tabindex="0">
           <span class="ico">◎</span>
@@ -761,7 +832,7 @@ body.view-clients #main{overflow:hidden}
       </div>
       <div id="sim-newfeat" style="display:none"></div>
       <div id="simt-form">
-        <label>Test type</label>
+        <span id="simt-f-kind"><label>Test type</label>
         <select id="simt-kind">
           <option value="persona_sweep">Persona Sweep &amp; Analysis — N fake
             businesses interview the bot; AI analyzes all inputs and outputs,
@@ -771,10 +842,7 @@ body.view-clients #main{overflow:hidden}
           <option value="regression_pin">Regression pin — re-run the EXACT
             personas of a previous test against the current bot and diff the
             scores</option>
-          <option value="feature_check">Feature checks — one persona per
-            selected feature (everything else plain), each as its own test,
-            run in parallel; the analyzer answers YES/NO per feature</option>
-          </select>
+          </select></span>
         <span id="simt-f-count"><label>How many different business
           personas</label>
         <input id="simt-count" type="number" min="2" max="8" value="4"
@@ -800,43 +868,9 @@ body.view-clients #main{overflow:hidden}
           <label>Base test number to re-run</label>
           <input id="simt-base" type="number" min="1" style="width:90px"></span>
         <span id="simt-f-features" style="display:none">
-          <label>Features to check (each becomes its own test — use
-            Ctrl/Cmd-click to pick several)</label>
-          <select id="simt-features" multiple size="10">
-            <optgroup label="Industries">
-              <option value="industry=Automotive repair &amp; detailing">industry: Automotive repair &amp; detailing</option>
-              <option value="industry=Restaurant">industry: Restaurant</option>
-              <option value="industry=Beauty salon">industry: Beauty salon</option>
-              <option value="industry=Law firm">industry: Law firm</option>
-              <option value="industry=Manufacturing workshop">industry: Manufacturing workshop</option>
-              <option value="industry=Photography studio">industry: Photography studio</option>
-              <option value="industry=Private tutoring">industry: Private tutoring</option>
-              <option value="industry=Gym / fitness studio">industry: Gym / fitness studio</option>
-            </optgroup>
-            <optgroup label="Hardest ladder rungs">
-              <option value="patience=0.15">patience 15% (wants it over)</option>
-              <option value="knowledge=0.25">knowledge 25% (knows little)</option>
-              <option value="consistency=0.15">consistency 15% (contradicts)</option>
-              <option value="clarity=0.15">clarity 15% (rambling/vague)</option>
-              <option value="trust=0.15">trust 15% (suspicious)</option>
-              <option value="language_mix=0.15">language mix 15% (mostly Arabic/Spanish)</option>
-              <option value="typing=0.15">typing 15% (fragments/typos)</option>
-              <option value="focus=0.15">focus 15% (asks questions back)</option>
-            </optgroup>
-            <optgroup label="Business setups">
-              <option value="business_model=B2B accounts">B2B accounts</option>
-              <option value="business_model=online orders">online orders</option>
-              <option value="data_situation=all on paper">data all on paper</option>
-              <option value="requested_scope=booking">scope: booking</option>
-              <option value="requested_scope=ordering">scope: ordering</option>
-              <option value="decision_structure=skeptical partner in background">skeptical partner</option>
-            </optgroup>
-            <optgroup label="Special behaviors">
-              <option value="behavior=drops_out">drops out mid-interview</option>
-              <option value="behavior=asks_meta">asks about the bot itself</option>
-              <option value="behavior=corrects_later">corrects a fact later</option>
-            </optgroup>
-          </select></span>
+          <label>Features to check — tick any number; each ticked feature
+            becomes its own parallel test with a YES/NO verdict</label>
+          <div id="simt-featchips">Loading feature catalog…</div></span>
         <div class="row"><button class="act" id="simt-start">Start test</button>
           <button class="act" id="simt-cancel">Cancel</button>
           <span class="m" id="simt-note">estimated cost: ~$0.20-0.40 per
@@ -958,7 +992,7 @@ $('#sb-toggle').onclick = () => {
 };
 const VIEW_TITLES = {home:'Operations', flows:'Workflows',
   chat:'Operator Test Chat', log:'Terminal', clients:'Clients',
-  sim:'Simulation Lab'};
+  sim:'Simulation Lab', queue:'Rate Limiting', costs:'Costs'};
 function showView(view){
   document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('active'));
   document.getElementById('nav-' + (view === 'chat' ? 'flows' : view))
@@ -971,6 +1005,8 @@ function showView(view){
   if(view === 'log') loadLog();
   if(view === 'clients') loadClients();
   if(view === 'sim') loadSim();
+  if(view === 'queue') loadQueue();
+  if(view === 'costs') loadCosts();
 }
 document.querySelectorAll('.nav-item[data-view]').forEach(item =>
   item.onclick = () => showView(item.dataset.view));
@@ -1054,6 +1090,112 @@ setInterval(async () => {
   const api = sys.health.api || {};
   renderRateLimits(api.limits || {});
 }, 30000);
+
+/* ================= Rate Limiting tab + queue footer line ================ */
+let lastQueue = null;
+const fmtAge = s => s == null ? '—' : s >= 60
+  ? Math.floor(s/60) + 'm' + Math.round(s%60) + 's' : s.toFixed(1) + 's';
+async function pollQueue(){
+  try{ lastQueue = await (await fetch('/api/queue')).json(); }
+  catch(e){ return; }
+  const q = lastQueue, c = q.counts;
+  const busy = c.interactive_active + c.background_running;
+  $('#dot-queue').className = 'dot ' + (q.waiting_capacity ? 'warn'
+    : busy ? 'ok' : '');
+  $('#txt-queue').textContent = q.waiting_capacity
+    ? 'API queue: waiting for capacity'
+    : busy || c.background_queued
+      ? `API queue: ${busy} running · ${c.background_queued} queued`
+      : 'API queue: idle';
+  if(document.body.className === 'view-queue') renderQueue();
+}
+setInterval(pollQueue, 3000);
+pollQueue();
+
+function qRow(e, live){
+  const wait = e.capacity_waits
+    ? ` <span class="m" title="times this call hit the rate limit and waited">(${
+        e.capacity_waits}× capacity wait, ${Math.round(e.capacity_wait_s)}s)</span>` : '';
+  return `<tr><td><span class="qc-pri ${e.priority}">${e.priority}</span></td>
+    <td>${esc(e.label)}${wait}</td>
+    <td class="mono">${esc((e.model||'').replace('claude-',''))}</td>
+    <td><span class="qc-st ${e.state}">${
+      e.state === 'waiting_capacity' ? 'waiting for API capacity' : e.state}</span>${
+      e.error ? `<div class="m">${esc(e.error).slice(0,140)}</div>` : ''}</td>
+    <td class="mono r">${live ? fmtAge(e.run_s ?? e.age_s)
+      : fmtAge(e.run_s) + (e.queued_s > 0.5 ? ` (+${fmtAge(e.queued_s)} queued)` : '')}</td></tr>`;
+}
+function renderQueue(){
+  const q = lastQueue;
+  if(!q){ $('#queue-body').innerHTML = 'Loading…'; return; }
+  const c = q.counts;
+  $('#queue-body').innerHTML =
+    (q.waiting_capacity ? `<div class="qc-banner">⚠ A live conversation is
+      waiting for API capacity — background tests are throttled until it gets
+      through.</div>` : '')
+    + `<div class="qc-cards">
+      <div class="qc-card"><div class="v">${c.interactive_active}</div>
+        <div class="l">interactive running</div></div>
+      <div class="qc-card"><div class="v">${c.background_running} / ${q.max_background}</div>
+        <div class="l">background running</div></div>
+      <div class="qc-card${c.background_queued ? ' warn' : ''}">
+        <div class="v">${c.background_queued}</div>
+        <div class="l">queued behind priority</div></div>
+    </div>
+    <div class="qc-sec"><div class="h">Live calls (interactive lane always goes
+      first; background runs at most ${q.max_background} at a time and pauses
+      while anyone is chatting)</div>
+      <table><tr><th>Priority</th><th>Call</th><th>Model</th><th>State</th>
+        <th class="r">Time</th></tr>${
+        q.live.map(e => qRow(e, true)).join('')
+        || '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:18px">No model calls in flight.</td></tr>'}</table></div>
+    <div class="qc-sec"><div class="h">Recent calls</div>
+      <table><tr><th>Priority</th><th>Call</th><th>Model</th><th>Outcome</th>
+        <th class="r">Time</th></tr>${
+        q.recent.map(e => qRow(e, false)).join('')
+        || '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:18px">Nothing yet this session.</td></tr>'}</table></div>`;
+}
+function loadQueue(){ renderQueue(); pollQueue(); }
+
+/* ================= Costs tab ================= */
+const usd = v => v == null ? '—' : '$' + v.toFixed(v >= 10 ? 2 : 4);
+async function loadCosts(){
+  let d;
+  try{ d = await (await fetch('/api/costs')).json(); }
+  catch(e){ $('#costs-body').innerHTML = 'Failed to load costs.'; return; }
+  const table = (title, cols, rows) => `<div class="qc-sec">
+    <div class="h">${title}</div><table><tr>${
+    cols.map((c,i) => `<th${i ? ' class="r"' : ''}>${c}</th>`).join('')}</tr>${
+    rows.map(r => `<tr>${r.map((v,i) =>
+      `<td${i ? ' class="mono r"' : ''}>${v}</td>`).join('')}</tr>`).join('')
+    || `<tr><td colspan="${cols.length}" style="text-align:center;color:var(--muted);padding:18px">Nothing recorded yet.</td></tr>`}</table></div>`;
+  const bucket = rows => rows.map(b =>
+    [esc(b.name), usd(b.usd), b.calls, fmtTok(b.tokens)]);
+  $('#costs-body').innerHTML = `
+    <div class="qc-cards">
+      <div class="qc-card"><div class="v">${usd(d.grand_total_usd)}</div>
+        <div class="l">total spend (all recorded)</div></div>
+      <div class="qc-card"><div class="v">${usd(d.production.total_usd)}</div>
+        <div class="l">production (interviews, supervisor)</div></div>
+      <div class="qc-card"><div class="v">${usd(d.lab.total_usd)}</div>
+        <div class="l">simulation lab (${d.lab.tests.length} tests${
+          d.lab.standalone_runs ? `, ${d.lab.standalone_runs} solo runs` : ''})</div></div>
+    </div>
+    <div class="m" style="color:var(--muted)">${esc(d.pricing_note)}${
+      d.unpriced_models.length ? ` · unpriced models (tokens counted, $0 shown): ${
+        esc(d.unpriced_models.join(', '))}` : ''}</div>
+    ${table('Spend by day', ['Day','USD'],
+      d.daily.map(x => [esc(x.day), usd(x.usd)]))}
+    ${table('Production by purpose', ['Purpose','USD','Calls','Tokens'],
+      bucket(d.production.by_purpose))}
+    ${table('Production by model', ['Model','USD','Calls','Tokens'],
+      bucket(d.production.by_model))}
+    ${table('Production by project', ['Project','USD','Calls','Tokens'],
+      bucket(d.production.by_project))}
+    ${table('Lab tests', ['Test','USD','Status'],
+      d.lab.tests.map(t => [`#${t.id} ${esc(t.kind)}`, usd(t.usd),
+        esc(t.status)]))}`;
+}
 
 /* ---------- hierarchical orchestrator map ----------
    Two orchestrators: BotBot (platform) owns Chatbot Orchestrator, which owns
@@ -1309,62 +1451,86 @@ $('#sup-toggle').onclick = async () => {
 /* (owner test chat + copy link removed from sidebar) */
 
 /* ================= Simulation Lab ================= */
-const simUI = {runs: [], tests: [], expanded: new Set()};
+const simUI = {runs: [], tests: [], expanded: new Set(), mode: null};
 async function loadFeatureCatalog(){
   if(loadFeatureCatalog.done) return;
   try{
     const cat = await (await fetch('/api/sim/feature_catalog')).json();
-    const sel = $('#simt-features');
-    sel.innerHTML = '';
+    const box = $('#simt-featchips');
     const groups = [
       ['Schema fields (from the requirements form)', cat.schema_fields],
       ['Industries', cat.industries],
       ['Hardest ladder rungs', cat.ladders],
       ['Business setups', cat.categories],
       ['Special behaviors', cat.behaviors]];
-    for(const [label, items] of groups){
-      const g = document.createElement('optgroup');
-      g.label = label;
-      for(const v of items || []){
-        const o = document.createElement('option');
-        o.value = v;
-        o.textContent = v.replace('schema_field=', '').replace('=', ': ');
-        g.appendChild(o);
-      }
-      sel.appendChild(g);
-    }
+    box.innerHTML = groups.map(([label, items]) => `
+      <div class="fgroup"><div class="fg-t">${esc(label)}</div>
+      <div class="fg-c">${(items || []).map(v => `
+        <span class="fchip" data-v="${esc(v)}" role="checkbox"
+          aria-checked="false" tabindex="0">${
+          esc(v.replace('schema_field=', '').replace('=', ': '))}</span>`)
+        .join('')}</div></div>`).join('');
+    box.querySelectorAll('.fchip').forEach(c => {
+      const flip = () => {
+        c.classList.toggle('on');
+        c.setAttribute('aria-checked', c.classList.contains('on'));
+      };
+      c.onclick = flip;
+      c.onkeydown = e => {
+        if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); flip(); }
+      };
+    });
     loadFeatureCatalog.done = true;
   }catch(e){}
 }
-function openSimForm(kind){
-  if(kind === 'feature_check') loadFeatureCatalog();
-  $('#simt-kind').value = kind;
+/* Picking a test-type box REPLACES the boxes with the form (back arrow to
+   return) — the boxes stacking behind the open form read as clutter. */
+function openSimForm(mode){
+  simUI.mode = mode;
+  if(mode === 'feature_check') loadFeatureCatalog();
+  $('#sim-types').style.display = 'none';
+  $('#simt-backrow').style.display = 'flex';
+  $('#simt-mode-label').textContent = mode === 'feature_check'
+    ? 'Feature Testing' : 'Requirement Bot Training';
   $('#simt-kind').onchange();
   $('#simt-form').classList.add('open');
   $('#simt-form').scrollIntoView({behavior: 'smooth', block: 'nearest'});
 }
-for(const [id, kind] of [['#simtype-training', 'persona_sweep'],
+function closeSimForm(){
+  simUI.mode = null;
+  $('#simt-form').classList.remove('open');
+  $('#simt-backrow').style.display = 'none';
+  $('#sim-types').style.display = '';
+}
+for(const [id, mode] of [['#simtype-training', 'training'],
                          ['#simtype-feature', 'feature_check']]){
   const el = $(id);
-  el.onclick = () => openSimForm(kind);
+  el.onclick = () => openSimForm(mode);
   el.onkeydown = e => {
     if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); el.onclick(); }
   };
 }
-$('#simt-cancel').onclick = () => $('#simt-form').classList.remove('open');
+$('#simt-back').onclick = closeSimForm;
+$('#simt-cancel').onclick = closeSimForm;
 $('#simt-kind').onchange = () => {
-  const k = $('#simt-kind').value;
+  const feat = simUI.mode === 'feature_check';
+  const k = feat ? 'feature_check' : $('#simt-kind').value;
+  // Feature Testing has exactly one kind, so its dropdown is noise: only
+  // the tickable feature catalog shows.
+  $('#simt-f-kind').style.display = feat ? 'none' : '';
   $('#simt-f-count').style.display =
     (k === 'regression_pin' || k === 'feature_check') ? 'none' : '';
   $('#simt-f-stress').style.display = k === 'stress' ? '' : 'none';
   $('#simt-f-base').style.display = k === 'regression_pin' ? '' : 'none';
-  $('#simt-f-features').style.display = k === 'feature_check' ? '' : 'none';
+  $('#simt-f-features').style.display = feat ? '' : 'none';
 };
 $('#simt-start').onclick = async () => {
-  const kind = $('#simt-kind').value;
+  const kind = simUI.mode === 'feature_check'
+    ? 'feature_check' : $('#simt-kind').value;
   const body = {kind};
   if(kind === 'feature_check'){
-    body.features = [...$('#simt-features').selectedOptions].map(o => o.value);
+    body.features = [...document.querySelectorAll('#simt-featchips .fchip.on')]
+      .map(c => c.dataset.v);
     if(!body.features.length) return;
   } else if(kind === 'regression_pin'){
     body.base_test_id = +$('#simt-base').value || 0;
@@ -1376,7 +1542,7 @@ $('#simt-start').onclick = async () => {
       body.level = +$('#simt-level').value;
     }
   }
-  $('#simt-form').classList.remove('open');
+  closeSimForm();
   await fetch('/api/sim/test', {method:'POST',
     headers:{'Content-Type':'application/json'},
     body: JSON.stringify(body)});
@@ -2207,6 +2373,19 @@ async function sendChat(){
      <div id="chat-typing"><span class="spin"></span>Requirements Bot is thinking…</div>`);
   t.scrollTop = t.scrollHeight;
   $('#chat-send').disabled = true;
+  // While the reply is in flight, watch the api_gate: if our call is stuck
+  // on the rate limit, say THAT instead of a generic thinking spinner.
+  const watcher = setInterval(async () => {
+    const el = document.getElementById('chat-typing');
+    if(!el) return;
+    try{
+      const q = await (await fetch('/api/queue')).json();
+      el.innerHTML = q.waiting_capacity
+        ? '<span class="spin"></span>Waiting for API capacity — background '
+          + 'tests are using the rate limit; your reply goes first…'
+        : '<span class="spin"></span>Requirements Bot is thinking…';
+    }catch(_){}
+  }, 2000);
   try{
     const d = await (await fetch('/chat/send', {method:'POST',
       headers:{'Content-Type':'application/json'},
@@ -2219,6 +2398,7 @@ async function sendChat(){
       `<div class="msg err">Request failed — is the server still running?</div>`);
     $('#chat-send').disabled = false;
   }
+  clearInterval(watcher);
   inp.focus();
 }
 async function uploadChatFiles(fileList){
@@ -2400,6 +2580,17 @@ async function send(){
      <div id="typing"><span class="spin"></span>thinking…</div>`);
   $('#thread').scrollTop = $('#thread').scrollHeight;
   $('#send').disabled = true;
+  // Honest spinner: if our reply is queued on API capacity, say so.
+  const watcher = setInterval(async () => {
+    const el = document.getElementById('typing');
+    if(!el) return;
+    try{
+      const q = await (await fetch('/client/queue')).json();
+      el.innerHTML = q.waiting_capacity
+        ? '<span class="spin"></span>Waiting for API capacity — your reply is next in line…'
+        : '<span class="spin"></span>thinking…';
+    }catch(_){}
+  }, 2000);
   try{
     const d = await (await fetch('/client/send', {method:'POST',
       headers:{'Content-Type':'application/json'},
@@ -2413,6 +2604,7 @@ async function send(){
        answers are saved — please try again.</div>`);
     $('#send').disabled = false;
   }
+  clearInterval(watcher);
   $('#inp').focus();
 }
 async function upload(fileList){
@@ -2782,6 +2974,11 @@ class Handler(BaseHTTPRequestHandler):
         if route == "/client/history":
             self._json(client_history(self._client_pid()))
             return
+        if route == "/client/queue":
+            # One boolean for the client spinner — no labels, no internals.
+            self._json({"waiting_capacity":
+                        api_gate.snapshot()["waiting_capacity"]})
+            return
 
         # owner API (owner cookie required — deny by default)
         if not self._is_owner():
@@ -2803,6 +3000,10 @@ class Handler(BaseHTTPRequestHandler):
             self._json(store.recent_terminal_feed())
         elif route == "/api/clients":
             self._json(store.list_clients())
+        elif route == "/api/queue":
+            self._json(api_gate.snapshot())
+        elif route == "/api/costs":
+            self._json(store.cost_overview())
         elif route == "/api/sim/personas":
             self._json(store.sim_personas())
         elif route == "/api/sim/runs":

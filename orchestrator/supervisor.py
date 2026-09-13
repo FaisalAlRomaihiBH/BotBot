@@ -140,16 +140,17 @@ def ask(pid: str, question: str) -> dict:
     cfg = config()["supervisor"]
     store.append_event(pid, "supervisor.requested", "operator", {})
     try:
-        from langchain_anthropic import ChatAnthropic
         from langchain_core.messages import HumanMessage, SystemMessage
+        import api_gate
         from requirements_bot import _blocks_to_text
-        llm = ChatAnthropic(model=cfg["model"], max_tokens=cfg["max_tokens"])
+        llm = api_gate.make_llm(cfg["model"], max_tokens=cfg["max_tokens"])
         system = PROMPT_PATH.read_text(encoding="utf-8")
         history = store.get_messages(pid, "management")[-12:]
         convo = "\n".join(f"{m['role']}: {m['text']}" for m in history[:-1])
         context = (_system_context() if pid == store.SYSTEM_SCOPE
                    else _context(pid))
-        reply = llm.invoke([
+        # Interactive: an operator is sitting in the drawer waiting for this.
+        reply = api_gate.invoke(llm, [
             # Cost hygiene (same techniques as the interview bot): the stable
             # system prompt is a 1h-TTL cache breakpoint — repeat questions in
             # a session read it at 10% price; all volatile context stays in
@@ -162,7 +163,7 @@ def ask(pid: str, question: str) -> dict:
                 f"{context}\n"
                 f"=== RECENT MANAGEMENT CONVERSATION ===\n{convo or '(none)'}\n\n"
                 f"OPERATOR QUESTION: {question}")),
-        ])
+        ], priority=api_gate.INTERACTIVE, label="supervisor answer")
         u = reply.response_metadata.get("usage") or {}
         store.add_invocation(pid, "supervisor_answer", cfg["model"], {
             "fresh_in": u.get("input_tokens") or 0,

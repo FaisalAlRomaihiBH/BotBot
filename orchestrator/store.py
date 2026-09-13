@@ -730,6 +730,110 @@ def usage_totals(pid: str) -> dict:
             "out": r["o"], "invocations": r["n"]}
 
 
+def cost_overview() -> dict:
+    """Everything money: the read-model behind the Costs tab.
+
+    Two spend sources, never double-counted:
+      - PRODUCTION: every row in invocations (interview turns, supervisor
+        answers, future call sites — anything recorded via add_invocation).
+      - LAB: sim_tests.cost_usd (which already folds in its runs' costs)
+        plus the cost of standalone sim_runs that belong to no test.
+    An unpriced model contributes tokens but no dollars, and is named in
+    unpriced_models rather than silently priced as something else."""
+    def _row_cost(model, f, cr, cw, o):
+        return _cost_usd(model, f or 0, cr or 0, cw or 0, o or 0)
+
+    with _connect() as con:
+        inv = con.execute(
+            "SELECT purpose, model, project_id, ts, COALESCE(fresh_in,0) f,"
+            " COALESCE(cache_read,0) cr, COALESCE(cache_write,0) cw,"
+            " COALESCE(out_tokens,0) o FROM invocations").fetchall()
+        tests = con.execute(
+            "SELECT id, kind, status, run_ids, cost_usd, started_ts,"
+            " finished_ts FROM sim_tests").fetchall()
+        runs = con.execute(
+            "SELECT id, cost_usd, started_ts, finished_ts, status"
+            " FROM sim_runs").fetchall()
+        projects = {p["id"]: (p["name"], p["num"]) for p in con.execute(
+            "SELECT id, name, num FROM projects")}
+
+    by_purpose: dict[str, dict] = {}
+    by_model: dict[str, dict] = {}
+    by_project: dict[str, dict] = {}
+    daily: dict[str, float] = {}
+    unpriced: set[str] = set()
+    prod_total = 0.0
+
+    def _acc(bucket: dict, key: str, usd, tokens: int):
+        b = bucket.setdefault(key, {"usd": 0.0, "calls": 0, "tokens": 0})
+        b["calls"] += 1
+        b["tokens"] += tokens
+        if usd is not None:
+            b["usd"] += usd
+
+    for r in inv:
+        usd = _row_cost(r["model"], r["f"], r["cr"], r["cw"], r["o"])
+        if usd is None and r["model"]:
+            unpriced.add(r["model"])
+        tokens = r["f"] + r["cr"] + r["cw"] + r["o"]
+        _acc(by_purpose, r["purpose"], usd, tokens)
+        _acc(by_model, r["model"] or "(unknown)", usd, tokens)
+        name, num = projects.get(r["project_id"], (None, None))
+        label = (f"#{num} {name}" if num else name) or "(system)"
+        _acc(by_project, label, usd, tokens)
+        if usd is not None:
+            prod_total += usd
+            day = time.strftime("%Y-%m-%d", time.localtime(r["ts"]))
+            daily[day] = daily.get(day, 0.0) + usd
+
+    in_tests: set[int] = set()
+    for t in tests:
+        try:
+            in_tests.update(json.loads(t["run_ids"] or "[]"))
+        except json.JSONDecodeError:
+            pass
+    lab_total = 0.0
+    lab_tests = []
+    for t in tests:
+        usd = t["cost_usd"] or 0.0
+        lab_total += usd
+        lab_tests.append({"id": t["id"], "kind": t["kind"],
+                          "status": t["status"], "usd": usd,
+                          "ts": t["finished_ts"] or t["started_ts"]})
+        if usd:
+            day = time.strftime("%Y-%m-%d", time.localtime(
+                t["finished_ts"] or t["started_ts"]))
+            daily[day] = daily.get(day, 0.0) + usd
+    solo_runs = 0
+    for r in runs:
+        if r["id"] in in_tests:
+            continue
+        usd = r["cost_usd"] or 0.0
+        lab_total += usd
+        solo_runs += 1
+        if usd:
+            day = time.strftime("%Y-%m-%d", time.localtime(
+                r["finished_ts"] or r["started_ts"]))
+            daily[day] = daily.get(day, 0.0) + usd
+
+    def _sorted(bucket):
+        return sorted(({"name": k} | v for k, v in bucket.items()),
+                      key=lambda x: -x["usd"])
+    lab_tests.sort(key=lambda t: -(t["ts"] or 0))
+    return {"grand_total_usd": prod_total + lab_total,
+            "production": {"total_usd": prod_total,
+                           "by_purpose": _sorted(by_purpose),
+                           "by_model": _sorted(by_model),
+                           "by_project": _sorted(by_project)},
+            "lab": {"total_usd": lab_total, "tests": lab_tests[:40],
+                    "standalone_runs": solo_runs},
+            "daily": sorted(({"day": d, "usd": u} for d, u in daily.items()),
+                            key=lambda x: x["day"], reverse=True)[:30],
+            "unpriced_models": sorted(unpriced),
+            "pricing_note": ("cache writes priced at the conservative 1h "
+                             "rate — totals are an upper bound")}
+
+
 # ---------------- reviews ----------------
 def open_reviews(pid: str) -> list[dict]:
     with _connect() as con:

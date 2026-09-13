@@ -83,6 +83,10 @@ Wrap your entire output in this format and provide no other text
     def __init__(self, llm, uploads_dir: Path):
         self.llm = llm
         self.uploads_dir = uploads_dir
+        # Whose turn budget these calls ride on: the owning bot keeps this in
+        # sync with its own priority (lab bots run background, live ones
+        # interactive).
+        self.priority = api_gate.INTERACTIVE
         self.parser = PydanticOutputParser(pydantic_object=ConversationAnalysis)
 
     def material_paths(self) -> list[Path]:
@@ -143,7 +147,9 @@ Wrap your entire output in this format and provide no other text
                 "cache_control": {"type": "ephemeral"}}
         last_error = None
         for _ in range(attempts):
-            reply = self.llm.invoke([HumanMessage(content=content)])
+            reply = api_gate.invoke(self.llm, [HumanMessage(content=content)],
+                                    priority=self.priority,
+                                    label="materials analysis")
             try:
                 return self.parser.parse(_blocks_to_text(reply.content)), names
             except Exception as e:
@@ -218,8 +224,12 @@ class RequirementsBot:
         # every turn, so replies grow throughout the interview and must never
         # be truncated. 8000 proved too small once a talkative owner filled
         # the richer form (truncated JSON -> parse failure on every retry).
-        self.llm = ChatAnthropic(model=model, max_tokens=16000)
+        self.llm = api_gate.make_llm(model, max_tokens=16000)
         self.uploads_dir = uploads_dir
+        # Interactive by default: a live owner is waiting on every turn. The
+        # Simulation Lab flips this to BACKGROUND on the bots it drives, so
+        # test interviews queue politely behind real conversations.
+        self.priority = api_gate.INTERACTIVE
         self.analyzer = MaterialsAnalyzer(self.llm, uploads_dir)
         self.parser = PydanticOutputParser(pydantic_object=InterviewTurn)
         # CODE-HELD FORM (cost solution 1). The model no longer re-emits the
@@ -392,6 +402,7 @@ class RequirementsBot:
             return "empty"
         if names == self.analyzed_files and self.analysis is not None:
             return "unchanged"
+        self.analyzer.priority = self.priority   # ride the owner's lane
         analysis, names = self.analyzer.analyze()
         if analysis is None:
             # Files exist, yet no analysis object came back. Reporting "empty"
@@ -668,7 +679,9 @@ class RequirementsBot:
                     "the same content as one valid JSON object matching the "
                     "format instructions, with your chat text in next_message. "
                     "Output nothing except the JSON object.")))
-            reply = self.llm.invoke(messages)
+            reply = api_gate.invoke(self.llm, messages,
+                                    priority=self.priority,
+                                    label="interview turn")
             u = reply.response_metadata.get("usage") or {}
             self.usage["fresh_in"] += u.get("input_tokens") or 0
             self.usage["cache_read"] += u.get("cache_read_input_tokens") or 0
