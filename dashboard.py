@@ -174,6 +174,10 @@ body.view-flows #flows{display:flex}
 .fc-step .mline{font:10px var(--mono);color:var(--text2);margin-top:4px;
   line-height:1.5}
 .fc-step .mline b{color:var(--text);font-weight:500}
+.fc-step .mjson{font:10px var(--mono);color:var(--accent);margin-top:4px;
+  text-decoration:none;border:1px solid var(--border);border-radius:99px;
+  padding:2px 9px}
+.fc-step .mjson:hover{border-color:var(--accent)}
 /* label / bot / status / metrics stack under each other */
 .fc-step>div{display:flex;flex-direction:column;align-items:center;min-width:0}
 .fc-step .lbl{margin-top:7px;font-size:13px;color:var(--text2);line-height:1.3}
@@ -911,6 +915,10 @@ function renderFlows(){
           <b>${m.cost_usd!=null ? '$'+m.cost_usd.toFixed(2) : 'cost —'}</b>
           · ${fmtTok(m.tokens_in)} in · ${fmtTok(m.tokens_out)} out
           · ${fmtSecs(m.active_seconds)} · ${esc(m.model||'—')}</span>` : ''}
+        ${t.id==='interviewing' && f.head_rev ? `<a class="mjson"
+          href="/api/export?project=${f.flow_id}&format=legacy" target="_blank"
+          title="The requirements JSON the bot has produced so far (revision r${f.head_rev})">
+          ⤓ Output JSON · r${f.head_rev}</a>` : ''}
         </div></div>`;
     }).join('');
     const cur = tpl.find(t => t.id === f.current_stage);
