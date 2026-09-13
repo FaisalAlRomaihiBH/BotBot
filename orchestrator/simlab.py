@@ -293,6 +293,17 @@ def _run_sweep(test_id: int, count: int) -> None:
         from langchain_core.messages import HumanMessage
         from requirements_bot import _blocks_to_text
 
+        # Register the MODEL LINE-UP of this test permanently: which model
+        # ran each stage. That makes model choice a comparable dimension of
+        # the archive — the same feature combination can later be re-tried
+        # on a different model and compared test-to-test.
+        from requirements_bot import RequirementsBot
+        bot_model = RequirementsBot.__init__.__defaults__[0]
+        store.sim_update_test(test_id, params={
+            "count": count,
+            "models": {"generator": GENERATOR_MODEL, "bot": bot_model,
+                       "persona": PERSONA_MODEL, "analyst": ANALYST_MODEL}})
+
         # 1) generate the fake identities: full schema-shaped ground truth,
         # each persona at its own rung of the completeness ladder
         from models import BusinessRequirements
@@ -517,7 +528,8 @@ def _execute(run_id: int, persona: dict) -> None:
             interview_complete=int(bot.complete),
             transcript=transcript, brief=brief,
             score=score, missed=missed,
-            usage={"bot": bot.usage, "persona": p_usage},
+            usage={"bot": bot.usage | {"model": bot.model},
+                   "persona": p_usage | {"model": PERSONA_MODEL}},
             cost_usd=round(cost, 4), finished_ts=time.time())
     except Exception as e:
         store.sim_update_run(

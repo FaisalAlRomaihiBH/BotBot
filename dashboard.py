@@ -1357,6 +1357,7 @@ function simtCard(t){
     : (stageCost.generating || 0) + runsCost + (stageCost.analyzing || 0);
   // per-milestone detail boxes (same idea as the Workflows interview box)
   const short = m => (m || '').replace('claude-', '') || '—';
+  const models = t.params.models || {};
   const sumB = k => runs.reduce((s, r) => s + (((r.usage||{}).bot||{})[k]||0), 0);
   const totTurns = runs.reduce((s, r) => s + (r.turns||0), 0);
   const kv = rows => `<span class="simt-det">${rows.filter(r => r).map(
@@ -1372,6 +1373,8 @@ function simtCard(t){
         && ['Cost', '$'+stageCost.generating.toFixed(2)]]) : '',
     running: runs.length ? kv([
       ['Interviews', `${doneRuns}/${t.run_ids.length}`],
+      models.bot && ['Bot model', esc(short(models.bot))],
+      models.persona && ['Persona model', esc(short(models.persona))],
       ['Turns', totTurns],
       ['In · Out', `${fmtTok(sumB('fresh_in')+sumB('cache_read')
         +sumB('cache_write'))} · ${fmtTok(sumB('out'))}`],
@@ -1437,6 +1440,13 @@ function simtCard(t){
       <span class="cost">${t.cost_usd != null ? '$'+t.cost_usd.toFixed(2)
         : liveTotal ? '~$'+liveTotal.toFixed(2) : ''}</span>
       <span class="chev">${open ? '▾' : '▸'}</span></div>
+    ${Object.keys(models).length ? `<span class="sim-meta"
+      style="margin-top:8px" title="The model line-up this test ran on — a
+      registered dimension, so the same feature mix can be compared across
+      models between tests">${['generator','bot','persona','analyst']
+      .filter(k => models[k]).map(k =>
+        `<span><span style="color:var(--muted)">${k}:</span> ${
+          esc(short(models[k]))}</span>`).join('')}</span>` : ''}
     <div class="simt-path">${steps}</div>
     ${bars}
     ${table}
