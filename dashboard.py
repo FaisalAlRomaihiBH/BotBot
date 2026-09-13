@@ -82,6 +82,7 @@ body{margin:0;background:var(--bg);color:var(--text);font:13px/1.45 var(--sans)}
   background:var(--muted);margin-right:6px;vertical-align:1px}
 #sb-foot .dot.ok{background:var(--green)}
 #sb-foot .dot.bad{background:var(--red)}
+#sb-foot .dot.warn{background:var(--amber)}
 #sb-foot div{margin:3px 0}
 #sidebar.collapsed #sb-title,#sidebar.collapsed .nav-label,#sidebar.collapsed #sb-foot{display:none}
 
@@ -572,6 +573,7 @@ body.view-clients #main{overflow:hidden}
       <div class="nav-item" id="nav-clients" data-view="clients"><span class="nav-ico">◉</span><span class="nav-label">Clients</span></div>
     </nav>
     <div id="sb-foot">
+      <div><span class="dot" id="dot-api"></span><span id="txt-api">Claude API: checking…</span></div>
       <div><span class="dot" id="dot-store"></span><span id="txt-store">store: checking…</span></div>
       <div><span class="dot" id="dot-provider"></span><span id="txt-provider">model: no calls yet</span></div>
       <div><span class="dot" id="dot-sup"></span><span id="txt-sup">supervisor: —</span></div>
@@ -743,6 +745,14 @@ async function loadSystem(){
   const lc = s.health.last_call;
 
   // honest footer
+  const api = s.health.api || {status: 'checking'};
+  const apiCls = api.status === 'connected' ? 'ok'
+    : api.status === 'checking' ? ''
+    : (api.status === 'rate limited' || api.status === 'Anthropic overloaded')
+      ? 'warn' : 'bad';
+  $('#dot-api').className = 'dot ' + apiCls;
+  $('#txt-api').textContent = 'Claude API: ' + api.status;
+  $('#txt-api').title = api.detail || '';
   $('#dot-store').className = 'dot ' + (s.health.store_ok ? 'ok' : 'bad');
   $('#txt-store').textContent = 'store: ' + (s.health.store_ok ? 'writable' : 'ERROR');
   $('#dot-provider').className = 'dot ' + (lc ? (lc.error ? 'bad' : 'ok') : '');
@@ -1772,6 +1782,48 @@ def chat_send(pid: str, message: str) -> dict:
     return out
 
 
+_api_status_cache = {"ts": 0.0, "status": "checking", "detail": ""}
+
+
+def _api_status() -> dict:
+    """Live Claude API connection status, probed with the FREE token-count
+    endpoint (no tokens are billed) at most once a minute. Backward-looking
+    'last call ok' can hide an expired key for hours; this says whether the
+    connection works RIGHT NOW."""
+    now = time.time()
+    if now - _api_status_cache["ts"] < 60:
+        return dict(_api_status_cache)
+    status, detail = "connected", ""
+    try:
+        import anthropic
+        from dotenv import load_dotenv
+        load_dotenv(str(Path(__file__).parent / ".env"))
+        if not __import__("os").environ.get("ANTHROPIC_API_KEY"):
+            status, detail = "no API key", "ANTHROPIC_API_KEY is not set"
+        else:
+            client = anthropic.Anthropic()
+            client.with_options(timeout=8.0, max_retries=0).messages.count_tokens(
+                model="claude-sonnet-5",
+                messages=[{"role": "user", "content": "ping"}])
+    except Exception as e:
+        import anthropic
+        if isinstance(e, (anthropic.AuthenticationError,
+                          anthropic.PermissionDeniedError)):
+            status = "auth error"
+        elif isinstance(e, anthropic.RateLimitError):
+            status = "rate limited"
+        elif isinstance(e, anthropic.APIStatusError) and e.status_code >= 500:
+            status = "Anthropic overloaded"
+        elif isinstance(e, (anthropic.APITimeoutError,
+                            anthropic.APIConnectionError)):
+            status = "unreachable"
+        else:
+            status = "error"
+        detail = f"{type(e).__name__}"
+    _api_status_cache.update(ts=now, status=status, detail=detail)
+    return dict(_api_status_cache)
+
+
 def system_payload() -> dict:
     store.ensure_default_project()
     return {
@@ -1780,7 +1832,8 @@ def system_payload() -> dict:
         "capabilities": registry.capabilities(),
         "health": store.health() | {
             "last_call": store.last_provider_event(),
-            "supervisor_mode": supervisor.mode()},
+            "supervisor_mode": supervisor.mode(),
+            "api": _api_status()},
         "client_link": {"path": "/chat", "local_only": True},
     }
 
