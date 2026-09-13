@@ -83,7 +83,7 @@ def send_interview_message(pid: str, message: str) -> dict:
                              "Start a new project for another interview."}
 
         store.add_message(pid, "interview", "owner", message)
-        store.append_event(pid, "message.received", "client", {})
+        store.append_event(pid, "message.received", "customer", {})
         if project["state"] in ("created",):
             store.set_project_state(pid, "interviewing")
 
@@ -215,7 +215,7 @@ FLOW_TEMPLATE = {
 
 
 def flow_projection(row: dict, planned_caps: set[str],
-                    is_client: bool) -> dict:
+                    is_customer: bool) -> dict:
     """Deterministic read-model for one flow card. Derives stage states ONLY
     from recorded facts: lifecycle state, the in-process busy flag (actual
     executing work), review/approval records. Never from transcripts, elapsed
@@ -246,7 +246,7 @@ def flow_projection(row: dict, planned_caps: set[str],
     elif busy:
         add("interviewing", "current", "Processing answer")
     elif row["has_session"]:
-        add("interviewing", "current", "Waiting for client")
+        add("interviewing", "current", "Waiting for customer")
     else:
         add("interviewing", "current", "Not started — no messages yet")
     # 2 architecture — its entry gate is requirements approval (the review
@@ -278,12 +278,12 @@ def flow_projection(row: dict, planned_caps: set[str],
     return {
         "flow_id": row["id"], "template_version": FLOW_TEMPLATE["version"],
         "name": (row.get("business_name")
-                 or (None if is_client else row["name"])
+                 or (None if is_customer else row["name"])
                  or "New chatbot request"),
         "contact": row.get("contact_name"),
         "project_name": row["name"],
-        "client_id": row.get("client_id"),
-        "is_test": not is_client,
+        "customer_id": row.get("customer_id"),
+        "is_test": not is_customer,
         "state": state, "busy": busy,
         "interview_complete": bool(row["interview_complete"]),
         "head_rev": row.get("head_rev"),

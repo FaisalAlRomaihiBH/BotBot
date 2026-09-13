@@ -10,7 +10,7 @@
 #              (claude-haiku-4-5), so it actually answers whatever the bot
 #              asks, in character
 #
-# Lab runs are fully separate from production: no project, no Client ID, no
+# Lab runs are fully separate from production: no project, no Customer ID, no
 # workflow card, nothing in the Terminal — the archive lives in sim_runs.
 #
 # Cost hygiene (standing rule): the bot side already carries the full kit

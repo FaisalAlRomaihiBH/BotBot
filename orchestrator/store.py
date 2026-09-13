@@ -45,13 +45,13 @@ CREATE TABLE IF NOT EXISTS approvals(
   revision INTEGER NOT NULL, actor TEXT NOT NULL, reason TEXT,
   status TEXT NOT NULL DEFAULT 'active',     -- active | invalidated
   ts REAL NOT NULL);
-CREATE TABLE IF NOT EXISTS client_sessions(
+CREATE TABLE IF NOT EXISTS customer_sessions(
   token TEXT PRIMARY KEY,          -- server-issued, unguessable
   project_id TEXT NOT NULL REFERENCES projects(id),
   created_ts REAL NOT NULL, last_seen_ts REAL NOT NULL,
   revoked INTEGER NOT NULL DEFAULT 0);
-CREATE TABLE IF NOT EXISTS clients(
-  id INTEGER PRIMARY KEY AUTOINCREMENT,   -- Client ID: 1, 2, 3, ...
+CREATE TABLE IF NOT EXISTS customers(
+  id INTEGER PRIMARY KEY AUTOINCREMENT,   -- Customer ID: 1, 2, 3, ...
   project_id TEXT NOT NULL UNIQUE REFERENCES projects(id),
   created_ts REAL NOT NULL);
 CREATE TABLE IF NOT EXISTS sim_personas(
@@ -120,7 +120,25 @@ def _connect() -> sqlite3.Connection:
     con.row_factory = sqlite3.Row
     con.execute("PRAGMA journal_mode=WAL")
     con.execute("PRAGMA foreign_keys=ON")
+    # RENAME MIGRATION (2026-09-13, clients -> customers): must run BEFORE
+    # the schema script, or the CREATEs would make empty new tables and strand
+    # the old data under the old names. A missing old table (fresh DB, or
+    # already migrated) just raises and is skipped. When a rename actually
+    # happens, the stored VALUES that carried the old word migrate with it —
+    # once — so the Activity feed and project names match the new naming too.
+    renamed = False
+    for old, new in (("clients", "customers"),
+                     ("client_sessions", "customer_sessions")):
+        try:
+            con.execute(f"ALTER TABLE {old} RENAME TO {new}")
+            renamed = True
+        except sqlite3.OperationalError:
+            pass  # no old table to migrate
     con.executescript(_SCHEMA)
+    if renamed:
+        con.execute("UPDATE events SET actor='customer' WHERE actor='client'")
+        con.execute("UPDATE projects SET name='Customer '||substr(name,8) "
+                    "WHERE name LIKE 'Client %'")
     # additive migration: duration on invocations for older databases
     try:
         con.execute("ALTER TABLE invocations ADD COLUMN duration REAL")
@@ -193,8 +211,8 @@ def ensure_default_project() -> None:
 
 
 def create_project(name: str, actor: str = "operator") -> dict:
-    """actor: 'operator' for console-created projects, 'client' when a
-    client starts one through the chat link — the event must say who
+    """actor: 'operator' for console-created projects, 'customer' when a
+    customer starts one through the chat link — the event must say who
     actually did it."""
     pid = "proj_" + uuid.uuid4().hex[:10]
     with _connect() as con:
@@ -250,30 +268,30 @@ def system_stats() -> dict:
     }
 
 
-# ---------------- client sessions (server-issued, unguessable) ----------------
-def create_client_session(project_id: str) -> str:
+# ---------------- customer sessions (server-issued, unguessable) ----------------
+def create_customer_session(project_id: str) -> str:
     import secrets
     token = secrets.token_urlsafe(32)
     with _connect() as con:
-        con.execute("INSERT INTO client_sessions(token, project_id, created_ts, "
+        con.execute("INSERT INTO customer_sessions(token, project_id, created_ts, "
                     "last_seen_ts) VALUES(?,?,?,?)",
                     (token, project_id, time.time(), time.time()))
-        # Register the client: every person who comes in through the client
-        # link gets the next sequential Client ID, starting at 1.
-        con.execute("INSERT OR IGNORE INTO clients(project_id, created_ts) "
+        # Register the customer: every person who comes in through the customer
+        # link gets the next sequential Customer ID, starting at 1.
+        con.execute("INSERT OR IGNORE INTO customers(project_id, created_ts) "
                     "VALUES(?,?)", (project_id, time.time()))
     return token
 
 
-def list_clients() -> list[dict]:
-    """Every registered client (people who came in via the client link),
-    Client ID ascending, with their project and interview facts."""
+def list_customers() -> list[dict]:
+    """Every registered customer (people who came in via the customer link),
+    Customer ID ascending, with their project and interview facts."""
     with _connect() as con:
         rows = con.execute(
-            "SELECT c.id AS client_id, c.project_id, c.created_ts,"
+            "SELECT c.id AS customer_id, c.project_id, c.created_ts,"
             " p.name AS project_name, p.num AS project_num, p.state,"
             " s.complete AS interview_complete,"
-            " (SELECT MAX(last_seen_ts) FROM client_sessions cs"
+            " (SELECT MAX(last_seen_ts) FROM customer_sessions cs"
             "   WHERE cs.project_id = c.project_id) AS last_seen_ts,"
             " (SELECT COUNT(*) FROM messages m WHERE m.project_id=c.project_id"
             "   AND m.conversation='interview' AND m.role='owner') AS msgs,"
@@ -283,32 +301,32 @@ def list_clients() -> list[dict]:
             " (SELECT json_extract(v.requirements,'$.business_name')"
             "   FROM revisions v WHERE v.project_id=c.project_id"
             "   ORDER BY v.rev DESC LIMIT 1) AS business_name"
-            " FROM clients c JOIN projects p ON p.id = c.project_id"
+            " FROM customers c JOIN projects p ON p.id = c.project_id"
             " LEFT JOIN sessions s ON s.project_id = c.project_id"
             " ORDER BY c.id").fetchall()
     return [dict(r) for r in rows]
 
 
-def resolve_client_session(token: str) -> str | None:
-    """Token -> its OWN project id, or None. The only authorization a client
-    request ever gets; client-supplied project ids are never honored."""
+def resolve_customer_session(token: str) -> str | None:
+    """Token -> its OWN project id, or None. The only authorization a customer
+    request ever gets; customer-supplied project ids are never honored."""
     if not token:
         return None
     with _connect() as con:
-        r = con.execute("SELECT project_id FROM client_sessions WHERE token=? "
+        r = con.execute("SELECT project_id FROM customer_sessions WHERE token=? "
                         "AND revoked=0", (token,)).fetchone()
         if r:
-            con.execute("UPDATE client_sessions SET last_seen_ts=? WHERE token=?",
+            con.execute("UPDATE customer_sessions SET last_seen_ts=? WHERE token=?",
                         (time.time(), token))
     return r["project_id"] if r else None
 
 
-def revoke_client_session(token: str) -> None:
+def revoke_customer_session(token: str) -> None:
     with _connect() as con:
-        con.execute("UPDATE client_sessions SET revoked=1 WHERE token=?", (token,))
+        con.execute("UPDATE customer_sessions SET revoked=1 WHERE token=?", (token,))
 
 
-def count_client_messages(project_id: str) -> int:
+def count_customer_messages(project_id: str) -> int:
     with _connect() as con:
         r = con.execute("SELECT COUNT(*) n FROM messages WHERE project_id=? AND "
                         "conversation='interview' AND role='owner'",
@@ -437,8 +455,8 @@ def recent_events_all(limit: int = 120) -> list[dict]:
         rows = con.execute(
             "SELECT e.seq, e.project_id, e.type, e.actor, e.payload, e.ts,"
             " p.name AS project_name, p.num AS project_num,"
-            " (SELECT id FROM clients c WHERE c.project_id=e.project_id)"
-            "   AS client_id"
+            " (SELECT id FROM customers c WHERE c.project_id=e.project_id)"
+            "   AS customer_id"
             " FROM events e LEFT JOIN projects p ON p.id = e.project_id"
             " ORDER BY e.seq DESC LIMIT ?", (limit,)).fetchall()
     return [dict(r) | {"payload": json.loads(r["payload"] or "{}")} for r in rows]
@@ -446,15 +464,15 @@ def recent_events_all(limit: int = 120) -> list[dict]:
 
 def recent_terminal_feed(limit: int = 150) -> list[dict]:
     """The Terminal's combined live feed: recorded events AND the actual
-    interview messages between clients and the bot, merged in time order,
+    interview messages between customers and the bot, merged in time order,
     newest first. Pure read — no models, no side effects."""
     events = [e | {"kind": "event"} for e in recent_events_all(limit)]
     with _connect() as con:
         rows = con.execute(
             "SELECT m.id AS seq, m.project_id, m.role, m.text, m.ts,"
             " p.name AS project_name, p.num AS project_num,"
-            " (SELECT id FROM clients c WHERE c.project_id=m.project_id)"
-            "   AS client_id"
+            " (SELECT id FROM customers c WHERE c.project_id=m.project_id)"
+            "   AS customer_id"
             " FROM messages m LEFT JOIN projects p ON p.id = m.project_id"
             " WHERE m.conversation='interview'"
             " ORDER BY m.id DESC LIMIT ?", (limit,)).fetchall()
@@ -668,8 +686,8 @@ def interviewing_metrics(pid: str) -> dict:
             "conversation='interview' AND role='owner'", (pid,)).fetchone()["n"]
     if not r["n"]:
         return {"calls": 0}
-    # conversation rhythm: counts + average client reply gap (bot message ->
-    # next client message) from real timestamps, and average bot turn time
+    # conversation rhythm: counts + average customer reply gap (bot message ->
+    # next customer message) from real timestamps, and average bot turn time
     with _connect() as con:
         msgs = con.execute(
             "SELECT role, ts FROM messages WHERE project_id=? AND "
@@ -682,7 +700,7 @@ def interviewing_metrics(pid: str) -> dict:
     received = sum(1 for m in msgs if m["role"] == "owner")
     # Wall-clock conversation duration: first message to the last one once
     # the interview is complete, to NOW while it is still open (an open
-    # interview is still running — waiting for the client counts).
+    # interview is still running — waiting for the customer counts).
     elapsed = None
     if msgs:
         with _connect() as con:
@@ -697,7 +715,7 @@ def interviewing_metrics(pid: str) -> dict:
         elif m["role"] == "owner" and prev_bot is not None:
             gaps.append(m["ts"] - prev_bot)
             prev_bot = None
-    avg_client = (sum(gaps) / len(gaps)) if gaps else None
+    avg_customer = (sum(gaps) / len(gaps)) if gaps else None
     # a single unpriced/unknown model makes the whole cost unknown — never
     # silently price it as something else
     unpriced = any(m not in PRICING for m in models)
@@ -716,7 +734,7 @@ def interviewing_metrics(pid: str) -> dict:
             "cost_usd": cost, "active_seconds": r["dur"],
             "elapsed_seconds": elapsed,
             "msgs_sent": sent, "msgs_received": received,
-            "avg_client_seconds": avg_client, "avg_bot_seconds": avg_bot,
+            "avg_customer_seconds": avg_customer, "avg_bot_seconds": avg_bot,
             "model": (r["model"] or "").replace("claude-", "") or None}
 
 
@@ -842,10 +860,10 @@ def open_reviews(pid: str) -> list[dict]:
     return [dict(r) for r in rows]
 
 
-def client_project_ids() -> set[str]:
-    """Projects created through the client link (vs owner test sessions)."""
+def customer_project_ids() -> set[str]:
+    """Projects created through the customer link (vs owner test sessions)."""
     with _connect() as con:
-        rows = con.execute("SELECT DISTINCT project_id FROM client_sessions "
+        rows = con.execute("SELECT DISTINCT project_id FROM customer_sessions "
                            "WHERE revoked=0").fetchall()
     return {r["project_id"] for r in rows}
 
@@ -867,7 +885,7 @@ def flows_summary() -> list[dict]:
             " (SELECT COUNT(*) FROM approvals a WHERE a.project_id=p.id AND"
             "   a.status='active') AS approved,"
             " (SELECT MAX(rev) FROM revisions v WHERE v.project_id=p.id) AS head_rev,"
-            " (SELECT id FROM clients c WHERE c.project_id=p.id) AS client_id,"
+            " (SELECT id FROM customers c WHERE c.project_id=p.id) AS customer_id,"
             " (SELECT json_extract(v.requirements,'$.business_name')"
             "   FROM revisions v WHERE v.project_id=p.id"
             "   ORDER BY v.rev DESC LIMIT 1) AS business_name,"

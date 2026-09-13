@@ -1,22 +1,22 @@
-# dashboard.py — BotBot server: owner operations console + client intake chat.
+# dashboard.py — BotBot server: owner operations console + customer intake chat.
 #
 # Two entry points, one backend, one RequirementsBot engine:
 #   /admin  (also /)  the PLATFORM OWNER's operations console: system-wide
 #                     orchestrator map, sessions inspection, contracts &
 #                     review, floating AI supervisor (system scope).
-#   /chat             a CLIENT-facing page: only the RequirementsBot
+#   /chat             a CUSTOMER-facing page: only the RequirementsBot
 #                     conversation. No sidebar, no graph, no costs, no
-#                     supervisor, no other clients' records.
+#                     supervisor, no other customers' records.
 #
 # Access model (V1, localhost only — see release blockers in the repo docs):
 #   - Owner: an unguessable owner token is stored server-side and set as an
 #     HttpOnly cookie when /admin is served from localhost. Every /api/* and
-#     legacy owner route requires it. This gates client sessions out of the
+#     legacy owner route requires it. This gates customer sessions out of the
 #     console; it is NOT internet-grade auth — do not expose publicly.
-#   - Client: the first message POSTed from /chat creates one isolated
-#     project and a server-issued session token (HttpOnly cookie). A client
-#     request is authorized ONLY by that cookie — client-supplied project
-#     ids, query params and owner cookies are never honored on client routes.
+#   - Customer: the first message POSTed from /chat creates one isolated
+#     project and a server-issued session token (HttpOnly cookie). A customer
+#     request is authorized ONLY by that cookie — customer-supplied project
+#     ids, query params and owner cookies are never honored on customer routes.
 #   - Mutating POSTs verify the Origin header against this host.
 import json
 import secrets
@@ -312,7 +312,7 @@ body.view-billing #billing{display:flex}
   color:var(--text2);vertical-align:top}
 .simt-table td.mono{font:11px var(--mono);white-space:nowrap}
 
-/* ---------- clients ---------- */
+/* ---------- customers ---------- */
 #customers{flex-direction:column;margin:14px 20px 20px;min-height:0;
   background:var(--panel);border:1px solid var(--border);border-radius:8px}
 #customers-body{flex:1;overflow-y:auto;min-height:0}
@@ -327,7 +327,7 @@ body.view-billing #billing{display:flex}
   white-space:nowrap}
 #customers-body td.cname{color:var(--text)}
 #customers-body td.cmono{font:11px var(--mono);white-space:nowrap}
-.clients-empty{padding:30px;text-align:center;color:var(--muted)}
+.customers-empty{padding:30px;text-align:center;color:var(--muted)}
 #pipelines{flex-direction:column;margin:14px 20px 20px;gap:12px;min-height:0}
 
 /* ---------- live log: a terminal ---------- */
@@ -357,7 +357,7 @@ body.view-activity #main{overflow:hidden}
 #activity-body .prj{color:#d19a66;font-weight:600}
 #activity-body .ln.dim span{color:#4b5263}
 #activity-body .who{font-weight:600}
-#activity-body .who.client{color:#e5c07b}
+#activity-body .who.customer{color:#e5c07b}
 #activity-body .who.bot{color:#56b6c2}
 #activity-body .mt{color:#dcdcdc}
 #activity-body .activity-table{width:100%;border-collapse:collapse;font-size:12px;
@@ -390,7 +390,7 @@ body.view-activity #main{overflow:hidden}
 .fc-idbig{font:600 17px var(--sans);color:var(--text);white-space:nowrap;
   display:flex;align-items:center;gap:8px;letter-spacing:-.01em}
 .fc-ts{font:10.5px var(--mono);color:var(--muted);white-space:nowrap}
-.fc-client{font:600 11px var(--mono);color:var(--amber);white-space:nowrap}
+.fc-customer{font:600 11px var(--mono);color:var(--amber);white-space:nowrap}
 .fc-flowstate{font:600 11.5px var(--sans);color:var(--accent);margin-top:2px;
   display:flex;align-items:center;gap:7px}
 .fc-flowstate .spin{width:11px;height:11px}
@@ -857,8 +857,8 @@ body.view-customers #main{overflow:hidden}
         <input class="activity-filter" id="lf-proj" type="text" inputmode="numeric"
           placeholder="Project #" aria-label="Filter by project number"
           spellcheck="false">
-        <input class="activity-filter" id="lf-client" type="text" inputmode="numeric"
-          placeholder="Client #" aria-label="Filter by client number"
+        <input class="activity-filter" id="lf-customer" type="text" inputmode="numeric"
+          placeholder="Customer #" aria-label="Filter by customer number"
           spellcheck="false">
         <select class="activity-filter" id="lf-bot" aria-label="Filter by bot">
           <option value="">All bots</option>
@@ -867,13 +867,13 @@ body.view-customers #main{overflow:hidden}
           <option value="">All activity</option>
           <optgroup label="Conversations">
             <option value="cat:conversations">All conversations</option>
-            <option value="msg:owner">Client → Bot</option>
-            <option value="msg:bot">Bot → Client</option>
+            <option value="msg:owner">Customer → Bot</option>
+            <option value="msg:bot">Bot → Customer</option>
           </optgroup>
           <optgroup label="Clicks">
             <option value="cat:clicks">All clicks</option>
             <option value="click:operator">Operator clicks</option>
-            <option value="click:client">Client clicks</option>
+            <option value="click:customer">Customer clicks</option>
           </optgroup>
           <optgroup label="Milestones">
             <option value="cat:milestones">All milestones</option>
@@ -912,7 +912,7 @@ body.view-customers #main{overflow:hidden}
         <span class="t" style="color:var(--amber)">Operator Test Mode</span>
         <select class="proj-select" id="proj-select-chat" aria-label="Select test session"></select>
         <button class="act" id="proj-new">+ New test session</button>
-        <span class="m">same engine as the client link · test sessions only</span>
+        <span class="m">same engine as the customer link · test sessions only</span>
         <button class="act" id="chat-reset" title="Start a new interview">↺ New interview</button></div>
       <div id="chat-thread"></div>
       <div id="chat-bar">
@@ -1902,16 +1902,16 @@ async function loadSim(){
   });
 }
 
-/* ================= Clients ================= */
+/* ================= Customers ================= */
 async function loadCustomers(){
-  let clients = [];
-  try{ clients = await (await fetch('/api/customers')).json(); }
+  let customers = [];
+  try{ customers = await (await fetch('/api/customers')).json(); }
   catch(e){ return; }
-  $('#customers-body').innerHTML = clients.length
-    ? `<table><tr><th>Client ID</th><th>Name</th><th>Business</th>
+  $('#customers-body').innerHTML = customers.length
+    ? `<table><tr><th>Customer ID</th><th>Name</th><th>Business</th>
         <th>Project</th><th>State</th><th>Messages</th><th>Registered</th>
-        <th>Last seen</th></tr>` + clients.map(c => `<tr>
-        <td class="cid">Client ${c.client_id}</td>
+        <th>Last seen</th></tr>` + customers.map(c => `<tr>
+        <td class="cid">Customer ${c.customer_id}</td>
         <td class="cname">${esc(c.contact_name || '—')}</td>
         <td class="cname">${esc(c.business_name || '—')}</td>
         <td class="cmono">#${c.project_num ?? '—'}</td>
@@ -1921,9 +1921,9 @@ async function loadCustomers(){
           ? new Date(c.created_ts*1000).toLocaleString() : '—'}</td>
         <td class="cmono">${c.last_seen_ts ? ago(c.last_seen_ts) : '—'}</td>
       </tr>`).join('') + `</table>`
-    : `<div class="empty-state"><b>No clients registered yet</b>
-       <span>Clients are registered automatically when they start a
-       conversation through the client link.</span></div>`;
+    : `<div class="empty-state"><b>No customers registered yet</b>
+       <span>Customers are registered automatically when they start a
+       conversation through the customer link.</span></div>`;
 }
 
 function renderActivityTable(events){
@@ -1932,35 +1932,35 @@ function renderActivityTable(events){
     const t = `${d.toLocaleDateString('en-CA')} ${d.toLocaleTimeString('en-GB')}`;
     const proj = e.project_id === '__system__' ? 'system'
       : !e.project_id ? 'console' : `#${e.project_num ?? '?'}`;
-    const client = e.client_id != null ? `Client${e.client_id}` : '—';
+    const customer = e.customer_id != null ? `Customer${e.customer_id}` : '—';
     if(e.kind === 'msg'){
-      const dir = e.role === 'owner' ? 'Client → Bot' : 'Bot → Client';
+      const dir = e.role === 'owner' ? 'Customer → Bot' : 'Bot → Customer';
       return `<tr><td class="cmono">${t}</td><td class="cmono">${esc(proj)}</td>
-        <td class="cmono">${esc(client)}</td><td>Message</td>
+        <td class="cmono">${esc(customer)}</td><td>Message</td>
         <td>${dir}</td><td>${esc(e.text.slice(0, 160))}${
         e.text.length > 160 ? '…' : ''}</td></tr>`;
     }
     const detail = Object.entries(e.payload||{})
       .map(([k,v]) => `${k}=${typeof v==='object'?JSON.stringify(v):v}`).join(' · ');
-    const actor = (e.actor === 'client' || e.actor === 'owner')
-      && e.client_id != null ? `Client${e.client_id}` : e.actor;
+    const actor = (e.actor === 'customer' || e.actor === 'owner')
+      && e.customer_id != null ? `Customer${e.customer_id}` : e.actor;
     return `<tr><td class="cmono">${t}</td><td class="cmono">${esc(proj)}</td>
-      <td class="cmono">${esc(client)}</td><td>Event</td>
+      <td class="cmono">${esc(customer)}</td><td>Event</td>
       <td class="cmono">${esc(e.type)} (${esc(actor)})</td>
       <td>${esc(detail.slice(0, 160))}</td></tr>`;
   }).join('');
   $('#activity-body').innerHTML = `<table class="activity-table"><tr><th>Time</th>
-    <th>Project</th><th>Client</th><th>Kind</th><th>What</th>
+    <th>Project</th><th>Customer</th><th>Kind</th><th>What</th>
     <th>Details</th></tr>${rows
     || '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:24px">Nothing matches the filters.</td></tr>'}</table>`;
 }
 
 /* ================= Live Log (system-wide event feed) ================= */
 let logSig = '';
-const logFilter = {proj: '', client: '', bot: '', kind: ''};
-// Project/client are TYPE-AHEAD prefix filters: type 8 and every number
+const logFilter = {proj: '', customer: '', bot: '', kind: ''};
+// Project/customer are TYPE-AHEAD prefix filters: type 8 and every number
 // starting with 8 stays; type 84 and it narrows to 84, 842, ... Digits only.
-for(const [id, key] of [['#lf-proj','proj'], ['#lf-client','client']]){
+for(const [id, key] of [['#lf-proj','proj'], ['#lf-customer','customer']]){
   $(id).oninput = e => {
     e.target.value = e.target.value.replace(/\D/g, '');
     logFilter[key] = e.target.value; logSig = ''; loadActivity();
@@ -2006,8 +2006,8 @@ async function loadActivity(){
   $('#activity-meta').textContent = 'live · refreshes every 3s';
   events = events.filter(e =>
     (!logFilter.proj || String(e.project_num ?? '').startsWith(logFilter.proj))
-    && (!logFilter.client
-        || String(e.client_id ?? '').startsWith(logFilter.client))
+    && (!logFilter.customer
+        || String(e.customer_id ?? '').startsWith(logFilter.customer))
     && (!logFilter.bot || e.kind === 'msg')
     && matchKind(e));
   const sig = (events.length
@@ -2031,22 +2031,22 @@ async function loadActivity(){
       : !e.project_id ? 'console' : `PROJECT${e.project_num ?? '?'}`;
     if(e.kind === 'msg'){
       // conversation messages, ops-log style with a direction arrow:
-      //   [ts] PROJECT13 Client1 → RequirementBot   (the client writing)
-      //   [ts] PROJECT13 RequirementBot → Client1   (the bot answering)
-      const client = `<span class="who client">${
-        e.client_id != null ? `Client${e.client_id}` : 'owner'}</span>`;
+      //   [ts] PROJECT13 Customer1 → RequirementBot   (the customer writing)
+      //   [ts] PROJECT13 RequirementBot → Customer1   (the bot answering)
+      const customer = `<span class="who customer">${
+        e.customer_id != null ? `Customer${e.customer_id}` : 'owner'}</span>`;
       const P = `<span class="prj">PROJECT${e.project_num ?? '?'}</span>`;
       const B = `<span class="who bot">RequirementBot</span>`;
       const arrow = `<span class="dt">→</span>`;
       const path = e.role === 'owner'
-        ? `${P} ${client} ${arrow} ${B}` : `${P} ${B} ${arrow} ${client}`;
+        ? `${P} ${customer} ${arrow} ${B}` : `${P} ${B} ${arrow} ${customer}`;
       const text = e.text.length > 300 ? e.text.slice(0, 300) + '…' : e.text;
       return `<div class="ln">${ts} ${path}  <span class="mt" title="${
         esc(e.text.slice(0, 1000))}">${esc(text)}</span></div>`;
     }
-    // 'client'/'owner' role actors resolve to the real Client ID when known
-    const actor = (e.actor === 'client' || e.actor === 'owner')
-      && e.client_id != null ? `Client${e.client_id}` : e.actor;
+    // 'customer'/'owner' role actors resolve to the real Customer ID when known
+    const actor = (e.actor === 'customer' || e.actor === 'owner')
+      && e.customer_id != null ? `Customer${e.customer_id}` : e.actor;
     if(e.type === 'project.created'){
       // keep WHO created it; drop the auto-generated name (just a timestamp)
       return `<div class="ln">${ts} <span class="prj">${esc(proj)}</span> ` +
@@ -2139,7 +2139,7 @@ function renderFlows(){
   if(!flows.length){
     list.innerHTML = `<div class="empty-state">${pipelinesUI.data.flows.length
       ? '<b>No matching workflows</b><span>No workflows match the current filter.</span>'
-      : '<b>No workflows yet</b><span>New client conversations appear here automatically. A workflow can also be started with New Session on the Home page.</span>'}</div>`;
+      : '<b>No workflows yet</b><span>New customer conversations appear here automatically. A workflow can also be started with New Session on the Home page.</span>'}</div>`;
     return;
   }
   list.innerHTML = flows.map(f => {
@@ -2203,7 +2203,7 @@ function renderFlows(){
                 <em>Cache Write</em><b>${fmtTok(m.cache_write)}</b></span>
             </span>
             <span class="mpair">
-              <span class="mcol" title="Messages received from the client">
+              <span class="mcol" title="Messages received from the customer">
                 <em>Received</em><b class="mpill">${m.msgs_received ?? '—'}</b></span>
               <span class="mcol" title="Messages the bot sent">
                 <em>Sent</em><b class="mpill">${m.msgs_sent ?? '—'}</b></span>
@@ -2211,9 +2211,9 @@ function renderFlows(){
             <span class="mpair mtime">
               <span class="mcol" title="Conversation duration: first message to the last (to now while the interview is still open)">
                 <em>Total</em><b>${fmtSecs(m.elapsed_seconds ?? m.active_seconds)}</b></span>
-              <span class="mcol" title="Average client reply gap">
-                <em>Avg Receive</em><b>${m.avg_client_seconds!=null
-                  ? fmtSecs(m.avg_client_seconds) : '—'}</b></span>
+              <span class="mcol" title="Average customer reply gap">
+                <em>Avg Receive</em><b>${m.avg_customer_seconds!=null
+                  ? fmtSecs(m.avg_customer_seconds) : '—'}</b></span>
               <span class="mcol" title="Average bot reply time">
                 <em>Avg Send</em><b>${m.avg_bot_seconds!=null
                   ? fmtSecs(m.avg_bot_seconds) : '—'}</b></span>
@@ -2240,8 +2240,8 @@ function renderFlows(){
             : `<span class="spin"></span>${esc(FLOW_STATE[f.current_stage]||'—')}`}</span>
           <span class="fc-idbig" title="${esc(f.project_name || '')} · ${esc(f.flow_id)}">Project ${f.num ?? '—'}
             ${f.is_test ? `<span class="fc-test">Test</span>` : ''}</span>
-          ${f.client_id != null
-            ? `<span class="fc-client">Client ${f.client_id}</span>` : ''}
+          ${f.customer_id != null
+            ? `<span class="fc-customer">Customer ${f.customer_id}</span>` : ''}
           <span class="fc-ts">${f.created_ts
             ? new Date(f.created_ts*1000).toLocaleString([], {month:'short',
                 day:'numeric', hour:'2-digit', minute:'2-digit',
@@ -2338,7 +2338,7 @@ function switchProject(id){
 }
 $('#proj-select-chat').onchange = e => switchProject(e.target.value);
 $('#proj-new').onclick = async () => {
-  const name = prompt('New TEST session name (real clients get their own via the client link):');
+  const name = prompt('New TEST session name (real customers get their own via the customer link):');
   if(!name) return;
   const d = await (await fetch('/api/projects', {method:'POST',
     headers:{'Content-Type':'application/json'},
@@ -2480,8 +2480,8 @@ setInterval(() => {
 </script></body></html>"""
 
 
-# ============================ CLIENT CHAT PAGE ============================
-CLIENT_PAGE = r"""<!doctype html><html><head><meta charset="utf-8">
+# ============================ CUSTOMER CHAT PAGE ============================
+CUSTOMER_PAGE = r"""<!doctype html><html><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>BotBot — Let's plan your chatbot</title>
 <style>
@@ -2572,7 +2572,7 @@ function render(d){
   $('#inp').disabled = st.complete;
 }
 async function load(){
-  try{ render(await (await fetch('/client/history')).json()); }
+  try{ render(await (await fetch('/customer/history')).json()); }
   catch(e){ render({messages:[], error:'Could not reach the server. Please refresh.'}); }
 }
 async function send(){
@@ -2589,14 +2589,14 @@ async function send(){
     const el = document.getElementById('typing');
     if(!el) return;
     try{
-      const q = await (await fetch('/client/queue')).json();
+      const q = await (await fetch('/customer/queue')).json();
       el.innerHTML = q.waiting_capacity
         ? '<span class="spin"></span>Waiting for API capacity — your reply is next in line…'
         : '<span class="spin"></span>thinking…';
     }catch(_){}
   }, 2000);
   try{
-    const d = await (await fetch('/client/send', {method:'POST',
+    const d = await (await fetch('/customer/send', {method:'POST',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({message: text})})).json();
     st.busy = false; render(d);
@@ -2624,7 +2624,7 @@ async function upload(fileList){
   })));
   if(!files.length) return;
   try{
-    const d = await (await fetch('/client/upload', {method:'POST',
+    const d = await (await fetch('/customer/upload', {method:'POST',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({files})})).json();
     if(d.saved && d.saved.length)
@@ -2645,7 +2645,7 @@ document.addEventListener('click', e => {
   if(!t) return;
   const label = (t.getAttribute('aria-label') || t.title || t.textContent
     || t.placeholder || t.tagName).trim().slice(0, 80);
-  try{ fetch('/client/ui-event', {method:'POST',
+  try{ fetch('/customer/ui-event', {method:'POST',
     headers:{'Content-Type':'application/json'},
     body: JSON.stringify({label})}); }catch(_){}
 }, true);
@@ -2727,10 +2727,10 @@ def _api_status() -> dict:
             # HEADERS carry the live per-model RPM/ITPM/OTPM meters. The
             # free token-count endpoint cannot serve here - it does not
             # return the token-bucket headers.
-            client = anthropic.Anthropic()
+            customer = anthropic.Anthropic()
             limits = {}
             for model in _RL_MODELS:
-                raw = client.with_options(
+                raw = customer.with_options(
                     timeout=8.0, max_retries=0).messages.with_raw_response.create(
                     model=model, max_tokens=1,
                     messages=[{"role": "user", "content": "."}])
@@ -2767,7 +2767,7 @@ def system_payload() -> dict:
             "last_call": store.last_provider_event(),
             "supervisor_mode": supervisor.mode(),
             "api": _api_status()},
-        "client_link": {"path": "/chat", "local_only": True},
+        "customer_link": {"path": "/chat", "local_only": True},
     }
 
 
@@ -2776,7 +2776,7 @@ def pipelines_payload() -> dict:
     per journey, driven by recorded state only. Reading it never calls a
     model, creates an interview, or advances anything."""
     store.ensure_default_project()
-    client_ids = store.client_project_ids()
+    customer_ids = store.customer_project_ids()
     planned = {c["id"] for c in registry.capabilities() if c.get("planned")}
     rows = [r for r in store.flows_summary()
             # the auto-created default placeholder is not a journey until
@@ -2785,7 +2785,7 @@ def pipelines_payload() -> dict:
                     and not r["has_session"] and not r["head_rev"])]
     flows = []
     for r in rows:
-        f = controller.flow_projection(r, planned, r["id"] in client_ids)
+        f = controller.flow_projection(r, planned, r["id"] in customer_ids)
         # real spend of the stages that actually run today
         metrics = {"interviewing": store.interviewing_metrics(r["id"])}
         f["stage_metrics"] = metrics
@@ -2833,7 +2833,7 @@ def review_payload(pid: str) -> dict:
 ALLOWED_EXTS = {".txt", ".md", ".csv", ".png", ".jpg", ".jpeg", ".webp", ".gif"}
 
 
-def save_uploads(pid: str, files: list, actor: str = "client") -> dict:
+def save_uploads(pid: str, files: list, actor: str = "customer") -> dict:
     """Validated upload into the PROJECT's own materials dir."""
     import base64
     updir = controller.uploads_dir(pid)
@@ -2861,11 +2861,11 @@ def save_uploads(pid: str, files: list, actor: str = "client") -> dict:
     return {"saved": saved, "rejected": rejected}
 
 
-# ---------- client-side payloads (no internals, redacted errors) ----------
-CLIENT_MAX_MESSAGES = 200
+# ---------- customer-side payloads (no internals, redacted errors) ----------
+CUSTOMER_MAX_MESSAGES = 200
 
 
-def client_history(pid: str | None) -> dict:
+def customer_history(pid: str | None) -> dict:
     from requirements_bot import RequirementsBot
     if pid is None:  # no session yet: the static greeting, nothing created
         return {"messages": [{"role": "ai", "text": RequirementsBot.GREETING}],
@@ -2873,23 +2873,23 @@ def client_history(pid: str | None) -> dict:
     return controller.chat_payload(pid) | {"started": True}
 
 
-def client_send(pid: str, message: str) -> dict:
+def customer_send(pid: str, message: str) -> dict:
     if len(message) > 4000:
-        return client_history(pid) | {"error": "That message is too long — "
+        return customer_history(pid) | {"error": "That message is too long — "
                                       "please split it up."}
-    if store.count_client_messages(pid) >= CLIENT_MAX_MESSAGES:
-        return client_history(pid) | {"error": "This conversation has reached "
+    if store.count_customer_messages(pid) >= CUSTOMER_MAX_MESSAGES:
+        return customer_history(pid) | {"error": "This conversation has reached "
                                       "its limit. Please contact us directly."}
     out = controller.send_interview_message(pid, message)
     if "error" in out:
         err = str(out["error"])
-        # Clients see actionable-but-safe text only; details stay in events.
+        # Customers see actionable-but-safe text only; details stay in events.
         if not (err.startswith("Stopped —") or "wait a moment" in err):
             out["error"] = ("Something went wrong on our side. Your answers "
                             "are saved — please try again in a moment.")
     if "messages" not in out:
         out = controller.chat_payload(pid) | {"error": out.get("error")}
-    out.pop("saved", None)          # internal filename, not for clients
+    out.pop("saved", None)          # internal filename, not for customers
     out["started"] = True
     return out
 
@@ -2922,12 +2922,15 @@ class Handler(BaseHTTPRequestHandler):
         return secrets.compare_digest(
             self._cookies().get("botbot_owner", ""), _owner_token())
 
-    def _client_pid(self) -> str | None:
-        """The ONLY authorization a client request gets: its own session
-        cookie resolved server-side. Owner cookies and any client-supplied
-        project ids are ignored on client routes."""
-        return store.resolve_client_session(
-            self._cookies().get("botbot_client", ""))
+    def _customer_pid(self) -> str | None:
+        """The ONLY authorization a customer request gets: its own session
+        cookie resolved server-side. Owner cookies and any customer-supplied
+        project ids are ignored on customer routes."""
+        return store.resolve_customer_session(
+            self._cookies().get("botbot_customer")
+            # legacy cookie name from before the customers rename — honored
+            # so live interview sessions survive the rename
+            or self._cookies().get("botbot_client", ""))
 
     def _origin_ok(self) -> bool:
         origin = self.headers.get("Origin")
@@ -2957,29 +2960,30 @@ class Handler(BaseHTTPRequestHandler):
             extra = None
             if q.get("new") == "1":
                 # Explicit fresh start (the owner's New Session button):
-                # revoke the old client session (records preserved), create
+                # revoke the old customer session (records preserved), create
                 # the new interview NOW so its flow card appears in Chatbot
                 # Flows immediately, and bind this browser to it.
-                old = self._cookies().get("botbot_client")
+                old = (self._cookies().get("botbot_customer")
+                       or self._cookies().get("botbot_client"))  # legacy name
                 if old:
-                    store.revoke_client_session(old)
+                    store.revoke_customer_session(old)
                 pid = store.create_project(
-                    "Client " + time.strftime("%Y-%m-%d %H:%M"),
-                    actor="client")["id"]
+                    "Customer " + time.strftime("%Y-%m-%d %H:%M"),
+                    actor="customer")["id"]
                 store.set_project_state(pid, "interviewing")
-                token = store.create_client_session(pid)
-                extra = {"Set-Cookie": f"botbot_client={token}; Path=/; "
+                token = store.create_customer_session(pid)
+                extra = {"Set-Cookie": f"botbot_customer={token}; Path=/; "
                          f"HttpOnly; SameSite=Lax"}
-            self._send(CLIENT_PAGE.encode("utf-8"), "text/html; charset=utf-8",
+            self._send(CUSTOMER_PAGE.encode("utf-8"), "text/html; charset=utf-8",
                        (extra or {}) | {"Cache-Control": "no-store"})
             return
 
-        # client API (client cookie only; never owner, never project params)
-        if route == "/client/history":
-            self._json(client_history(self._client_pid()))
+        # customer API (customer cookie only; never owner, never project params)
+        if route == "/customer/history":
+            self._json(customer_history(self._customer_pid()))
             return
-        if route == "/client/queue":
-            # One boolean for the client spinner — no labels, no internals.
+        if route == "/customer/queue":
+            # One boolean for the customer spinner — no labels, no internals.
             self._json({"waiting_capacity":
                         api_gate.snapshot()["waiting_capacity"]})
             return
@@ -3003,7 +3007,7 @@ class Handler(BaseHTTPRequestHandler):
         elif route == "/api/activity":
             self._json(store.recent_terminal_feed())
         elif route == "/api/customers":
-            self._json(store.list_clients())
+            self._json(store.list_customers())
         elif route == "/api/rate_limits":
             self._json(api_gate.snapshot())
         elif route == "/api/billing":
@@ -3031,7 +3035,7 @@ class Handler(BaseHTTPRequestHandler):
             self._json(supervisor.management_payload(scope))
         elif route == "/api/transcript":
             # the interview conversation (the bot's INPUT) as a plain text file
-            lines = [f"{'Client' if m['role']=='human' else 'Requirements Bot'}: "
+            lines = [f"{'Customer' if m['role']=='human' else 'Requirements Bot'}: "
                      f"{m['text']}" for m in controller.chat_payload(pid)["messages"]]
             self._send(("\n\n".join(lines) + "\n").encode("utf-8"),
                        "text/plain; charset=utf-8",
@@ -3065,30 +3069,30 @@ class Handler(BaseHTTPRequestHandler):
         except json.JSONDecodeError:
             req = {}
 
-        # ----- client routes: authorized ONLY by the client session cookie
-        if self.path == "/client/ui-event":
-            pid = self._client_pid()
+        # ----- customer routes: authorized ONLY by the customer session cookie
+        if self.path == "/customer/ui-event":
+            pid = self._customer_pid()
             if pid is not None:
-                store.append_event(pid, "ui.click", "client",
+                store.append_event(pid, "ui.click", "customer",
                                    {"label": str(req.get("label", ""))[:80]})
             self._json({"ok": True})
             return
-        if self.path == "/client/send":
-            pid = self._client_pid()
+        if self.path == "/customer/send":
+            pid = self._customer_pid()
             extra = None
             if pid is None:
                 # First message: create the isolated interview exactly once
                 # and issue the session. Merely loading the page never does.
-                name = "Client " + time.strftime("%Y-%m-%d %H:%M")
-                pid = store.create_project(name, actor="client")["id"]
-                token = store.create_client_session(pid)
-                extra = {"Set-Cookie": f"botbot_client={token}; Path=/; "
+                name = "Customer " + time.strftime("%Y-%m-%d %H:%M")
+                pid = store.create_project(name, actor="customer")["id"]
+                token = store.create_customer_session(pid)
+                extra = {"Set-Cookie": f"botbot_customer={token}; Path=/; "
                                        f"HttpOnly; SameSite=Lax"}
-            out = client_send(pid, str(req.get("message", "")).strip())
+            out = customer_send(pid, str(req.get("message", "")).strip())
             self._json(out, extra=extra)
             return
-        if self.path == "/client/upload":
-            pid = self._client_pid()
+        if self.path == "/customer/upload":
+            pid = self._customer_pid()
             if pid is None:
                 self._json({"saved": [], "rejected":
                             ["Please send a message first, then attach files."]})
@@ -3156,5 +3160,5 @@ class Handler(BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
     print(f"Owner console: http://localhost:{PORT}/admin")
-    print(f"Client chat:   http://localhost:{PORT}/chat   (local-only)")
+    print(f"Customer chat:   http://localhost:{PORT}/chat   (local-only)")
     ThreadingHTTPServer(("127.0.0.1", PORT), Handler).serve_forever()
