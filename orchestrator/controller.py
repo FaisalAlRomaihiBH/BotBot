@@ -276,6 +276,7 @@ def flow_projection(row: dict, planned_caps: set[str],
                  or (None if is_client else row["name"])
                  or "New chatbot request"),
         "contact": row.get("contact_name"),
+        "project_name": row["name"],
         "is_test": not is_client,
         "state": state, "busy": busy,
         "interview_complete": bool(row["interview_complete"]),
