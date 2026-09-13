@@ -1295,7 +1295,7 @@ load();
 # is clearly mocked; the chosen layout will be wired to real records.
 FLOWCARD_DEMO = r"""<!doctype html><html><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Flow Cards — pick one</title>
+<title>Flow Card Variants — pick one</title>
 <style>
 :root{--bg:#0d0d0d;--panel:#151515;--panel2:#1a1a1a;--border:#2a2a2a;
   --border-hi:#3f3f46;--text:#f5f5f5;--text2:#a1a1aa;--muted:#71717a;
@@ -1310,7 +1310,7 @@ p.sub{color:var(--text2);margin:0 0 24px;font-size:12.5px}
   padding:16px 20px;margin-bottom:20px;overflow-x:auto}
 .sample h2{font-size:15px;margin:0 0 2px}
 .sample .d{color:var(--muted);font-size:12px;margin:0 0 14px}
-.hd{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.hd{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
 .hd .nm{font-size:16px;font-weight:600}
 .hd .id{font:10.5px var(--mono);color:var(--muted)}
 .hd .badge{font:600 9px var(--mono);text-transform:uppercase;letter-spacing:.06em;
@@ -1318,241 +1318,114 @@ p.sub{color:var(--text2);margin:0 0 24px;font-size:12.5px}
 .hd .badge.att{color:var(--amber);border-color:#5c4a1e}
 .hd .tot{margin-left:auto;font:11px var(--mono);color:var(--text2)}
 .hd .tot b{color:var(--text)}
-.mono{font-family:var(--mono)}
-.mut{color:var(--muted)}.acc{color:var(--accent)}.grn{color:var(--green)}
-.cur{color:var(--accent)}.done{color:var(--green)}
+.mut{color:var(--muted)}
 .plan{opacity:.55}
-.stage-name{font-weight:600;font-size:13px}
+.stage-name{font-weight:600;font-size:13px;margin-top:7px}
 .bot{font-size:11px;color:var(--muted)}
+.note{font:10px var(--mono)}
+.note.cur{color:var(--accent)}
+.note.done{color:var(--green)}
 .metrics{font:10px var(--mono);color:var(--text2);line-height:1.7}
 .metrics b{color:var(--text);font-weight:500}
-/* shared circle */
-.cn{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border);
-  background:var(--panel2);display:grid;place-items:center;
-  font:600 11px var(--mono);color:var(--muted);flex:none}
-.done .cn,.cn.ok{border-color:#234534;color:var(--green)}
-.cur .cn,.cn.on{border-color:var(--accent);color:var(--accent)}
-.dash{border-style:dashed!important}
-
-/* v1: circles + metric stack under each (current style extended) */
-.v1{display:flex}
-.v1 .st{flex:1;min-width:128px;display:flex;flex-direction:column;align-items:center;
+.path{display:flex}
+.st{flex:1;min-width:132px;display:flex;flex-direction:column;align-items:center;
   text-align:center;position:relative;padding:0 6px}
-.v1 .st::before{content:'';position:absolute;top:14px;left:calc(-50% + 15px);
-  width:calc(100% - 30px);height:1.5px;background:var(--border)}
-.v1 .st:first-child::before{display:none}
-.v1 .cn{z-index:1}
-.v1 .stage-name{margin-top:6px}
-.v1 .metrics{margin-top:5px}
+.st::before{content:'';position:absolute;top:15px;left:calc(-50% + 16px);
+  width:calc(100% - 32px);height:1.5px;background:var(--border)}
+.st:first-child::before{display:none}
+.st.done::before{background:#234534}
+.cn{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--border);
+  background:var(--panel2);display:grid;place-items:center;z-index:1;
+  font:600 12px var(--mono);color:var(--muted)}
+.st.done .cn{border-color:#234534;color:var(--green)}
+.st.cur .cn{border-color:var(--accent);color:var(--accent);
+  box-shadow:0 0 10px rgba(110,168,254,.35)}
+.st.plan .cn{border-style:dashed}
 
-/* v2: ledger table */
-.v2 table{width:100%;border-collapse:collapse;font-size:12px}
-.v2 th{font:600 9.5px var(--sans);text-transform:uppercase;letter-spacing:.06em;
-  color:var(--muted);text-align:left;padding:4px 10px;border-bottom:1px solid var(--border)}
-.v2 td{padding:6px 10px;border-bottom:1px solid var(--border);vertical-align:middle}
-.v2 tr:last-child td{border-bottom:none}
-
-/* v3: mini-cards with arrows */
-.v3{display:flex;gap:8px;align-items:stretch}
-.v3 .box{flex:1;min-width:128px;background:var(--panel2);border:1px solid var(--border);
-  border-radius:7px;padding:9px 11px}
-.v3 .box.on{border-color:var(--accent)}
-.v3 .box.ok{border-color:#234534}
-.v3 .arr{align-self:center;color:var(--border-hi);flex:none}
-
-/* v4: vertical timeline */
-.v4 .row{display:flex;gap:14px;padding:7px 0;position:relative}
-.v4 .rail{width:28px;display:flex;flex-direction:column;align-items:center;flex:none}
-.v4 .row:not(:last-child) .rail::after{content:'';flex:1;width:1.5px;
-  background:var(--border);margin-top:3px}
-.v4 .body{flex:1;display:flex;gap:18px;align-items:baseline;flex-wrap:wrap}
-.v4 .metrics{margin-left:auto;text-align:right;line-height:1.5}
-
-/* v5: metro line with stations */
-.v5 .line{display:flex;align-items:center;margin:18px 8px 10px}
-.v5 .seg{flex:1;height:3px;background:var(--border)}
-.v5 .seg.ok{background:#234534}
-.v5 .dotc{width:14px;height:14px;border-radius:50%;border:2px solid var(--border);
-  background:var(--panel);flex:none}
-.v5 .dotc.ok{border-color:var(--green)}
-.v5 .dotc.on{border-color:var(--accent);box-shadow:0 0 8px rgba(110,168,254,.5)}
-.v5 .labels{display:flex}
-.v5 .lb{flex:1;text-align:center;padding:0 4px}
-
-/* v6: frosted capsules */
-.v6{display:flex;gap:10px;flex-wrap:wrap}
-.v6 .cap{background:rgba(16,18,22,.55);border:1px solid rgba(110,168,254,.2);
-  border-radius:14px;padding:9px 13px;min-width:126px;
+/* B — frosted metric chip */
+.vB .chip{margin-top:6px;background:rgba(16,18,22,.55);
+  border:1px solid rgba(110,168,254,.22);border-radius:10px;padding:5px 10px;
   backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
-.v6 .cap.on{border-color:rgba(110,168,254,.6)}
-.v6 .cap.ok{border-color:rgba(74,222,128,.35)}
+.vB .st.cur .chip{border-color:rgba(110,168,254,.55)}
 
-/* v7: header totals + slim path, metrics footer strip */
-.v7 .slim{display:flex;align-items:center;gap:6px;margin-bottom:10px}
-.v7 .chip{border:1px solid var(--border);border-radius:99px;padding:3px 11px;
-  font-size:11.5px;color:var(--muted);white-space:nowrap}
-.v7 .chip.on{color:var(--accent);border-color:var(--accent)}
-.v7 .chip.ok{color:var(--green);border-color:#234534}
-.v7 .foot{display:flex;border-top:1px solid var(--border);padding-top:9px;gap:0}
-.v7 .cell{flex:1;padding:0 10px;border-right:1px solid var(--border);min-width:110px}
-.v7 .cell:last-child{border-right:none}
+/* C — micro-table */
+.vC .mt{margin-top:6px;width:100%;max-width:150px;font:10px var(--mono)}
+.vC .mt .r{display:flex;justify-content:space-between;
+  border-bottom:1px dashed var(--border);padding:2px 2px}
+.vC .mt .r:last-child{border-bottom:none}
+.vC .mt .k{color:var(--muted)}
+.vC .mt .v{color:var(--text)}
 
-/* v8: big-number tiles */
-.v8{display:flex;gap:8px}
-.v8 .tile{flex:1;min-width:120px;background:var(--panel2);border:1px solid var(--border);
-  border-radius:7px;padding:10px 12px;text-align:center}
-.v8 .tile.on{border-color:var(--accent)}
-.v8 .tile.ok{border-color:#234534}
-.v8 .big{font:600 17px var(--mono);margin:5px 0 2px}
+/* D — cost in the circle */
+.vD .cn{width:54px;height:54px;font:600 11px var(--mono);flex-direction:column;
+  display:flex;align-items:center;justify-content:center}
+.vD .st::before{top:27px}
+.vD .cn small{font-size:8px;color:var(--muted);font-weight:400;line-height:1}
 
-/* v9: split rows — stage strip left, metrics panel right */
-.v9{display:flex;gap:0;border:1px solid var(--border);border-radius:7px;overflow:hidden}
-.v9 .left{flex:1.3;padding:10px 14px;display:flex;flex-direction:column;gap:9px;
-  background:var(--panel2)}
-.v9 .lrow{display:flex;align-items:center;gap:10px}
-.v9 .right{flex:1;border-left:1px solid var(--border);padding:10px 14px}
-.v9 .right h4{margin:0 0 6px;font:600 10px var(--sans);text-transform:uppercase;
-  letter-spacing:.06em;color:var(--muted)}
-
-/* v10: compact single-row with inline micro-metrics */
-.v10{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
-.v10 .pillst{display:flex;align-items:center;gap:7px;border:1px solid var(--border);
-  border-radius:8px;padding:6px 10px;background:var(--panel2);min-width:0}
-.v10 .pillst.on{border-color:var(--accent)}
-.v10 .pillst.ok{border-color:#234534}
-.v10 .sep{color:var(--border-hi)}
+/* E — unified metric band */
+.vE .band{display:flex;border:1px solid var(--border);border-radius:7px;
+  margin-top:12px;background:var(--panel2)}
+.vE .cell{flex:1;min-width:132px;padding:7px 10px;border-right:1px solid var(--border);
+  text-align:center}
+.vE .cell:last-child{border-right:none}
+.vE .cell.cur{box-shadow:inset 0 2px 0 var(--accent)}
 </style></head><body>
-<h1>Flow card samples</h1>
-<p class="sub">Data is mocked for the demo. Every layout shows: stage, the bot
-responsible, project ID, tokens in/out + cost under each bot, plus model,
-active time, attempts, revision/approval, gaps badge, totals and freshness.
-Tell Claude which number you want.</p>
+<h1>Style 1 variants — circles + metrics</h1>
+<p class="sub">Five treatments of the layout you liked. Data is mocked.
+Tell Claude which letter you want.</p>
 <div id="list"></div>
 <script>
-const STAGES=[
+const S=[
  {n:'Interviewing', bot:'RequirementsBot', st:'done', note:'Interview closed',
-  in:'182.4k', out:'41.2k', cost:'$1.24', time:'6m 12s', tries:'14 turns', model:'sonnet-5'},
- {n:'Architecture', bot:'Architect Bot', st:'cur', note:'Awaiting requirements approval · 2 blocking gaps',
-  in:'—', out:'—', cost:'—', time:'—', tries:'—', model:'—'},
- {n:'Building', bot:'Builder Bot', st:'plan', note:'Planned',
-  in:'—', out:'—', cost:'—', time:'—', tries:'—', model:'—'},
- {n:'Testing & Repair', bot:'Tester/Fixer Bot', st:'plan', note:'Planned',
-  in:'—', out:'—', cost:'—', time:'—', tries:'—', model:'—'},
- {n:'Bot Created', bot:'Outcome', st:'plan', note:'Unmet',
-  in:'—', out:'—', cost:'—', time:'—', tries:'—', model:'—'},
+  tin:'182.4k', tout:'41.2k', cost:'$1.24', time:'6m 12s', tries:'14 turns', model:'sonnet-5'},
+ {n:'Architecture', bot:'Architect Bot', st:'cur', note:'Awaiting approval · 2 gaps'},
+ {n:'Building', bot:'Builder Bot', st:'plan', note:'Planned'},
+ {n:'Testing & Repair', bot:'Tester/Fixer Bot', st:'plan', note:'Planned'},
+ {n:'Bot Created', bot:'Outcome', st:'plan', note:'Unmet'},
 ];
 const HD = `<div class="hd"><span class="nm">Shiny Wheels Car Wash</span>
   <span class="id">proj_a374880d50</span><span class="badge">Client</span>
   <span class="badge att">2 gaps</span><span class="badge">rev r14 · not approved</span>
   <span class="tot">total <b>$1.24</b> · 182.4k in / 41.2k out · updated 2m ago</span></div>`;
-const cls = s => s==='done'?'done':s==='cur'?'cur':'plan';
-const mark = (s,i) => s==='done'?'✓':(i+1);
-const M = s => `<div class="metrics">in <b>${s.in}</b> · out <b>${s.out}</b> · <b>${s.cost}</b><br>
-  <span class="mut">${s.time} · ${s.tries} · ${s.model}</span></div>`;
-
+const mark = (s,i) => s.st==='done'?'✓':(i+1);
+const head = (s,i) => `<span class="cn">${mark(s,i)}</span>
+  <span class="stage-name">${s.n}</span><span class="bot">${s.bot}</span>
+  <span class="note ${s.st}" style="margin-top:2px">${s.note}</span>`;
+const has = s => !!s.cost;
 const V={};
-V[1]=()=>`<div class="v1">${STAGES.map((s,i)=>`
-  <div class="st ${cls(s.st)}${s.st==='plan'?' plan':''}">
-    <span class="cn${s.st==='plan'?' dash':''}">${mark(s.st,i)}</span>
-    <span class="stage-name">${s.n}</span><span class="bot">${s.bot}</span>
-    <span class="metrics" style="margin-top:3px;color:${s.st==='cur'?'var(--accent)':'inherit'}">${s.note}</span>
-    ${s.st!=='plan'?M(s):''}
-  </div>`).join('')}</div>`;
-V[2]=()=>`<div class="v2"><table>
-  <tr><th></th><th>Stage</th><th>Bot</th><th>Status</th><th>In</th><th>Out</th><th>Cost</th><th>Time</th><th>Attempts</th></tr>
-  ${STAGES.map((s,i)=>`<tr class="${s.st==='plan'?'plan':''}">
-    <td><span class="cn${s.st==='plan'?' dash':''} ${s.st==='done'?'ok':s.st==='cur'?'on':''}">${mark(s.st,i)}</span></td>
-    <td class="stage-name">${s.n}</td><td class="bot">${s.bot}</td>
-    <td style="color:${s.st==='cur'?'var(--accent)':s.st==='done'?'var(--green)':'var(--muted)'}">${s.note}</td>
-    <td class="mono">${s.in}</td><td class="mono">${s.out}</td>
-    <td class="mono">${s.cost}</td><td class="mono">${s.time}</td><td class="mono">${s.tries}</td>
-  </tr>`).join('')}</table></div>`;
-V[3]=()=>`<div class="v3">${STAGES.map((s,i)=>`
-  ${i?'<span class="arr">→</span>':''}
-  <div class="box ${s.st==='cur'?'on':s.st==='done'?'ok':''}${s.st==='plan'?' plan':''}">
-    <div class="stage-name">${s.n}</div><div class="bot">${s.bot}</div>
-    <div class="metrics" style="margin:4px 0;color:${s.st==='cur'?'var(--accent)':'inherit'}">${s.note}</div>
-    ${s.st!=='plan'?M(s):''}
-  </div>`).join('')}</div>`;
-V[4]=()=>`<div class="v4">${STAGES.map((s,i)=>`
-  <div class="row${s.st==='plan'?' plan':''}">
-    <div class="rail"><span class="cn${s.st==='plan'?' dash':''} ${s.st==='done'?'ok':s.st==='cur'?'on':''}">${mark(s.st,i)}</span></div>
-    <div class="body"><span class="stage-name">${s.n}</span><span class="bot">${s.bot}</span>
-      <span class="metrics" style="color:${s.st==='cur'?'var(--accent)':'inherit'}">${s.note}</span>
-      ${s.st!=='plan'?`<span class="metrics" style="margin-left:auto;text-align:right">in <b>${s.in}</b> · out <b>${s.out}</b> · <b>${s.cost}</b> · ${s.time}</span>`:''}
-    </div>
-  </div>`).join('')}</div>`;
-V[5]=()=>`<div class="v5">
-  <div class="line">${STAGES.map((s,i)=>`
-    ${i?`<span class="seg ${STAGES[i-1].st==='done'?'ok':''}"></span>`:''}
-    <span class="dotc ${s.st==='done'?'ok':s.st==='cur'?'on':''}${s.st==='plan'?' dash':''}"></span>`).join('')}
-  </div>
-  <div class="labels">${STAGES.map(s=>`
-    <div class="lb${s.st==='plan'?' plan':''}"><div class="stage-name">${s.n}</div>
-    <div class="bot">${s.bot}</div>
-    <div class="metrics" style="color:${s.st==='cur'?'var(--accent)':'inherit'}">${s.note}</div>
-    ${s.st!=='plan'?M(s):''}</div>`).join('')}
-  </div></div>`;
-V[6]=()=>`<div class="v6">${STAGES.map(s=>`
-  <div class="cap ${s.st==='cur'?'on':s.st==='done'?'ok':''}${s.st==='plan'?' plan':''}">
-    <div class="stage-name">${s.n}</div><div class="bot">${s.bot}</div>
-    <div class="metrics" style="margin:3px 0;color:${s.st==='cur'?'var(--accent)':'inherit'}">${s.note}</div>
-    ${s.st!=='plan'?M(s):''}
-  </div>`).join('')}</div>`;
-V[7]=()=>`<div class="v7">
-  <div class="slim">${STAGES.map(s=>`
-    <span class="chip ${s.st==='cur'?'on':s.st==='done'?'ok':''}">${s.n}</span>`).join('<span class="mut">·</span>')}
-  </div>
-  <div class="foot">${STAGES.filter(s=>s.st!=='plan').map(s=>`
-    <div class="cell"><div class="stage-name" style="font-size:11.5px">${s.n}</div>
-      <div class="bot">${s.bot} · ${s.model}</div>${M(s)}</div>`).join('')}
-    <div class="cell"><div class="stage-name" style="font-size:11.5px">Remaining</div>
-      <div class="bot">Builder, Tester/Fixer</div>
-      <div class="metrics mut">Planned · Not implemented</div></div>
-  </div></div>`;
-V[8]=()=>`<div class="v8">${STAGES.map(s=>`
-  <div class="tile ${s.st==='cur'?'on':s.st==='done'?'ok':''}${s.st==='plan'?' plan':''}">
-    <div class="stage-name" style="font-size:12px">${s.n}</div>
-    <div class="bot">${s.bot}</div>
-    <div class="big">${s.cost}</div>
-    <div class="metrics">${s.st!=='plan'?`in ${s.in} · out ${s.out}<br>${s.time} · ${s.tries}`:s.note}</div>
-  </div>`).join('')}</div>`;
-V[9]=()=>`<div class="v9">
-  <div class="left">${STAGES.map((s,i)=>`
-    <div class="lrow${s.st==='plan'?' plan':''}">
-      <span class="cn${s.st==='plan'?' dash':''} ${s.st==='done'?'ok':s.st==='cur'?'on':''}">${mark(s.st,i)}</span>
-      <span class="stage-name">${s.n}</span><span class="bot">${s.bot}</span>
-      <span class="metrics" style="margin-left:auto;color:${s.st==='cur'?'var(--accent)':'inherit'}">${s.note}</span>
-    </div>`).join('')}</div>
-  <div class="right"><h4>Current stage spend — Interviewing</h4>
-    <div class="metrics">model <b>sonnet-5</b><br>tokens in <b>182.4k</b><br>
-    tokens out <b>41.2k</b><br>cost <b>$1.24</b><br>active time <b>6m 12s</b><br>
-    attempts <b>14 turns, 0 failed</b></div></div></div>`;
-V[10]=()=>`<div class="v10">${STAGES.map((s,i)=>`
-  ${i?'<span class="sep">›</span>':''}
-  <div class="pillst ${s.st==='cur'?'on':s.st==='done'?'ok':''}${s.st==='plan'?' plan':''}">
-    <span class="cn${s.st==='plan'?' dash':''}" style="width:22px;height:22px;font-size:10px">${mark(s.st,i)}</span>
-    <div><div class="stage-name" style="font-size:12px">${s.n} <span class="bot">${s.bot}</span></div>
-    <div class="metrics">${s.st!=='plan'?`in ${s.in} · out ${s.out} · ${s.cost} · ${s.time}`:s.note}</div></div>
-  </div>`).join('')}</div>`;
-
-const DESCR={
- 1:['Circles + metric stack','Your current milestone circles, with tokens/cost/time stacked under each bot.'],
- 2:['Ledger table','Each stage is a row: bot, status, in, out, cost, time, attempts — easiest to scan numbers.'],
- 3:['Mini-cards with arrows','Each stage is a small bordered card joined by arrows; metrics live inside the card.'],
- 4:['Vertical timeline','A rail of numbered dots; metrics right-aligned per row. Best for narrow screens.'],
- 5:['Metro line','A transit-style line with stations; labels and metrics under each stop.'],
- 6:['Frosted capsules','Stage capsules in the same frosted-glass style as your status pills.'],
- 7:['Slim chips + metrics footer','A compact chip path on top; spend details in a footer strip, planned stages folded.'],
- 8:['Cost tiles','Each stage is a tile with the COST as the big number; tokens/time beneath.'],
- 9:['Split panel',"Stage list on the left; a detail panel on the right showing the current stage's full spend."],
- 10:['Inline pill row','One compact row of stage pills with micro-metrics inline — densest option.'],
-};
+V['A']=['Classic stack','Plain metric lines under each bot — exactly the sample you picked.',
+ ()=>`<div class="path vA">${S.map((s,i)=>`<div class="st ${s.st}">${head(s,i)}
+   ${has(s)?`<div class="metrics">in <b>${s.tin}</b> · out <b>${s.tout}</b> · <b>${s.cost}</b><br>
+   <span class="mut">${s.time} · ${s.tries} · ${s.model}</span></div>`:''}</div>`).join('')}</div>`];
+V['B']=['Frosted metric chip','Metrics live in a small glass chip under each stage — matches your status pills.',
+ ()=>`<div class="path vB">${S.map((s,i)=>`<div class="st ${s.st}">${head(s,i)}
+   ${has(s)?`<div class="chip"><div class="metrics">in <b>${s.tin}</b> · out <b>${s.tout}</b><br>
+   <b>${s.cost}</b> · ${s.time}</div></div>`:''}</div>`).join('')}</div>`];
+V['C']=['Micro-table','Tiny label/value rows with dashed separators — the most readable numbers.',
+ ()=>`<div class="path vC">${S.map((s,i)=>`<div class="st ${s.st}">${head(s,i)}
+   ${has(s)?`<div class="mt">
+     <div class="r"><span class="k">in</span><span class="v">${s.tin}</span></div>
+     <div class="r"><span class="k">out</span><span class="v">${s.tout}</span></div>
+     <div class="r"><span class="k">cost</span><span class="v">${s.cost}</span></div>
+     <div class="r"><span class="k">time</span><span class="v">${s.time}</span></div>
+   </div>`:''}</div>`).join('')}</div>`];
+V['D']=['Cost in the circle','Bigger circles carry the cost itself; tokens and time in one line below.',
+ ()=>`<div class="path vD">${S.map((s,i)=>`<div class="st ${s.st}">
+   ${has(s)?`<span class="cn"><span>${s.cost}</span><small>spent</small></span>`
+     :`<span class="cn">${mark(s,i)}</span>`}
+   <span class="stage-name">${s.n}</span><span class="bot">${s.bot}</span>
+   <span class="note ${s.st}" style="margin-top:2px">${s.note}</span>
+   ${has(s)?`<div class="metrics">in <b>${s.tin}</b> · out <b>${s.tout}</b> · ${s.time}</div>`:''}</div>`).join('')}</div>`];
+V['E']=['Unified metric band','Clean circle row on top; one bordered band beneath with a metrics column per stage.',
+ ()=>`<div class="vE"><div class="path">${S.map((s,i)=>`<div class="st ${s.st}">${head(s,i)}</div>`).join('')}</div>
+  <div class="band">${S.map(s=>`<div class="cell ${s.st==='cur'?'cur':''}${s.st==='plan'?' plan':''}">
+    ${has(s)?`<div class="metrics">in <b>${s.tin}</b> · out <b>${s.tout}</b><br>
+    <b>${s.cost}</b> · ${s.time} · ${s.tries}</div>`
+    :`<div class="metrics mut">—</div>`}</div>`).join('')}</div></div>`];
 document.getElementById('list').innerHTML =
-  Object.keys(V).map(n=>`<div class="sample"><h2>${n}. ${DESCR[n][0]}</h2>
-   <p class="d">${DESCR[n][1]}</p>${HD}${V[n]()}</div>`).join('');
+  Object.keys(V).map(k=>`<div class="sample"><h2>${k}. ${V[k][0]}</h2>
+   <p class="d">${V[k][1]}</p>${HD}${V[k][2]()}</div>`).join('');
 </script></body></html>"""
-
 
 # ============================ BACKEND ============================
 def _project_of(value) -> str:
