@@ -2552,6 +2552,8 @@ def _api_status() -> dict:
         elif isinstance(e, (anthropic.APITimeoutError,
                             anthropic.APIConnectionError)):
             status = "unreachable"
+        elif "credit balance" in str(e).lower():
+            status = "out of credits"
         else:
             status = "error"
         detail = f"{type(e).__name__}"
