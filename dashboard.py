@@ -206,6 +206,7 @@ body.view-clients #clients{display:flex}
 .simt-step.cur .st{color:var(--accent)}
 .simt-step.fail .cn{border-color:#552b2b;color:var(--red)}
 .simt-step.fail .st{color:var(--red)}
+.simt-step .stc{font:600 10px var(--mono);color:var(--text);margin-top:3px}
 .simt-actions{display:flex;gap:6px;margin-top:10px}
 .sim-meta{display:flex;gap:5px;flex-wrap:wrap}
 .sim-meta span{font:10px var(--mono);color:var(--text2);
@@ -1229,7 +1230,16 @@ function fbar(title, map, denom, overlapping){
       ? ' <span class="fo">(overlapping)</span>' : ''}</em>
     <div class="fb">${segs}</div><div class="fls">${lbls}</div></div>`;
 }
+function usageCost(u, fam){
+  if(!u) return null;
+  const m = fam || u.model || 'sonnet';
+  const p = /haiku/.test(m) ? [1.0, 5.0] : /opus/.test(m) ? [5.0, 25.0]
+    : [2.0, 10.0];
+  return ((u.fresh_in||0)*p[0] + (u.cache_write||0)*p[0]*2
+    + (u.cache_read||0)*p[0]*0.10 + (u.out||0)*p[1]) / 1e6;
+}
 function simRunRow(r){
+  const u = r.usage || {}, bu = u.bot || {}, pu = u.persona || {};
   const dur = r.finished_ts ? fmtSecs(r.finished_ts - r.started_ts)
     : fmtSecs(Date.now()/1000 - r.started_ts);
   const st = r.status === 'running'
@@ -1254,6 +1264,13 @@ function simRunRow(r){
     <td>${st}</td>
     <td class="mono">${r.turns ?? 0}</td>
     <td class="mono">${r.cost_usd != null ? '$'+r.cost_usd.toFixed(2) : '—'}</td>
+    <td class="mono">${bu.out != null ? '$'+(usageCost(bu)||0).toFixed(2) : '—'}</td>
+    <td class="mono">${pu.out != null
+      ? '$'+(usageCost(pu, 'haiku')||0).toFixed(2) : '—'}</td>
+    <td class="mono">${fmtTok((bu.fresh_in||0)+(bu.cache_read||0)+(bu.cache_write||0))}</td>
+    <td class="mono">${fmtTok(bu.out||0)}</td>
+    <td class="mono">${fmtTok(bu.cache_read||0)}</td>
+    <td class="mono">${fmtTok(bu.cache_write||0)}</td>
     <td class="mono">${dur}</td>
     <td style="white-space:nowrap"><button class="act" onclick="event.stopPropagation();simView(${r.id},'identity')">Identity</button>
       <button class="act" onclick="event.stopPropagation();simView(${r.id},'transcript')">Input</button>
@@ -1268,6 +1285,16 @@ function simtCard(t){
     .filter(Boolean);
   const doneRuns = runs.filter(r => r.status !== 'running').length;
   const open = simUI.expanded.has(t.id);
+  // per-stage costs, visible live under each milestone
+  const u = t.usage || {};
+  const runsCost = runs.reduce((s, r) => s + (r.cost_usd || 0), 0);
+  const stageCost = {
+    generating: usageCost(u.generator),
+    running: runs.length ? runsCost : null,
+    analyzing: usageCost(u.analyst),
+  };
+  const liveTotal = t.cost_usd != null ? t.cost_usd
+    : (stageCost.generating || 0) + runsCost + (stageCost.analyzing || 0);
   const steps = SIMT_STEPS.slice(1).map(([key, label], i) => {
     const pos = i + 1;
     const cls = failed ? 'fail'
@@ -1280,9 +1307,11 @@ function simtCard(t){
             ? `<span class="spin"></span> ${doneRuns}/${t.run_ids.length || t.params.count}`
             : '<span class="spin"></span> Running')
         : 'Pending';
+    const sc = stageCost[key];
     return `<div class="simt-step ${cls}"><span class="cn">${
       cls === 'done' ? '✓' : pos}</span><span class="lbl">${label}</span>
-      <span class="st">${st}</span></div>`;
+      <span class="st">${st}</span>${sc != null
+        ? `<span class="stc">$${sc.toFixed(2)}</span>` : ''}</div>`;
   }).join('');
   const agg = simAgg(runs);
   const n = runs.length || 1;
@@ -1301,8 +1330,10 @@ function simtCard(t){
     </div>` : '';
   const table = open && runs.length ? `<div class="simt-table">
     <table><tr><th>Persona</th><th>Industry</th><th>Size</th><th>Knows</th>
-      <th>Patience</th><th>Score</th><th>Status</th><th>Turns</th><th>Cost</th>
-      <th>Duration</th><th></th></tr>
+      <th>Patience</th><th>Score</th><th>Status</th><th>Turns</th>
+      <th>Total Cost</th><th>Bot Cost</th><th>Persona Cost</th>
+      <th>Input Tokens</th><th>Output Tokens</th><th>Cache Read</th>
+      <th>Cache Write</th><th>Duration</th><th></th></tr>
       ${runs.map(simRunRow).join('')}</table></div>` : '';
   return `<div class="simt-card${open ? ' open' : ''}" data-tid="${t.id}">
     <div class="simt-top" role="button" tabindex="0" aria-expanded="${open}">
@@ -1312,7 +1343,8 @@ function simtCard(t){
       ${avgScore != null ? `<span class="ts" style="color:var(--green);
         font-weight:600" title="Average extraction score: of what each persona
         actually knew, how much the interview captured">score ${avgScore}%</span>` : ''}
-      <span class="cost">${t.cost_usd != null ? '$'+t.cost_usd.toFixed(2) : ''}</span>
+      <span class="cost">${t.cost_usd != null ? '$'+t.cost_usd.toFixed(2)
+        : liveTotal ? '~$'+liveTotal.toFixed(2) : ''}</span>
       <span class="chev">${open ? '▾' : '▸'}</span></div>
     <div class="simt-path">${steps}</div>
     ${bars}

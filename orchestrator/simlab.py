@@ -51,8 +51,11 @@ Rules:
   message text."""
 
 
-GENERATOR_MODEL = "claude-sonnet-5"
-ANALYST_MODEL = "claude-opus-5"
+# Cheapest model everywhere in the LAB'S OWN machinery for now (user call,
+# 2026-09-13). The RequirementsBot under test keeps its production model —
+# testing a cheaper stand-in would find problems real clients never see.
+GENERATOR_MODEL = "claude-haiku-4-5"
+ANALYST_MODEL = "claude-haiku-4-5"
 
 # The completeness ladder: how much of their own business each persona in a
 # batch actually knows. Spread across the batch so every sweep tests both
@@ -223,9 +226,14 @@ def _analyze(cases: list, prompt_text: str, schema_text: str) -> tuple[str, dict
                + f"\n=== CURRENT OUTPUT SCHEMA (models.py) ===\n{schema_text}\n\n"
                + "\n".join(cases))
     usage = {"fresh_in": 0, "cache_read": 0, "cache_write": 0, "out": 0}
-    for llm in (ChatAnthropic(model=ANALYST_MODEL, max_tokens=30000),
-                ChatAnthropic(model=ANALYST_MODEL, max_tokens=16000,
-                              thinking={"type": "disabled"})):
+    if "haiku" in ANALYST_MODEL:   # no adaptive thinking to eat the budget
+        attempts = (ChatAnthropic(model=ANALYST_MODEL, max_tokens=8000),
+                    ChatAnthropic(model=ANALYST_MODEL, max_tokens=8000))
+    else:
+        attempts = (ChatAnthropic(model=ANALYST_MODEL, max_tokens=30000),
+                    ChatAnthropic(model=ANALYST_MODEL, max_tokens=16000,
+                                  thinking={"type": "disabled"}))
+    for llm in attempts:
         reply = llm.invoke([HumanMessage(content=content)])
         _acc(usage, _usage_of(reply))
         report = _blocks_to_text(reply.content).strip()
@@ -266,7 +274,7 @@ def _reanalyze_exec(test_id: int) -> None:
                 f"--- FINAL BRIEF (OUTPUT) ---\n{brief}\n")
         report, a_usage = _analyze(cases, prompt_text, schema_text)
         usage = t.get("usage") or {}
-        usage["analyst"] = a_usage
+        usage["analyst"] = a_usage | {"model": ANALYST_MODEL}
         extra = _cost_of(ANALYST_MODEL, a_usage)
         store.sim_update_test(
             test_id, status="completed", report=report, usage=usage,
@@ -347,6 +355,9 @@ def _run_sweep(test_id: int, count: int) -> None:
                 completeness=level, patience=patience))
             summaries.append(f"{p.get('name')} ({p.get('industry')}, "
                              f"{p.get('company_size')})")
+        # partial usage right away, so the UI can price each stage live
+        store.sim_update_test(test_id, usage={
+            "generator": g_usage | {"model": GENERATOR_MODEL}})
 
         # 2) run every interview (in parallel, live-archived like any run)
         store.sim_update_test(test_id, status="running")
@@ -382,7 +393,8 @@ def _run_sweep(test_id: int, count: int) -> None:
                  + _cost_of(ANALYST_MODEL, a_usage))
         store.sim_update_test(
             test_id, status="completed", report=report,
-            usage={"generator": g_usage, "analyst": a_usage},
+            usage={"generator": g_usage | {"model": GENERATOR_MODEL},
+                   "analyst": a_usage | {"model": ANALYST_MODEL}},
             cost_usd=round(total, 4), finished_ts=time.time())
     except Exception as e:
         store.sim_update_test(test_id, status="failed",

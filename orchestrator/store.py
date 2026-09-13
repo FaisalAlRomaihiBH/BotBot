@@ -582,7 +582,7 @@ def sim_update_test(test_id: int, **fields) -> None:
 def sim_tests(limit: int = 100) -> list[dict]:
     with _connect() as con:
         rows = con.execute(
-            "SELECT id, kind, params, status, run_ids, cost_usd, error,"
+            "SELECT id, kind, params, status, run_ids, cost_usd, error, usage,"
             " started_ts, finished_ts, report IS NOT NULL AS has_report"
             " FROM sim_tests ORDER BY id DESC LIMIT ?", (limit,)).fetchall()
     out = []
@@ -590,6 +590,7 @@ def sim_tests(limit: int = 100) -> list[dict]:
         d = dict(r)
         d["params"] = json.loads(d["params"] or "{}")
         d["run_ids"] = json.loads(d["run_ids"] or "[]")
+        d["usage"] = json.loads(d["usage"]) if d["usage"] else None
         out.append(d)
     return out
 
