@@ -58,6 +58,9 @@ CREATE TABLE IF NOT EXISTS sim_personas(
   id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL,
   kind TEXT NOT NULL,             -- 'scripted' (fixed lines) | 'ai' (roleplayed)
   content TEXT NOT NULL,          -- script lines / persona profile
+  industry TEXT,                  -- the fake identity, registered so the test
+  company_size TEXT,              -- coverage is visible at a glance: what
+  traits TEXT,                    -- industries/sizes/temperaments were tested
   created_ts REAL NOT NULL);
 CREATE TABLE IF NOT EXISTS sim_runs(
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -67,6 +70,17 @@ CREATE TABLE IF NOT EXISTS sim_runs(
   transcript TEXT NOT NULL DEFAULT '[]',    -- [{who, text}] persona|bot
   brief TEXT,                     -- the final requirements form (JSON)
   usage TEXT,                     -- {bot:{...}, persona:{...}}
+  cost_usd REAL, error TEXT,
+  started_ts REAL NOT NULL, finished_ts REAL);
+CREATE TABLE IF NOT EXISTS sim_tests(
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  kind TEXT NOT NULL,             -- 'persona_sweep' (more kinds later)
+  params TEXT NOT NULL,           -- {"count": 5, ...}
+  status TEXT NOT NULL DEFAULT 'starting',
+                                  -- starting|generating|running|analyzing|completed|failed
+  run_ids TEXT NOT NULL DEFAULT '[]',
+  report TEXT,                    -- the analyst's markdown report + drafted fixes
+  usage TEXT,                     -- {generator:{...}, analyst:{...}}
   cost_usd REAL, error TEXT,
   started_ts REAL NOT NULL, finished_ts REAL);
 CREATE TABLE IF NOT EXISTS busy(
@@ -112,6 +126,12 @@ def _connect() -> sqlite3.Connection:
         con.execute("ALTER TABLE invocations ADD COLUMN duration REAL")
     except sqlite3.OperationalError:
         pass  # already present
+    # additive migration: persona identity metadata
+    for col in ("industry", "company_size", "traits"):
+        try:
+            con.execute(f"ALTER TABLE sim_personas ADD COLUMN {col} TEXT")
+        except sqlite3.OperationalError:
+            pass  # already present
     # additive migration: human-friendly sequential project number (display
     # identity; the stable internal id is unchanged). Backfilled by creation
     # order the first time.
@@ -440,11 +460,15 @@ def last_provider_event() -> dict | None:
 
 
 # ---------------- simulation lab (personas + permanent run archive) ---------
-def sim_add_persona(name: str, kind: str, content: str) -> int:
+def sim_add_persona(name: str, kind: str, content: str,
+                    industry: str | None = None,
+                    company_size: str | None = None,
+                    traits: str | None = None) -> int:
     with _connect() as con:
         cur = con.execute(
-            "INSERT INTO sim_personas(name, kind, content, created_ts) "
-            "VALUES(?,?,?,?)", (name, kind, content, time.time()))
+            "INSERT INTO sim_personas(name, kind, content, industry, "
+            "company_size, traits, created_ts) VALUES(?,?,?,?,?,?,?)",
+            (name, kind, content, industry, company_size, traits, time.time()))
         return cur.lastrowid
 
 
@@ -488,7 +512,8 @@ def sim_runs(limit: int = 200) -> list[dict]:
             "SELECT r.id, r.persona_id, r.status, r.interview_complete,"
             " r.cost_usd, r.error, r.started_ts, r.finished_ts,"
             " json_array_length(r.transcript) AS turns,"
-            " p.name AS persona_name, p.kind AS persona_kind"
+            " p.name AS persona_name, p.kind AS persona_kind,"
+            " p.industry, p.company_size"
             " FROM sim_runs r JOIN sim_personas p ON p.id=r.persona_id"
             " ORDER BY r.id DESC LIMIT ?", (limit,)).fetchall()
     return [dict(r) for r in rows]
@@ -505,6 +530,51 @@ def sim_run(run_id: int) -> dict | None:
         return None
     d = dict(r)
     for k in ("transcript", "brief", "usage"):
+        d[k] = json.loads(d[k]) if d[k] else None
+    return d
+
+
+def sim_create_test(kind: str, params: dict) -> int:
+    with _connect() as con:
+        cur = con.execute(
+            "INSERT INTO sim_tests(kind, params, started_ts) VALUES(?,?,?)",
+            (kind, json.dumps(params), time.time()))
+        return cur.lastrowid
+
+
+def sim_update_test(test_id: int, **fields) -> None:
+    keys, vals = [], []
+    for k, v in fields.items():
+        keys.append(f"{k}=?")
+        vals.append(json.dumps(v, ensure_ascii=False)
+                    if k in ("run_ids", "usage", "params") else v)
+    with _connect() as con:
+        con.execute(f"UPDATE sim_tests SET {', '.join(keys)} WHERE id=?",
+                    (*vals, test_id))
+
+
+def sim_tests(limit: int = 100) -> list[dict]:
+    with _connect() as con:
+        rows = con.execute(
+            "SELECT id, kind, params, status, run_ids, cost_usd, error,"
+            " started_ts, finished_ts, report IS NOT NULL AS has_report"
+            " FROM sim_tests ORDER BY id DESC LIMIT ?", (limit,)).fetchall()
+    out = []
+    for r in rows:
+        d = dict(r)
+        d["params"] = json.loads(d["params"] or "{}")
+        d["run_ids"] = json.loads(d["run_ids"] or "[]")
+        out.append(d)
+    return out
+
+
+def sim_test(test_id: int) -> dict | None:
+    with _connect() as con:
+        r = con.execute("SELECT * FROM sim_tests WHERE id=?", (test_id,)).fetchone()
+    if not r:
+        return None
+    d = dict(r)
+    for k in ("params", "run_ids", "usage"):
         d[k] = json.loads(d[k]) if d[k] else None
     return d
 

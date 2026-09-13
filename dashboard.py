@@ -170,6 +170,47 @@ body.view-clients #clients{display:flex}
 .sim-st.completed{color:var(--green)}
 .sim-st.failed{color:var(--red)}
 
+#simt-form{background:var(--panel);border:1px solid var(--border);
+  border-radius:8px;padding:14px;display:none;flex-direction:column;gap:9px}
+#simt-form.open{display:flex}
+#simt-form label{font:600 10px var(--sans);text-transform:uppercase;
+  letter-spacing:.06em;color:var(--muted)}
+#simt-form input,#simt-form select{background:var(--panel2);
+  border:1px solid var(--border);color:var(--text);border-radius:6px;
+  padding:7px 10px;font:12.5px var(--sans)}
+#simt-form .row{display:flex;gap:8px;align-items:center}
+#sim-tests{display:flex;flex-direction:column;gap:10px}
+.simt-card{background:var(--panel);border:1px solid var(--border);
+  border-radius:8px;padding:12px 16px}
+.simt-top{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.simt-top .n{font:600 14px var(--sans);color:var(--text)}
+.simt-top .ts{font:10.5px var(--mono);color:var(--muted)}
+.simt-top .cost{margin-left:auto;font:600 12px var(--mono);color:var(--text)}
+.simt-path{display:flex;align-items:flex-start;margin-top:12px;
+  overflow-x:auto}
+.simt-step{flex:1;min-width:110px;display:flex;flex-direction:column;
+  align-items:center;text-align:center;position:relative}
+.simt-step::before{content:'';position:absolute;top:13px;
+  left:calc(-50% + 14px);width:calc(100% - 28px);height:1.5px;
+  background:var(--border)}
+.simt-step:first-child::before{display:none}
+.simt-step .cn{width:26px;height:26px;border-radius:50%;
+  border:1.5px solid var(--border);background:var(--panel2);display:grid;
+  place-items:center;font:600 10.5px var(--mono);color:var(--muted)}
+.simt-step .lbl{margin-top:6px;font-size:11.5px;color:var(--text2)}
+.simt-step .st{font:600 9.5px var(--mono);margin-top:2px;color:var(--muted)}
+.simt-step.done .cn{border-color:#234534;color:var(--green)}
+.simt-step.done::before{background:#234534}
+.simt-step.done .st{color:var(--green)}
+.simt-step.cur .cn{border-color:var(--accent);color:var(--accent)}
+.simt-step.cur .st{color:var(--accent)}
+.simt-step.fail .cn{border-color:#552b2b;color:var(--red)}
+.simt-step.fail .st{color:var(--red)}
+.simt-actions{display:flex;gap:6px;margin-top:10px}
+.sim-meta{display:flex;gap:5px;flex-wrap:wrap}
+.sim-meta span{font:10px var(--mono);color:var(--text2);
+  border:1px solid var(--border);border-radius:99px;padding:1px 8px}
+
 /* ---------- clients ---------- */
 #clients{flex-direction:column;margin:14px 20px 20px;min-height:0;
   background:var(--panel);border:1px solid var(--border);border-radius:8px}
@@ -615,8 +656,8 @@ body.view-clients #main{overflow:hidden}
       <div class="nav-item active" id="nav-home" data-view="home"><span class="nav-ico">◎</span><span class="nav-label">Home</span></div>
       <div class="nav-item" id="nav-log" data-view="log"><span class="nav-ico">&gt;_</span><span class="nav-label">Terminal</span></div>
       <div class="nav-item" id="nav-flows" data-view="flows"><span class="nav-ico">⇶</span><span class="nav-label">Workflows</span></div>
-      <div class="nav-item" id="nav-clients" data-view="clients"><span class="nav-ico">◉</span><span class="nav-label">Clients</span></div>
       <div class="nav-item" id="nav-sim" data-view="sim"><span class="nav-ico">⚗</span><span class="nav-label">Simulation Lab</span></div>
+      <div class="nav-item" id="nav-clients" data-view="clients"><span class="nav-ico">◉</span><span class="nav-label">Clients</span></div>
     </nav>
     <div id="sb-foot">
       <div><span class="dot" id="dot-api"></span><span id="txt-api">Claude API: checking…</span></div>
@@ -646,9 +687,26 @@ body.view-clients #main{overflow:hidden}
     </div>
 
     <div id="sim">
-      <div class="sim-head"><span class="t">Simulation Lab</span>
-        <span class="m">fake personas interview the real bot · every run is
-        archived and re-runnable</span>
+      <div class="sim-head" style="justify-content:center">
+        <button class="act" id="sim-addtest" style="font-size:13px;
+          padding:8px 22px">+ Add Test</button></div>
+      <div id="simt-form">
+        <label>Test type</label>
+        <select id="simt-kind">
+          <option value="persona_sweep">Persona Sweep &amp; Analysis — N fake
+            businesses interview the bot; AI analyzes all inputs and outputs,
+            reports problems and drafts the fixes</option></select>
+        <label>How many different business personas</label>
+        <input id="simt-count" type="number" min="2" max="8" value="4"
+          style="width:90px">
+        <div class="row"><button class="act" id="simt-start">Start test</button>
+          <button class="act" id="simt-cancel">Cancel</button>
+          <span class="m" id="simt-note">estimated cost: ~$0.20-0.40 per
+            persona + ~$0.40-0.90 for the Opus analysis</span></div>
+      </div>
+      <div id="sim-tests"></div>
+      <div class="sim-head" style="margin-top:4px">
+        <span class="t">Personas</span>
         <button class="act" id="sim-new" style="margin-left:auto">+ New persona</button></div>
       <div id="sim-form">
         <label>Persona name</label>
@@ -1109,6 +1167,63 @@ $('#sim-new').onclick = () => {
   $('#sim-form').classList.add('open');
   $('#simf-name').focus();
 };
+$('#sim-addtest').onclick = () => $('#simt-form').classList.add('open');
+$('#simt-cancel').onclick = () => $('#simt-form').classList.remove('open');
+$('#simt-start').onclick = async () => {
+  const count = Math.max(2, Math.min(8, +$('#simt-count').value || 4));
+  $('#simt-form').classList.remove('open');
+  await fetch('/api/sim/test', {method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({kind: 'persona_sweep', count})});
+  loadSim();
+};
+const SIMT_STEPS = [
+  ['starting', 'Start'], ['generating', 'Generate Personas'],
+  ['running', 'Run Interviews'], ['analyzing', 'Analyze'],
+  ['completed', 'Report Ready']];
+function simtCard(t){
+  const order = SIMT_STEPS.map(s => s[0]);
+  const failed = t.status === 'failed';
+  const idx = failed ? order.length : order.indexOf(t.status);
+  const doneRuns = simUI.runs.filter(r =>
+    t.run_ids.includes(r.id) && r.status !== 'running').length;
+  const steps = SIMT_STEPS.slice(1).map(([key, label], i) => {
+    const pos = i + 1;
+    const cls = failed && pos >= idx ? 'fail'
+      : pos < idx || t.status === 'completed' ? 'done'
+      : pos === idx ? 'cur' : '';
+    const st = cls === 'done' ? 'Completed'
+      : cls === 'fail' ? 'Failed'
+      : cls === 'cur'
+        ? (key === 'running'
+            ? `<span class="spin"></span> ${doneRuns}/${t.run_ids.length || t.params.count}`
+            : '<span class="spin"></span> Running')
+        : 'Pending';
+    return `<div class="simt-step ${cls}"><span class="cn">${
+      cls === 'done' ? '✓' : pos}</span><span class="lbl">${label}</span>
+      <span class="st">${st}</span></div>`;
+  }).join('');
+  return `<div class="simt-card">
+    <div class="simt-top"><span class="n">Test ${t.id} · Persona Sweep &amp;
+      Analysis (${t.params.count} personas)</span>
+      <span class="ts">${new Date(t.started_ts*1000).toLocaleString()}</span>
+      <span class="cost">${t.cost_usd != null ? '$'+t.cost_usd.toFixed(2) : ''}</span></div>
+    <div class="simt-path">${steps}</div>
+    <div class="simt-actions">
+      ${t.has_report ? `<button class="act" onclick="simReport(${t.id})">View Report</button>` : ''}
+      ${t.status === 'completed' ? `<button class="act"
+        onclick="fetch('/api/sim/test',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({kind:'persona_sweep',count:${t.params.count}})}).then(loadSim)"
+        title="Run a fresh sweep of the same size against the current bot">Re-run</button>` : ''}
+      ${t.error ? `<span class="m" style="color:var(--red)">${esc(t.error)}</span>` : ''}
+    </div></div>`;
+}
+async function simReport(id){
+  const d = await (await fetch('/api/sim/test_report?id='+id)).json();
+  $('#viewer-title').textContent = `Test ${id} — analysis report`;
+  $('#viewer-dl').innerHTML = '';
+  $('#viewer-pre').textContent = d.report || '(no report)';
+  $('#viewer').classList.add('open');
+}
 $('#simf-cancel').onclick = () => $('#sim-form').classList.remove('open');
 $('#simf-kind').onchange = () => {
   const [label, ph] = SIMF_HINTS[$('#simf-kind').value];
@@ -1154,14 +1269,24 @@ async function simView(id, what){
 }
 async function loadSim(){
   try{
-    [simUI.personas, simUI.runs] = await Promise.all([
+    [simUI.personas, simUI.runs, simUI.tests] = await Promise.all([
       (await fetch('/api/sim/personas')).json(),
-      (await fetch('/api/sim/runs')).json()]);
+      (await fetch('/api/sim/runs')).json(),
+      (await fetch('/api/sim/tests')).json()]);
   }catch(e){ return; }
+  $('#sim-tests').innerHTML = simUI.tests.map(simtCard).join('')
+    || `<div class="empty-state" style="min-height:90px"><b>No tests yet</b>
+        <span>Add Test runs a batch of fake businesses through the bot and
+        analyzes every input and output for problems and fixes.</span></div>`;
   $('#sim-personas').innerHTML = simUI.personas.map(p => `
     <div class="sim-card">
       <span class="n">${esc(p.name)} <span class="k">${
         p.kind === 'ai' ? 'AI persona' : 'Scripted'}</span></span>
+      ${p.industry || p.company_size || p.traits ? `<span class="sim-meta">
+        ${p.industry ? `<span>${esc(p.industry)}</span>` : ''}
+        ${p.company_size ? `<span>${esc(p.company_size)}</span>` : ''}
+        ${p.traits ? `<span>${esc(p.traits.slice(0, 60))}</span>` : ''}
+      </span>` : ''}
       <span class="p">${esc(p.content.slice(0, 160))}</span>
       <span class="b"><button class="act" onclick="simRun(${p.id})">▶ Run</button>
         <span class="rc">${p.runs} run${p.runs === 1 ? '' : 's'}</span></span>
@@ -1169,11 +1294,12 @@ async function loadSim(){
     || `<div class="empty-state" style="min-height:120px"><b>No personas yet</b>
         <span>Create a persona to simulate a client interview.</span></div>`;
   $('#sim-runs').innerHTML = simUI.runs.length
-    ? `<table><tr><th>Run</th><th>Persona</th><th>Started</th><th>Status</th>
+    ? `<table><tr><th>Run</th><th>Persona</th><th>Industry</th><th>Started</th><th>Status</th>
         <th>Interview</th><th>Turns</th><th>Cost</th><th></th></tr>`
       + simUI.runs.map(r => `<tr>
         <td class="mono">#${r.id}</td>
         <td>${esc(r.persona_name)}</td>
+        <td>${esc(r.industry || '—')}${r.company_size ? ` · ${esc(r.company_size)}` : ''}</td>
         <td class="mono">${new Date(r.started_ts*1000).toLocaleString()}</td>
         <td><span class="sim-st ${r.status}">${r.status === 'running'
           ? '<span class="spin"></span> running' : r.status}</span>${
@@ -2236,6 +2362,11 @@ class Handler(BaseHTTPRequestHandler):
             self._json(store.sim_personas())
         elif route == "/api/sim/runs":
             self._json(store.sim_runs())
+        elif route == "/api/sim/tests":
+            self._json(store.sim_tests())
+        elif route == "/api/sim/test_report":
+            t = store.sim_test(int(q.get("id") or 0))
+            self._json({"report": t and t.get("report")})
         elif route == "/api/sim/run_detail":
             self._json(store.sim_run(int(q.get("id") or 0)) or {"error": "unknown run"})
         elif route == "/chat/history":
@@ -2347,6 +2478,10 @@ class Handler(BaseHTTPRequestHandler):
         elif self.path == "/api/sim/run":
             from orchestrator import simlab
             out = simlab.start_run(int(req.get("persona_id") or 0))
+        elif self.path == "/api/sim/test":
+            from orchestrator import simlab
+            out = simlab.start_test(str(req.get("kind", "")),
+                                    {"count": req.get("count")})
         elif self.path == "/api/review/resolve":
             ok = store.resolve_review(pid, int(req.get("review_id") or 0),
                                       str(req.get("disposition", ""))[:500]

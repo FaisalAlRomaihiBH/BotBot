@@ -51,6 +51,146 @@ Rules:
   message text."""
 
 
+GENERATOR_MODEL = "claude-sonnet-5"
+ANALYST_MODEL = "claude-opus-5"
+
+GENERATOR_PROMPT = """Generate {count} MAXIMALLY DIFFERENT fake business-owner
+personas for testing a chatbot-requirements interviewer. Vary aggressively:
+industry (food, trades, professional services, retail, beauty, automotive,
+events, manufacturing, health...), company size (solo up to ~30 staff),
+personality (patient/impatient, chatty/terse, tech-savvy/technophobe,
+suspicious/trusting), and communication style (some mix Arabic or Spanish
+words in). Each persona must include concrete facts: services with real
+prices, hours, team, location, a reason they want a chatbot, a rough budget.
+
+Output ONLY a JSON array, each element:
+{{"name": "<short persona name>", "industry": "<industry>",
+  "company_size": "<e.g. solo / 3 staff / 12 staff>",
+  "traits": "<personality + communication style, one line>",
+  "profile": "<8-14 sentences: the full identity, facts, and voice the
+              roleplayer will use>"}}"""
+
+ANALYST_PROMPT = """You are an expert conversation designer and product
+analyst. Below: the CURRENT interviewer system prompt, the CURRENT output
+schema (Pydantic source), and {n} complete test cases — for each, a fake
+owner's identity, the full interview transcript (INPUT), and the final
+requirements brief (OUTPUT).
+
+Produce a rigorous markdown report:
+
+# Communication problems (from the transcripts)
+For each real problem found: the evidence (quote the exchange, name the
+case), why it hurts the interview, and the fix — including the EXACT
+sentence(s) to add/change in the interviewer prompt, as a ready-to-apply
+draft in a fenced block.
+
+# Schema gaps (from the briefs)
+For each kind of business where the brief lost or had no home for
+information the downstream Architect Bot would need to design a good
+chatbot: the evidence, the impact, and the fix — the EXACT proposed Pydantic
+field(s) with types and a comment, as a ready-to-apply draft in a fenced
+block.
+
+# Top 5 actions
+The five changes with the highest payoff, ranked, one line each.
+
+Only report REAL problems with evidence — an empty section with "no issues
+found" is a valid finding. Never invent problems to fill space."""
+
+
+def start_test(kind: str, params: dict) -> dict:
+    if kind != "persona_sweep":
+        return {"error": f"unknown test kind {kind}"}
+    count = max(2, min(8, int(params.get("count") or 4)))
+    test_id = store.sim_create_test(kind, {"count": count})
+    threading.Thread(target=_run_sweep, args=(test_id, count),
+                     daemon=True).start()
+    return {"test_id": test_id}
+
+
+def _usage_of(reply) -> dict:
+    u = reply.response_metadata.get("usage") or {}
+    return {"fresh_in": u.get("input_tokens") or 0,
+            "cache_read": u.get("cache_read_input_tokens") or 0,
+            "cache_write": u.get("cache_creation_input_tokens") or 0,
+            "out": u.get("output_tokens") or 0}
+
+
+def _cost_of(model: str, u: dict) -> float:
+    return store._cost_usd(model, u["fresh_in"], u["cache_read"],
+                           u["cache_write"], u["out"]) or 0.0
+
+
+def _run_sweep(test_id: int, count: int) -> None:
+    from concurrent.futures import ThreadPoolExecutor
+    try:
+        from langchain_anthropic import ChatAnthropic
+        from langchain_core.messages import HumanMessage
+        from requirements_bot import _blocks_to_text
+
+        # 1) generate the fake identities (registered with industry/size/traits)
+        store.sim_update_test(test_id, status="generating")
+        gen = ChatAnthropic(model=GENERATOR_MODEL, max_tokens=8000)
+        reply = gen.invoke([HumanMessage(
+            content=GENERATOR_PROMPT.replace("{count}", str(count)))])
+        g_usage = _usage_of(reply)
+        text = _blocks_to_text(reply.content)
+        text = text[text.index("["):text.rindex("]") + 1]
+        personas = json.loads(text)[:count]
+        persona_ids = [store.sim_add_persona(
+            p.get("name", f"Persona {i+1}"), "ai", p.get("profile", ""),
+            industry=p.get("industry"), company_size=p.get("company_size"),
+            traits=p.get("traits")) for i, p in enumerate(personas)]
+
+        # 2) run every interview (in parallel, live-archived like any run)
+        store.sim_update_test(test_id, status="running")
+        run_ids = [store.sim_create_run(pid) for pid in persona_ids]
+        store.sim_update_test(test_id, run_ids=run_ids)
+        with ThreadPoolExecutor(max_workers=count) as ex:
+            list(ex.map(lambda rp: _execute(rp[0], store.sim_persona(rp[1])),
+                        zip(run_ids, persona_ids)))
+
+        # 3) the analyst reads every input and output together
+        store.sim_update_test(test_id, status="analyzing")
+        root = Path(__file__).parent.parent
+        prompt_text = (root / "interviewer_prompt.txt").read_text(encoding="utf-8")
+        schema_text = (root / "models.py").read_text(encoding="utf-8")
+        cases = []
+        for rid in run_ids:
+            r = store.sim_run(rid)
+            convo = "\n".join(
+                f"{'BOT' if t['who'] == 'bot' else 'OWNER'}: {t['text']}"
+                for t in (r["transcript"] or []))
+            brief = json.dumps(r["brief"], ensure_ascii=False) if r["brief"] else "(none)"
+            p = store.sim_persona(r["persona_id"]) or {}
+            cases.append(
+                f"=== CASE {rid}: {r['persona_name']} — {p.get('industry')} — "
+                f"{p.get('company_size')} — {p.get('traits')} ===\n"
+                f"--- TRANSCRIPT (INPUT) ---\n{convo}\n"
+                f"--- FINAL BRIEF (OUTPUT) ---\n{brief}\n")
+        analyst = ChatAnthropic(model=ANALYST_MODEL, max_tokens=16000)
+        a_reply = analyst.invoke([HumanMessage(content=(
+            ANALYST_PROMPT.replace("{n}", str(len(cases)))
+            + f"\n\n=== CURRENT INTERVIEWER PROMPT ===\n{prompt_text}\n"
+            + f"\n=== CURRENT OUTPUT SCHEMA (models.py) ===\n{schema_text}\n\n"
+            + "\n".join(cases)))])
+        a_usage = _usage_of(a_reply)
+        report = _blocks_to_text(a_reply.content)
+
+        runs_cost = sum((store.sim_run(rid) or {}).get("cost_usd") or 0
+                        for rid in run_ids)
+        total = (runs_cost + _cost_of(GENERATOR_MODEL, g_usage)
+                 + _cost_of(ANALYST_MODEL, a_usage))
+        store.sim_update_test(
+            test_id, status="completed", report=report,
+            usage={"generator": g_usage, "analyst": a_usage},
+            cost_usd=round(total, 4), finished_ts=time.time())
+    except Exception as e:
+        store.sim_update_test(test_id, status="failed",
+                              error=f"{type(e).__name__}: {e}",
+                              finished_ts=time.time())
+
+
 def start_run(persona_id: int) -> dict:
     persona = store.sim_persona(persona_id)
     if not persona:
