@@ -124,14 +124,6 @@ body.view-flows #flows{display:flex}
 #flows{flex-direction:column;margin:14px 20px 20px;gap:12px;min-height:0}
 
 /* ---------- chatbot flow cards ---------- */
-#flows-bar{display:flex;align-items:center;gap:10px;background:var(--panel);
-  border:1px solid var(--border);border-radius:6px;padding:8px 14px;flex-wrap:wrap}
-#flow-search{background:var(--panel2);border:1px solid var(--border);color:var(--text);
-  border-radius:5px;padding:5px 10px;font:12.5px var(--sans);width:220px}
-#flow-search:focus{outline:none;border-color:var(--border-hi)}
-#flow-filter{background:var(--panel2);border:1px solid var(--border);color:var(--text);
-  border-radius:5px;padding:5px 8px;font:12px var(--sans)}
-#flows-stale{margin-left:auto;font:10px var(--mono);color:var(--muted)}
 #flows-list{display:flex;flex-direction:column;gap:12px}
 .flow-card{background:var(--panel);border:1px solid var(--border);border-radius:8px}
 .fc-head{display:flex;align-items:center;gap:10px;padding:11px 16px;cursor:pointer;
@@ -248,7 +240,7 @@ body.view-flows #flows{display:flex}
 body.view-home #main{overflow:hidden}
 
 /* ---------- Home: header-free, the map IS the page ---------- */
-body.view-home #run-header{display:none}
+body.view-home #run-header,body.view-flows #run-header{display:none}
 
 /* ---------- orchestrator map: fills the workspace ---------- */
 #graph-wrap{flex:1;min-height:0;position:relative;display:flex;
@@ -422,6 +414,8 @@ body.view-home #run-header{display:none}
     <nav id="sb-nav">
       <div class="nav-item active" id="nav-home" data-view="home"><span class="nav-ico">◎</span><span class="nav-label">Home</span></div>
       <div class="nav-item" id="nav-flows" data-view="flows"><span class="nav-ico">⇶</span><span class="nav-label">Chatbot Flows</span></div>
+      <div class="nav-item" id="nav-testchat" title="Owner test mode — same engine, never a customer's session"><span class="nav-ico">▶</span><span class="nav-label">Owner Test Chat</span></div>
+      <div class="nav-item" id="nav-copylink" title="Copy the client intake link (local-only)"><span class="nav-ico">⧉</span><span class="nav-label">Copy Client Link</span></div>
     </nav>
     <div id="sb-foot">
       <div><span class="dot" id="dot-store"></span><span id="txt-store">store: checking…</span></div>
@@ -444,20 +438,6 @@ body.view-home #run-header{display:none}
     </div>
 
     <div id="flows">
-      <div id="flows-bar">
-        <input id="flow-search" type="search" placeholder="Search flows…" aria-label="Search flows">
-        <select id="flow-filter" aria-label="Filter flows">
-          <option value="all">All</option>
-          <option value="active">Interviewing</option>
-          <option value="review">Needs review</option>
-          <option value="approved">Approved</option>
-          <option value="test">Test sessions</option>
-        </select>
-        <button class="act" id="open-test-chat" title="Owner test mode — talks to the same engine, never a customer's session">Owner test chat</button>
-        <button class="act" id="client-link" title="Copy the client intake link">Copy client link</button>
-        <span id="client-link-note" style="font:10px var(--mono);color:var(--muted)"></span>
-        <span id="flows-stale"></span>
-      </div>
       <div id="flows-list"></div>
     </div>
 
@@ -522,7 +502,6 @@ function showView(view){
 }
 document.querySelectorAll('.nav-item[data-view]').forEach(item =>
   item.onclick = () => showView(item.dataset.view));
-$('#open-test-chat').onclick = () => showView('chat');
 $('#chat-back').onclick = () => showView('flows');
 
 /* ================= system-wide Home ================= */
@@ -819,12 +798,14 @@ $('#sup-toggle').onclick = async () => {
   loadSystem();
 };
 
-/* ---------- client link (lives on the Chatbot Flows toolbar) ---------- */
-$('#client-link').onclick = async () => {
+/* ---------- sidebar utility actions ---------- */
+$('#nav-testchat').onclick = () => showView('chat');
+$('#nav-copylink').onclick = async () => {
   const url = location.origin + '/chat';
   try{ await navigator.clipboard.writeText(url); }catch(e){}
-  $('#client-link-note').textContent = url + ' (local-only)';
-  setTimeout(() => $('#client-link-note').textContent = '', 6000);
+  const lbl = $('#nav-copylink .nav-label'), old = lbl.textContent;
+  lbl.textContent = 'Copied!';
+  setTimeout(() => lbl.textContent = old, 2500);
 };
 
 /* ================= Chatbot Flows (monitoring, read-only) ================= */
@@ -857,13 +838,7 @@ function ago(ts){
 
 async function loadFlows(){
   try{ flowsUI.data = await (await fetch('/api/flows')).json(); }
-  catch(e){
-    $('#flows-stale').textContent = 'stale — server unreachable';
-    $('#flows-stale').style.color = 'var(--red)';
-    return;
-  }
-  $('#flows-stale').textContent = 'updated just now';
-  $('#flows-stale').style.color = '';
+  catch(e){ return; }
   renderFlows();
   // refresh any open detail panels from records (read-only, no side effects)
   flowsUI.expanded.forEach(pid => loadFlowDetail(pid));
@@ -884,15 +859,14 @@ function flowMatches(f, q, filt){
 
 function renderFlows(){
   if(!flowsUI.data) return;
-  const q = ($('#flow-search').value||'').trim().toLowerCase();
-  const filt = $('#flow-filter').value;
+  const q = '', filt = 'all';
   const tpl = flowsUI.data.template.stages;
   const flows = flowsUI.data.flows.filter(f => flowMatches(f, q, filt));
   const list = $('#flows-list');
   if(!flows.length){
     list.innerHTML = `<div class="flow-empty">${flowsUI.data.flows.length
       ? 'No flows match the current search/filter.'
-      : 'No chatbot requests yet. Share the client link to start one, or open the owner test chat.'}</div>`;
+      : 'No chatbot requests yet. Use New Session on Home or Copy Client Link in the sidebar.'}</div>`;
     return;
   }
   list.innerHTML = flows.map(f => {
@@ -1076,8 +1050,6 @@ function renderFlowDetail(fid){
          implemented — nothing is fabricated in the meantime.</span>`;
   }
 }
-$('#flow-search').oninput = () => renderFlows();
-$('#flow-filter').onchange = () => renderFlows();
 
 /* ================= sessions (owner testing) & review ================= */
 const proj = {id:'default'};
