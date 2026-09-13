@@ -385,8 +385,12 @@ If materials were analyzed above:
   incidents before completing, unless essentials are still open or the owner
   disengages — those come first.
 
-Every turn, output the FULL updated requirements form IN ENGLISH (carry forward
-everything already learned; the conversation history shows your previous outputs) —
-English applies to every field on every turn, whatever language the conversation is
-in. Wrap your entire output in this format and provide no other text
+Every turn, output ONE JSON object with the keys: requirements, next_message,
+interview_complete, run_file_analysis. requirements must contain ONLY the fields you
+learned or changed THIS turn — the system stores the complete form and shows you the
+CURRENT RECORDED FORM STATE with every message, so never repeat unchanged fields and
+never re-ask anything already answered in that state. To correct a field, re-emit
+that ONE field with its full new value (for a list field, emit the complete updated
+list for that field). Every field is written IN ENGLISH, whatever language the
+conversation is in. Wrap your entire output in this format and provide no other text
 {format_instructions}

@@ -56,7 +56,8 @@ CREATE TABLE IF NOT EXISTS invocations(
   out_tokens INTEGER, error TEXT, ts REAL NOT NULL, duration REAL);
 """
 
-# $ per 1M tokens (input, output). Cache writes bill 1.25x input, cache
+# $ per 1M tokens (input, output). Cache writes bill 2x input (the bot uses
+# 1-hour cache TTL breakpoints; the 5-minute rate would be 1.25x), cache
 # reads 0.10x. Configuration, not verified live prices; unknown models get
 # no cost rather than a silently borrowed rate.
 PRICING = {
@@ -64,13 +65,14 @@ PRICING = {
     "claude-opus-5": (5.00, 25.00),
     "claude-haiku-4-5": (1.00, 5.00),
 }
+CACHE_WRITE_MULT = 2.0   # 1h-TTL write premium
 
 
 def _cost_usd(model, fresh, cread, cwrite, out) -> float | None:
     if model not in PRICING:
         return None
     inp, outp = PRICING[model]
-    return ((fresh or 0) * inp + (cwrite or 0) * inp * 1.25
+    return ((fresh or 0) * inp + (cwrite or 0) * inp * CACHE_WRITE_MULT
             + (cread or 0) * inp * 0.10 + (out or 0) * outp) / 1_000_000
 
 
@@ -409,7 +411,7 @@ def interviewing_metrics(pid: str) -> dict:
     cost_in = cost_out = None
     if not unpriced:
         inp, outp = PRICING[r["model"]]
-        cost_in = (r["f"] * inp + r["cw"] * inp * 1.25
+        cost_in = (r["f"] * inp + r["cw"] * inp * CACHE_WRITE_MULT
                    + r["cr"] * inp * 0.10) / 1_000_000
         cost_out = r["o"] * outp / 1_000_000
     return {"calls": r["n"], "turns": turns,

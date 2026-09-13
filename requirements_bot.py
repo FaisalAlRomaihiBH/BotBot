@@ -10,6 +10,7 @@
 # to_dict()/from_dict() make that state serializable, so an interview can span
 # processes (see persona_test.py) or run in one sitting (see main.py).
 import base64
+import json
 import os
 import re
 from pathlib import Path
@@ -207,6 +208,12 @@ class RequirementsBot:
         self.uploads_dir = uploads_dir
         self.analyzer = MaterialsAnalyzer(self.llm, uploads_dir)
         self.parser = PydanticOutputParser(pydantic_object=InterviewTurn)
+        # CODE-HELD FORM (cost solution 1). The model no longer re-emits the
+        # whole form every turn — it outputs only the fields it learned or
+        # changed, this master copy is shown back to it each turn, and the
+        # delta is merged here. Cuts output tokens (the 5x-priced direction)
+        # by ~60-70% and stops the history from accumulating JSON echoes.
+        self.form = BusinessRequirements()
         # --- interview state ---
         # The greeting starts the history so the model knows it already asked
         # for the owner's name.
@@ -297,6 +304,7 @@ class RequirementsBot:
     # ---------------- state (de)serialization ----------------
     def to_dict(self) -> dict:
         return {
+            "form": self.form.model_dump(),
             "chat_history": [list(pair) for pair in self.chat_history],
             "analysis": self.analysis.model_dump() if self.analysis else None,
             "analysis_text": self.analysis_text,
@@ -311,6 +319,19 @@ class RequirementsBot:
     def from_dict(cls, state: dict, **kwargs) -> "RequirementsBot":
         bot = cls(**kwargs)
         bot.chat_history = [tuple(pair) for pair in state["chat_history"]]
+        if state.get("form"):
+            bot.form = BusinessRequirements.model_validate(state["form"])
+        else:
+            # A session saved before the code-held form existed: its history
+            # entries are full InterviewTurn JSON echoes — recover the form
+            # from the newest one that parses, so the interview resumes with
+            # everything it had learned instead of a blank sheet.
+            for _, text in reversed(bot.chat_history):
+                try:
+                    bot.form = bot.parser.parse(text).requirements
+                    break
+                except Exception:
+                    continue
         if state["analysis"]:
             bot.analysis = ConversationAnalysis(**state["analysis"])
         bot.analysis_text = state["analysis_text"]
@@ -352,8 +373,11 @@ class RequirementsBot:
         """Fix up the form in code, in place, for the things the model must not
         be trusted to get right on its own.
 
-        Safe to run every turn: the history keeps the model's RAW output, so
-        these additions never feed back into the next turn and compound."""
+        Safe to run every turn. The postprocessed form is now what the model
+        sees back as the CURRENT RECORDED FORM STATE, so every generator here
+        must be stable under re-running on its own output — the label
+        stripping, prefix-clearing and normalized-key dedupes below are what
+        keep additions from compounding turn over turn."""
         def merge(existing: Optional[list[str]], extra: list[str]) -> Optional[list[str]]:
             return _dedupe(list(existing or []) + list(extra)) or None
 
@@ -548,12 +572,21 @@ class RequirementsBot:
         one on the system prompt and one on the last history message, so each
         turn only pays full input price for what's new since the previous
         turn. The prompt file is read FRESH so edits take effect on the very
-        next turn, not on the next process restart."""
+        next turn, not on the next process restart.
+
+        The 1-hour cache TTL (cost solution 2) exists for real owners, who
+        type slower than the default 5-minute cache lives: one expired-cache
+        turn rewrites the whole prefix at full write price, which costs more
+        than many turns of the 1h premium.
+
+        The CURRENT RECORDED FORM STATE block (cost solution 1) rides on the
+        final, never-cached user message: state changes every turn, so
+        putting it anywhere in the prefix would invalidate the cache."""
         system_text = (self.PROMPT_FILE.read_text(encoding="utf-8")
                        .replace("{analysis}", self.analysis_text)
                        .replace("{format_instructions}",
-                                self.parser.get_format_instructions()))
-        cached = {"cache_control": {"type": "ephemeral"}}
+                                _compact_format_instructions()))
+        cached = {"cache_control": {"type": "ephemeral", "ttl": "1h"}}
         messages = [SystemMessage(
             content=[{"type": "text", "text": system_text, **cached}])]
         for i, (role, text) in enumerate(self.chat_history):
@@ -562,7 +595,11 @@ class RequirementsBot:
                        if i == len(self.chat_history) - 1 else text)
             cls = HumanMessage if role == "human" else AIMessage
             messages.append(cls(content=content))
-        messages.append(HumanMessage(content=question))
+        state = json.dumps(self.form.model_dump(exclude_none=True),
+                           ensure_ascii=False)
+        messages.append(HumanMessage(content=(
+            f"{question}\n\n(CURRENT RECORDED FORM STATE — already saved; "
+            f"output only fields that change:\n{state}\n)")))
         return messages
 
     def _ask(self, question: str, record_as: Optional[str] = None) -> InterviewTurn:
@@ -603,6 +640,15 @@ class RequirementsBot:
             except Exception as e:
                 last_error = e
                 continue
+            # DELTA MERGE (cost solution 1): the model sent only the fields it
+            # learned or changed this turn; fold them into the code-held form.
+            # model_validate (not model_copy) so nested dicts coerce back into
+            # ServiceOffer/TeamMember/... objects. A field the model re-emits
+            # replaces the held value wholesale, which is how corrections and
+            # list updates land; a field it omits is untouched.
+            delta = turn.requirements.model_dump(exclude_none=True)
+            turn.requirements = BusinessRequirements.model_validate(
+                {**self.form.model_dump(), **delta})
             # Guard: the model sometimes flags completion mid-interview. A real
             # completion follows a confirmed summary, by which point the core
             # fields below are always filled — refuse the flag until they are.
@@ -613,8 +659,13 @@ class RequirementsBot:
             if turn.interview_complete and not (r.problem_to_solve and r.channels):
                 turn.interview_complete = False
             self._postprocess(r, complete=turn.interview_complete)
+            # The postprocessed merge IS the new master copy the model sees
+            # next turn (the dedupe/merge helpers keep re-running it stable).
+            self.form = r
             self.chat_history.append(("human", record_as or question))
-            self.chat_history.append(("ai", output))
+            # History keeps only the chat text: storing the JSON echo is what
+            # made every later turn re-pay for every earlier turn's form.
+            self.chat_history.append(("ai", turn.next_message))
             return turn
         raise last_error
 
@@ -926,6 +977,36 @@ def _unlabel(item: str) -> str:
     Labels now carry a position ("[owner fact #2] "), so the older bare form is
     stripped too — otherwise rebuilding an index nests the tags."""
     return _REF_LABEL_RE.sub("", item, count=1)
+
+
+_COMPACT_FMT: Optional[str] = None
+
+
+def _compact_format_instructions() -> str:
+    """The output-format contract as a minified JSON schema (cost solution 3).
+
+    PydanticOutputParser.get_format_instructions() injects ~22k characters of
+    pretty-printed schema into the system prompt; the same contract minified,
+    with the decorative "title" keys stripped, is ~25% smaller and parses
+    identically. (True API-enforced structured outputs were tried and rejected
+    upstream: this form's schema exceeds the API's compiled-grammar limit.)"""
+    global _COMPACT_FMT
+    if _COMPACT_FMT is None:
+        def strip(node):
+            if isinstance(node, dict):
+                node.pop("title", None)
+                for v in node.values():
+                    strip(v)
+            elif isinstance(node, list):
+                for v in node:
+                    strip(v)
+            return node
+        schema = strip(InterviewTurn.model_json_schema())
+        _COMPACT_FMT = (
+            "Output a single JSON object (no markdown fences, no other text) "
+            "that conforms to this JSON schema:\n"
+            + json.dumps(schema, separators=(",", ":"), ensure_ascii=False))
+    return _COMPACT_FMT
 
 
 def _blocks_to_text(content) -> str:
