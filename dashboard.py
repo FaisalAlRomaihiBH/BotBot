@@ -1040,8 +1040,9 @@ async function loadLog(){
   const lines = events.slice().reverse()
     .filter(e => e.type !== 'message.received')
     .map(e => {
-    const ts = `<span class="ts">[${
-      new Date(e.ts*1000).toLocaleTimeString('en-GB')}]</span>`;
+    const d = new Date(e.ts*1000);
+    const ts = `<span class="ts">[${d.toLocaleDateString('en-CA')} ${
+      d.toLocaleTimeString('en-GB')}]</span>`;
     const proj = e.project_id === '__system__' ? 'system'
       : !e.project_id ? 'console' : `PROJECT${e.project_num ?? '?'}`;
     if(e.kind === 'msg'){
@@ -1062,6 +1063,11 @@ async function loadLog(){
     // 'client'/'owner' role actors resolve to the real Client ID when known
     const actor = (e.actor === 'client' || e.actor === 'owner')
       && e.client_id != null ? `Client${e.client_id}` : e.actor;
+    if(e.type === 'project.created'){
+      // the auto-generated name is just a timestamp — noise; keep it short
+      return `<div class="ln">${ts} <span class="prj">${esc(proj)}</span> ` +
+        `<span class="ev">project.created</span></div>`;
+    }
     if(e.type === 'ui.click'){
       // clicks read as an action; operator clicks carry no location prefix
       const label = (e.payload.label || '?').replace(/^[>_◎⇶◉≡\s]+/, '');
