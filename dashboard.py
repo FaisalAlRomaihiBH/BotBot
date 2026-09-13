@@ -183,6 +183,20 @@ body.view-clients #clients{display:flex}
 .sim-st.completed{color:var(--green)}
 .sim-st.failed{color:var(--red)}
 
+#sim-newfeat{background:rgba(251,191,36,.06);border:1px solid #5c4a1e;
+  border-radius:10px;padding:12px 16px;display:flex;align-items:center;
+  gap:12px;flex-wrap:wrap;font:12.5px var(--sans);color:var(--text2)}
+#sim-newfeat b{color:var(--amber);font-weight:600}
+#sim-types{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.sim-type{background:var(--panel);border:1px solid var(--border);
+  border-radius:10px;padding:18px 20px;display:flex;flex-direction:column;
+  gap:7px;cursor:pointer;text-align:center;align-items:center}
+.sim-type:hover,.sim-type:focus{border-color:var(--accent);outline:none}
+.sim-type .ico{font-size:26px;color:var(--accent);line-height:1}
+.sim-type .tt{font:600 14.5px var(--sans);color:var(--text)}
+.sim-type .td{font:12px var(--sans);color:var(--muted);line-height:1.55;
+  max-width:340px}
+@media (max-width:900px){#sim-types{grid-template-columns:1fr}}
 #simt-form{background:var(--panel);border:1px solid var(--border);
   border-radius:8px;padding:14px;display:none;flex-direction:column;gap:9px}
 #simt-form.open{display:flex}
@@ -729,9 +743,23 @@ body.view-clients #main{overflow:hidden}
     </div>
 
     <div id="sim">
-      <div class="sim-head" style="justify-content:center">
-        <button class="act" id="sim-addtest" style="font-size:13px;
-          padding:8px 22px">+ Add Test</button></div>
+      <div id="sim-types">
+        <div class="sim-type" id="simtype-training" role="button" tabindex="0">
+          <span class="ico">◎</span>
+          <span class="tt">Requirement Bot Training</span>
+          <span class="td">Persona sweeps, stress tests and regression pins —
+            batches of fake businesses interview the bot, an analyst finds
+            problems and drafts fixes.</span>
+        </div>
+        <div class="sim-type" id="simtype-feature" role="button" tabindex="0">
+          <span class="ico">⌖</span>
+          <span class="tt">Feature Testing</span>
+          <span class="td">One persona per feature, nothing else defined —
+            each feature its own parallel test with a strict YES/NO
+            verdict.</span>
+        </div>
+      </div>
+      <div id="sim-newfeat" style="display:none"></div>
       <div id="simt-form">
         <label>Test type</label>
         <select id="simt-kind">
@@ -1282,7 +1310,47 @@ $('#sup-toggle').onclick = async () => {
 
 /* ================= Simulation Lab ================= */
 const simUI = {runs: [], tests: [], expanded: new Set()};
-$('#sim-addtest').onclick = () => $('#simt-form').classList.add('open');
+async function loadFeatureCatalog(){
+  if(loadFeatureCatalog.done) return;
+  try{
+    const cat = await (await fetch('/api/sim/feature_catalog')).json();
+    const sel = $('#simt-features');
+    sel.innerHTML = '';
+    const groups = [
+      ['Schema fields (from the requirements form)', cat.schema_fields],
+      ['Industries', cat.industries],
+      ['Hardest ladder rungs', cat.ladders],
+      ['Business setups', cat.categories],
+      ['Special behaviors', cat.behaviors]];
+    for(const [label, items] of groups){
+      const g = document.createElement('optgroup');
+      g.label = label;
+      for(const v of items || []){
+        const o = document.createElement('option');
+        o.value = v;
+        o.textContent = v.replace('schema_field=', '').replace('=', ': ');
+        g.appendChild(o);
+      }
+      sel.appendChild(g);
+    }
+    loadFeatureCatalog.done = true;
+  }catch(e){}
+}
+function openSimForm(kind){
+  if(kind === 'feature_check') loadFeatureCatalog();
+  $('#simt-kind').value = kind;
+  $('#simt-kind').onchange();
+  $('#simt-form').classList.add('open');
+  $('#simt-form').scrollIntoView({behavior: 'smooth', block: 'nearest'});
+}
+for(const [id, kind] of [['#simtype-training', 'persona_sweep'],
+                         ['#simtype-feature', 'feature_check']]){
+  const el = $(id);
+  el.onclick = () => openSimForm(kind);
+  el.onkeydown = e => {
+    if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); el.onclick(); }
+  };
+}
 $('#simt-cancel').onclick = () => $('#simt-form').classList.remove('open');
 $('#simt-kind').onchange = () => {
   const k = $('#simt-kind').value;
@@ -1615,6 +1683,37 @@ async function loadSim(){
     [r.id, r.status, r.turns]), [...simUI.expanded]]);
   if(sig === simUI.sig) return;   // nothing changed — don't disturb clicks
   simUI.sig = sig;
+  // NEW-FEATURE BUBBLE: schema fields that exist in the requirements form
+  // but have never been feature-tested get flagged for one-click testing
+  try{
+    if(!simUI.catalog)
+      simUI.catalog = await (await fetch('/api/sim/feature_catalog')).json();
+    const tested = new Set(simUI.tests
+      .filter(t => t.kind === 'feature_check' && t.params.feature)
+      .map(t => 'schema_field=' + t.params.feature.split('=').pop().trim()));
+    const fresh = (simUI.catalog.schema_fields || []).filter(f => {
+      const norm = 'schema_field=' + f.split('=').pop().trim();
+      return !tested.has(norm);
+    });
+    const box = $('#sim-newfeat');
+    if(fresh.length){
+      box.style.display = 'flex';
+      box.innerHTML = `<b>${fresh.length} schema feature${
+        fresh.length === 1 ? '' : 's'} never tested</b>
+        <span>${esc(fresh.slice(0, 6).map(f =>
+          f.replace('schema_field=', '')).join(', '))}${
+          fresh.length > 6 ? '…' : ''}</span>
+        <button class="act" style="margin-left:auto" id="sim-newfeat-add">
+          Add &amp; test ${fresh.length}</button>`;
+      $('#sim-newfeat-add').onclick = async () => {
+        box.style.display = 'none';
+        await fetch('/api/sim/test', {method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({kind: 'feature_check', features: fresh})});
+        loadSim();
+      };
+    } else box.style.display = 'none';
+  }catch(e){}
   $('#sim-tests').innerHTML = simUI.tests.map(simtCard).join('')
     || `<div class="empty-state"><b>No tests yet</b>
         <span>Add Test runs a batch of fake businesses through the bot and
@@ -2706,6 +2805,9 @@ class Handler(BaseHTTPRequestHandler):
             self._json(store.sim_personas())
         elif route == "/api/sim/runs":
             self._json(store.sim_runs())
+        elif route == "/api/sim/feature_catalog":
+            from orchestrator import simlab
+            self._json(simlab.feature_catalog())
         elif route == "/api/sim/tests":
             self._json(store.sim_tests())
         elif route == "/api/sim/test_report":

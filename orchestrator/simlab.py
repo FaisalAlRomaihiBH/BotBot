@@ -312,11 +312,42 @@ Then 2-5 sentences of concrete evidence quoted from the transcript.
 {brief}"""
 
 
+# Schema fields that are process/auto artifacts, not persona features
+_NON_FEATURE_FIELDS = {
+    "open_items", "owner_sentiment_or_concerns", "facts_from_uploads",
+    "upload_provenance_status", "fact_conflicts", "contact_name",
+    "business_name", "additional_notes",
+}
+
+SAMPLE_INDUSTRIES = [
+    "Automotive repair & detailing", "Restaurant", "Beauty salon",
+    "Law firm", "Manufacturing workshop", "Photography studio",
+    "Private tutoring", "Gym / fitness studio", "Pet grooming",
+    "Event planning", "Pharmacy", "Real estate agency"]
+
+
+def feature_catalog() -> dict:
+    """Every testable single feature, derived live so the schema can never
+    drift out of sync with the test catalog."""
+    from models import BusinessRequirements
+    schema = [f for f in BusinessRequirements.model_fields
+              if f not in _NON_FEATURE_FIELDS]
+    return {
+        "schema_fields": [f"schema_field={f}" for f in schema],
+        "industries": [f"industry={i}" for i in SAMPLE_INDUSTRIES],
+        "ladders": ([f"{n}=0.15" for n in EXTRA_LADDERS]
+                    + ["patience=0.15", "knowledge=0.25"]),
+        "categories": [f"{n}={o}" for n, opts in CATEGORY_OPTIONS.items()
+                       for o in opts],
+        "behaviors": [f"behavior={b}" for b in BEHAVIOR_WEIGHT if b != "none"],
+    }
+
+
 def start_feature_checks(features: list) -> dict:
     """features: list of 'dimension=value' strings; one separate test each,
     all running in parallel."""
     ids = []
-    for f in features[:12]:
+    for f in features[:110]:
         dim, _, value = str(f).partition("=")
         if not dim or not value:
             continue
@@ -360,8 +391,16 @@ def _run_feature_check(test_id: int, dim: str, value: str) -> None:
                            f"{EXTRA_LADDERS[dim]}")
         elif dim == "behavior":
             behavior = value
-        feature_line = (f"- industry: {value}" if dim == "industry"
-                        else f"- {dim}: {value}")
+        if dim == "schema_field":
+            feature_line = (
+                f"- the business PROMINENTLY has/needs '{value}' (a field of "
+                f"the requirements schema): invent a concrete, non-trivial, "
+                f"realistic situation for it and fill that identity field "
+                f"with real values the owner can state in the interview")
+        elif dim == "industry":
+            feature_line = f"- industry: {value}"
+        else:
+            feature_line = f"- {dim}: {value}"
         assigned = NL.join([
             "- THE ONE FEATURE UNDER TEST (the persona's ONLY defined "
             "characteristic):", feature_line,
