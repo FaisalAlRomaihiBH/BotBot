@@ -143,11 +143,15 @@ body.view-flows #flows{display:flex}
 .fc-test{font:600 9px var(--mono);text-transform:uppercase;letter-spacing:.06em;
   color:var(--amber);border:1px solid #5c4a1e;border-radius:99px;padding:2px 7px}
 .fc-state{font:12px var(--sans);color:var(--text2)}
-.fc-left{display:flex;flex-direction:column;min-width:0;margin-right:4px;gap:1px}
-.fc-idbig{font:600 16px var(--mono);color:var(--text);white-space:nowrap;
-  display:flex;align-items:center;gap:8px}
-.fc-ts{font:10px var(--mono);color:var(--muted);white-space:nowrap}
-.fc-flowstate{font:600 11px var(--sans);color:var(--accent);margin-top:2px}
+.fc-left{display:flex;flex-direction:column;min-width:0;margin-right:4px;gap:4px}
+.fc-idbig{font:600 17px var(--sans);color:var(--text);white-space:nowrap;
+  display:flex;align-items:center;gap:8px;letter-spacing:-.01em}
+.fc-ts{font:10.5px var(--mono);color:var(--muted);white-space:nowrap}
+.fc-flowstate{font:600 11.5px var(--sans);color:var(--accent);margin-top:2px;
+  display:flex;align-items:center;gap:7px}
+.fc-flowstate .spin{width:11px;height:11px}
+.fc-flowstate .fs-done{color:var(--green)}
+.fc-flowstate:has(.fs-done){color:var(--green)}
 .fc-cost{margin-left:auto;display:flex;flex-direction:column;
   align-items:flex-end;white-space:nowrap}
 .fc-cost em{font:600 8.5px var(--sans);font-style:normal;text-transform:uppercase;
@@ -916,12 +920,14 @@ function renderFlows(){
         aria-expanded="${flowsUI.expanded.has(f.flow_id)}"
         aria-label="Flow ${esc(f.name)} — expand details">
         <div class="fc-left">
-          <span class="fc-idbig">${esc(f.flow_id)}
+          <span class="fc-idbig" title="${esc(f.flow_id)}">Project #${f.num ?? '—'}
             ${f.is_test ? `<span class="fc-test">Test</span>` : ''}</span>
           <span class="fc-ts">${f.created_ts
             ? new Date(f.created_ts*1000).toLocaleString([], {month:'short',
                 day:'numeric', hour:'2-digit', minute:'2-digit'}) : '—'}</span>
-          <span class="fc-flowstate">${esc(FLOW_STATE[f.current_stage]||'—')}</span>
+          <span class="fc-flowstate">${f.finished
+            ? `<span class="fs-done">✓</span> Completed`
+            : `<span class="spin"></span>${esc(FLOW_STATE[f.current_stage]||'—')}`}</span>
         </div>
         <span class="fc-cost"><em>${f.finished ? 'Total Cost' : 'Running cost'}</em>
           <b>${f.total_cost_usd != null ? '$'+f.total_cost_usd.toFixed(2) : '—'}</b></span>

@@ -86,6 +86,17 @@ def _connect() -> sqlite3.Connection:
         con.execute("ALTER TABLE invocations ADD COLUMN duration REAL")
     except sqlite3.OperationalError:
         pass  # already present
+    # additive migration: human-friendly sequential project number (display
+    # identity; the stable internal id is unchanged). Backfilled by creation
+    # order the first time.
+    try:
+        con.execute("ALTER TABLE projects ADD COLUMN num INTEGER")
+        rows = con.execute("SELECT id FROM projects WHERE id != ? "
+                           "ORDER BY created_ts", (SYSTEM_SCOPE,)).fetchall()
+        for n, r in enumerate(rows, 1):
+            con.execute("UPDATE projects SET num=? WHERE id=?", (n, r["id"]))
+    except sqlite3.OperationalError:
+        pass  # already present
     return con
 
 
@@ -125,10 +136,13 @@ def ensure_default_project() -> None:
 def create_project(name: str) -> dict:
     pid = "proj_" + uuid.uuid4().hex[:10]
     with _connect() as con:
-        con.execute("INSERT INTO projects(id, name, state, created_ts) VALUES(?,?,?,?)",
-                    (pid, name, "created", time.time()))
+        num = con.execute("SELECT COALESCE(MAX(num),0)+1 AS n FROM projects"
+                          ).fetchone()["n"]
+        con.execute("INSERT INTO projects(id, name, state, created_ts, num) "
+                    "VALUES(?,?,?,?,?)",
+                    (pid, name, "created", time.time(), num))
     append_event(pid, "project.created", "operator", {"name": name})
-    return {"id": pid, "name": name, "state": "created"}
+    return {"id": pid, "name": name, "state": "created", "num": num}
 
 
 def list_projects() -> list[dict]:
@@ -409,7 +423,7 @@ def flows_summary() -> list[dict]:
     (json_extract on the head revision); everything else is recorded state."""
     with _connect() as con:
         rows = con.execute(
-            "SELECT p.id, p.name, p.state, p.created_ts,"
+            "SELECT p.id, p.name, p.state, p.created_ts, p.num,"
             " s.complete AS interview_complete,"
             " s.bot_state IS NOT NULL AS has_session,"
             " (SELECT MAX(ts) FROM events e WHERE e.project_id=p.id) AS last_ts,"
