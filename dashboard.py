@@ -914,14 +914,16 @@ function renderFlows(){
           <b>${m.cost_usd!=null ? '$'+m.cost_usd.toFixed(2) : 'cost —'}</b>
           · ${fmtSecs(m.active_seconds)} · ${esc(m.model||'—')}</span>` : ''}
         ${s.status==='current' && m && m.calls ? `<span class="mrow">
-          <span class="mcol" title="Messages received from the client · the bot's average reply time">
-            <em>Received</em><b>${m.msgs_received ?? '—'}</b>
-            <span class="msub">avg ${m.avg_bot_seconds!=null
-              ? fmtSecs(m.avg_bot_seconds) : '—'}</span></span>
-          <span class="mcol" title="Messages the bot sent · the client's average reply time">
-            <em>Sent</em><b>${m.msgs_sent ?? '—'}</b>
-            <span class="msub">avg ${m.avg_client_seconds!=null
-              ? fmtSecs(m.avg_client_seconds) : '—'}</span></span>
+          <span class="mcol" title="Messages received from the client">
+            <em>Received</em><b>${m.msgs_received ?? '—'}</b></span>
+          <span class="mcol" title="How long a client reply takes to arrive on average">
+            <em>Avg Receive Time</em><b>${m.avg_client_seconds!=null
+              ? fmtSecs(m.avg_client_seconds) : '—'}</b></span>
+          <span class="mcol" title="Messages the bot sent">
+            <em>Sent</em><b>${m.msgs_sent ?? '—'}</b></span>
+          <span class="mcol" title="How long the bot takes to send its reply on average">
+            <em>Avg Send Time</em><b>${m.avg_bot_seconds!=null
+              ? fmtSecs(m.avg_bot_seconds) : '—'}</b></span>
         </span>` : ''}
         ${t.id==='interviewing' && (f.head_rev || (m && m.calls)) ? `<span class="mrow">
           ${m && m.calls ? `<span class="mcol">
