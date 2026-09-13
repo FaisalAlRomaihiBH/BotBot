@@ -315,8 +315,12 @@ body.view-log #main{overflow:hidden}
 .fd-msg.ai{background:var(--panel)}
 .fd-msg .who{font:600 9px var(--mono);text-transform:uppercase;
   letter-spacing:.07em;color:var(--muted);margin-bottom:2px}
-.flow-empty{color:var(--muted);text-align:center;padding:40px;font-size:13px;
-  background:var(--panel);border:1px solid var(--border);border-radius:8px}
+/* shared empty state: centered on screen, one style for every empty tab */
+.empty-state{min-height:62vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;padding:20px}
+.empty-state b{font:500 15px var(--sans);color:var(--text);margin-bottom:7px}
+.empty-state span{font:13px var(--sans);color:var(--muted);max-width:420px;
+  line-height:1.6}
 @media (max-width:900px){
   .fc-path{flex-direction:column;align-items:stretch;gap:10px;overflow:visible}
   .fc-step{flex-direction:row;text-align:left;gap:12px;min-width:0;
@@ -997,9 +1001,9 @@ async function loadClients(){
           ? new Date(c.created_ts*1000).toLocaleString() : '—'}</td>
         <td class="cmono">${c.last_seen_ts ? ago(c.last_seen_ts) : '—'}</td>
       </tr>`).join('') + `</table>`
-    : `<div class="clients-empty">No clients registered yet — every person
-       who starts an interview through the client link gets the next
-       Client ID, starting at 1.</div>`;
+    : `<div class="empty-state"><b>No clients registered yet</b>
+       <span>Clients are registered automatically when they start a
+       conversation through the client link.</span></div>`;
 }
 
 function renderLogTable(events){
@@ -1148,9 +1152,10 @@ async function loadLog(){
       esc(proj)}</span> <span class="ev${cls}">${esc(e.type)}</span> <span class="ac">(${
       esc(actor)})</span>${detail ? ` <span class="dt">${esc(detail)}</span>` : ''}</div>`;
   }).join('');
-  body.innerHTML = (lines
-    || `<div class="ln dt">no recorded events yet — waiting…</div>`)
-    + `<div class="ln"><span class="pr">$</span> <span class="cursor"></span></div>`;
+  body.innerHTML = lines
+    ? lines + `<div class="ln"><span class="pr">$</span> <span class="cursor"></span></div>`
+    : `<div class="empty-state"><b>No activity yet</b><span>Live events,
+       conversations, and interactions will stream here as they happen.</span></div>`;
   body.dataset.filled = '1';
   if(stick) body.scrollTop = body.scrollHeight;
 }
@@ -1212,9 +1217,9 @@ function renderFlows(){
   const flows = flowsUI.data.flows.filter(f => flowMatches(f, q, filt));
   const list = $('#flows-list');
   if(!flows.length){
-    list.innerHTML = `<div class="flow-empty">${flowsUI.data.flows.length
-      ? 'No flows match the current search/filter.'
-      : 'No chatbot requests yet. Use New Session on Home or Copy Client Link in the sidebar.'}</div>`;
+    list.innerHTML = `<div class="empty-state">${flowsUI.data.flows.length
+      ? '<b>No matching workflows</b><span>No workflows match the current filter.</span>'
+      : '<b>No workflows yet</b><span>New client conversations appear here automatically. A workflow can also be started with New Session on the Home page.</span>'}</div>`;
     return;
   }
   list.innerHTML = flows.map(f => {
