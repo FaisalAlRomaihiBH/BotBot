@@ -210,18 +210,17 @@ body.view-log #main{overflow:hidden}
 .fc-step .mcard{display:flex;flex-direction:column;align-items:center;gap:6px;
   border:1px solid var(--border);border-radius:10px;background:var(--panel2);
   padding:10px 12px;width:158px;flex:none}
-/* GROUPED metric cards: Messages / Timing / Cost — related facts live in
-   one card. Cards STACK vertically in one narrow column so the step stays
-   slim, and every line is the same fixed-size label/value row. */
-.fc-step .mstack{flex-direction:column;align-items:stretch;width:186px;
-  gap:8px}
-.fc-step .mstack .mcard{width:100%}
-.fc-step .mhdr{font:600 8.5px var(--sans);font-style:normal;
-  text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
-.fc-step .mkv{display:flex;justify-content:space-between;align-items:center;
-  width:100%;min-height:18px;font:11px var(--mono);color:var(--text2)}
-.fc-step .mkv b{color:var(--text);font-weight:500;white-space:nowrap;
-  font-size:11px}
+/* ONE compact metric box, paired left/right: costs on top (Human | Bot),
+   tokens (Input | Output), message pills (Received | Sent), a slim timing
+   row, then View Input | View Output. Fixed width, fixed font sizes. */
+.fc-step .mstack{flex-direction:column;align-items:stretch;width:216px}
+.fc-step .mstack .mcard{width:100%;gap:9px}
+.fc-step .mpair{display:grid;grid-template-columns:1fr 1fr;width:100%;
+  gap:4px;align-items:start;justify-items:center}
+.fc-step .mpair.mtime{grid-template-columns:1fr 1.2fr 1fr}
+.fc-step .mpair .mcol{padding:0;min-width:0}
+.fc-step .mpill{border:1px solid var(--border-hi);border-radius:99px;
+  padding:1px 11px}
 .fc-step .mmodel{font:9.5px var(--mono);color:var(--muted);margin-top:2px;
   border:1px solid var(--border);border-radius:99px;padding:1px 8px}
 /* View pins to the card bottom; cards stretch to equal height */
@@ -1034,40 +1033,40 @@ function renderFlows(){
 
         ${t.id==='interviewing' && m && m.calls ? `<span class="mrow mstack">
           <span class="mcard">
-            <em class="mhdr">Messages</em>
-            <span class="mkv" title="Messages received from the client">
-              <span>Received</span><b>${m.msgs_received ?? '—'}</b></span>
-            <span class="mkv" title="Messages the bot sent">
-              <span>Sent</span><b>${m.msgs_sent ?? '—'}</b></span>
-            <span class="mjson"><a href="#" data-viewer="input"
-              data-pid="${f.flow_id}">View Input</a></span>
-          </span>
-          <span class="mcard">
-            <em class="mhdr">Timing</em>
-            <span class="mkv" title="Active model processing time (waiting excluded)">
-              <span>Total</span><b>${fmtSecs(m.active_seconds)}</b></span>
-            <span class="mkv" title="How long a client reply takes to arrive on average">
-              <span>Avg receive</span><b>${m.avg_client_seconds!=null
-                ? fmtSecs(m.avg_client_seconds) : '—'}</b></span>
-            <span class="mkv" title="How long the bot takes to send its reply on average">
-              <span>Avg send</span><b>${m.avg_bot_seconds!=null
-                ? fmtSecs(m.avg_bot_seconds) : '—'}</b></span>
-          </span>
-          <span class="mcard">
-            <em class="mhdr">Cost</em>
-            <span class="mkv" title="Total cost of this stage so far">
-              <span>Total</span><b>${m.cost_usd!=null
-                ? '$'+m.cost_usd.toFixed(2) : '—'}</b></span>
-            <span class="mkv" title="Input side (conversation fed into the model)">
-              <span>Human</span><b>${m.cost_in_usd!=null
-                ? '$'+m.cost_in_usd.toFixed(2) : '—'}</b></span>
-            <span class="mkv" title="Output side (what the bot generated)">
-              <span>Bot</span><b>${m.cost_out_usd!=null
-                ? '$'+m.cost_out_usd.toFixed(2) : '—'}</b></span>
-            <span class="mkv" title="Input and output tokens">
-              <span>In · Out</span><b>${fmtTok(m.tokens_in)} · ${fmtTok(m.tokens_out)}</b></span>
-            ${f.head_rev ? `<span class="mjson"><a href="#" data-viewer="output"
-              data-pid="${f.flow_id}" data-rev="${f.head_rev}">View Output</a></span>` : ''}
+            <span class="mpair">
+              <span class="mcol" title="Input side (conversation fed into the model)">
+                <em>Human Cost</em><b>${m.cost_in_usd!=null
+                  ? '$'+m.cost_in_usd.toFixed(2) : '—'}</b></span>
+              <span class="mcol" title="Output side (what the bot generated)">
+                <em>Bot Cost</em><b>${m.cost_out_usd!=null
+                  ? '$'+m.cost_out_usd.toFixed(2) : '—'}</b></span>
+            </span>
+            <span class="mpair">
+              <span class="mcol"><em>Input Tokens</em><b>${fmtTok(m.tokens_in)}</b></span>
+              <span class="mcol"><em>Output Tokens</em><b>${fmtTok(m.tokens_out)}</b></span>
+            </span>
+            <span class="mpair">
+              <span class="mcol" title="Messages received from the client">
+                <em>Received</em><b class="mpill">${m.msgs_received ?? '—'}</b></span>
+              <span class="mcol" title="Messages the bot sent">
+                <em>Sent</em><b class="mpill">${m.msgs_sent ?? '—'}</b></span>
+            </span>
+            <span class="mpair mtime">
+              <span class="mcol" title="Active model processing time">
+                <em>Total</em><b>${fmtSecs(m.active_seconds)}</b></span>
+              <span class="mcol" title="Average client reply gap">
+                <em>Avg Receive</em><b>${m.avg_client_seconds!=null
+                  ? fmtSecs(m.avg_client_seconds) : '—'}</b></span>
+              <span class="mcol" title="Average bot reply time">
+                <em>Avg Send</em><b>${m.avg_bot_seconds!=null
+                  ? fmtSecs(m.avg_bot_seconds) : '—'}</b></span>
+            </span>
+            <span class="mpair">
+              <span class="mjson"><a href="#" data-viewer="input"
+                data-pid="${f.flow_id}">View Input</a></span>
+              ${f.head_rev ? `<span class="mjson"><a href="#" data-viewer="output"
+                data-pid="${f.flow_id}" data-rev="${f.head_rev}">View Output</a></span>` : ''}
+            </span>
           </span>
         </span>` : ''}
         </div></div>`;
