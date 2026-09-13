@@ -168,6 +168,11 @@ body.view-flows #flows{display:flex}
 .fc-step .mline b{color:var(--text);font-weight:500}
 .fc-step .mrow{display:flex;gap:5px;margin-top:4px;flex-wrap:nowrap;
   justify-content:center}
+.fc-step .mcol{display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:0 6px}
+.fc-step .mcol em{font:600 8px var(--sans);font-style:normal;
+  text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.fc-step .mcol>b{font:500 11px var(--mono);color:var(--text)}
 .fc-step .mjson{font:9.5px var(--mono);color:var(--text2);
   border:1px solid var(--border);border-radius:99px;padding:2px 7px;
   white-space:nowrap}
@@ -881,7 +886,6 @@ function renderFlows(){
         <span class="st" title="${esc(s.note||'')}">${stSpin}${simple}</span>
         ${m && m.calls ? `<span class="mline">
           <b>${m.cost_usd!=null ? '$'+m.cost_usd.toFixed(2) : 'cost —'}</b>
-          · ${fmtTok(m.tokens_in)} in · ${fmtTok(m.tokens_out)} out
           · ${fmtSecs(m.active_seconds)} · ${esc(m.model||'—')}</span>` : ''}
         ${s.status==='current' && m && m.calls ? `<span class="mrow">
           <span class="mjson" title="Messages the bot sent · the client's average reply time">
@@ -892,14 +896,17 @@ function renderFlows(){
               ? fmtSecs(m.avg_bot_seconds) : '—'}</span>
         </span>` : ''}
         ${t.id==='interviewing' && (f.head_rev || (m && m.calls)) ? `<span class="mrow">
-          ${m && m.calls ? `<span class="mjson"
-            title="The interview conversation the bot works from">Input·<a
-            href="/api/transcript?project=${f.flow_id}" target="_blank">TXT</a></span>` : ''}
-          ${f.head_rev ? `<span class="mjson"
-            title="The requirements the bot has produced so far (revision r${f.head_rev})">
-            Output r${f.head_rev}·<a
-            href="/api/export?project=${f.flow_id}&format=legacy" target="_blank">JSON</a>/<a
-            href="/api/export?project=${f.flow_id}&format=legacy&as=txt" target="_blank">TXT</a></span>` : ''}
+          ${m && m.calls ? `<span class="mcol">
+            <em>Input Tokens</em><b>${fmtTok(m.tokens_in)}</b>
+            <span class="mjson" title="The interview conversation the bot works from"><a
+              href="/api/transcript?project=${f.flow_id}" target="_blank">TXT</a></span>
+          </span>` : ''}
+          ${f.head_rev ? `<span class="mcol">
+            <em>Output Tokens</em><b>${m && m.calls ? fmtTok(m.tokens_out) : '—'}</b>
+            <span class="mjson" title="The requirements produced so far (revision r${f.head_rev})"><a
+              href="/api/export?project=${f.flow_id}&format=legacy" target="_blank">JSON</a>/<a
+              href="/api/export?project=${f.flow_id}&format=legacy&as=txt" target="_blank">TXT</a></span>
+          </span>` : ''}
         </span>` : ''}
         </div></div>`;
     }).join('');
