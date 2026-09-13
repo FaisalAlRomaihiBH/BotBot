@@ -348,6 +348,20 @@ body.view-home #run-header,body.view-flows #run-header{display:none}
 .mmsg.system{align-self:center;max-width:none;border-style:dashed;
   color:var(--muted);font:11px var(--mono)}
 
+/* ---------- centered content viewer ---------- */
+#viewer{position:fixed;inset:0;z-index:70;display:none;align-items:center;
+  justify-content:center;background:rgba(0,0,0,.62)}
+#viewer.open{display:flex}
+#viewer .vbox{background:var(--panel);border:1px solid var(--border);
+  border-radius:10px;width:min(700px,92vw);max-height:80vh;display:flex;
+  flex-direction:column;box-shadow:0 18px 60px rgba(0,0,0,.6)}
+#viewer-pre{flex:1;overflow:auto;margin:0;padding:14px 16px;
+  font:11.5px/1.6 var(--mono);color:var(--text2);white-space:pre-wrap;
+  overflow-wrap:break-word}
+#viewer-foot{display:flex;justify-content:flex-end;gap:8px;
+  padding:10px 14px;border-top:1px solid var(--border)}
+#viewer-foot .act{text-decoration:none}
+
 /* ---------- attention overlay ---------- */
 #att-list{flex:1;overflow-y:auto;padding:10px 14px;display:flex;
   flex-direction:column;gap:8px}
@@ -474,6 +488,15 @@ body.view-home #run-header,body.view-flows #run-header{display:none}
   <div id="mgmt-bar">
     <textarea id="mgmt-input" rows="1" placeholder="Ask about the platform… (a paid call when enabled)" spellcheck="false"></textarea>
     <button class="act" id="mgmt-send">Ask</button>
+  </div>
+</div>
+<div id="viewer" role="dialog" aria-modal="true" aria-label="Content viewer">
+  <div class="vbox">
+    <div class="op-head"><span id="viewer-title">—</span>
+      <button class="ov-close" id="viewer-close" title="Close" aria-label="Close"
+        style="margin-left:auto">✕</button></div>
+    <pre id="viewer-pre"></pre>
+    <div id="viewer-foot"><span id="viewer-dl"></span></div>
   </div>
 </div>
 <div id="att-drawer" class="overlay" role="dialog" aria-label="Needs attention">
@@ -725,7 +748,9 @@ $('#sup-fab').onclick = () =>
     : openOverlay('#sup-drawer', '#mgmt-input');
 $('#sup-close').onclick = closeOverlays;
 $('#att-close').onclick = closeOverlays;
-document.addEventListener('keydown', e => { if(e.key === 'Escape') closeOverlays(); });
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape'){ closeOverlays(); $('#viewer').classList.remove('open'); }
+});
 
 async function loadAttention(){
   let items = [];
@@ -898,14 +923,13 @@ function renderFlows(){
         ${t.id==='interviewing' && (f.head_rev || (m && m.calls)) ? `<span class="mrow">
           ${m && m.calls ? `<span class="mcol">
             <em>Input Tokens</em><b>${fmtTok(m.tokens_in)}</b>
-            <span class="mjson" title="The interview conversation the bot works from"><a
-              href="/api/transcript?project=${f.flow_id}" target="_blank">TXT</a></span>
+            <span class="mjson"><a href="#" data-viewer="input"
+              data-pid="${f.flow_id}">View</a></span>
           </span>` : ''}
           ${f.head_rev ? `<span class="mcol">
             <em>Output Tokens</em><b>${m && m.calls ? fmtTok(m.tokens_out) : '—'}</b>
-            <span class="mjson" title="The requirements produced so far (revision r${f.head_rev})"><a
-              href="/api/export?project=${f.flow_id}&format=legacy" target="_blank">JSON</a>/<a
-              href="/api/export?project=${f.flow_id}&format=legacy&as=txt" target="_blank">TXT</a></span>
+            <span class="mjson"><a href="#" data-viewer="output"
+              data-pid="${f.flow_id}" data-rev="${f.head_rev}">View</a></span>
           </span>` : ''}
         </span>` : ''}
         </div></div>`;
@@ -949,7 +973,35 @@ function renderFlows(){
     h.onkeydown = e => { if(e.key==='Enter'||e.key===' '){ e.preventDefault(); toggle(); } };
   });
   flowsUI.expanded.forEach(fid => renderFlowDetail(fid));
+  list.querySelectorAll('[data-viewer]').forEach(a => a.onclick = e => {
+    e.preventDefault(); e.stopPropagation();
+    openViewer(a.dataset.viewer, a.dataset.pid, a.dataset.rev);
+  });
 }
+
+/* ---------- centered content viewer ---------- */
+async function openViewer(kind, pid, rev){
+  const isIn = kind === 'input';
+  $('#viewer-title').textContent = isIn
+    ? `Input — conversation · ${pid}`
+    : `Output — requirements r${rev} · ${pid}`;
+  const dl = $('#viewer-dl');
+  dl.innerHTML = isIn
+    ? `<a class="act" href="/api/transcript?project=${pid}">Download TXT</a>`
+    : `<a class="act" href="/api/export?project=${pid}&format=legacy">Download JSON</a>
+       <a class="act" href="/api/export?project=${pid}&format=legacy&as=txt">Download TXT</a>`;
+  $('#viewer-pre').textContent = 'Loading…';
+  $('#viewer').classList.add('open');
+  try{
+    const url = isIn ? `/api/transcript?project=${pid}`
+                     : `/api/export?project=${pid}&format=legacy`;
+    $('#viewer-pre').textContent = await (await fetch(url)).text();
+  }catch(e){ $('#viewer-pre').textContent = 'Could not load the content.'; }
+}
+$('#viewer-close').onclick = () => $('#viewer').classList.remove('open');
+$('#viewer').addEventListener('click', e => {
+  if(e.target === $('#viewer')) $('#viewer').classList.remove('open');
+});
 
 async function loadFlowDetail(fid){
   try{
