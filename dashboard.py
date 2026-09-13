@@ -143,8 +143,11 @@ body.view-flows #flows{display:flex}
 .fc-test{font:600 9px var(--mono);text-transform:uppercase;letter-spacing:.06em;
   color:var(--amber);border:1px solid #5c4a1e;border-radius:99px;padding:2px 7px}
 .fc-state{font:12px var(--sans);color:var(--text2)}
-.fc-left{display:flex;flex-direction:column;min-width:0;margin-right:4px}
+.fc-left{display:flex;flex-direction:column;min-width:0;margin-right:4px;gap:1px}
+.fc-idbig{font:600 16px var(--mono);color:var(--text);white-space:nowrap;
+  display:flex;align-items:center;gap:8px}
 .fc-ts{font:10px var(--mono);color:var(--muted);white-space:nowrap}
+.fc-flowstate{font:600 11px var(--sans);color:var(--accent);margin-top:2px}
 .fc-cost{margin-left:auto;display:flex;flex-direction:column;
   align-items:flex-end;white-space:nowrap}
 .fc-cost em{font:600 8.5px var(--sans);font-style:normal;text-transform:uppercase;
@@ -819,6 +822,9 @@ const flowsUI = {data:null, expanded:new Set(), tab:{}, detail:{}};
 
 const STAGE_ICONS = {interviewing:'💬', architecture:'📐', building:'🔨',
   testing_repair:'🧪', bot_created:'🏁'};
+const FLOW_STATE = {interviewing:'Interviewing', architecture:'Architecting',
+  building:'Building', testing_repair:'Testing & Repairing',
+  bot_created:'Completed'};
 function fmtTok(n){
   if(n==null) return '—';
   if(n >= 1e6) return (n/1e6).toFixed(1)+'M';
@@ -910,15 +916,13 @@ function renderFlows(){
         aria-expanded="${flowsUI.expanded.has(f.flow_id)}"
         aria-label="Flow ${esc(f.name)} — expand details">
         <div class="fc-left">
+          <span class="fc-idbig">${esc(f.flow_id)}
+            ${f.is_test ? `<span class="fc-test">Test</span>` : ''}</span>
           <span class="fc-ts">${f.created_ts
             ? new Date(f.created_ts*1000).toLocaleString([], {month:'short',
                 day:'numeric', hour:'2-digit', minute:'2-digit'}) : '—'}</span>
-          <span class="fc-id">${esc(f.flow_id)}</span>
+          <span class="fc-flowstate">${esc(FLOW_STATE[f.current_stage]||'—')}</span>
         </div>
-        <span class="fc-name" title="${esc(f.name)}">${esc(f.name)}</span>
-        ${f.contact ? `<span class="fc-id">· ${esc(f.contact)}</span>` : ''}
-        ${f.is_test ? `<span class="fc-test">Test</span>` : ''}
-        <span class="fc-state">Current: ${esc(cur ? cur.label : '—')}</span>
         <span class="fc-cost"><em>${f.finished ? 'Total Cost' : 'Running cost'}</em>
           <b>${f.total_cost_usd != null ? '$'+f.total_cost_usd.toFixed(2) : '—'}</b></span>
       </div>
