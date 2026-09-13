@@ -910,9 +910,15 @@ function renderFlows(){
         <div><span class="lbl">${esc(t.label)}</span>
         ${showWho ? `<span class="who">${esc(t.who)}</span>` : ''}
         <span class="st" title="${esc(s.note||'')}">${stSpin}${simple}</span>
-        ${m && m.calls ? `<span class="mline">
-          <b>${m.cost_usd!=null ? '$'+m.cost_usd.toFixed(2) : 'cost —'}</b>
-          · ${fmtSecs(m.active_seconds)} · ${esc(m.model||'—')}</span>` : ''}
+        ${m && m.calls ? `<span class="mrow">
+          <span class="mcol" title="Cost of this stage so far">
+            <em>Total Price</em><b>${m.cost_usd!=null
+              ? '$'+m.cost_usd.toFixed(2) : '—'}</b></span>
+          <span class="mcol" title="Active model processing time (waiting excluded)">
+            <em>Total Time</em><b>${fmtSecs(m.active_seconds)}</b></span>
+          <span class="mcol" title="Model running this stage">
+            <em>Model</em><b>${esc(m.model||'—')}</b></span>
+        </span>` : ''}
         ${s.status==='current' && m && m.calls ? `<span class="mrow">
           <span class="mcol" title="Messages received from the client">
             <em>Received</em><b>${m.msgs_received ?? '—'}</b></span>
