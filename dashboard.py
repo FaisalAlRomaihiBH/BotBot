@@ -207,18 +207,20 @@ body.view-log #main{overflow:hidden}
   text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
 .fc-step .mcol>b{font:500 11px var(--mono);color:var(--text)}
 .fc-step .mcol .msub{font:9.5px var(--mono);color:var(--muted)}
-.fc-step .mcard{display:flex;flex-direction:column;align-items:center;gap:7px;
+.fc-step .mcard{display:flex;flex-direction:column;align-items:center;gap:6px;
   border:1px solid var(--border);border-radius:10px;background:var(--panel2);
-  padding:10px;width:200px;flex:none}
-/* FIXED layout: both cards are the same size and stack the same centered
-   rows — cost on top, tokens under it, then messages + average speed, then
-   View ('—' when unknown) — so the Human Cost and Bot Cost boxes align
-   cell for cell whether the interview is live or finished */
-.fc-step .mcard>.mcol{min-height:34px;justify-content:center}
-.fc-step .mcard>.mhead b{font-size:15px}
-.fc-step .mpair{display:grid;grid-template-columns:1fr 1fr;width:100%;gap:4px;
-  align-items:center;justify-items:center;min-height:46px}
-.fc-step .mpair .mcol{padding:0 3px;min-width:0;justify-content:center}
+  padding:10px 12px;width:158px;flex:none}
+/* GROUPED metric cards: Messages | Timing | Cost — related facts live in
+   one card, each fact a fixed-height label/value line, View pinned at the
+   bottom; cards stretch to equal height so the three boxes stay aligned */
+.fc-step .mhdr{font:600 8.5px var(--sans);font-style:normal;
+  text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.fc-step .mkv{display:flex;justify-content:space-between;align-items:center;
+  width:100%;min-height:18px;font:10.5px var(--mono);color:var(--text2)}
+.fc-step .mkv b{color:var(--text);font-weight:500;white-space:nowrap}
+.fc-step .mtotal{font:600 15px var(--mono);color:var(--text)}
+.fc-step .mmodel{font:9.5px var(--mono);color:var(--muted);margin-top:2px;
+  border:1px solid var(--border);border-radius:99px;padding:1px 8px}
 /* View pins to the card bottom; cards stretch to equal height */
 .fc-step .mcard .mjson{margin-top:auto}
 .fc-step .mjson{font:9.5px var(--mono);color:var(--text2);
@@ -722,8 +724,8 @@ function renderGraph(){
     dot: nActive ? 'var(--accent)' : 'var(--green)'});
   // Supervisor status lives under the AI launcher (bottom-right), not here.
   const center = graphNode({id:'orchestrator', enabled:true}, cx, cy, rC,
-    ['BotBot','Orchestrator'],
-    [`controller: ${nActive ? 'executing' : 'idle'}`],
+    ['Chatbot','Orchestrator'],
+    [`Chatbot_Orchestrator_Controller: ${nActive ? 'executing' : 'idle'}`],
     nActive ? 'var(--accent)' : 'var(--green)', true, centerRing);
   // RequirementsBotEntryAction: New Session pill pinned under the node
   let entry = '';
@@ -1014,8 +1016,10 @@ function renderFlows(){
           <span class="numb">${badge}</span></span>
         <div><span class="lbl">${esc(t.label)}</span>
         ${showWho ? `<span class="who">${esc(t.who)}</span>` : ''}
+        ${t.id==='interviewing' && m && m.calls && m.model
+          ? `<span class="mmodel" title="Model running this stage">${esc(m.model)}</span>` : ''}
         <span class="st" title="${esc(s.note||'')}">${stSpin}${simple}</span>
-        ${m && m.calls ? `<span class="mrow">
+        ${t.id!=='interviewing' && m && m.calls ? `<span class="mrow">
           <span class="mcol" title="Cost of this stage so far">
             <em>Total Price</em><b>${m.cost_usd!=null
               ? '$'+m.cost_usd.toFixed(2) : '—'}</b></span>
@@ -1025,39 +1029,42 @@ function renderFlows(){
             <em>Model</em><b>${esc(m.model||'—')}</b></span>
         </span>` : ''}
 
-        ${t.id==='interviewing' && (f.head_rev || (m && m.calls)) ? `<span class="mrow">
-          ${m && m.calls ? `<span class="mcard">
-            <span class="mcol mhead" title="Cost of the input side (conversation fed into the model)">
-              <em>Human Cost</em><b>${m.cost_in_usd!=null
-                ? '$'+m.cost_in_usd.toFixed(2) : '—'}</b></span>
-            <span class="mcol" title="Tokens fed into the model">
-              <em>Input Tokens</em><b>${fmtTok(m.tokens_in)}</b></span>
-            <span class="mpair">
-              <span class="mcol" title="Messages received from the client">
-                <em>Received</em><b>${m.msgs_received ?? '—'}</b></span>
-              <span class="mcol" title="How long a client reply takes to arrive on average">
-                <em>Average Receive Time</em><b>${m.avg_client_seconds!=null
-                  ? fmtSecs(m.avg_client_seconds) : '—'}</b></span>
-            </span>
+        ${t.id==='interviewing' && m && m.calls ? `<span class="mrow">
+          <span class="mcard">
+            <em class="mhdr">Messages</em>
+            <span class="mkv" title="Messages received from the client">
+              <span>Received</span><b>${m.msgs_received ?? '—'}</b></span>
+            <span class="mkv" title="Messages the bot sent">
+              <span>Sent</span><b>${m.msgs_sent ?? '—'}</b></span>
             <span class="mjson"><a href="#" data-viewer="input"
-              data-pid="${f.flow_id}">View</a></span>
-          </span>` : ''}
-          ${f.head_rev ? `<span class="mcard">
-            <span class="mcol mhead" title="Cost of the output side (what the bot generated)">
-              <em>Bot Cost</em><b>${m && m.calls && m.cost_out_usd!=null
+              data-pid="${f.flow_id}">View conversation</a></span>
+          </span>
+          <span class="mcard">
+            <em class="mhdr">Timing</em>
+            <span class="mkv" title="Active model processing time (waiting excluded)">
+              <span>Total</span><b>${fmtSecs(m.active_seconds)}</b></span>
+            <span class="mkv" title="How long a client reply takes to arrive on average">
+              <span>Avg receive</span><b>${m.avg_client_seconds!=null
+                ? fmtSecs(m.avg_client_seconds) : '—'}</b></span>
+            <span class="mkv" title="How long the bot takes to send its reply on average">
+              <span>Avg send</span><b>${m.avg_bot_seconds!=null
+                ? fmtSecs(m.avg_bot_seconds) : '—'}</b></span>
+          </span>
+          <span class="mcard">
+            <em class="mhdr">Cost</em>
+            <span class="mtotal" title="Total cost of this stage so far">${
+              m.cost_usd!=null ? '$'+m.cost_usd.toFixed(2) : '—'}</span>
+            <span class="mkv" title="Input side (conversation fed into the model)">
+              <span>Human</span><b>${m.cost_in_usd!=null
+                ? '$'+m.cost_in_usd.toFixed(2) : '—'}</b></span>
+            <span class="mkv" title="Output side (what the bot generated)">
+              <span>Bot</span><b>${m.cost_out_usd!=null
                 ? '$'+m.cost_out_usd.toFixed(2) : '—'}</b></span>
-            <span class="mcol" title="Tokens the model generated">
-              <em>Output Tokens</em><b>${m && m.calls ? fmtTok(m.tokens_out) : '—'}</b></span>
-            <span class="mpair">
-              <span class="mcol" title="Messages the bot sent">
-                <em>Sent</em><b>${m && m.calls ? (m.msgs_sent ?? '—') : '—'}</b></span>
-              <span class="mcol" title="How long the bot takes to send its reply on average">
-                <em>Average Send Time</em><b>${m && m.calls && m.avg_bot_seconds!=null
-                  ? fmtSecs(m.avg_bot_seconds) : '—'}</b></span>
-            </span>
-            <span class="mjson"><a href="#" data-viewer="output"
-              data-pid="${f.flow_id}" data-rev="${f.head_rev}">View</a></span>
-          </span>` : ''}
+            <span class="mkv" title="Input and output tokens">
+              <span>In · Out</span><b>${fmtTok(m.tokens_in)} · ${fmtTok(m.tokens_out)}</b></span>
+            ${f.head_rev ? `<span class="mjson"><a href="#" data-viewer="output"
+              data-pid="${f.flow_id}" data-rev="${f.head_rev}">View brief</a></span>` : ''}
+          </span>
         </span>` : ''}
         </div></div>`;
     }).join('');

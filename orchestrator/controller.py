@@ -1,4 +1,5 @@
-# controller.py — the deterministic execution controller.
+# controller.py — the Chatbot_Orchestrator_Controller: the deterministic
+# execution controller.
 #
 # The ONLY code that transitions project state, commits spec revisions, and
 # records approvals. RequirementsBot proposes (via its InterviewTurn); the AI
@@ -31,14 +32,16 @@ def _lock(pid: str) -> threading.Lock:
 
 
 def is_busy(pid: str) -> bool:
-    return _busy.get(pid, False)
+    return _busy.get(pid, False) or pid in store.busy_projects()
 
 
 def active_runs() -> list[str]:
     """Projects with a model call ACTUALLY executing right now. This is worker
     activity — distinct from a lifecycle state like 'interviewing', which can
-    coexist with an idle worker waiting on the person."""
-    return [pid for pid, b in _busy.items() if b]
+    coexist with an idle worker waiting on the person. Includes turns run by
+    OTHER processes (tests, the CLI) via the durable busy markers."""
+    return sorted({pid for pid, b in _busy.items() if b}
+                  | store.busy_projects())
 
 
 def uploads_dir(pid: str) -> Path:
@@ -70,6 +73,7 @@ def send_interview_message(pid: str, message: str) -> dict:
     if not lk.acquire(blocking=False):
         return {"error": "The bot is still answering — wait a moment."}
     _busy[pid] = True
+    store.mark_busy(pid)
     try:
         project = store.get_project(pid)
         if project is None:
@@ -89,13 +93,13 @@ def send_interview_message(pid: str, message: str) -> dict:
         try:
             msgs, turn = bot.send(message)
         except RuntimeError as e:  # materials gate — surfaced, not a crash
-            store.append_event(pid, "run.failed", "controller", {"error": str(e)})
+            store.append_event(pid, "run.failed", "Chatbot_Orchestrator_Controller", {"error": str(e)})
             return {"error": f"Stopped — {e}. Fix or remove the files in the "
                              f"uploads folder."}
         except Exception as e:
             store.add_invocation(pid, "interview_turn", bot.model, None,
                                  error=f"{type(e).__name__}: {e}")
-            store.append_event(pid, "run.failed", "controller",
+            store.append_event(pid, "run.failed", "Chatbot_Orchestrator_Controller",
                                {"error": f"{type(e).__name__}: {e}"})
             return {"error": f"{type(e).__name__}: {e}"}
 
@@ -111,7 +115,7 @@ def send_interview_message(pid: str, message: str) -> dict:
         saved = None
         if bot.complete:
             store.set_project_state(pid, "interview_closed")
-            store.append_event(pid, "interview.closed", "controller", {"rev": rev})
+            store.append_event(pid, "interview.closed", "Chatbot_Orchestrator_Controller", {"rev": rev})
             saved = _export_brief_file(pid, bot, turn)
             evaluate_readiness(pid)   # files ReviewRequests for blocking gaps
             # Review is always an explicit human step, even with zero gaps:
@@ -120,6 +124,7 @@ def send_interview_message(pid: str, message: str) -> dict:
         return chat_payload(pid) | {"saved": saved}
     finally:
         _busy[pid] = False
+        store.clear_busy(pid)
         lk.release()
 
 
@@ -138,7 +143,7 @@ def _export_brief_file(pid: str, bot, turn) -> str:
         path = store.DATA_DIR / f"brief_{pid}.json"
     path.write_text(json.dumps(brief, indent=2, ensure_ascii=False),
                     encoding="utf-8")
-    store.append_event(pid, "export.created", "controller", {"path": path.name})
+    store.append_event(pid, "export.created", "Chatbot_Orchestrator_Controller", {"path": path.name})
     return path.name
 
 
@@ -306,7 +311,7 @@ def evaluate_readiness(pid: str) -> list[dict]:
         if g["blocking"]:
             store.add_review(pid, "readiness_gap",
                              f"[{g['name']}] {g['why']}", True, head["rev"])
-    store.append_event(pid, "readiness.evaluated", "controller",
+    store.append_event(pid, "readiness.evaluated", "Chatbot_Orchestrator_Controller",
                        {"rubric": RUBRIC_VERSION,
                         "blocking": sum(1 for g in gaps if g["blocking"]),
                         "total": len(gaps), "rev": head["rev"]})

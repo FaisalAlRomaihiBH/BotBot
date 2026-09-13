@@ -50,6 +50,9 @@ CREATE TABLE IF NOT EXISTS client_sessions(
   project_id TEXT NOT NULL REFERENCES projects(id),
   created_ts REAL NOT NULL, last_seen_ts REAL NOT NULL,
   revoked INTEGER NOT NULL DEFAULT 0);
+CREATE TABLE IF NOT EXISTS busy(
+  project_id TEXT PRIMARY KEY,     -- a model turn is executing for this project
+  started_ts REAL NOT NULL);
 CREATE TABLE IF NOT EXISTS invocations(
   id INTEGER PRIMARY KEY AUTOINCREMENT, project_id TEXT, purpose TEXT NOT NULL,
   model TEXT, fresh_in INTEGER, cache_read INTEGER, cache_write INTEGER,
@@ -301,7 +304,7 @@ def commit_revision(pid: str, requirements: dict) -> int:
         rev = (last["rev"] if last else 0) + 1
         con.execute("INSERT INTO revisions(project_id, rev, requirements, created_ts) "
                     "VALUES(?,?,?,?)", (pid, rev, body, time.time()))
-    append_event(pid, "revision.committed", "controller", {"rev": rev})
+    append_event(pid, "revision.committed", "Chatbot_Orchestrator_Controller", {"rev": rev})
     return rev
 
 
@@ -380,6 +383,32 @@ def last_provider_event() -> dict | None:
         r = con.execute("SELECT purpose, model, ts, error FROM invocations "
                         "ORDER BY id DESC LIMIT 1").fetchone()
     return dict(r) if r else None
+
+
+# ---------------- busy markers (cross-process worker activity) ----------------
+# The Home map's "running tasks" used to live in the web server's memory
+# only, so an interview turn executed by any other process (tests, the CLI)
+# never showed. These markers are durable: whoever runs a turn marks it,
+# every reader sees it.
+def mark_busy(pid: str) -> None:
+    with _connect() as con:
+        con.execute("INSERT INTO busy(project_id, started_ts) VALUES(?,?) "
+                    "ON CONFLICT(project_id) DO UPDATE SET started_ts=excluded.started_ts",
+                    (pid, time.time()))
+
+
+def clear_busy(pid: str) -> None:
+    with _connect() as con:
+        con.execute("DELETE FROM busy WHERE project_id=?", (pid,))
+
+
+def busy_projects(max_age: float = 600) -> set[str]:
+    """Projects with a turn executing now. The age cutoff keeps a marker
+    orphaned by a crashed process from reading as busy forever."""
+    with _connect() as con:
+        rows = con.execute("SELECT project_id FROM busy WHERE started_ts > ?",
+                           (time.time() - max_age,)).fetchall()
+    return {r["project_id"] for r in rows}
 
 
 # ---------------- invocations (usage accounting) ----------------
@@ -541,7 +570,7 @@ def add_review(pid: str, source: str, decision_needed: str, blocking: bool,
             "INSERT INTO reviews(project_id, source, decision_needed, blocking, "
             "revision, created_ts) VALUES(?,?,?,?,?,?)",
             (pid, source, decision_needed, int(blocking), revision, time.time()))
-    append_event(pid, "review.requested", "controller",
+    append_event(pid, "review.requested", "Chatbot_Orchestrator_Controller",
                  {"decision_needed": decision_needed, "blocking": blocking})
 
 
@@ -587,4 +616,4 @@ def invalidate_approvals(pid: str) -> None:
                           "WHERE project_id=? AND status='active'", (pid,))
         n = cur.rowcount
     if n:
-        append_event(pid, "approval.invalidated", "controller", {"count": n})
+        append_event(pid, "approval.invalidated", "Chatbot_Orchestrator_Controller", {"count": n})

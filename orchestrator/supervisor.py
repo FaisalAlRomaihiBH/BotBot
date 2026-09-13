@@ -171,7 +171,7 @@ def ask(pid: str, question: str) -> dict:
         # A supervisor failure is a supervisor outcome — nothing else degrades.
         err = f"{type(e).__name__}: {e}"
         store.add_invocation(pid, "supervisor_answer", cfg["model"], None, error=err)
-        store.append_event(pid, "supervisor.failed", "controller", {"error": err})
+        store.append_event(pid, "supervisor.failed", "Chatbot_Orchestrator_Controller", {"error": err})
         store.add_message(pid, "management", "system",
                           f"Supervisor request failed ({err}). The interview and "
                           f"reviews are unaffected.")
