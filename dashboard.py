@@ -175,6 +175,7 @@ body.view-flows #flows{display:flex}
 .fc-step.current .cn{border-color:var(--accent);color:var(--accent)}
 .fc-step.current .lbl{color:var(--text);font-weight:600}
 .fc-step.current .st{color:var(--accent)}
+.fc-step.completed .st{color:var(--green)}
 .fc-step.current.busy .cn{animation:pulse 1.6s ease-in-out infinite}
 @media (prefers-reduced-motion:reduce){.fc-step.current.busy .cn{animation:none}}
 .fc-step.blocked .st{color:var(--amber)}
@@ -872,14 +873,16 @@ function renderFlows(){
       const showWho = s.status==='current' || s.status==='blocked'
         || t.id==='interviewing';
       const m = (f.stage_metrics||{})[t.id];
+      // three simple statuses; the detailed reason lives in the card's
+      // detail tabs (aria keeps it for screen readers)
+      const simple = s.status==='completed' ? 'Completed'
+        : (s.status==='current' && f.busy) ? 'Running' : 'Pending';
       return `<div class="fc-step ${s.status}${busyCls}">
         <span class="cn" aria-hidden="true"><span class="ico">${STAGE_ICONS[t.id]||'•'}</span>
           <span class="numb">${badge}</span></span>
         <div><span class="lbl">${esc(t.label)}</span>
         ${showWho ? `<span class="who">${esc(t.who)}</span>` : ''}
-        ${s.note ? `<span class="st">${
-          s.status==='current' ? 'CURRENT · ' : ''}${esc(s.note)}</span>`
-          : s.status==='planned' ? `<span class="st">Planned · Not implemented</span>` : ''}
+        <span class="st" title="${esc(s.note||'')}">${simple}</span>
         ${m && m.calls ? `<span class="mline">
           <b>${m.cost_usd!=null ? '$'+m.cost_usd.toFixed(2) : 'cost —'}</b>
           · ${fmtTok(m.tokens_in)} in · ${fmtTok(m.tokens_out)} out
