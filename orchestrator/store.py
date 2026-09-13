@@ -730,7 +730,7 @@ def usage_totals(pid: str) -> dict:
             "out": r["o"], "invocations": r["n"]}
 
 
-def cost_overview() -> dict:
+def billing_overview() -> dict:
     """Everything money: the read-model behind the Costs tab.
 
     Two spend sources, never double-counted:

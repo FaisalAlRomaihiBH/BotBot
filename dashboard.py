@@ -132,19 +132,19 @@ body{margin:0;background:var(--bg);color:var(--text);font:13px/1.45 var(--sans)}
 @keyframes rot{to{transform:rotate(360deg)}}
 
 /* ---------- views ---------- */
-#chat,#home,#flows,#log,#clients,#sim,#queue,#costs{display:none}
-body.view-simtrain #sim,body.view-simtest #sim{display:flex}
-body.view-simtrain #main,body.view-simtest #main{overflow:hidden}
+#chat,#overview,#pipelines,#activity,#customers,#sim,#ratelimits,#billing{display:none}
+body.view-experiments #sim,body.view-testsuites #sim{display:flex}
+body.view-experiments #main,body.view-testsuites #main{overflow:hidden}
 body.view-chat #chat{display:flex}
-body.view-home #home{display:flex}
-body.view-flows #flows{display:flex}
-body.view-log #log{display:flex}
-body.view-clients #clients{display:flex}
-body.view-queue #queue{display:flex}
-body.view-costs #costs{display:flex}
+body.view-overview #overview{display:flex}
+body.view-pipelines #pipelines{display:flex}
+body.view-activity #activity{display:flex}
+body.view-customers #customers{display:flex}
+body.view-ratelimits #ratelimits{display:flex}
+body.view-billing #billing{display:flex}
 
 /* ---------- rate limiting + costs tabs ---------- */
-#queue,#costs{flex:1;flex-direction:column;margin:14px 20px 20px;
+#ratelimits,#billing{flex:1;flex-direction:column;margin:14px 20px 20px;
   min-height:0;overflow-y:auto;gap:12px}
 .qc-cards{display:grid;grid-template-columns:repeat(auto-fit,
   minmax(170px,1fr));gap:10px}
@@ -313,69 +313,69 @@ body.view-costs #costs{display:flex}
 .simt-table td.mono{font:11px var(--mono);white-space:nowrap}
 
 /* ---------- clients ---------- */
-#clients{flex-direction:column;margin:14px 20px 20px;min-height:0;
+#customers{flex-direction:column;margin:14px 20px 20px;min-height:0;
   background:var(--panel);border:1px solid var(--border);border-radius:8px}
-#clients-body{flex:1;overflow-y:auto;min-height:0}
-#clients-body table{width:100%;border-collapse:collapse;font-size:12.5px}
-#clients-body th{position:sticky;top:0;background:var(--panel);z-index:1;
+#customers-body{flex:1;overflow-y:auto;min-height:0}
+#customers-body table{width:100%;border-collapse:collapse;font-size:12.5px}
+#customers-body th{position:sticky;top:0;background:var(--panel);z-index:1;
   font:600 10px var(--sans);text-transform:uppercase;letter-spacing:.06em;
   color:var(--muted);text-align:left;padding:9px 14px;
   border-bottom:1px solid var(--border)}
-#clients-body td{padding:8px 14px;border-bottom:1px solid var(--border);
+#customers-body td{padding:8px 14px;border-bottom:1px solid var(--border);
   color:var(--text2);vertical-align:top}
-#clients-body td.cid{font:600 13px var(--mono);color:var(--accent);
+#customers-body td.cid{font:600 13px var(--mono);color:var(--accent);
   white-space:nowrap}
-#clients-body td.cname{color:var(--text)}
-#clients-body td.cmono{font:11px var(--mono);white-space:nowrap}
+#customers-body td.cname{color:var(--text)}
+#customers-body td.cmono{font:11px var(--mono);white-space:nowrap}
 .clients-empty{padding:30px;text-align:center;color:var(--muted)}
-#flows{flex-direction:column;margin:14px 20px 20px;gap:12px;min-height:0}
+#pipelines{flex-direction:column;margin:14px 20px 20px;gap:12px;min-height:0}
 
 /* ---------- live log: a terminal ---------- */
-body.view-log #main{overflow:hidden}
-#log{flex:1;flex-direction:column;margin:14px 20px 20px;min-height:0;
+body.view-activity #main{overflow:hidden}
+#activity{flex:1;flex-direction:column;margin:14px 20px 20px;min-height:0;
   background:#0a0a0a;border:1px solid var(--border);border-radius:8px;
   overflow:hidden}
-#log-head{display:flex;align-items:center;gap:7px;padding:8px 14px;
+#activity-head{display:flex;align-items:center;gap:7px;padding:8px 14px;
   background:var(--panel);border-bottom:1px solid var(--border)}
-#log-head .dot{width:11px;height:11px;border-radius:50%;flex:none}
-#log-head .t{font:600 11px var(--mono);color:var(--text2);margin-left:8px}
-#log-head .m{font:10px var(--mono);color:var(--muted);margin-left:auto}
-.log-filter{background:var(--panel2);border:1px solid var(--border);
+#activity-head .dot{width:11px;height:11px;border-radius:50%;flex:none}
+#activity-head .t{font:600 11px var(--mono);color:var(--text2);margin-left:8px}
+#activity-head .m{font:10px var(--mono);color:var(--muted);margin-left:auto}
+.activity-filter{background:var(--panel2);border:1px solid var(--border);
   color:var(--text2);border-radius:5px;padding:2px 6px;
   font:10.5px var(--mono);max-width:140px;margin-left:8px}
-.log-filter:focus{outline:none;border-color:var(--border-hi)}
-#log-body{flex:1;overflow-y:auto;min-height:0;padding:12px 14px;
+.activity-filter:focus{outline:none;border-color:var(--border-hi)}
+#activity-body{flex:1;overflow-y:auto;min-height:0;padding:12px 14px;
   font:11.5px/1.75 var(--mono);color:#c8c8c8;overflow-wrap:break-word}
-#log-body .ln{white-space:pre-wrap}
-#log-body .ts{color:#5c6370}
-#log-body .pr{color:#61afef}
-#log-body .ev{color:#98c379}
-#log-body .ev.err{color:#e06c75;font-weight:600}
-#log-body .ev.warn{color:#e5c07b}
-#log-body .ac{color:#c678dd}
-#log-body .dt{color:#7f848e}
-#log-body .prj{color:#d19a66;font-weight:600}
-#log-body .ln.dim span{color:#4b5263}
-#log-body .who{font-weight:600}
-#log-body .who.client{color:#e5c07b}
-#log-body .who.bot{color:#56b6c2}
-#log-body .mt{color:#dcdcdc}
-#log-body .log-table{width:100%;border-collapse:collapse;font-size:12px;
+#activity-body .ln{white-space:pre-wrap}
+#activity-body .ts{color:#5c6370}
+#activity-body .pr{color:#61afef}
+#activity-body .ev{color:#98c379}
+#activity-body .ev.err{color:#e06c75;font-weight:600}
+#activity-body .ev.warn{color:#e5c07b}
+#activity-body .ac{color:#c678dd}
+#activity-body .dt{color:#7f848e}
+#activity-body .prj{color:#d19a66;font-weight:600}
+#activity-body .ln.dim span{color:#4b5263}
+#activity-body .who{font-weight:600}
+#activity-body .who.client{color:#e5c07b}
+#activity-body .who.bot{color:#56b6c2}
+#activity-body .mt{color:#dcdcdc}
+#activity-body .activity-table{width:100%;border-collapse:collapse;font-size:12px;
   font-family:var(--sans)}
-#log-body .log-table th{position:sticky;top:-12px;background:#111;z-index:1;
+#activity-body .activity-table th{position:sticky;top:-12px;background:#111;z-index:1;
   font:600 10px var(--sans);text-transform:uppercase;letter-spacing:.06em;
   color:var(--muted);text-align:left;padding:8px 10px;
   border-bottom:1px solid var(--border)}
-#log-body .log-table td{padding:6px 10px;border-bottom:1px solid #1c1c1c;
+#activity-body .activity-table td{padding:6px 10px;border-bottom:1px solid #1c1c1c;
   color:var(--text2);vertical-align:top}
-#log-body .log-table td.cmono{font:11px var(--mono);white-space:nowrap}
-#log-body .cursor{display:inline-block;width:7px;height:13px;
+#activity-body .activity-table td.cmono{font:11px var(--mono);white-space:nowrap}
+#activity-body .cursor{display:inline-block;width:7px;height:13px;
   background:#98c379;vertical-align:-2px;animation:blink 1.1s step-end infinite}
 @keyframes blink{50%{opacity:0}}
-@media (prefers-reduced-motion:reduce){#log-body .cursor{animation:none}}
+@media (prefers-reduced-motion:reduce){#activity-body .cursor{animation:none}}
 
 /* ---------- chatbot flow cards ---------- */
-#flows-list{display:flex;flex-direction:column;gap:12px}
+#pipelines-list{display:flex;flex-direction:column;gap:12px}
 .flow-card{background:var(--panel);border:1px solid var(--border);border-radius:8px}
 .fc-head{display:flex;align-items:center;gap:10px;padding:11px 16px;cursor:pointer;
   flex-wrap:wrap}
@@ -519,21 +519,21 @@ body.view-log #main{overflow:hidden}
   .fc-step>div{align-items:flex-start}
 }
 /* Home is the full remaining workspace: no narrow card, no page scroll */
-#home{flex:1;flex-direction:column;min-height:0;overflow:hidden}
-body.view-home #main{overflow:hidden}
+#overview{flex:1;flex-direction:column;min-height:0;overflow:hidden}
+body.view-overview #main{overflow:hidden}
 
 /* ---------- Home: header-free, the map IS the page ---------- */
-body.view-home #run-header,body.view-flows #run-header,
-body.view-log #run-header{display:none}
-body.view-clients #main{overflow:hidden}
+body.view-overview #run-header,body.view-pipelines #run-header,
+body.view-activity #run-header{display:none}
+body.view-customers #main{overflow:hidden}
 
 /* ---------- orchestrator map: fills the workspace ---------- */
 #graph-wrap{flex:1;min-height:0;position:relative;display:flex;
   align-items:center;justify-content:center;background:var(--bg)}
 #graph{display:block;width:100%;height:100%}
-#home-stale{position:absolute;top:10px;right:16px;font:10px var(--mono);
+#overview-stale{position:absolute;top:10px;right:16px;font:10px var(--mono);
   color:var(--muted);pointer-events:none}
-#home-stale.bad{color:var(--red)}
+#overview-stale.bad{color:var(--red)}
 .gnode{cursor:pointer}
 .gnode:focus{outline:none}
 .gnode:focus>circle.body{stroke:var(--accent)}
@@ -744,24 +744,24 @@ body.view-clients #main{overflow:hidden}
 
 @media (max-width:760px){
   #sidebar{display:none}
-  body.view-home #main{overflow-y:auto}
-  #home{overflow:visible}
+  body.view-overview #main{overflow-y:auto}
+  #overview{overflow:visible}
   #graph-wrap{min-height:420px}
 }
-</style></head><body class="view-home">
+</style></head><body class="view-overview">
 <div id="shell">
   <aside id="sidebar">
     <div id="sb-head"><div id="sb-logo" title="BotBot Orchestrator" aria-label="BotBot Orchestrator">B</div><span id="sb-title">BotBot Orchestrator</span>
       <button id="sb-toggle" title="Collapse">⟨⟩</button></div>
     <nav id="sb-nav">
-      <div class="nav-item active" id="nav-home" data-view="home"><span class="nav-ico">◎</span><span class="nav-label">Home</span></div>
-      <div class="nav-item" id="nav-log" data-view="log"><span class="nav-ico">&gt;_</span><span class="nav-label">Terminal</span></div>
-      <div class="nav-item" id="nav-flows" data-view="flows"><span class="nav-ico">⇶</span><span class="nav-label">Workflows</span></div>
-      <div class="nav-item" id="nav-simtrain" data-view="simtrain"><span class="nav-ico">⚗</span><span class="nav-label">Training Lab</span></div>
-      <div class="nav-item" id="nav-simtest" data-view="simtest"><span class="nav-ico">⌖</span><span class="nav-label">Testing Lab</span></div>
-      <div class="nav-item" id="nav-clients" data-view="clients"><span class="nav-ico">◉</span><span class="nav-label">Clients</span></div>
-      <div class="nav-item" id="nav-queue" data-view="queue"><span class="nav-ico">⇅</span><span class="nav-label">API Rate Tracking</span></div>
-      <div class="nav-item" id="nav-costs" data-view="costs"><span class="nav-ico">$</span><span class="nav-label">Costs</span></div>
+      <div class="nav-item active" id="nav-overview" data-view="overview"><span class="nav-ico">◎</span><span class="nav-label">Overview</span></div>
+      <div class="nav-item" id="nav-activity" data-view="activity"><span class="nav-ico">&gt;_</span><span class="nav-label">Activity</span></div>
+      <div class="nav-item" id="nav-pipelines" data-view="pipelines"><span class="nav-ico">⇶</span><span class="nav-label">Pipelines</span></div>
+      <div class="nav-item" id="nav-experiments" data-view="experiments"><span class="nav-ico">⚗</span><span class="nav-label">Experiment suites</span></div>
+      <div class="nav-item" id="nav-testsuites" data-view="testsuites"><span class="nav-ico">⌖</span><span class="nav-label">Test suites</span></div>
+      <div class="nav-item" id="nav-customers" data-view="customers"><span class="nav-ico">◉</span><span class="nav-label">Customers</span></div>
+      <div class="nav-item" id="nav-ratelimits" data-view="ratelimits"><span class="nav-ico">⇅</span><span class="nav-label">Rate limits</span></div>
+      <div class="nav-item" id="nav-billing" data-view="billing"><span class="nav-ico">$</span><span class="nav-label">Billing</span></div>
     </nav>
     <div id="sb-foot">
       <div><span class="dot" id="dot-store"></span><span id="txt-store">Database: checking…</span></div>
@@ -777,27 +777,27 @@ body.view-clients #main{overflow:hidden}
       <div id="run-actions"></div>
     </div>
 
-    <div id="home">
+    <div id="overview">
       <div id="graph-wrap">
         <svg id="graph" role="img" aria-label="Orchestrator map"></svg>
-        <span id="home-stale"></span>
+        <span id="overview-stale"></span>
       </div>
     </div>
 
-    <div id="flows">
-      <div id="flows-list"></div>
+    <div id="pipelines">
+      <div id="pipelines-list"></div>
     </div>
 
-    <div id="clients">
-      <div id="clients-body">Loading…</div>
+    <div id="customers">
+      <div id="customers-body">Loading…</div>
     </div>
 
-    <div id="queue">
-      <div id="queue-body">Loading…</div>
+    <div id="ratelimits">
+      <div id="ratelimits-body">Loading…</div>
     </div>
 
-    <div id="costs">
-      <div id="costs-body">Loading…</div>
+    <div id="billing">
+      <div id="billing-body">Loading…</div>
     </div>
 
     <div id="sim">
@@ -852,18 +852,18 @@ body.view-clients #main{overflow:hidden}
       <div id="sim-tests" style="flex:1;min-height:0;overflow-y:auto"></div>
     </div>
 
-    <div id="log">
-      <div id="log-head">
-        <input class="log-filter" id="lf-proj" type="text" inputmode="numeric"
+    <div id="activity">
+      <div id="activity-head">
+        <input class="activity-filter" id="lf-proj" type="text" inputmode="numeric"
           placeholder="Project #" aria-label="Filter by project number"
           spellcheck="false">
-        <input class="log-filter" id="lf-client" type="text" inputmode="numeric"
+        <input class="activity-filter" id="lf-client" type="text" inputmode="numeric"
           placeholder="Client #" aria-label="Filter by client number"
           spellcheck="false">
-        <select class="log-filter" id="lf-bot" aria-label="Filter by bot">
+        <select class="activity-filter" id="lf-bot" aria-label="Filter by bot">
           <option value="">All bots</option>
           <option value="RequirementBot">RequirementBot</option></select>
-        <select class="log-filter" id="lf-kind" aria-label="Filter by activity type">
+        <select class="activity-filter" id="lf-kind" aria-label="Filter by activity type">
           <option value="">All activity</option>
           <optgroup label="Conversations">
             <option value="cat:conversations">All conversations</option>
@@ -900,15 +900,15 @@ body.view-clients #main{overflow:hidden}
             <option value="type:revision.committed">revision.committed</option>
           </optgroup>
         </select>
-        <span class="m" id="log-meta">connecting…</span>
-        <button class="act" id="log-mode" style="margin-left:10px"
+        <span class="m" id="activity-meta">connecting…</span>
+        <button class="act" id="activity-mode" style="margin-left:10px"
           title="Switch between raw terminal and a structured table">Structured log</button></div>
-      <div id="log-body">Loading…</div>
+      <div id="activity-body">Loading…</div>
     </div>
 
     <div id="chat">
       <div id="chat-head">
-        <button class="act" id="chat-back" title="Back to Workflows">←</button>
+        <button class="act" id="chat-back" title="Back to Pipelines">←</button>
         <span class="t" style="color:var(--amber)">Operator Test Mode</span>
         <select class="proj-select" id="proj-select-chat" aria-label="Select test session"></select>
         <button class="act" id="proj-new">+ New test session</button>
@@ -960,31 +960,31 @@ const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
 $('#sb-toggle').onclick = () => {
   $('#sidebar').classList.toggle('collapsed');
-  if(document.body.className === 'view-home') renderGraph();
+  if(document.body.className === 'view-overview') renderGraph();
 };
-const VIEW_TITLES = {home:'Operations', flows:'Workflows',
-  chat:'Operator Test Chat', log:'Terminal', clients:'Clients',
-  simtrain:'Training Lab', simtest:'Testing Lab',
-  queue:'API Rate Tracking', costs:'Costs'};
+const VIEW_TITLES = {overview:'Overview', pipelines:'Pipelines',
+  chat:'Operator Test Chat', activity:'Activity', customers:'Customers',
+  experiments:'Experiment Suites', testsuites:'Test Suites',
+  ratelimits:'Rate Limits', billing:'Billing'};
 function showView(view){
   document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('active'));
-  document.getElementById('nav-' + (view === 'chat' ? 'flows' : view))
+  document.getElementById('nav-' + (view === 'chat' ? 'pipelines' : view))
     ?.classList.add('active');
   document.body.className = 'view-' + view;
   $('#run-title').textContent = VIEW_TITLES[view] || 'Operations';
   if(view === 'chat' && !chat.loaded) loadChat();
-  if(view === 'home') loadSystem();
-  if(view === 'flows') loadFlows();
-  if(view === 'log') loadLog();
-  if(view === 'clients') loadClients();
-  if(view === 'simtrain') openSimTab('training');
-  if(view === 'simtest') openSimTab('feature_check');
-  if(view === 'queue') loadQueue();
-  if(view === 'costs') loadCosts();
+  if(view === 'overview') loadSystem();
+  if(view === 'pipelines') loadPipelines();
+  if(view === 'activity') loadActivity();
+  if(view === 'customers') loadCustomers();
+  if(view === 'experiments') openSimTab('training');
+  if(view === 'testsuites') openSimTab('feature_check');
+  if(view === 'ratelimits') loadRateLimits();
+  if(view === 'billing') loadBilling();
 }
 document.querySelectorAll('.nav-item[data-view]').forEach(item =>
   item.onclick = () => showView(item.dataset.view));
-$('#chat-back').onclick = () => showView('flows');
+$('#chat-back').onclick = () => showView('pipelines');
 
 /* ================= system-wide Home ================= */
 let sys = null;   // last /api/system payload
@@ -992,12 +992,12 @@ let sys = null;   // last /api/system payload
 async function loadSystem(){
   try{ sys = await (await fetch('/api/system')).json(); }
   catch(e){
-    $('#home-stale').textContent = 'stale — server unreachable';
-    $('#home-stale').className = 'bad';
+    $('#overview-stale').textContent = 'stale — server unreachable';
+    $('#overview-stale').className = 'bad';
     return;
   }
-  $('#home-stale').textContent = '';
-  $('#home-stale').className = '';
+  $('#overview-stale').textContent = '';
+  $('#overview-stale').className = '';
   const s = sys;
   const lc = s.health.last_call;
 
@@ -1059,7 +1059,7 @@ function renderRateLimits(limits){
   }).join('');
 }
 setInterval(async () => {
-  if(document.body.className === 'view-home') return;  // Home already polls
+  if(document.body.className === 'view-overview') return;  // Home already polls
   try{ sys = await (await fetch('/api/system')).json(); }catch(e){ return; }
   const api = sys.health.api || {};
   renderRateLimits(api.limits || {});
@@ -1070,7 +1070,7 @@ let lastQueue = null;
 const fmtAge = s => s == null ? '—' : s >= 60
   ? Math.floor(s/60) + 'm' + Math.round(s%60) + 's' : s.toFixed(1) + 's';
 async function pollQueue(){
-  try{ lastQueue = await (await fetch('/api/queue')).json(); }
+  try{ lastQueue = await (await fetch('/api/rate_limits')).json(); }
   catch(e){ return; }
   const q = lastQueue, c = q.counts;
   const busy = c.interactive_active + c.background_running;
@@ -1081,7 +1081,7 @@ async function pollQueue(){
     : busy || c.background_queued
       ? `API queue: ${busy} running · ${c.background_queued} queued`
       : 'API queue: idle';
-  if(document.body.className === 'view-queue') renderQueue();
+  if(document.body.className === 'view-ratelimits') renderQueue();
 }
 setInterval(pollQueue, 3000);
 pollQueue();
@@ -1101,9 +1101,9 @@ function qRow(e, live){
 }
 function renderQueue(){
   const q = lastQueue;
-  if(!q){ $('#queue-body').innerHTML = 'Loading…'; return; }
+  if(!q){ $('#ratelimits-body').innerHTML = 'Loading…'; return; }
   const c = q.counts;
-  $('#queue-body').innerHTML =
+  $('#ratelimits-body').innerHTML =
     (q.waiting_capacity ? `<div class="qc-banner">⚠ A live conversation is
       waiting for API capacity — background tests are throttled until it gets
       through.</div>` : '')
@@ -1129,14 +1129,14 @@ function renderQueue(){
         q.recent.map(e => qRow(e, false)).join('')
         || '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:18px">Nothing yet this session.</td></tr>'}</table></div>`;
 }
-function loadQueue(){ renderQueue(); pollQueue(); }
+function loadRateLimits(){ renderQueue(); pollQueue(); }
 
 /* ================= Costs tab ================= */
 const usd = v => v == null ? '—' : '$' + v.toFixed(v >= 10 ? 2 : 4);
-async function loadCosts(){
+async function loadBilling(){
   let d;
-  try{ d = await (await fetch('/api/costs')).json(); }
-  catch(e){ $('#costs-body').innerHTML = 'Failed to load costs.'; return; }
+  try{ d = await (await fetch('/api/billing')).json(); }
+  catch(e){ $('#billing-body').innerHTML = 'Failed to load costs.'; return; }
   const table = (title, cols, rows) => `<div class="qc-sec">
     <div class="h">${title}</div><table><tr>${
     cols.map((c,i) => `<th${i ? ' class="r"' : ''}>${c}</th>`).join('')}</tr>${
@@ -1145,7 +1145,7 @@ async function loadCosts(){
     || `<tr><td colspan="${cols.length}" style="text-align:center;color:var(--muted);padding:18px">Nothing recorded yet.</td></tr>`}</table></div>`;
   const bucket = rows => rows.map(b =>
     [esc(b.name), usd(b.usd), b.calls, fmtTok(b.tokens)]);
-  $('#costs-body').innerHTML = `
+  $('#billing-body').innerHTML = `
     <div class="qc-cards">
       <div class="qc-card"><div class="v">${usd(d.grand_total_usd)}</div>
         <div class="l">total spend (all recorded)</div></div>
@@ -1315,7 +1315,7 @@ function renderGraph(){
       if(s.id === 'botbot' || s.id === 'chatbot'){
         if(graphFocus !== s.id){ graphFocus = s.id; graphSig = ''; renderGraph(); }
         else openOverlay('#sup-drawer', '#mgmt-input');
-      } else if(s.id === 'requirements_bot') showView('flows');
+      } else if(s.id === 'requirements_bot') showView('pipelines');
     };
     el.onkeydown = e => {
       if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); el.onclick(); }
@@ -1903,11 +1903,11 @@ async function loadSim(){
 }
 
 /* ================= Clients ================= */
-async function loadClients(){
+async function loadCustomers(){
   let clients = [];
-  try{ clients = await (await fetch('/api/clients')).json(); }
+  try{ clients = await (await fetch('/api/customers')).json(); }
   catch(e){ return; }
-  $('#clients-body').innerHTML = clients.length
+  $('#customers-body').innerHTML = clients.length
     ? `<table><tr><th>Client ID</th><th>Name</th><th>Business</th>
         <th>Project</th><th>State</th><th>Messages</th><th>Registered</th>
         <th>Last seen</th></tr>` + clients.map(c => `<tr>
@@ -1926,7 +1926,7 @@ async function loadClients(){
        conversation through the client link.</span></div>`;
 }
 
-function renderLogTable(events){
+function renderActivityTable(events){
   const rows = events.map(e => {
     const d = new Date(e.ts*1000);
     const t = `${d.toLocaleDateString('en-CA')} ${d.toLocaleTimeString('en-GB')}`;
@@ -1949,7 +1949,7 @@ function renderLogTable(events){
       <td class="cmono">${esc(e.type)} (${esc(actor)})</td>
       <td>${esc(detail.slice(0, 160))}</td></tr>`;
   }).join('');
-  $('#log-body').innerHTML = `<table class="log-table"><tr><th>Time</th>
+  $('#activity-body').innerHTML = `<table class="activity-table"><tr><th>Time</th>
     <th>Project</th><th>Client</th><th>Kind</th><th>What</th>
     <th>Details</th></tr>${rows
     || '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:24px">Nothing matches the filters.</td></tr>'}</table>`;
@@ -1963,11 +1963,11 @@ const logFilter = {proj: '', client: '', bot: '', kind: ''};
 for(const [id, key] of [['#lf-proj','proj'], ['#lf-client','client']]){
   $(id).oninput = e => {
     e.target.value = e.target.value.replace(/\D/g, '');
-    logFilter[key] = e.target.value; logSig = ''; loadLog();
+    logFilter[key] = e.target.value; logSig = ''; loadActivity();
   };
 }
 $('#lf-bot').onchange = e => {
-  logFilter.bot = e.target.value; logSig = ''; loadLog();
+  logFilter.bot = e.target.value; logSig = ''; loadActivity();
 };
 const LOG_CATS = {
   conversations: e => e.kind === 'msg',
@@ -1991,19 +1991,19 @@ function matchKind(e){
   return true;
 }
 $('#lf-kind').onchange = e => {
-  logFilter.kind = e.target.value; logSig = ''; loadLog();
+  logFilter.kind = e.target.value; logSig = ''; loadActivity();
 };
-let logMode = 'term';
-$('#log-mode').onclick = () => {
-  logMode = logMode === 'term' ? 'table' : 'term';
-  $('#log-mode').textContent = logMode === 'term' ? 'Structured log' : 'Terminal view';
-  logSig = ''; loadLog();
+let activityMode = 'term';
+$('#activity-mode').onclick = () => {
+  activityMode = activityMode === 'term' ? 'table' : 'term';
+  $('#activity-mode').textContent = activityMode === 'term' ? 'Structured log' : 'Terminal view';
+  logSig = ''; loadActivity();
 };
-async function loadLog(){
+async function loadActivity(){
   let events = [];
-  try{ events = await (await fetch('/api/log')).json(); }
-  catch(e){ $('#log-meta').textContent = 'disconnected'; return; }
-  $('#log-meta').textContent = 'live · refreshes every 3s';
+  try{ events = await (await fetch('/api/activity')).json(); }
+  catch(e){ $('#activity-meta').textContent = 'disconnected'; return; }
+  $('#activity-meta').textContent = 'live · refreshes every 3s';
   events = events.filter(e =>
     (!logFilter.proj || String(e.project_num ?? '').startsWith(logFilter.proj))
     && (!logFilter.client
@@ -2012,11 +2012,11 @@ async function loadLog(){
     && matchKind(e));
   const sig = (events.length
     ? events[0].kind + events[0].seq + ':' + events.length : '0')
-    + JSON.stringify(logFilter) + logMode;
+    + JSON.stringify(logFilter) + activityMode;
   if(sig === logSig) return;   // nothing new — don't disturb the scroll
   logSig = sig;
-  const body = $('#log-body');
-  if(logMode === 'table'){ renderLogTable(events); return; }
+  const body = $('#activity-body');
+  if(activityMode === 'table'){ renderActivityTable(events); return; }
   // terminal semantics: oldest at the top, newest at the prompt line; stick
   // to the bottom unless the user has scrolled up to read history
   const stick = body.scrollHeight - body.scrollTop - body.clientHeight < 40
@@ -2081,7 +2081,7 @@ async function loadLog(){
 }
 
 /* ================= Workflows (monitoring, read-only) ================= */
-const flowsUI = {data:null, expanded:new Set(), tab:{}, detail:{}};
+const pipelinesUI = {data:null, expanded:new Set(), tab:{}, detail:{}};
 
 const STAGE_ICONS = {interviewing:'💬', architecture:'📐', building:'🔨',
   testing_repair:'🧪', bot_created:'🏁'};
@@ -2109,12 +2109,12 @@ function ago(ts){
   return Math.floor(s/86400) + 'd ago';
 }
 
-async function loadFlows(){
-  try{ flowsUI.data = await (await fetch('/api/flows')).json(); }
+async function loadPipelines(){
+  try{ pipelinesUI.data = await (await fetch('/api/pipelines')).json(); }
   catch(e){ return; }
   renderFlows();
   // refresh any open detail panels from records (read-only, no side effects)
-  flowsUI.expanded.forEach(pid => loadFlowDetail(pid));
+  pipelinesUI.expanded.forEach(pid => loadFlowDetail(pid));
 }
 
 function flowMatches(f, q, filt){
@@ -2131,13 +2131,13 @@ function flowMatches(f, q, filt){
 }
 
 function renderFlows(){
-  if(!flowsUI.data) return;
+  if(!pipelinesUI.data) return;
   const q = '', filt = 'all';
-  const tpl = flowsUI.data.template.stages;
-  const flows = flowsUI.data.flows.filter(f => flowMatches(f, q, filt));
-  const list = $('#flows-list');
+  const tpl = pipelinesUI.data.template.stages;
+  const flows = pipelinesUI.data.flows.filter(f => flowMatches(f, q, filt));
+  const list = $('#pipelines-list');
   if(!flows.length){
-    list.innerHTML = `<div class="empty-state">${flowsUI.data.flows.length
+    list.innerHTML = `<div class="empty-state">${pipelinesUI.data.flows.length
       ? '<b>No matching workflows</b><span>No workflows match the current filter.</span>'
       : '<b>No workflows yet</b><span>New client conversations appear here automatically. A workflow can also be started with New Session on the Home page.</span>'}</div>`;
     return;
@@ -2230,9 +2230,9 @@ function renderFlows(){
     }).join('');
     const cur = tpl.find(t => t.id === f.current_stage);
     const curStage = f.stages.find(x => x.id === f.current_stage) || {};
-    return `<div class="flow-card${flowsUI.expanded.has(f.flow_id)?' open':''}" data-fid="${f.flow_id}">
+    return `<div class="flow-card${pipelinesUI.expanded.has(f.flow_id)?' open':''}" data-fid="${f.flow_id}">
       <div class="fc-head" role="button" tabindex="0"
-        aria-expanded="${flowsUI.expanded.has(f.flow_id)}"
+        aria-expanded="${pipelinesUI.expanded.has(f.flow_id)}"
         aria-label="Flow ${esc(f.name)} — expand details">
         <div class="fc-left">
           <span class="fc-flowstate">${f.finished
@@ -2261,14 +2261,14 @@ function renderFlows(){
   list.querySelectorAll('.fc-head').forEach(h => {
     const card = h.parentElement, fid = card.dataset.fid;
     const toggle = () => {
-      if(flowsUI.expanded.has(fid)){ flowsUI.expanded.delete(fid); card.classList.remove('open'); }
-      else{ flowsUI.expanded.add(fid); card.classList.add('open'); loadFlowDetail(fid); }
+      if(pipelinesUI.expanded.has(fid)){ pipelinesUI.expanded.delete(fid); card.classList.remove('open'); }
+      else{ pipelinesUI.expanded.add(fid); card.classList.add('open'); loadFlowDetail(fid); }
       h.setAttribute('aria-expanded', card.classList.contains('open'));
     };
     h.onclick = toggle;
     h.onkeydown = e => { if(e.key==='Enter'||e.key===' '){ e.preventDefault(); toggle(); } };
   });
-  flowsUI.expanded.forEach(fid => renderFlowDetail(fid));
+  pipelinesUI.expanded.forEach(fid => renderFlowDetail(fid));
   list.querySelectorAll('[data-viewer]').forEach(a => a.onclick = e => {
     e.preventDefault(); e.stopPropagation();
     openViewer(a.dataset.viewer, a.dataset.pid, a.dataset.rev);
@@ -2301,7 +2301,7 @@ $('#viewer').addEventListener('click', e => {
 
 async function loadFlowDetail(fid){
   try{
-    flowsUI.detail[fid] = await (await fetch('/api/flow?project='+fid)).json();
+    pipelinesUI.detail[fid] = await (await fetch('/api/pipeline?project='+fid)).json();
     renderFlowDetail(fid);
   }catch(e){}
 }
@@ -2309,7 +2309,7 @@ async function loadFlowDetail(fid){
 function renderFlowDetail(fid){
   // Activity only: the recorded events and attempts for this flow.
   const el = document.getElementById('fd-' + fid);
-  const d = flowsUI.detail[fid];
+  const d = pipelinesUI.detail[fid];
   if(!el) return;
   if(!d){ el.textContent = 'Loading…'; return; }
   el.innerHTML = (d.events && d.events.length)
@@ -2382,7 +2382,7 @@ async function sendChat(){
     const el = document.getElementById('chat-typing');
     if(!el) return;
     try{
-      const q = await (await fetch('/api/queue')).json();
+      const q = await (await fetch('/api/rate_limits')).json();
       el.innerHTML = q.waiting_capacity
         ? '<span class="spin"></span>Waiting for API capacity — background '
           + 'tests are using the rate limit; your reply goes first…'
@@ -2464,17 +2464,17 @@ document.addEventListener('click', e => {
 
 loadSystem();
 setInterval(() => {
-  if(document.body.className === 'view-home') loadSystem();
-  if(document.body.className === 'view-flows') loadFlows();
+  if(document.body.className === 'view-overview') loadSystem();
+  if(document.body.className === 'view-pipelines') loadPipelines();
 }, 5000);
 setInterval(() => {
-  if(document.body.className === 'view-log') loadLog();
+  if(document.body.className === 'view-activity') loadActivity();
 }, 3000);
 setInterval(() => {
-  if(document.body.className === 'view-clients') loadClients();
+  if(document.body.className === 'view-customers') loadCustomers();
 }, 5000);
 setInterval(() => {
-  if(['view-simtrain', 'view-simtest'].includes(document.body.className))
+  if(['view-experiments', 'view-testsuites'].includes(document.body.className))
     loadSim();
 }, 3000);
 </script></body></html>"""
@@ -2771,7 +2771,7 @@ def system_payload() -> dict:
     }
 
 
-def flows_payload() -> dict:
+def pipelines_payload() -> dict:
     """Read-model for the Workflows monitor: one deterministic projection
     per journey, driven by recorded state only. Reading it never calls a
     model, creates an interview, or advances anything."""
@@ -2800,7 +2800,7 @@ def flows_payload() -> dict:
     return {"template": controller.FLOW_TEMPLATE, "flows": flows}
 
 
-def flow_detail(pid: str) -> dict:
+def pipeline_detail(pid: str) -> dict:
     """Read-only inspection of one flow: recorded events, the clean display
     transcript (no composer, no raw JSON), the exact revision/approval state,
     and artifacts that actually exist."""
@@ -2991,23 +2991,23 @@ class Handler(BaseHTTPRequestHandler):
         pid = _project_of(q.get("project"))
         if route == "/api/system":
             self._json(system_payload())
-        elif route == "/api/flows":
-            self._json(flows_payload())
-        elif route == "/api/flow":
-            self._json(flow_detail(pid))
+        elif route == "/api/pipelines":
+            self._json(pipelines_payload())
+        elif route == "/api/pipeline":
+            self._json(pipeline_detail(pid))
         elif route == "/api/projects":
             self._json([{"id": p["id"], "name": p["name"], "state": p["state"]}
                         for p in store.list_projects()])
         elif route == "/api/attention":
             self._json(store.open_reviews_all())
-        elif route == "/api/log":
+        elif route == "/api/activity":
             self._json(store.recent_terminal_feed())
-        elif route == "/api/clients":
+        elif route == "/api/customers":
             self._json(store.list_clients())
-        elif route == "/api/queue":
+        elif route == "/api/rate_limits":
             self._json(api_gate.snapshot())
-        elif route == "/api/costs":
-            self._json(store.cost_overview())
+        elif route == "/api/billing":
+            self._json(store.billing_overview())
         elif route == "/api/sim/personas":
             self._json(store.sim_personas())
         elif route == "/api/sim/runs":
