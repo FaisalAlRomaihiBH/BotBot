@@ -162,6 +162,7 @@ body.view-log #main{overflow:hidden}
 #log-body .ev.warn{color:#e5c07b}
 #log-body .ac{color:#c678dd}
 #log-body .dt{color:#7f848e}
+#log-body .prj{color:#d19a66;font-weight:600}
 #log-body .who{font-weight:600}
 #log-body .who.client{color:#e5c07b}
 #log-body .who.bot{color:#56b6c2}
@@ -965,18 +966,18 @@ async function loadLog(){
       : e.project_num != null
         ? `#${e.project_num}${e.project_name ? ':'+e.project_name : ''}` : '?';
     if(e.kind === 'msg'){
-      // conversation messages carry their DIRECTIONAL path:
-      //   project23>Client23>RequirementBot:  (the client writing to the bot)
-      //   RequirementBot>project23>Client23:  (the bot answering the client)
-      const client = e.client_id != null ? `Client${e.client_id}` : 'owner';
-      const projPart = e.project_num != null ? `project${e.project_num}` : 'project?';
-      const P = `<span class="pr">${projPart}</span>`;
-      const C = `<span class="who client">${client}</span>`;
+      // conversation messages, ops-log style with a direction arrow:
+      //   [ts] PROJECT13 Client1 → RequirementBot   (the client writing)
+      //   [ts] PROJECT13 RequirementBot → Client1   (the bot answering)
+      const client = `<span class="who client">${
+        e.client_id != null ? `Client${e.client_id}` : 'owner'}</span>`;
+      const P = `<span class="prj">PROJECT${e.project_num ?? '?'}</span>`;
       const B = `<span class="who bot">RequirementBot</span>`;
+      const arrow = `<span class="dt">→</span>`;
       const path = e.role === 'owner'
-        ? `${P}&gt;${C}&gt;${B}:` : `${B}&gt;${P}&gt;${C}:`;
+        ? `${P} ${client} ${arrow} ${B}` : `${P} ${B} ${arrow} ${client}`;
       const text = e.text.length > 300 ? e.text.slice(0, 300) + '…' : e.text;
-      return `<div class="ln">${ts} ${path} <span class="mt" title="${
+      return `<div class="ln">${ts} ${path}  <span class="mt" title="${
         esc(e.text.slice(0, 1000))}">${esc(text)}</span></div>`;
     }
     const detail = Object.entries(e.payload||{})
