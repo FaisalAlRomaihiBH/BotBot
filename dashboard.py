@@ -83,6 +83,17 @@ body{margin:0;background:var(--bg);color:var(--text);font:13px/1.45 var(--sans)}
 #sb-foot .dot.ok{background:var(--green)}
 #sb-foot .dot.bad{background:var(--red)}
 #sb-foot .dot.warn{background:var(--amber)}
+#rl-bars{margin-top:7px;display:flex;flex-direction:column;gap:5px}
+.rl-row{display:flex;align-items:center;gap:7px}
+.rl-row em{font:600 8.5px var(--sans);font-style:normal;
+  text-transform:uppercase;letter-spacing:.05em;color:var(--muted);
+  width:58px;flex:none}
+.rl-bar{flex:1;height:5px;border-radius:99px;background:var(--panel2);
+  overflow:hidden}
+.rl-bar span{display:block;height:100%;border-radius:99px}
+.rl-row b{font:9.5px var(--mono);color:var(--text2);font-weight:500;
+  white-space:nowrap}
+#sidebar.collapsed #rl-bars{display:none}
 #sb-foot div{margin:3px 0}
 #sidebar.collapsed #sb-title,#sidebar.collapsed .nav-label,#sidebar.collapsed #sb-foot{display:none}
 
@@ -684,6 +695,7 @@ body.view-clients #main{overflow:hidden}
     <div id="sb-foot">
       <div><span class="dot" id="dot-api"></span><span id="txt-api">Claude API: checking…</span></div>
       <div><span class="dot" id="dot-store"></span><span id="txt-store">Database: checking…</span></div>
+      <div id="rl-bars"></div>
     </div>
   </aside>
 
@@ -886,6 +898,7 @@ async function loadSystem(){
   $('#dot-store').className = 'dot ' + (s.health.store_ok ? 'ok' : 'bad');
   $('#txt-store').textContent = 'Database: ' + (s.health.store_ok ? 'connected' : 'error');
   $('#txt-store').title = s.health.error || '';
+  renderRateLimits(api.limits || {});
   const mode = s.health.supervisor_mode;
   $('#sup-mode').className = 'badge ' + (mode==='advisory' ? 'completed' : 'idle');
   $('#sup-mode-txt').textContent = mode==='advisory' ? 'Advisory' : 'Disabled';
@@ -897,6 +910,43 @@ async function loadSystem(){
   $('#sup-fab-label').title = 'AI supervisor mode';
   renderGraph();
 }
+
+/* ---------- rate-limit bars: live per-minute meters from API headers ---- */
+const RL_METRICS = [['requests', 'Requests'], ['input-tokens', 'Input tok'],
+  ['output-tokens', 'Output tok']];
+function renderRateLimits(limits){
+  const models = Object.keys(limits);
+  if(!models.length){ $('#rl-bars').innerHTML = ''; return; }
+  $('#rl-bars').innerHTML = RL_METRICS.map(([key, label]) => {
+    // show the MOST CONSTRAINED model for this meter; all models on hover
+    let worst = null, tips = [];
+    for(const m of models){
+      const v = limits[m][key];
+      if(!v || !v.limit) continue;
+      tips.push(`${m.replace('claude-','')}: ${v.remaining.toLocaleString()}`
+        + ` of ${v.limit.toLocaleString()} left`);
+      if(!worst || v.remaining / v.limit < worst.remaining / worst.limit)
+        worst = v;
+    }
+    if(!worst) return '';
+    const frac = worst.remaining / worst.limit;
+    const color = frac > .5 ? 'var(--green)' : frac > .2
+      ? 'var(--amber)' : 'var(--red)';
+    return `<div class="rl-row" title="${esc(label)}/min per model — ${
+      esc(tips.join(' · '))}"><em>${label}/min</em>
+      <span class="rl-bar"><span style="width:${
+        Math.round((1 - frac) * 100)}%;background:${color}"></span></span>
+      <b>${worst.remaining >= 1000
+        ? fmtTok(worst.remaining) : worst.remaining}/${
+        worst.limit >= 1000 ? fmtTok(worst.limit) : worst.limit}</b></div>`;
+  }).join('');
+}
+setInterval(async () => {
+  if(document.body.className === 'view-home') return;  // Home already polls
+  try{ sys = await (await fetch('/api/system')).json(); }catch(e){ return; }
+  const api = sys.health.api || {};
+  renderRateLimits(api.limits || {});
+}, 30000);
 
 /* ---------- hierarchical orchestrator map ----------
    Two orchestrators: BotBot (platform) owns Chatbot Orchestrator, which owns
@@ -2173,7 +2223,22 @@ def chat_send(pid: str, message: str) -> dict:
     return out
 
 
-_api_status_cache = {"ts": 0.0, "status": "checking", "detail": ""}
+_api_status_cache = {"ts": 0.0, "status": "checking", "detail": "",
+                     "limits": {}}
+
+_RL_MODELS = ("claude-sonnet-5", "claude-haiku-4-5")
+
+
+def _parse_ratelimit_headers(headers) -> dict:
+    out = {}
+    for metric in ("requests", "input-tokens", "output-tokens"):
+        limit = headers.get(f"anthropic-ratelimit-{metric}-limit")
+        remaining = headers.get(f"anthropic-ratelimit-{metric}-remaining")
+        if limit is not None and remaining is not None:
+            out[metric] = {"limit": int(limit), "remaining": int(remaining),
+                           "reset": headers.get(
+                               f"anthropic-ratelimit-{metric}-reset")}
+    return out
 
 
 def _api_status() -> dict:
@@ -2192,10 +2257,20 @@ def _api_status() -> dict:
         if not __import__("os").environ.get("ANTHROPIC_API_KEY"):
             status, detail = "no API key", "ANTHROPIC_API_KEY is not set"
         else:
+            # The probe doubles as the rate-limit sampler: a 1-output-token
+            # message per model (fractions of a cent per day) whose response
+            # HEADERS carry the live per-model RPM/ITPM/OTPM meters. The
+            # free token-count endpoint cannot serve here - it does not
+            # return the token-bucket headers.
             client = anthropic.Anthropic()
-            client.with_options(timeout=8.0, max_retries=0).messages.count_tokens(
-                model="claude-sonnet-5",
-                messages=[{"role": "user", "content": "ping"}])
+            limits = {}
+            for model in _RL_MODELS:
+                raw = client.with_options(
+                    timeout=8.0, max_retries=0).messages.with_raw_response.create(
+                    model=model, max_tokens=1,
+                    messages=[{"role": "user", "content": "."}])
+                limits[model] = _parse_ratelimit_headers(raw.headers)
+            _api_status_cache["limits"] = limits
     except Exception as e:
         import anthropic
         if isinstance(e, (anthropic.AuthenticationError,
