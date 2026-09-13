@@ -171,6 +171,7 @@ body.view-flows #flows{display:flex}
 .fc-step .mjson{font:9.5px var(--mono);color:var(--text2);
   border:1px solid var(--border);border-radius:99px;padding:2px 7px;
   white-space:nowrap}
+.fc-step .mjson b{color:var(--text);font-weight:500}
 .fc-step .mjson a{color:var(--accent);text-decoration:none}
 .fc-step .mjson a:hover{text-decoration:underline}
 /* label / bot / status / metrics stack under each other */
@@ -882,10 +883,14 @@ function renderFlows(){
           <b>${m.cost_usd!=null ? '$'+m.cost_usd.toFixed(2) : 'cost —'}</b>
           · ${fmtTok(m.tokens_in)} in · ${fmtTok(m.tokens_out)} out
           · ${fmtSecs(m.active_seconds)} · ${esc(m.model||'—')}</span>` : ''}
-        ${s.status==='current' && m && m.calls ? `<span class="mline">
-          sent <b>${m.msgs_sent ?? '—'}</b> · received <b>${m.msgs_received ?? '—'}</b><br>
-          client avg <b>${m.avg_client_seconds!=null ? fmtSecs(m.avg_client_seconds) : '—'}</b>
-          · bot avg <b>${m.avg_bot_seconds!=null ? fmtSecs(m.avg_bot_seconds) : '—'}</b></span>` : ''}
+        ${s.status==='current' && m && m.calls ? `<span class="mrow">
+          <span class="mjson" title="Messages the bot sent · the client's average reply time">
+            Sent <b>${m.msgs_sent ?? '—'}</b> · avg ${m.avg_client_seconds!=null
+              ? fmtSecs(m.avg_client_seconds) : '—'}</span>
+          <span class="mjson" title="Messages the client sent · the bot's average reply time">
+            Received <b>${m.msgs_received ?? '—'}</b> · avg ${m.avg_bot_seconds!=null
+              ? fmtSecs(m.avg_bot_seconds) : '—'}</span>
+        </span>` : ''}
         ${t.id==='interviewing' && (f.head_rev || (m && m.calls)) ? `<span class="mrow">
           ${m && m.calls ? `<span class="mjson"
             title="The interview conversation the bot works from">Input·<a
