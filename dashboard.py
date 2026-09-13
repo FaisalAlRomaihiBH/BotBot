@@ -760,7 +760,7 @@ body.view-clients #main{overflow:hidden}
       <div class="nav-item" id="nav-simtrain" data-view="simtrain"><span class="nav-ico">⚗</span><span class="nav-label">Training Lab</span></div>
       <div class="nav-item" id="nav-simtest" data-view="simtest"><span class="nav-ico">⌖</span><span class="nav-label">Testing Lab</span></div>
       <div class="nav-item" id="nav-clients" data-view="clients"><span class="nav-ico">◉</span><span class="nav-label">Clients</span></div>
-      <div class="nav-item" id="nav-queue" data-view="queue"><span class="nav-ico">⇅</span><span class="nav-label">Rate Limiting</span></div>
+      <div class="nav-item" id="nav-queue" data-view="queue"><span class="nav-ico">⇅</span><span class="nav-label">API Rate Tracking</span></div>
       <div class="nav-item" id="nav-costs" data-view="costs"><span class="nav-ico">$</span><span class="nav-label">Costs</span></div>
     </nav>
     <div id="sb-foot">
@@ -965,7 +965,7 @@ $('#sb-toggle').onclick = () => {
 const VIEW_TITLES = {home:'Operations', flows:'Workflows',
   chat:'Operator Test Chat', log:'Terminal', clients:'Clients',
   simtrain:'Training Lab', simtest:'Testing Lab',
-  queue:'Rate Limiting', costs:'Costs'};
+  queue:'API Rate Tracking', costs:'Costs'};
 function showView(view){
   document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('active'));
   document.getElementById('nav-' + (view === 'chat' ? 'flows' : view))
@@ -1065,7 +1065,7 @@ setInterval(async () => {
   renderRateLimits(api.limits || {});
 }, 30000);
 
-/* ================= Rate Limiting tab + queue footer line ================ */
+/* ============== API Rate Tracking tab + queue footer line =============== */
 let lastQueue = null;
 const fmtAge = s => s == null ? '—' : s >= 60
   ? Math.floor(s/60) + 'm' + Math.round(s%60) + 's' : s.toFixed(1) + 's';
