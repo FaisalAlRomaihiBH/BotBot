@@ -1295,7 +1295,7 @@ load();
 # is clearly mocked; the chosen layout will be wired to real records.
 FLOWCARD_DEMO = r"""<!doctype html><html><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Flow Card Variants — pick one</title>
+<title>Flow Card Icons — pick one</title>
 <style>
 :root{--bg:#0d0d0d;--panel:#151515;--panel2:#1a1a1a;--border:#2a2a2a;
   --border-hi:#3f3f46;--text:#f5f5f5;--text2:#a1a1aa;--muted:#71717a;
@@ -1328,19 +1328,24 @@ p.sub{color:var(--text2);margin:0 0 24px;font-size:12.5px}
 .path{display:flex}
 .st{flex:1;min-width:158px;display:flex;flex-direction:column;align-items:center;
   text-align:center;position:relative;padding:0 7px}
-.st::before{content:'';position:absolute;top:15px;left:calc(-50% + 16px);
-  width:calc(100% - 32px);height:1.5px;background:var(--border)}
+.st::before{content:'';position:absolute;top:17px;left:calc(-50% + 18px);
+  width:calc(100% - 36px);height:1.5px;background:var(--border)}
 .st:first-child::before{display:none}
 .st.done::before{background:#234534}
-.cn{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--border);
+.cn{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--border);
   background:var(--panel2);display:grid;place-items:center;z-index:1;
-  font:600 12px var(--mono);color:var(--muted)}
+  font:600 12px var(--mono);color:var(--muted);position:relative}
 .st.done .cn{border-color:#234534;color:var(--green)}
 .st.cur .cn{border-color:var(--accent);color:var(--accent);
   box-shadow:0 0 10px rgba(110,168,254,.35)}
 .st.plan .cn{border-style:dashed}
-
-/* the shared metric unit: each metric is its OWN labeled segment */
+.cn .ico{font-size:15px;line-height:1;filter:grayscale(35%)}
+.st.plan .cn .ico{filter:grayscale(90%);opacity:.8}
+.numb{position:absolute;top:-5px;right:-7px;width:15px;height:15px;border-radius:50%;
+  background:var(--panel);border:1px solid var(--border-hi);
+  font:600 9px var(--mono);color:var(--text2);display:grid;place-items:center}
+.st.done .numb{color:var(--green);border-color:#234534}
+.st.cur .numb{color:var(--accent);border-color:var(--accent)}
 .kv{display:flex;flex-direction:column;padding:2px 9px;min-width:0}
 .kv em{font:600 8px var(--sans);font-style:normal;text-transform:uppercase;
   letter-spacing:.07em;color:var(--muted)}
@@ -1350,97 +1355,54 @@ p.sub{color:var(--text2);margin:0 0 24px;font-size:12.5px}
 .kvgrid .kv{border-right:1px solid var(--border)}
 .kvgrid .kv:nth-child(3n){border-right:none}
 .kvgrid .kv:nth-child(-n+3){border-bottom:1px solid var(--border)}
-
-/* B — frosted metric chip */
-.vB .chip{margin-top:6px;background:rgba(16,18,22,.55);
-  border:1px solid rgba(110,168,254,.22);border-radius:10px;padding:4px 4px;
-  backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
-.vB .chip .kvgrid{margin-top:0}
-.vB .st.cur .chip{border-color:rgba(110,168,254,.55)}
-
-/* C — micro-table */
-.vC .mt{margin-top:6px;width:100%;max-width:158px;font:10px var(--mono)}
-.vC .mt .r{display:flex;justify-content:space-between;
-  border-bottom:1px dashed var(--border);padding:2.5px 2px}
-.vC .mt .r:last-child{border-bottom:none}
-.vC .mt .k{color:var(--muted);text-transform:uppercase;font-size:8.5px;
-  letter-spacing:.06em;align-self:center}
-.vC .mt .v{color:var(--text)}
-
-/* D — cost in the circle */
-.vD .cn{width:54px;height:54px;font:600 11px var(--mono);
-  display:flex;flex-direction:column;align-items:center;justify-content:center}
-.vD .st::before{top:27px}
-.vD .cn small{font-size:8px;color:var(--muted);font-weight:400;line-height:1.4}
-
-/* E — unified metric band */
-.vE .band{display:flex;border:1px solid var(--border);border-radius:7px;
-  margin-top:12px;background:var(--panel2)}
-.vE .cell{flex:1;min-width:158px;padding:6px 6px;border-right:1px solid var(--border)}
-.vE .cell:last-child{border-right:none}
-.vE .cell.cur{box-shadow:inset 0 2px 0 var(--accent)}
-.vE .cell .kvgrid{margin-top:0}
+.oneline{font:10px var(--mono);color:var(--text2);margin-top:5px}
+.oneline b{color:var(--text)}
 </style></head><body>
-<h1>Style 1 variants — circles + metrics</h1>
-<p class="sub">Five treatments of the layout you liked. Every stage that ran
-shows all six metrics — model, turns, time, in, out, cost — each in its own
-separated segment. Data is mocked. Tell Claude which letter you want.</p>
+<h1>Icon treatments — your chosen card</h1>
+<p class="sub">Same layout, five icon ideas. Some circles carry numbers, some
+carry stage icons, and the detail under each varies. Data is mocked.
+Tell Claude which number you want.</p>
 <div id="list"></div>
 <script>
 const S=[
- {n:'Interviewing', bot:'RequirementsBot', st:'done', note:'Interview closed',
+ {n:'Interviewing', bot:'RequirementsBot', st:'done', note:'Interview closed', ico:'💬',
   tin:'182.4k', tout:'41.2k', cost:'$1.24', time:'6m 12s', turns:'14', model:'sonnet-5'},
- {n:'Architecture', bot:'Architect Bot', st:'cur', note:'Awaiting approval · 2 gaps'},
- {n:'Building', bot:'Builder Bot', st:'plan', note:'Planned'},
- {n:'Testing & Repair', bot:'Tester/Fixer Bot', st:'plan', note:'Planned'},
- {n:'Bot Created', bot:'Outcome', st:'plan', note:'Unmet'},
+ {n:'Architecture', bot:'Architect Bot', st:'cur', note:'Awaiting approval · 2 gaps', ico:'📐'},
+ {n:'Building', bot:'Builder Bot', st:'plan', note:'Planned', ico:'🔨'},
+ {n:'Testing & Repair', bot:'Tester/Fixer Bot', st:'plan', note:'Planned', ico:'🧪'},
+ {n:'Bot Created', bot:'Outcome', st:'plan', note:'Unmet', ico:'🏁'},
 ];
 const HD = `<div class="hd"><span class="nm">Shiny Wheels Car Wash</span>
   <span class="id">proj_a374880d50</span><span class="badge">Client</span>
   <span class="badge att">2 gaps</span><span class="badge">rev r14 · not approved</span>
   <span class="tot">total <b>$1.24</b> · 182.4k in / 41.2k out · updated 2m ago</span></div>`;
-const mark = (s,i) => s.st==='done'?'✓':(i+1);
-const head = (s,i) => `<span class="cn">${mark(s,i)}</span>
-  <span class="stage-name">${s.n}</span><span class="bot">${s.bot}</span>
-  <span class="note ${s.st}" style="margin-top:2px">${s.note}</span>`;
 const has = s => !!s.cost;
-const KV = (s, skip) => ['in','out','cost','time','turns','model']
-  .filter(k => k !== skip)
-  .map(k => `<span class="kv"><em>${k}</em><b>${
+const KV = s => ['in','out','cost','time','turns','model'].map(k =>
+  `<span class="kv"><em>${k}</em><b>${
     {in:s.tin,out:s.tout,cost:s.cost,time:s.time,turns:s.turns,model:s.model}[k]
   }</b></span>`).join('');
+const numCn = (s,i) => `<span class="cn">${s.st==='done'?'✓':(i+1)}</span>`;
+const icoCn = s => `<span class="cn"><span class="ico">${s.st==='done'?'✓':s.ico}</span></span>`;
+const icoNumCn = (s,i) => `<span class="cn"><span class="ico">${s.ico}</span>
+  <span class="numb">${s.st==='done'?'✓':(i+1)}</span></span>`;
+const under = s => `<span class="stage-name">${s.n}</span><span class="bot">${s.bot}</span>
+  <span class="note ${s.st}" style="margin-top:2px">${s.note}</span>`;
+const grid = s => has(s)?`<div class="kvgrid">${KV(s)}</div>`:'';
+const line = s => has(s)?`<div class="oneline"><b>${s.cost}</b> · ${s.tin} in · ${s.tout} out · ${s.time}</div>`:'';
 const V={};
-V['A']=['Classic stack','The sample you picked, with each metric in its own labeled, divided segment.',
- ()=>`<div class="path vA">${S.map((s,i)=>`<div class="st ${s.st}">${head(s,i)}
-   ${has(s)?`<div class="kvgrid">${KV(s)}</div>`:''}</div>`).join('')}</div>`];
-V['B']=['Frosted metric chip','The same separated segments inside a glass chip — matches your status pills.',
- ()=>`<div class="path vB">${S.map((s,i)=>`<div class="st ${s.st}">${head(s,i)}
-   ${has(s)?`<div class="chip"><div class="kvgrid">${KV(s)}</div></div>`:''}</div>`).join('')}</div>`];
-V['C']=['Micro-table','Six label/value rows with dashed separators — the most readable numbers.',
- ()=>`<div class="path vC">${S.map((s,i)=>`<div class="st ${s.st}">${head(s,i)}
-   ${has(s)?`<div class="mt">
-     <div class="r"><span class="k">in</span><span class="v">${s.tin}</span></div>
-     <div class="r"><span class="k">out</span><span class="v">${s.tout}</span></div>
-     <div class="r"><span class="k">cost</span><span class="v">${s.cost}</span></div>
-     <div class="r"><span class="k">time</span><span class="v">${s.time}</span></div>
-     <div class="r"><span class="k">turns</span><span class="v">${s.turns}</span></div>
-     <div class="r"><span class="k">model</span><span class="v">${s.model}</span></div>
-   </div>`:''}</div>`).join('')}</div>`];
-V['D']=['Cost in the circle','Bigger circles carry the cost; the other five metrics in separated segments below.',
- ()=>`<div class="path vD">${S.map((s,i)=>`<div class="st ${s.st}">
-   ${has(s)?`<span class="cn"><span>${s.cost}</span><small>spent</small></span>`
-     :`<span class="cn">${mark(s,i)}</span>`}
-   <span class="stage-name">${s.n}</span><span class="bot">${s.bot}</span>
-   <span class="note ${s.st}" style="margin-top:2px">${s.note}</span>
-   ${has(s)?`<div class="kvgrid">${KV(s,'cost')}</div>`:''}</div>`).join('')}</div>`];
-V['E']=['Unified metric band','Clean circle row on top; a bordered band beneath with a separated-metrics column per stage.',
- ()=>`<div class="vE"><div class="path">${S.map((s,i)=>`<div class="st ${s.st}">${head(s,i)}</div>`).join('')}</div>
-  <div class="band">${S.map(s=>`<div class="cell ${s.st==='cur'?'cur':''}${s.st==='plan'?' plan':''}">
-    ${has(s)?`<div class="kvgrid">${KV(s)}</div>`
-    :`<div class="mut" style="text-align:center;font:10px var(--mono);padding:8px 0">—</div>`}</div>`).join('')}</div></div>`];
+V[1]=['Numbers + full metrics','Numbered circles (your current baseline) with the separated metric grid.',
+ ()=>S.map((s,i)=>`<div class="st ${s.st}">${numCn(s,i)}${under(s)}${grid(s)}</div>`).join('')];
+V[2]=['Stage icons + full metrics','Each stage gets its own icon in the circle; the full metric grid stays.',
+ ()=>S.map((s,i)=>`<div class="st ${s.st}">${icoCn(s)}${under(s)}${grid(s)}</div>`).join('')];
+V[3]=['Icon + number badge + full metrics','Icon in the circle with a tiny step number on its shoulder; full metric grid.',
+ ()=>S.map((s,i)=>`<div class="st ${s.st}">${icoNumCn(s,i)}${under(s)}${grid(s)}</div>`).join('')];
+V[4]=['Numbers, minimal underneath','Numbered circles; the grid collapses into one compact metrics line.',
+ ()=>S.map((s,i)=>`<div class="st ${s.st}">${numCn(s,i)}${under(s)}${line(s)}</div>`).join('')];
+V[5]=['Icons, minimal underneath','Stage icons; one compact metrics line — the lightest of the five.',
+ ()=>S.map((s,i)=>`<div class="st ${s.st}">${icoCn(s)}${under(s)}${line(s)}</div>`).join('')];
 document.getElementById('list').innerHTML =
   Object.keys(V).map(k=>`<div class="sample"><h2>${k}. ${V[k][0]}</h2>
-   <p class="d">${V[k][1]}</p>${HD}${V[k][2]()}</div>`).join('');
+   <p class="d">${V[k][1]}</p>${HD}<div class="path">${V[k][2]()}</div></div>`).join('');
 </script></body></html>"""
 # ============================ BACKEND ============================
 def _project_of(value) -> str:
