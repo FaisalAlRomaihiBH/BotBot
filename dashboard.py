@@ -173,6 +173,7 @@ body.view-flows #flows{display:flex}
 .fc-step .mcol em{font:600 8px var(--sans);font-style:normal;
   text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
 .fc-step .mcol>b{font:500 11px var(--mono);color:var(--text)}
+.fc-step .mcol .msub{font:9.5px var(--mono);color:var(--muted)}
 .fc-step .mjson{font:9.5px var(--mono);color:var(--text2);
   border:1px solid var(--border);border-radius:99px;padding:2px 7px;
   white-space:nowrap}
@@ -913,12 +914,14 @@ function renderFlows(){
           <b>${m.cost_usd!=null ? '$'+m.cost_usd.toFixed(2) : 'cost —'}</b>
           · ${fmtSecs(m.active_seconds)} · ${esc(m.model||'—')}</span>` : ''}
         ${s.status==='current' && m && m.calls ? `<span class="mrow">
-          <span class="mjson" title="Messages the bot sent · the client's average reply time">
-            Sent <b>${m.msgs_sent ?? '—'}</b> · avg ${m.avg_client_seconds!=null
-              ? fmtSecs(m.avg_client_seconds) : '—'}</span>
-          <span class="mjson" title="Messages the client sent · the bot's average reply time">
-            Received <b>${m.msgs_received ?? '—'}</b> · avg ${m.avg_bot_seconds!=null
-              ? fmtSecs(m.avg_bot_seconds) : '—'}</span>
+          <span class="mcol" title="Messages received from the client · the bot's average reply time">
+            <em>Received</em><b>${m.msgs_received ?? '—'}</b>
+            <span class="msub">avg ${m.avg_bot_seconds!=null
+              ? fmtSecs(m.avg_bot_seconds) : '—'}</span></span>
+          <span class="mcol" title="Messages the bot sent · the client's average reply time">
+            <em>Sent</em><b>${m.msgs_sent ?? '—'}</b>
+            <span class="msub">avg ${m.avg_client_seconds!=null
+              ? fmtSecs(m.avg_client_seconds) : '—'}</span></span>
         </span>` : ''}
         ${t.id==='interviewing' && (f.head_rev || (m && m.calls)) ? `<span class="mrow">
           ${m && m.calls ? `<span class="mcol">
