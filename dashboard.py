@@ -83,16 +83,18 @@ body{margin:0;background:var(--bg);color:var(--text);font:13px/1.45 var(--sans)}
 #sb-foot .dot.ok{background:var(--green)}
 #sb-foot .dot.bad{background:var(--red)}
 #sb-foot .dot.warn{background:var(--amber)}
-#rl-bars{margin-top:7px;display:flex;flex-direction:column;gap:5px}
-.rl-row{display:flex;align-items:center;gap:7px}
-.rl-row em{font:600 8.5px var(--sans);font-style:normal;
-  text-transform:uppercase;letter-spacing:.05em;color:var(--muted);
-  width:58px;flex:none}
-.rl-bar{flex:1;height:5px;border-radius:99px;background:var(--panel2);
-  overflow:hidden}
-.rl-bar span{display:block;height:100%;border-radius:99px}
-.rl-row b{font:9.5px var(--mono);color:var(--text2);font-weight:500;
+#rl-bars{margin-top:8px;display:flex;flex-direction:column;gap:6px}
+.rl-row{display:flex;flex-direction:column;gap:3px}
+.rl-top{display:flex;justify-content:space-between;align-items:baseline}
+.rl-top em{font:600 8.5px var(--sans);font-style:normal;
+  text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.rl-top b{font:9.5px var(--mono);color:var(--text2);font-weight:500;
   white-space:nowrap}
+/* fuel gauge: the FILLED part is what REMAINS — a full green bar means
+   the whole minute's budget is still available */
+.rl-bar{height:5px;border-radius:99px;background:#0b0b0b;
+  border:1px solid var(--border);overflow:hidden}
+.rl-bar span{display:block;height:100%;border-radius:99px}
 #sidebar.collapsed #rl-bars{display:none}
 #sb-foot div{margin:3px 0}
 #sidebar.collapsed #sb-title,#sidebar.collapsed .nav-label,#sidebar.collapsed #sb-foot{display:none}
@@ -693,8 +695,8 @@ body.view-clients #main{overflow:hidden}
       <div class="nav-item" id="nav-clients" data-view="clients"><span class="nav-ico">◉</span><span class="nav-label">Clients</span></div>
     </nav>
     <div id="sb-foot">
-      <div><span class="dot" id="dot-api"></span><span id="txt-api">Claude API: checking…</span></div>
       <div><span class="dot" id="dot-store"></span><span id="txt-store">Database: checking…</span></div>
+      <div><span class="dot" id="dot-api"></span><span id="txt-api">Claude API: checking…</span></div>
       <div id="rl-bars"></div>
     </div>
   </aside>
@@ -932,13 +934,15 @@ function renderRateLimits(limits){
     const frac = worst.remaining / worst.limit;
     const color = frac > .5 ? 'var(--green)' : frac > .2
       ? 'var(--amber)' : 'var(--red)';
-    return `<div class="rl-row" title="${esc(label)}/min per model — ${
-      esc(tips.join(' · '))}"><em>${label}/min</em>
-      <span class="rl-bar"><span style="width:${
-        Math.round((1 - frac) * 100)}%;background:${color}"></span></span>
+    return `<div class="rl-row" title="${esc(label)} per minute, per model — ${
+      esc(tips.join(' · '))} (full bar = full budget available)">
+      <span class="rl-top"><em>${label}/min</em>
       <b>${worst.remaining >= 1000
-        ? fmtTok(worst.remaining) : worst.remaining}/${
-        worst.limit >= 1000 ? fmtTok(worst.limit) : worst.limit}</b></div>`;
+        ? fmtTok(worst.remaining) : worst.remaining} / ${
+        worst.limit >= 1000 ? fmtTok(worst.limit) : worst.limit} left</b></span>
+      <span class="rl-bar"><span style="width:${
+        Math.max(2, Math.round(frac * 100))}%;background:${color}"></span></span>
+      </div>`;
   }).join('');
 }
 setInterval(async () => {
