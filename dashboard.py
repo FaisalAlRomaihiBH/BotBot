@@ -1311,6 +1311,12 @@ function renderFlows(){
               <span class="mcol"><em>Output Tokens</em><b>${fmtTok(m.tokens_out)}</b></span>
             </span>
             <span class="mpair">
+              <span class="mcol" title="Tokens served from the prompt cache at 10% price">
+                <em>Cache Read</em><b>${fmtTok(m.cache_read)}</b></span>
+              <span class="mcol" title="Tokens written into the prompt cache">
+                <em>Cache Write</em><b>${fmtTok(m.cache_write)}</b></span>
+            </span>
+            <span class="mpair">
               <span class="mcol" title="Messages received from the client">
                 <em>Received</em><b class="mpill">${m.msgs_received ?? '—'}</b></span>
               <span class="mcol" title="Messages the bot sent">

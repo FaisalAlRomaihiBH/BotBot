@@ -526,6 +526,7 @@ def interviewing_metrics(pid: str) -> dict:
     return {"calls": r["n"], "turns": turns,
             "cost_in_usd": cost_in, "cost_out_usd": cost_out,
             "tokens_in": r["f"] + r["cr"] + r["cw"], "tokens_out": r["o"],
+            "cache_read": r["cr"], "cache_write": r["cw"], "fresh_in": r["f"],
             "cost_usd": cost, "active_seconds": r["dur"],
             "elapsed_seconds": elapsed,
             "msgs_sent": sent, "msgs_received": received,
