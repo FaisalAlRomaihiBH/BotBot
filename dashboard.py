@@ -166,8 +166,10 @@ body.view-flows #flows{display:flex}
 .fc-step .mline{font:10px var(--mono);color:var(--text2);margin-top:4px;
   line-height:1.5}
 .fc-step .mline b{color:var(--text);font-weight:500}
-.fc-step .mjson{font:10px var(--mono);color:var(--text2);margin-top:4px;
-  border:1px solid var(--border);border-radius:99px;padding:2px 9px;
+.fc-step .mrow{display:flex;gap:5px;margin-top:4px;flex-wrap:nowrap;
+  justify-content:center}
+.fc-step .mjson{font:9.5px var(--mono);color:var(--text2);
+  border:1px solid var(--border);border-radius:99px;padding:2px 7px;
   white-space:nowrap}
 .fc-step .mjson a{color:var(--accent);text-decoration:none}
 .fc-step .mjson a:hover{text-decoration:underline}
@@ -409,8 +411,6 @@ body.view-home #run-header,body.view-flows #run-header{display:none}
     <nav id="sb-nav">
       <div class="nav-item active" id="nav-home" data-view="home"><span class="nav-ico">◎</span><span class="nav-label">Home</span></div>
       <div class="nav-item" id="nav-flows" data-view="flows"><span class="nav-ico">⇶</span><span class="nav-label">Chatbot Flows</span></div>
-      <div class="nav-item" id="nav-testchat" title="Owner test mode — same engine, never a customer's session"><span class="nav-ico">▶</span><span class="nav-label">Owner Test Chat</span></div>
-      <div class="nav-item" id="nav-copylink" title="Copy the client intake link (local-only)"><span class="nav-ico">⧉</span><span class="nav-label">Copy Client Link</span></div>
     </nav>
     <div id="sb-foot">
       <div><span class="dot" id="dot-store"></span><span id="txt-store">store: checking…</span></div>
@@ -793,15 +793,7 @@ $('#sup-toggle').onclick = async () => {
   loadSystem();
 };
 
-/* ---------- sidebar utility actions ---------- */
-$('#nav-testchat').onclick = () => showView('chat');
-$('#nav-copylink').onclick = async () => {
-  const url = location.origin + '/chat';
-  try{ await navigator.clipboard.writeText(url); }catch(e){}
-  const lbl = $('#nav-copylink .nav-label'), old = lbl.textContent;
-  lbl.textContent = 'Copied!';
-  setTimeout(() => lbl.textContent = old, 2500);
-};
+/* (owner test chat + copy link removed from sidebar) */
 
 /* ================= Chatbot Flows (monitoring, read-only) ================= */
 const flowsUI = {data:null, expanded:new Set(), tab:{}, detail:{}};
@@ -890,16 +882,19 @@ function renderFlows(){
           <b>${m.cost_usd!=null ? '$'+m.cost_usd.toFixed(2) : 'cost —'}</b>
           · ${fmtTok(m.tokens_in)} in · ${fmtTok(m.tokens_out)} out
           · ${fmtSecs(m.active_seconds)} · ${esc(m.model||'—')}</span>` : ''}
-        ${t.id==='interviewing' && m && m.calls ? `<span class="mjson"
-          title="The interview conversation the bot works from">
-          ⤓ Input ·
-          <a href="/api/transcript?project=${f.flow_id}" target="_blank">TXT</a>
-        </span>` : ''}
-        ${t.id==='interviewing' && f.head_rev ? `<span class="mjson"
-          title="The requirements the bot has produced so far (revision r${f.head_rev})">
-          ⤓ Output r${f.head_rev} ·
-          <a href="/api/export?project=${f.flow_id}&format=legacy" target="_blank">JSON</a> /
-          <a href="/api/export?project=${f.flow_id}&format=legacy&as=txt" target="_blank">TXT</a>
+        ${s.status==='current' && m && m.calls ? `<span class="mline">
+          sent <b>${m.msgs_sent ?? '—'}</b> · received <b>${m.msgs_received ?? '—'}</b><br>
+          client avg <b>${m.avg_client_seconds!=null ? fmtSecs(m.avg_client_seconds) : '—'}</b>
+          · bot avg <b>${m.avg_bot_seconds!=null ? fmtSecs(m.avg_bot_seconds) : '—'}</b></span>` : ''}
+        ${t.id==='interviewing' && (f.head_rev || (m && m.calls)) ? `<span class="mrow">
+          ${m && m.calls ? `<span class="mjson"
+            title="The interview conversation the bot works from">Input·<a
+            href="/api/transcript?project=${f.flow_id}" target="_blank">TXT</a></span>` : ''}
+          ${f.head_rev ? `<span class="mjson"
+            title="The requirements the bot has produced so far (revision r${f.head_rev})">
+            Output r${f.head_rev}·<a
+            href="/api/export?project=${f.flow_id}&format=legacy" target="_blank">JSON</a>/<a
+            href="/api/export?project=${f.flow_id}&format=legacy&as=txt" target="_blank">TXT</a></span>` : ''}
         </span>` : ''}
         </div></div>`;
     }).join('');

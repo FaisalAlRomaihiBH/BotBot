@@ -381,6 +381,26 @@ def interviewing_metrics(pid: str) -> dict:
             "conversation='interview' AND role='owner'", (pid,)).fetchone()["n"]
     if not r["n"]:
         return {"calls": 0}
+    # conversation rhythm: counts + average client reply gap (bot message ->
+    # next client message) from real timestamps, and average bot turn time
+    with _connect() as con:
+        msgs = con.execute(
+            "SELECT role, ts FROM messages WHERE project_id=? AND "
+            "conversation='interview' ORDER BY id", (pid,)).fetchall()
+        avg_bot = con.execute(
+            "SELECT AVG(duration) a FROM invocations WHERE project_id=? AND "
+            "purpose='interview_turn' AND duration IS NOT NULL",
+            (pid,)).fetchone()["a"]
+    sent = sum(1 for m in msgs if m["role"] == "bot")
+    received = sum(1 for m in msgs if m["role"] == "owner")
+    gaps, prev_bot = [], None
+    for m in msgs:
+        if m["role"] == "bot":
+            prev_bot = m["ts"]
+        elif m["role"] == "owner" and prev_bot is not None:
+            gaps.append(m["ts"] - prev_bot)
+            prev_bot = None
+    avg_client = (sum(gaps) / len(gaps)) if gaps else None
     # a single unpriced/unknown model makes the whole cost unknown — never
     # silently price it as something else
     cost = (None if any(m not in PRICING for m in models)
@@ -388,6 +408,8 @@ def interviewing_metrics(pid: str) -> dict:
     return {"calls": r["n"], "turns": turns,
             "tokens_in": r["f"] + r["cr"] + r["cw"], "tokens_out": r["o"],
             "cost_usd": cost, "active_seconds": r["dur"],
+            "msgs_sent": sent, "msgs_received": received,
+            "avg_client_seconds": avg_client, "avg_bot_seconds": avg_bot,
             "model": (r["model"] or "").replace("claude-", "") or None}
 
 
