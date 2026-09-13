@@ -575,7 +575,7 @@ body.view-clients #main{overflow:hidden}
     <div id="chat">
       <div id="chat-head">
         <button class="act" id="chat-back" title="Back to Chatbot Flows">←</button>
-        <span class="t" style="color:var(--amber)">Owner Test Mode</span>
+        <span class="t" style="color:var(--amber)">Operator Test Mode</span>
         <select class="proj-select" id="proj-select-chat" aria-label="Select test session"></select>
         <button class="act" id="proj-new">+ New test session</button>
         <span class="m">same engine as the client link · test sessions only</span>
@@ -602,7 +602,7 @@ body.view-clients #main{overflow:hidden}
     <button class="ov-close" id="sup-close" title="Close" aria-label="Close">✕</button></div>
   <div id="mgmt-thread"></div>
   <div id="mgmt-bar">
-    <textarea id="mgmt-input" rows="1" placeholder="Ask about the platform… (a paid call when enabled)" spellcheck="false"></textarea>
+    <textarea id="mgmt-input" rows="1" placeholder="Ask about the platform…" spellcheck="false"></textarea>
     <button class="act" id="mgmt-send">Ask</button>
   </div>
 </div>
@@ -629,7 +629,7 @@ $('#sb-toggle').onclick = () => {
   if(document.body.className === 'view-home') renderGraph();
 };
 const VIEW_TITLES = {home:'Operations', flows:'Chatbot Flows',
-  chat:'Owner Test Chat', log:'Terminal', clients:'Clients'};
+  chat:'Operator Test Chat', log:'Terminal', clients:'Clients'};
 function showView(view){
   document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('active'));
   document.getElementById('nav-' + (view === 'chat' ? 'flows' : view))
