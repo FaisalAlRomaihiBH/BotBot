@@ -191,8 +191,8 @@ def reset_interview(pid: str) -> dict:
 FLOW_TEMPLATE = {
     "version": "chatbot-flow@2",
     "stages": [
-        {"id": "interviewing", "label": "Interviewing",
-         "who": "RequirementsBot", "capability": "requirements_bot"},
+        {"id": "interviewing", "label": "Interview",
+         "who": "Requirements Bot", "capability": "requirements_bot"},
         {"id": "architecture", "label": "Architecture",
          "who": "Architect Bot", "capability": "architecture_agent"},
         {"id": "building", "label": "Building",

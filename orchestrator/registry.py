@@ -18,7 +18,7 @@ def capabilities() -> list[dict]:
     caps = [
         {
             "id": "requirements_bot",
-            "name": "RequirementsBot",
+            "name": "Requirements Bot",
             "kind": "production_specialist",
             "purpose": "Interviews a business owner and produces the requirements brief",
             "contract": "reqbot-io@1",

@@ -176,8 +176,16 @@ body.view-flows #flows{display:flex}
 .fc-step.current .lbl{color:var(--text);font-weight:600}
 .fc-step.current .st{color:var(--accent)}
 .fc-step.completed .st{color:var(--green)}
-.fc-step.current.busy .cn{animation:pulse 1.6s ease-in-out infinite}
-@media (prefers-reduced-motion:reduce){.fc-step.current.busy .cn{animation:none}}
+.fc-step.current.busy .cn::after{content:'';position:absolute;inset:-5px;
+  border-radius:50%;pointer-events:none;
+  background:conic-gradient(from 0deg, transparent 0 12%,
+    rgba(110,168,254,.12) 35%, rgba(110,168,254,.55) 75%, var(--accent) 100%);
+  -webkit-mask:radial-gradient(closest-side,transparent calc(100% - 5px),
+    #000 calc(100% - 4px));
+  mask:radial-gradient(closest-side,transparent calc(100% - 5px),
+    #000 calc(100% - 4px));
+  animation:spin 1.6s linear infinite}
+@media (prefers-reduced-motion:reduce){.fc-step.current.busy .cn::after{animation:none}}
 .fc-step.blocked .st{color:var(--amber)}
 .fc-step.blocked .cn{border-color:#5c4a1e;color:var(--amber)}
 .fc-step.planned .cn{border-style:dashed;opacity:.65}
@@ -959,7 +967,7 @@ function renderFlowDetail(fid){
       ? `<div style="color:var(--muted);font:10px var(--mono);margin-bottom:6px">
            Read-only transcript — inspection never sends a message as the customer.</div>`
         + d.transcript.map(m => `<div class="fd-msg ${m.role==='human'?'human':'ai'}">
-          <div class="who">${m.role==='human'?'Client':'RequirementsBot'}</div>${esc(m.text)}</div>`).join('')
+          <div class="who">${m.role==='human'?'Client':'Requirements Bot'}</div>${esc(m.text)}</div>`).join('')
       : '<span style="color:var(--muted)">No messages yet.</span>';
   }else if(tab === 'Requirements'){
     // ChatbotFlowReviewPanel: the full review workflow lives here now —
@@ -1065,11 +1073,11 @@ function renderChat(d){
   const t = $('#chat-thread');
   t.innerHTML = d.messages.map(m =>
     `<div class="msg ${m.role === 'human' ? 'human' : 'ai'}">
-       <div class="who">${m.role === 'human' ? 'You' : 'RequirementsBot'}</div>${esc(m.text)}</div>`
+       <div class="who">${m.role === 'human' ? 'You' : 'Requirements Bot'}</div>${esc(m.text)}</div>`
   ).join('')
   + (d.error ? `<div class="msg err">${esc(d.error)}</div>` : '')
   + (d.saved ? `<div class="msg sys">✓ Interview complete — full brief saved to ${d.saved}</div>` : '')
-  + (chat.busy ? `<div id="chat-typing"><span class="spin"></span>RequirementsBot is thinking…</div>` : '');
+  + (chat.busy ? `<div id="chat-typing"><span class="spin"></span>Requirements Bot is thinking…</div>` : '');
   t.scrollTop = t.scrollHeight;
   $('#chat-send').disabled = chat.busy || chat.complete;
   $('#chat-input').disabled = chat.complete;
@@ -1087,7 +1095,7 @@ async function sendChat(){
   const t = $('#chat-thread');
   t.insertAdjacentHTML('beforeend',
     `<div class="msg human"><div class="who">You</div>${esc(text)}</div>
-     <div id="chat-typing"><span class="spin"></span>RequirementsBot is thinking…</div>`);
+     <div id="chat-typing"><span class="spin"></span>Requirements Bot is thinking…</div>`);
   t.scrollTop = t.scrollHeight;
   $('#chat-send').disabled = true;
   try{
