@@ -1059,15 +1059,22 @@ async function loadLog(){
       return `<div class="ln">${ts} ${path}  <span class="mt" title="${
         esc(e.text.slice(0, 1000))}">${esc(text)}</span></div>`;
     }
+    // 'client'/'owner' role actors resolve to the real Client ID when known
+    const actor = (e.actor === 'client' || e.actor === 'owner')
+      && e.client_id != null ? `Client${e.client_id}` : e.actor;
+    if(e.type === 'ui.click'){
+      // clicks read as an action, not a raw event record
+      const label = (e.payload.label || '?').replace(/^[>_◎⇶◉≡\s]+/, '');
+      return `<div class="ln dim">${ts} <span class="prj">${esc(proj)}</span> ` +
+        `<span class="ac">${esc(actor)}</span> <span class="dt">→ clicked</span> ` +
+        `<span class="mt">"${esc(label)}"</span>${e.payload.view
+          ? ` <span class="dt">in ${esc(String(e.payload.view).replace('view-',''))}</span>` : ''}</div>`;
+    }
     const detail = Object.entries(e.payload||{})
       .map(([k,v]) => `${k}=${typeof v==='object'?JSON.stringify(v):v}`).join(' ');
     const cls = /fail|error/.test(e.type) ? ' err'
       : /review.requested|reset/.test(e.type) ? ' warn' : '';
-    const dim = (e.type === 'revision.committed' || e.type === 'ui.click')
-      ? ' dim' : '';
-    // 'client'/'owner' role actors resolve to the real Client ID when known
-    const actor = (e.actor === 'client' || e.actor === 'owner')
-      && e.client_id != null ? `Client${e.client_id}` : e.actor;
+    const dim = e.type === 'revision.committed' ? ' dim' : '';
     return `<div class="ln${dim}">${ts} <span class="prj">${
       esc(proj)}</span> <span class="ev${cls}">${esc(e.type)}</span> <span class="ac">(${
       esc(actor)})</span>${detail ? ` <span class="dt">${esc(detail)}</span>` : ''}</div>`;
