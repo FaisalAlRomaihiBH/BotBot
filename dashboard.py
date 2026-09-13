@@ -211,19 +211,29 @@ body.view-clients #clients{display:flex}
 .sim-meta span{font:10px var(--mono);color:var(--text2);
   border:1px solid var(--border);border-radius:99px;padding:1px 8px}
 
-.simr-grid{display:grid;grid-template-columns:repeat(auto-fill,
-  minmax(235px,1fr));gap:10px;margin-top:4px}
-.simr-card{background:var(--panel2);border:1px solid var(--border);
-  border-radius:8px;padding:11px 13px;display:flex;flex-direction:column;
-  gap:6px;align-items:center;text-align:center}
-.simr-card .n{font:600 13px var(--sans);color:var(--text)}
-.simr-card .p{font:10.5px var(--sans);color:var(--muted);line-height:1.45}
-.simr-card .rtotal{font:600 13px var(--mono);color:var(--text);
-  border:1px solid var(--border-hi);border-radius:99px;padding:2px 14px}
-.simr-card .kv{display:flex;justify-content:space-between;width:100%;
-  font:10.5px var(--mono);color:var(--muted)}
-.simr-card .kv b{color:var(--text2);font-weight:500;white-space:nowrap}
-.simr-card .b{display:flex;gap:6px;margin-top:3px}
+.fbars{display:grid;grid-template-columns:repeat(auto-fit,
+  minmax(210px,1fr));gap:12px 22px;margin-top:12px}
+.fbar em{font:600 8.5px var(--sans);font-style:normal;
+  text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.fbar .fo{text-transform:none;letter-spacing:0;font-weight:400}
+.fbar .fb{display:flex;height:7px;border-radius:99px;overflow:hidden;
+  margin:5px 0 6px;background:var(--panel2)}
+.fbar .fb span{min-width:3px}
+.fbar .fls{display:flex;flex-wrap:wrap;gap:3px 12px}
+.fbar .fl{font:10px var(--mono);color:var(--text2);white-space:nowrap}
+.fbar .fd{display:inline-block;width:7px;height:7px;border-radius:50%;
+  margin-right:5px;vertical-align:0}
+.simt-top{cursor:pointer}
+.simt-top .chev{color:var(--muted);font-size:12px}
+.simt-table{margin-top:12px;border:1px solid var(--border);border-radius:6px;
+  overflow-x:auto}
+.simt-table table{width:100%;border-collapse:collapse;font-size:12px}
+.simt-table th{font:600 10px var(--sans);text-transform:uppercase;
+  letter-spacing:.06em;color:var(--muted);text-align:left;padding:8px 10px;
+  border-bottom:1px solid var(--border)}
+.simt-table td{padding:7px 10px;border-bottom:1px solid var(--border);
+  color:var(--text2);vertical-align:top}
+.simt-table td.mono{font:11px var(--mono);white-space:nowrap}
 
 /* ---------- clients ---------- */
 #clients{flex-direction:column;margin:14px 20px 20px;min-height:0;
@@ -1144,7 +1154,7 @@ $('#sup-toggle').onclick = async () => {
 /* (owner test chat + copy link removed from sidebar) */
 
 /* ================= Simulation Lab ================= */
-const simUI = {runs: [], tests: []};
+const simUI = {runs: [], tests: [], expanded: new Set()};
 $('#sim-addtest').onclick = () => $('#simt-form').classList.add('open');
 $('#simt-cancel').onclick = () => $('#simt-form').classList.remove('open');
 $('#simt-start').onclick = async () => {
@@ -1159,48 +1169,76 @@ const SIMT_STEPS = [
   ['starting', 'Start'], ['generating', 'Generate Personas'],
   ['running', 'Run Interviews'], ['analyzing', 'Analyze'],
   ['completed', 'Report Ready']];
+const FBAR_COLORS = ['#61afef','#98c379','#e5c07b','#c678dd','#56b6c2',
+  '#d19a66','#e06c75','#7f848e'];
+const TRAIT_WORDS = ['impatient','patient','chatty','terse','tech-savvy',
+  'technophobe','suspicious','trusting','analytical','formal','casual',
+  'friendly','anxious','skeptical','precise'];
 
-function simRunCard(r){
-  if(!r) return '';
-  const u = (r.usage || {});
-  const bu = u.bot || {}, pu = u.persona || {};
-  const inTok = (bu.fresh_in||0) + (bu.cache_read||0) + (bu.cache_write||0);
+function sizeBucket(s){
+  if(!s) return null;
+  const t = String(s).toLowerCase();
+  if(/solo|alone|just me|owner only|1 person|one person/.test(t)) return 'solo';
+  const m = t.match(/\d+/);
+  const n = m ? +m[0] : null;
+  if(n == null) return t.slice(0, 18);
+  if(n <= 1) return 'solo';
+  if(n <= 5) return '2–5 staff';
+  if(n <= 15) return '6–15 staff';
+  return '16+ staff';
+}
+function count(map, key){ if(key) map.set(key, (map.get(key)||0)+1); }
+function simAgg(runs){
+  const industry = new Map(), size = new Map(), traits = new Map(),
+    outcome = new Map();
+  for(const r of runs){
+    count(industry, r.industry);
+    count(size, sizeBucket(r.company_size));
+    const t = (r.traits||'').toLowerCase();
+    for(const w of TRAIT_WORDS)
+      if(new RegExp('\\b' + w + '\\b').test(t)) count(traits, w);
+    if(/language|arabic|spanish|mixes/.test(t)) count(traits, 'mixes languages');
+    count(outcome, r.status === 'running' ? 'running'
+      : r.status === 'failed' ? 'failed'
+      : r.interview_complete ? 'completed' : 'incomplete');
+  }
+  return {industry, size, traits, outcome};
+}
+function fbar(title, map, denom, overlapping){
+  if(!map.size) return '';
+  const entries = [...map.entries()].sort((x, y) => y[1] - x[1]);
+  const total = entries.reduce((s, e) => s + e[1], 0);
+  const segs = entries.map(([k, v], i) =>
+    `<span style="flex:${v};background:${FBAR_COLORS[i % 8]}"></span>`).join('');
+  const lbls = entries.map(([k, v], i) =>
+    `<span class="fl"><span class="fd" style="background:${
+      FBAR_COLORS[i % 8]}"></span>${esc(k)} ${Math.round(v / denom * 100)}%</span>`)
+    .join('');
+  return `<div class="fbar"><em>${title}${overlapping
+      ? ' <span class="fo">(overlapping)</span>' : ''}</em>
+    <div class="fb">${segs}</div><div class="fls">${lbls}</div></div>`;
+}
+function simRunRow(r){
   const dur = r.finished_ts ? fmtSecs(r.finished_ts - r.started_ts)
     : fmtSecs(Date.now()/1000 - r.started_ts);
   const st = r.status === 'running'
-    ? '<span class="sim-st running"><span class="spin"></span> Interviewing</span>'
+    ? '<span class="sim-st running"><span class="spin"></span> interviewing</span>'
     : r.status === 'failed'
       ? `<span class="sim-st failed" title="${esc(r.error||'')}">failed</span>`
       : `<span class="sim-st completed">${r.interview_complete
-          ? 'completed ✓' : 'ended (incomplete)'}</span>`;
-  return `<div class="simr-card">
-    <span class="n">${esc(r.persona_name)}</span>
-    <span class="sim-meta">
-      ${r.industry ? `<span>${esc(r.industry)}</span>` : ''}
-      ${r.company_size ? `<span>${esc(r.company_size)}</span>` : ''}
-    </span>
-    ${r.traits ? `<span class="p">${esc(r.traits)}</span>` : ''}
-    ${st}
-    <b class="rtotal">${r.cost_usd != null ? '$'+r.cost_usd.toFixed(2) : '—'}</b>
-    <span class="kv"><span>Bot Cost · Persona Cost</span><b>${
-      fmtPairCost(bu, 'claude')} · ${fmtPairCost(pu, 'haiku')}</b></span>
-    <span class="kv"><span>In · Out Tokens</span><b>${fmtTok(inTok)} · ${
-      fmtTok(bu.out||0)}</b></span>
-    <span class="kv"><span>Cache Read · Write</span><b>${
-      fmtTok(bu.cache_read||0)} · ${fmtTok(bu.cache_write||0)}</b></span>
-    <span class="kv"><span>Turns</span><b>${r.turns ?? 0}</b></span>
-    <span class="kv"><span>Duration</span><b>${dur}</b></span>
-    <span class="b">
-      <button class="act" onclick="simView(${r.id},'transcript')">View Input</button>
-      ${r.has_brief ? `<button class="act" onclick="simView(${r.id},'brief')">View Output</button>` : ''}
-    </span>
-  </div>`;
-}
-function fmtPairCost(u, fam){
-  const p = fam === 'haiku' ? [1.0, 5.0] : [2.0, 10.0];
-  const c = ((u.fresh_in||0)*p[0] + (u.cache_write||0)*p[0]*2
-    + (u.cache_read||0)*p[0]*0.10 + (u.out||0)*p[1]) / 1e6;
-  return '$' + c.toFixed(2);
+          ? 'completed ✓' : 'incomplete'}</span>`;
+  return `<tr>
+    <td style="color:var(--text)">${esc(r.persona_name)}</td>
+    <td>${esc(r.industry || '—')}</td>
+    <td>${esc(sizeBucket(r.company_size) || '—')}</td>
+    <td style="max-width:220px">${esc(r.traits || '—')}</td>
+    <td>${st}</td>
+    <td class="mono">${r.turns ?? 0}</td>
+    <td class="mono">${r.cost_usd != null ? '$'+r.cost_usd.toFixed(2) : '—'}</td>
+    <td class="mono">${dur}</td>
+    <td><button class="act" onclick="event.stopPropagation();simView(${r.id},'transcript')">Input</button>
+      ${r.has_brief ? `<button class="act" onclick="event.stopPropagation();simView(${r.id},'brief')">Output</button>` : ''}</td>
+  </tr>`;
 }
 function simtCard(t){
   const order = SIMT_STEPS.map(s => s[0]);
@@ -1209,6 +1247,7 @@ function simtCard(t){
   const runs = t.run_ids.map(id => simUI.runs.find(r => r.id === id))
     .filter(Boolean);
   const doneRuns = runs.filter(r => r.status !== 'running').length;
+  const open = simUI.expanded.has(t.id);
   const steps = SIMT_STEPS.slice(1).map(([key, label], i) => {
     const pos = i + 1;
     const cls = failed && pos >= idx ? 'fail'
@@ -1225,17 +1264,28 @@ function simtCard(t){
       cls === 'done' ? '✓' : pos}</span><span class="lbl">${label}</span>
       <span class="st">${st}</span></div>`;
   }).join('');
-  // identity coverage line: what kinds of businesses this test exercised
-  const coverage = [...new Set(runs.map(r => r.industry).filter(Boolean))];
-  return `<div class="simt-card">
-    <div class="simt-top"><span class="n">Test ${t.id} · Persona Sweep &amp;
-      Analysis (${t.params.count} personas)</span>
+  const agg = simAgg(runs);
+  const n = runs.length || 1;
+  const bars = runs.length ? `<div class="fbars">
+      ${fbar('Industry', agg.industry, n, false)}
+      ${fbar('Company size', agg.size, n, false)}
+      ${fbar('Personality', agg.traits, n, true)}
+      ${fbar('Interview outcome', agg.outcome, n, false)}
+    </div>` : '';
+  const table = open && runs.length ? `<div class="simt-table">
+    <table><tr><th>Persona</th><th>Industry</th><th>Size</th><th>Traits</th>
+      <th>Status</th><th>Turns</th><th>Cost</th><th>Duration</th><th></th></tr>
+      ${runs.map(simRunRow).join('')}</table></div>` : '';
+  return `<div class="simt-card${open ? ' open' : ''}" data-tid="${t.id}">
+    <div class="simt-top" role="button" tabindex="0" aria-expanded="${open}">
+      <span class="n">Test ${t.id} · Persona Sweep &amp; Analysis
+        (${t.params.count} personas)</span>
       <span class="ts">${new Date(t.started_ts*1000).toLocaleString()}</span>
-      <span class="cost">${t.cost_usd != null ? '$'+t.cost_usd.toFixed(2) : ''}</span></div>
-    ${coverage.length ? `<span class="sim-meta" style="margin-top:8px">${
-      coverage.map(c => `<span>${esc(c)}</span>`).join('')}</span>` : ''}
+      <span class="cost">${t.cost_usd != null ? '$'+t.cost_usd.toFixed(2) : ''}</span>
+      <span class="chev">${open ? '▾' : '▸'}</span></div>
+    ${bars}
     <div class="simt-path">${steps}</div>
-    <div class="simr-grid">${runs.map(simRunCard).join('')}</div>
+    ${table}
     <div class="simt-actions">
       ${t.has_report ? `<button class="act" onclick="simReport(${t.id})">View Report</button>` : ''}
       ${t.status === 'completed' ? `<button class="act"
@@ -1272,11 +1322,27 @@ async function loadSim(){
       (await fetch('/api/sim/runs')).json(),
       (await fetch('/api/sim/tests')).json()]);
   }catch(e){ return; }
+  const sig = JSON.stringify([simUI.tests, simUI.runs.map(r =>
+    [r.id, r.status, r.turns]), [...simUI.expanded]]);
+  if(sig === simUI.sig) return;   // nothing changed — don't disturb clicks
+  simUI.sig = sig;
   $('#sim-tests').innerHTML = simUI.tests.map(simtCard).join('')
     || `<div class="empty-state"><b>No tests yet</b>
         <span>Add Test runs a batch of fake businesses through the bot and
         analyzes every input and output for problems and fixes. Every test,
         conversation, and brief is archived here permanently.</span></div>`;
+  document.querySelectorAll('.simt-card .simt-top').forEach(h => {
+    const tid = +h.parentElement.dataset.tid;
+    const toggle = () => {
+      simUI.expanded.has(tid) ? simUI.expanded.delete(tid)
+        : simUI.expanded.add(tid);
+      loadSim();
+    };
+    h.onclick = toggle;
+    h.onkeydown = e => {
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggle(); }
+    };
+  });
 }
 
 /* ================= Clients ================= */
