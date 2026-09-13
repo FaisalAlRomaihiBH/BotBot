@@ -138,6 +138,7 @@ def _connect() -> sqlite3.Connection:
     for tbl, col, typ in (("sim_personas", "identity", "TEXT"),
                           ("sim_personas", "completeness", "REAL"),
                           ("sim_personas", "patience", "REAL"),
+                          ("sim_personas", "features", "TEXT"),
                           ("sim_runs", "score", "REAL"),
                           ("sim_runs", "missed", "TEXT")):
         try:
@@ -478,15 +479,18 @@ def sim_add_persona(name: str, kind: str, content: str,
                     traits: str | None = None,
                     identity: dict | None = None,
                     completeness: float | None = None,
-                    patience: float | None = None) -> int:
+                    patience: float | None = None,
+                    features: dict | None = None) -> int:
     with _connect() as con:
         cur = con.execute(
             "INSERT INTO sim_personas(name, kind, content, industry, "
             "company_size, traits, identity, completeness, patience, "
-            "created_ts) VALUES(?,?,?,?,?,?,?,?,?,?)",
+            "features, created_ts) VALUES(?,?,?,?,?,?,?,?,?,?,?)",
             (name, kind, content, industry, company_size, traits,
              json.dumps(identity, ensure_ascii=False) if identity else None,
-             completeness, patience, time.time()))
+             completeness, patience,
+             json.dumps(features, ensure_ascii=False) if features else None,
+             time.time()))
         return cur.lastrowid
 
 
@@ -533,13 +537,13 @@ def sim_runs(limit: int = 300) -> list[dict]:
             " json_array_length(r.transcript) AS turns,"
             " p.name AS persona_name, p.kind AS persona_kind,"
             " p.industry, p.company_size, p.traits, p.identity,"
-            " p.completeness, p.patience"
+            " p.completeness, p.patience, p.features"
             " FROM sim_runs r JOIN sim_personas p ON p.id=r.persona_id"
             " ORDER BY r.id DESC LIMIT ?", (limit,)).fetchall()
     out = []
     for r in rows:
         d = dict(r)
-        for k in ("usage", "missed", "identity"):
+        for k in ("usage", "missed", "identity", "features"):
             d[k] = json.loads(d[k]) if d[k] else None
         out.append(d)
     return out

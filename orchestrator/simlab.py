@@ -78,6 +78,67 @@ PATIENCE LEVEL: {pct}% —
 - below 25%: wants this over NOW; minimal answers; after ~6 questions
   demands it finish and threatens to leave; ignores non-essential questions."""
 
+# Six more behavioral ladders, each on four rungs (1.0 best-case .. 0.15
+# hardest-case). Balanced least-tested-first across the whole archive, like
+# knowledge and patience.
+EXTRA_RUNGS = [1.0, 0.7, 0.4, 0.15]
+EXTRA_LADDERS = {
+    "consistency": ("100%: never contradicts yourself. 70%: one slip you fix "
+                    "if challenged. 40%: change one price or the hours "
+                    "mid-interview without noticing. 15%: repeatedly "
+                    "contradict earlier answers"),
+    "clarity": ("100%: precise concrete answers. 70%: mostly clear, a vague "
+                "word now and then. 40%: vague by default ('around noonish, "
+                "depends') until pushed. 15%: rambling stories with the "
+                "actual answer buried"),
+    "trust": ("100%: open with every detail. 70%: slightly guarded. 40%: "
+              "won't give budget or address until the bot explains why. "
+              "15%: suspicious, questions why everything is needed"),
+    "language_mix": ("100%: pure English. 70%: a few foreign words dropped "
+                     "in. 40%: heavy mixing of Arabic or Spanish mid-"
+                     "sentence. 15%: mostly Arabic or Spanish, little "
+                     "English"),
+    "typing": ("100%: clean text. 70%: casual, some typos. 40%: no "
+               "punctuation, abbreviations. 15%: voice-note-style fragments "
+               "('ya so bsically 25bd fr the big 1')"),
+    "focus": ("100%: stays on topic. 70%: brief tangents. 40%: drifts into "
+              "stories, needs redirecting. 15%: keeps asking the "
+              "interviewer questions back instead of answering"),
+}
+
+# Categorical dimensions, assigned (not left to chance) so coverage balances.
+CATEGORY_OPTIONS = {
+    "business_model": ["walk-in", "appointment-based", "B2B accounts",
+                       "online orders", "hybrid"],
+    "data_situation": ["all on paper", "phone notes", "spreadsheets",
+                       "real systems"],
+    "requested_scope": ["FAQ only", "lead capture", "booking", "ordering"],
+    "decision_structure": ["sole decider", "spouse must agree",
+                           "skeptical partner in background"],
+}
+
+# One-off special behaviors ('none' weighted 3x so most interviews stay
+# ordinary). drops_out is enforced by the engine via the exit token.
+BEHAVIOR_WEIGHT = {"none": 3, "drops_out": 1, "asks_meta": 1,
+                   "corrects_later": 1}
+DROP_TOKEN = "[LEFT_CONVERSATION]"
+BEHAVIOR_RULES = {
+    "none": "",
+    "drops_out": (f"SPECIAL BEHAVIOR: at a natural point roughly two thirds "
+                  f"of the way through the interview, you silently stop "
+                  f"responding — output exactly {DROP_TOKEN} and nothing "
+                  f"else. Never announce you are leaving first."),
+    "asks_meta": ("SPECIAL BEHAVIOR: two or three times during the "
+                  "interview, ask about the process itself (what will this "
+                  "bot cost me? is my data private? how long until it's "
+                  "ready?) before answering the question you were asked."),
+    "corrects_later": ("SPECIAL BEHAVIOR: early on, state one important "
+                       "fact slightly WRONG (a price or the closing hour). "
+                       "Several exchanges later, correct yourself "
+                       "unprompted ('wait, I said X before, it's actually "
+                       "Y')."),
+}
+
 GENERATOR_PROMPT = """Invent ONE fake business-owner persona for testing a
 chatbot-requirements interviewer. Make it MAXIMALLY DIFFERENT from these
 already generated in this batch: [{previous}]. Vary industry (food, trades,
@@ -87,6 +148,9 @@ health...), company size (solo up to ~30 staff), personality, language style
 
 GLOBAL COVERAGE SO FAR (every persona ever tested, across all tests):
 {coverage}
+ASSIGNED ATTRIBUTES — the persona MUST match these exactly, and the
+identity must be consistent with them:
+{assigned}
 BALANCE RULE: pick an industry, company size, language mix, and requested
 channels that are UNDER-represented or absent above, so total coverage
 across all tests stays balanced. Never repeat the most-tested industry.
@@ -152,15 +216,33 @@ def _bucket(v: float | None, edges: list) -> str | None:
     return edges[-1][1]
 
 
-def _coverage_summary() -> tuple[str, dict, dict]:
+def _coverage_summary() -> tuple[str, dict]:
     """What the whole archive has already tested, so a new sweep can balance
-    against it. Returns (text for the generator prompt, completeness-rung
-    counts, patience-rung counts)."""
+    against it. Returns (text for the generator prompt, per-dimension usage
+    counts for least-tested-first assignment)."""
     personas = store.sim_personas()
     ind, size, langs, chans = {}, {}, {}, {}
     know_counts = {r: 0 for r in COMPLETENESS_LADDER}
     pat_counts = {r: 0 for r in PATIENCE_LADDER}
+    ladder_counts = {n: {r: 0 for r in EXTRA_RUNGS} for n in EXTRA_LADDERS}
+    cat_counts = {n: {o: 0 for o in opts}
+                  for n, opts in CATEGORY_OPTIONS.items()}
+    beh_counts = {b: 0 for b in BEHAVIOR_WEIGHT}
     for p in personas:
+        try:
+            feats = json.loads(p.get("features") or "{}")
+        except Exception:
+            feats = {}
+        for n, r in (feats.get("ladders") or {}).items():
+            if n in ladder_counts and r in ladder_counts[n]:
+                ladder_counts[n][r] += 1
+        for n in CATEGORY_OPTIONS:
+            v = feats.get(n)
+            if v in cat_counts[n]:
+                cat_counts[n][v] += 1
+        b = feats.get("behavior")
+        if b in beh_counts:
+            beh_counts[b] += 1
         if p.get("industry"):
             ind[p["industry"]] = ind.get(p["industry"], 0) + 1
         s = p.get("company_size")
@@ -187,17 +269,85 @@ def _coverage_summary() -> tuple[str, dict, dict]:
             f"{k} x{v}" for k, v in sorted(m.items(), key=lambda e: -e[1])[:15])
     text = "\n".join([fmt("Industries", ind), fmt("Company sizes", size),
                       fmt("Languages", langs), fmt("Channels", chans)])
-    return text, know_counts, pat_counts
+    counts = {"know": know_counts, "pat": pat_counts,
+              "ladders": ladder_counts, "cats": cat_counts,
+              "beh": beh_counts}
+    return text, counts
 
 
 def start_test(kind: str, params: dict) -> dict:
-    if kind != "persona_sweep":
-        return {"error": f"unknown test kind {kind}"}
-    count = max(2, min(8, int(params.get("count") or 4)))
-    test_id = store.sim_create_test(kind, {"count": count})
-    threading.Thread(target=_run_sweep, args=(test_id, count),
-                     daemon=True).start()
-    return {"test_id": test_id}
+    if kind in ("persona_sweep", "stress"):
+        count = max(2, min(8, int(params.get("count") or 4)))
+        pin = None
+        if kind == "stress":
+            dim = str(params.get("dimension") or "patience")
+            try:
+                val = float(params.get("level") or 0.15)
+            except (TypeError, ValueError):
+                val = 0.15
+            pin = (dim, val)
+        test_id = store.sim_create_test(kind, {"count": count} | (
+            {"dimension": pin[0], "level": pin[1]} if pin else {}))
+        threading.Thread(target=_run_sweep, args=(test_id, count, pin),
+                         daemon=True).start()
+        return {"test_id": test_id}
+    if kind == "regression_pin":
+        base_id = int(params.get("base_test_id") or 0)
+        base = store.sim_test(base_id)
+        if not base or not base.get("run_ids"):
+            return {"error": f"base test {base_id} has no runs"}
+        test_id = store.sim_create_test(kind, {
+            "count": len(base["run_ids"]), "base_test_id": base_id})
+        threading.Thread(target=_run_regression, args=(test_id, base_id),
+                         daemon=True).start()
+        return {"test_id": test_id}
+    return {"error": f"unknown test kind {kind}"}
+
+
+def _run_regression(test_id: int, base_id: int) -> None:
+    """Re-run the EXACT personas of a previous test against the current bot
+    and diff the extraction scores — the true before/after instrument."""
+    from concurrent.futures import ThreadPoolExecutor
+    try:
+        base = store.sim_test(base_id)
+        base_runs = [store.sim_run(r) for r in base["run_ids"]]
+        persona_ids = [r["persona_id"] for r in base_runs if r]
+        from requirements_bot import RequirementsBot
+        bot_model = RequirementsBot.__init__.__defaults__[0]
+        store.sim_update_test(test_id, status="running", params={
+            "count": len(persona_ids), "base_test_id": base_id,
+            "models": {"bot": bot_model, "persona": PERSONA_MODEL}})
+        run_ids = [store.sim_create_run(pid) for pid in persona_ids]
+        store.sim_update_test(test_id, run_ids=run_ids)
+        with ThreadPoolExecutor(max_workers=len(run_ids)) as ex:
+            list(ex.map(lambda rp: _execute(rp[0], store.sim_persona(rp[1])),
+                        zip(run_ids, persona_ids)))
+        store.sim_update_test(test_id, status="analyzing")
+        lines = [f"# Regression vs Test {base_id}", "",
+                 "| Persona | Old score | New score | Delta | "
+                 "Newly captured | Newly missed |",
+                 "|---|---|---|---|---|---|"]
+        for old, rid in zip(base_runs, run_ids):
+            new = store.sim_run(rid)
+            om = set(old.get("missed") or [])
+            nm = set(new.get("missed") or [])
+            osc, nsc = old.get("score"), new.get("score")
+            delta = (f"{(nsc-osc)*100:+.0f}%"
+                     if osc is not None and nsc is not None else "—")
+            fmt_s = lambda s: f"{s*100:.0f}%" if s is not None else "—"
+            lines.append(
+                f"| {new['persona_name']} | {fmt_s(osc)} | {fmt_s(nsc)} | "
+                f"{delta} | {', '.join(sorted(om - nm)) or '—'} | "
+                f"{', '.join(sorted(nm - om)) or '—'} |")
+        runs_cost = sum((store.sim_run(r) or {}).get("cost_usd") or 0
+                        for r in run_ids)
+        store.sim_update_test(
+            test_id, status="completed", report="\n".join(lines),
+            cost_usd=round(runs_cost, 4), finished_ts=time.time())
+    except Exception as e:
+        store.sim_update_test(test_id, status="failed",
+                              error=f"{type(e).__name__}: {e}",
+                              finished_ts=time.time())
 
 
 def _usage_of(reply) -> dict:
@@ -286,7 +436,7 @@ def _reanalyze_exec(test_id: int) -> None:
                               finished_ts=time.time())
 
 
-def _run_sweep(test_id: int, count: int) -> None:
+def _run_sweep(test_id: int, count: int, pin: tuple | None = None) -> None:
     from concurrent.futures import ThreadPoolExecutor
     try:
         from langchain_anthropic import ChatAnthropic
@@ -315,16 +465,47 @@ def _run_sweep(test_id: int, count: int) -> None:
         # the generator is told what is over/under-tested, and the ladder
         # rungs are handed out least-tested-first so knowledge/patience
         # levels stay even across ALL tests, not just within one.
-        coverage_text, know_counts, pat_counts = _coverage_summary()
+        coverage_text, cov = _coverage_summary()
         persona_ids, summaries = [], []
         for i in range(count):
-            level = min(know_counts, key=lambda r: (know_counts[r], -r))
-            patience = min(pat_counts, key=lambda r: (pat_counts[r], -r))
-            know_counts[level] += 1
-            pat_counts[patience] += 1
+            level = min(cov["know"], key=lambda r: (cov["know"][r], -r))
+            patience = min(cov["pat"], key=lambda r: (cov["pat"][r], -r))
+            cov["know"][level] += 1
+            cov["pat"][patience] += 1
+            ladders = {}
+            for n in EXTRA_LADDERS:
+                r = min(cov["ladders"][n],
+                        key=lambda x: (cov["ladders"][n][x], -x))
+                cov["ladders"][n][r] += 1
+                ladders[n] = r
+            cats = {}
+            for n in CATEGORY_OPTIONS:
+                o = min(cov["cats"][n], key=lambda x: cov["cats"][n][x])
+                cov["cats"][n][o] += 1
+                cats[n] = o
+            behavior = min(cov["beh"],
+                           key=lambda b: cov["beh"][b] / BEHAVIOR_WEIGHT[b])
+            cov["beh"][behavior] += 1
+            # honor a stress-test pin: one dimension fixed for every persona
+            if pin:
+                dim, val = pin
+                if dim == "knowledge":
+                    level = val
+                elif dim == "patience":
+                    patience = val
+                elif dim in ladders:
+                    ladders[dim] = val
+            features = {"ladders": ladders, **cats, "behavior": behavior}
+            assigned = "\n".join(
+                [f"- {n}: {o}" for n, o in cats.items()]
+                + [f"- {n} level {int(r*100)}% ({EXTRA_LADDERS[n]})"
+                   for n, r in ladders.items()]
+                + ([f"- special behavior: {behavior}"]
+                   if behavior != "none" else []))
             prompt = (GENERATOR_PROMPT
                       .replace("{previous}", "; ".join(summaries) or "(none yet)")
                       .replace("{coverage}", coverage_text)
+                      .replace("{assigned}", assigned)
                       .replace("{fields}", field_names)
                       .replace("{pct}", str(int(level * 100))))
             # a reply without valid JSON must not kill the whole sweep:
@@ -358,12 +539,17 @@ def _run_sweep(test_id: int, count: int) -> None:
                 + "\n\nFIELDS THIS OWNER GENUINELY DOES NOT KNOW OR HAS NOT "
                 "DECIDED (answer honestly that you don't know when asked):\n"
                 + (", ".join(unknown) or "(none)")
-                + "\n" + PATIENCE_RULE.replace("{pct}", str(int(patience * 100))))
+                + "\n" + PATIENCE_RULE.replace("{pct}", str(int(patience * 100)))
+                + "\n\nBEHAVIORAL LADDERS (follow each at its level):\n"
+                + "\n".join(f"- {n} {int(r*100)}%: {EXTRA_LADDERS[n]}"
+                             for n, r in ladders.items())
+                + ("\n\n" + BEHAVIOR_RULES[behavior]
+                   if BEHAVIOR_RULES[behavior] else ""))
             persona_ids.append(store.sim_add_persona(
                 p.get("name", f"Persona {i+1}"), "ai", content,
                 industry=p.get("industry"), company_size=p.get("company_size"),
                 traits=p.get("traits"), identity=identity,
-                completeness=level, patience=patience))
+                completeness=level, patience=patience, features=features))
             summaries.append(f"{p.get('name')} ({p.get('industry')}, "
                              f"{p.get('company_size')})")
         # partial usage right away, so the UI can price each stage live
@@ -506,6 +692,12 @@ def _execute(run_id: int, persona: dict) -> None:
                 _acc(p_usage, pu)
                 if not owner_msg:
                     break
+            if DROP_TOKEN in owner_msg:
+                # the persona silently left — archive the fact and stop
+                transcript.append({"who": "persona",
+                                   "text": "(left the conversation)"})
+                store.sim_update_run(run_id, transcript=transcript)
+                break
             transcript.append({"who": "persona", "text": owner_msg})
             msgs, turn = bot.send(owner_msg)
             for m in msgs:

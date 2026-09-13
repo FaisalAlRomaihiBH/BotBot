@@ -737,14 +737,41 @@ body.view-clients #main{overflow:hidden}
         <select id="simt-kind">
           <option value="persona_sweep">Persona Sweep &amp; Analysis — N fake
             businesses interview the bot; AI analyzes all inputs and outputs,
-            reports problems and drafts the fixes</option></select>
-        <label>How many different business personas</label>
+            reports problems and drafts the fixes</option>
+          <option value="stress">Single-dimension stress test — every persona
+            pinned to one level of one dimension (isolates a variable)</option>
+          <option value="regression_pin">Regression pin — re-run the EXACT
+            personas of a previous test against the current bot and diff the
+            scores</option></select>
+        <span id="simt-f-count"><label>How many different business
+          personas</label>
         <input id="simt-count" type="number" min="2" max="8" value="4"
-          style="width:90px">
+          style="width:90px"></span>
+        <span id="simt-f-stress" style="display:none">
+          <label>Pinned dimension and level</label>
+          <span class="row">
+          <select id="simt-dim">
+            <option value="knowledge">Owner knowledge</option>
+            <option value="patience" selected>Patience</option>
+            <option value="consistency">Consistency</option>
+            <option value="clarity">Clarity</option>
+            <option value="trust">Trust</option>
+            <option value="language_mix">Language mix</option>
+            <option value="typing">Typing quality</option>
+            <option value="focus">Focus</option></select>
+          <select id="simt-level">
+            <option value="0.15" selected>15% — hardest case</option>
+            <option value="0.4">40%</option>
+            <option value="0.7">70%</option>
+            <option value="1.0">100% — best case</option></select></span></span>
+        <span id="simt-f-base" style="display:none">
+          <label>Base test number to re-run</label>
+          <input id="simt-base" type="number" min="1" style="width:90px"></span>
         <div class="row"><button class="act" id="simt-start">Start test</button>
           <button class="act" id="simt-cancel">Cancel</button>
           <span class="m" id="simt-note">estimated cost: ~$0.20-0.40 per
-            persona + ~$0.40-0.90 for the Opus analysis</span></div>
+            persona, plus the analysis (Haiku ~$0.10; regression pins skip
+            AI analysis entirely)</span></div>
       </div>
       <div id="sim-tests" style="flex:1;min-height:0;overflow-y:auto"></div>
     </div>
@@ -1215,12 +1242,29 @@ $('#sup-toggle').onclick = async () => {
 const simUI = {runs: [], tests: [], expanded: new Set()};
 $('#sim-addtest').onclick = () => $('#simt-form').classList.add('open');
 $('#simt-cancel').onclick = () => $('#simt-form').classList.remove('open');
+$('#simt-kind').onchange = () => {
+  const k = $('#simt-kind').value;
+  $('#simt-f-count').style.display = k === 'regression_pin' ? 'none' : '';
+  $('#simt-f-stress').style.display = k === 'stress' ? '' : 'none';
+  $('#simt-f-base').style.display = k === 'regression_pin' ? '' : 'none';
+};
 $('#simt-start').onclick = async () => {
-  const count = Math.max(2, Math.min(8, +$('#simt-count').value || 4));
+  const kind = $('#simt-kind').value;
+  const body = {kind};
+  if(kind === 'regression_pin'){
+    body.base_test_id = +$('#simt-base').value || 0;
+    if(!body.base_test_id) return;
+  } else {
+    body.count = Math.max(2, Math.min(8, +$('#simt-count').value || 4));
+    if(kind === 'stress'){
+      body.dimension = $('#simt-dim').value;
+      body.level = +$('#simt-level').value;
+    }
+  }
   $('#simt-form').classList.remove('open');
   await fetch('/api/sim/test', {method:'POST',
     headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({kind: 'persona_sweep', count})});
+    body: JSON.stringify(body)});
   loadSim();
 };
 const SIMT_STEPS = [
@@ -1258,7 +1302,8 @@ function ladderBucket(v, kind){
 function simAgg(runs){
   const industry = new Map(), size = new Map(), traits = new Map(),
     outcome = new Map(), know = new Map(), pat = new Map(),
-    langs = new Map(), chans = new Map();
+    langs = new Map(), chans = new Map(), beh = new Map(),
+    xl = {}, xc = {};
   for(const r of runs){
     count(industry, r.industry);
     count(size, sizeBucket(r.company_size));
@@ -1268,6 +1313,13 @@ function simAgg(runs){
     for(const w of TRAIT_WORDS)
       if(new RegExp('\\b' + w + '\\b').test(t)) count(traits, w);
     if(/language|arabic|spanish|mixes/.test(t)) count(traits, 'mixes languages');
+    const f = r.features || {};
+    for(const [n, v] of Object.entries(f.ladders || {}))
+      count(xl[n] = xl[n] || new Map(), Math.round(v*100)+'%');
+    for(const n of ['business_model','data_situation','requested_scope',
+                    'decision_structure'])
+      if(f[n]) count(xc[n] = xc[n] || new Map(), f[n]);
+    if(f.behavior && f.behavior !== 'none') count(beh, f.behavior);
     const id = r.identity || {};
     const asList = v => Array.isArray(v) ? v : (v == null ? [] : [v]);
     for(const l of asList(id.languages)) count(langs, String(l).slice(0, 16));
@@ -1276,8 +1328,15 @@ function simAgg(runs){
       : r.status === 'failed' ? 'failed'
       : r.interview_complete ? 'completed' : 'incomplete');
   }
-  return {industry, size, traits, outcome, know, pat, langs, chans};
+  return {industry, size, traits, outcome, know, pat, langs, chans,
+    beh, xl, xc};
 }
+const XL_LABELS = {consistency:'Consistency', clarity:'Clarity',
+  trust:'Trust', language_mix:'Language mix', typing:'Typing quality',
+  focus:'Focus'};
+const XC_LABELS = {business_model:'Business model',
+  data_situation:'Data situation', requested_scope:'Requested scope',
+  decision_structure:'Decision structure'};
 function fbar(title, map, denom, overlapping){
   if(!map.size) return '';
   const entries = [...map.entries()].sort((x, y) => y[1] - x[1]);
@@ -1418,6 +1477,11 @@ function simtCard(t){
       ${fbar('Company size', agg.size, n, false)}
       ${fbar('Owner knowledge', agg.know, n, false)}
       ${fbar('Patience', agg.pat, n, false)}
+      ${Object.entries(agg.xl).map(([k, m]) =>
+        fbar(XL_LABELS[k] || k, m, n, false)).join('')}
+      ${Object.entries(agg.xc).map(([k, m]) =>
+        fbar(XC_LABELS[k] || k, m, n, false)).join('')}
+      ${fbar('Special behavior', agg.beh, n, true)}
       ${fbar('Personality', agg.traits, n, true)}
       ${fbar('Languages', agg.langs, n, true)}
       ${fbar('Channels wanted', agg.chans, n, true)}
@@ -1431,8 +1495,12 @@ function simtCard(t){
       ${runs.map(simRunRow).join('')}</table></div>` : '';
   return `<div class="simt-card${open ? ' open' : ''}" data-tid="${t.id}">
     <div class="simt-top" role="button" tabindex="0" aria-expanded="${open}">
-      <span class="n">Test ${t.id} · Persona Sweep &amp; Analysis
-        (${t.params.count} personas)</span>
+      <span class="n">Test ${t.id} · ${t.kind === 'stress'
+        ? `Stress Test (${esc(t.params.dimension||'')} pinned at ${
+            Math.round((t.params.level||0)*100)}%, ${t.params.count} personas)`
+        : t.kind === 'regression_pin'
+        ? `Regression vs Test ${t.params.base_test_id}`
+        : `Persona Sweep &amp; Analysis (${t.params.count} personas)`}</span>
       <span class="ts">${new Date(t.started_ts*1000).toLocaleString()}</span>
       ${avgScore != null ? `<span class="ts" style="color:var(--green);
         font-weight:600" title="Average extraction score: of what each persona
@@ -1443,10 +1511,10 @@ function simtCard(t){
     ${Object.keys(models).length ? `<span class="sim-meta"
       style="margin-top:8px" title="The model line-up this test ran on — a
       registered dimension, so the same feature mix can be compared across
-      models between tests">${['generator','bot','persona','analyst']
+      models between tests"><span>${['generator','bot','persona','analyst']
       .filter(k => models[k]).map(k =>
-        `<span><span style="color:var(--muted)">${k}:</span> ${
-          esc(short(models[k]))}</span>`).join('')}</span>` : ''}
+        `<span style="color:var(--muted)">${k}:</span> ${
+          esc(short(models[k]))}`).join(' · ')}</span></span>` : ''}
     <div class="simt-path">${steps}</div>
     ${bars}
     ${table}
