@@ -152,6 +152,10 @@ body.view-log #main{overflow:hidden}
 #log-head .dot{width:11px;height:11px;border-radius:50%;flex:none}
 #log-head .t{font:600 11px var(--mono);color:var(--text2);margin-left:8px}
 #log-head .m{font:10px var(--mono);color:var(--muted);margin-left:auto}
+.log-filter{background:var(--panel2);border:1px solid var(--border);
+  color:var(--text2);border-radius:5px;padding:2px 6px;
+  font:10.5px var(--mono);max-width:140px;margin-left:8px}
+.log-filter:focus{outline:none;border-color:var(--border-hi)}
 #log-body{flex:1;overflow-y:auto;min-height:0;padding:12px 14px;
   font:11.5px/1.75 var(--mono);color:#c8c8c8;overflow-wrap:break-word}
 #log-body .ln{white-space:pre-wrap}
@@ -544,6 +548,13 @@ body.view-clients #main{overflow:hidden}
         <span class="dot" style="background:#fbbf24"></span>
         <span class="dot" style="background:#4ade80"></span>
         <span class="t">botbot — terminal (live event log)</span>
+        <select class="log-filter" id="lf-proj" aria-label="Filter by project">
+          <option value="">All projects</option></select>
+        <select class="log-filter" id="lf-client" aria-label="Filter by client">
+          <option value="">All clients</option></select>
+        <select class="log-filter" id="lf-bot" aria-label="Filter by bot">
+          <option value="">All bots</option>
+          <option value="RequirementBot">RequirementBot</option></select>
         <span class="m" id="log-meta">connecting…</span></div>
       <div id="log-body">Loading…</div>
     </div>
@@ -946,13 +957,39 @@ async function loadClients(){
 
 /* ================= Live Log (system-wide event feed) ================= */
 let logSig = '';
+const logFilter = {proj: '', client: '', bot: ''};
+for(const [id, key] of [['#lf-proj','proj'], ['#lf-client','client'],
+                        ['#lf-bot','bot']]){
+  $(id).onchange = e => { logFilter[key] = e.target.value; logSig = ''; loadLog(); };
+}
+function fillFilter(sel, values, fmt){
+  const el = $(sel), cur = el.value;
+  const opts = el.querySelectorAll('option:not(:first-child)');
+  if(opts.length === values.length) return;
+  opts.forEach(o => o.remove());
+  values.forEach(v => el.insertAdjacentHTML('beforeend',
+    `<option value="${v}">${fmt(v)}</option>`));
+  el.value = cur;
+}
 async function loadLog(){
   let events = [];
   try{ events = await (await fetch('/api/log')).json(); }
   catch(e){ $('#log-meta').textContent = 'disconnected'; return; }
   $('#log-meta').textContent = 'live · refreshes every 3s';
-  const sig = events.length
-    ? events[0].kind + events[0].seq + ':' + events.length : '0';
+  // filter dropdown choices come from the data itself
+  fillFilter('#lf-proj',
+    [...new Set(events.map(e => e.project_num).filter(n => n != null))]
+      .sort((a,b) => a-b), n => `PROJECT${n}`);
+  fillFilter('#lf-client',
+    [...new Set(events.map(e => e.client_id).filter(n => n != null))]
+      .sort((a,b) => a-b), n => `Client${n}`);
+  events = events.filter(e =>
+    (!logFilter.proj || String(e.project_num) === logFilter.proj)
+    && (!logFilter.client || String(e.client_id) === logFilter.client)
+    && (!logFilter.bot || e.kind === 'msg'));
+  const sig = (events.length
+    ? events[0].kind + events[0].seq + ':' + events.length : '0')
+    + JSON.stringify(logFilter);
   if(sig === logSig) return;   // nothing new — don't disturb the scroll
   logSig = sig;
   const body = $('#log-body');
@@ -987,9 +1024,12 @@ async function loadLog(){
     const cls = /fail|error/.test(e.type) ? ' err'
       : /review.requested|reset/.test(e.type) ? ' warn' : '';
     const dim = e.type === 'revision.committed' ? ' dim' : '';
+    // 'client'/'owner' role actors resolve to the real Client ID when known
+    const actor = (e.actor === 'client' || e.actor === 'owner')
+      && e.client_id != null ? `Client${e.client_id}` : e.actor;
     return `<div class="ln${dim}">${ts} <span class="prj">${
       esc(proj)}</span> <span class="ev${cls}">${esc(e.type)}</span> <span class="ac">(${
-      esc(e.actor)})</span>${detail ? ` <span class="dt">${esc(detail)}</span>` : ''}</div>`;
+      esc(actor)})</span>${detail ? ` <span class="dt">${esc(detail)}</span>` : ''}</div>`;
   }).join('');
   body.innerHTML = (lines
     || `<div class="ln dt">no recorded events yet — waiting…</div>`)
@@ -1620,7 +1660,7 @@ def review_payload(pid: str) -> dict:
 ALLOWED_EXTS = {".txt", ".md", ".csv", ".png", ".jpg", ".jpeg", ".webp", ".gif"}
 
 
-def save_uploads(pid: str, files: list) -> dict:
+def save_uploads(pid: str, files: list, actor: str = "client") -> dict:
     """Validated upload into the PROJECT's own materials dir."""
     import base64
     updir = controller.uploads_dir(pid)
@@ -1644,7 +1684,7 @@ def save_uploads(pid: str, files: list) -> dict:
         (updir / name).write_bytes(data)
         saved.append(name)
     if saved:
-        store.append_event(pid, "materials.uploaded", "owner", {"files": saved})
+        store.append_event(pid, "materials.uploaded", actor, {"files": saved})
     return {"saved": saved, "rejected": rejected}
 
 
@@ -1751,7 +1791,8 @@ class Handler(BaseHTTPRequestHandler):
                 if old:
                     store.revoke_client_session(old)
                 pid = store.create_project(
-                    "Client " + time.strftime("%Y-%m-%d %H:%M"))["id"]
+                    "Client " + time.strftime("%Y-%m-%d %H:%M"),
+                    actor="client")["id"]
                 store.set_project_state(pid, "interviewing")
                 token = store.create_client_session(pid)
                 extra = {"Set-Cookie": f"botbot_client={token}; Path=/; "
@@ -1836,7 +1877,7 @@ class Handler(BaseHTTPRequestHandler):
                 # First message: create the isolated interview exactly once
                 # and issue the session. Merely loading the page never does.
                 name = "Client " + time.strftime("%Y-%m-%d %H:%M")
-                pid = store.create_project(name)["id"]
+                pid = store.create_project(name, actor="client")["id"]
                 token = store.create_client_session(pid)
                 extra = {"Set-Cookie": f"botbot_client={token}; Path=/; "
                                        f"HttpOnly; SameSite=Lax"}
@@ -1860,7 +1901,7 @@ class Handler(BaseHTTPRequestHandler):
         if self.path == "/chat/send":
             out = chat_send(pid, str(req.get("message", "")).strip())
         elif self.path == "/chat/upload":
-            out = save_uploads(pid, req.get("files") or [])
+            out = save_uploads(pid, req.get("files") or [], actor="operator")
         elif self.path == "/chat/reset":
             out = controller.reset_interview(pid)
         elif self.path == "/api/projects":

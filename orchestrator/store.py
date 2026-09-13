@@ -144,7 +144,10 @@ def ensure_default_project() -> None:
             (DEFAULT_PROJECT, "Default project", "created", time.time()))
 
 
-def create_project(name: str) -> dict:
+def create_project(name: str, actor: str = "operator") -> dict:
+    """actor: 'operator' for console-created projects, 'client' when a
+    client starts one through the chat link — the event must say who
+    actually did it."""
     pid = "proj_" + uuid.uuid4().hex[:10]
     with _connect() as con:
         num = con.execute("SELECT COALESCE(MAX(num),0)+1 AS n FROM projects"
@@ -152,7 +155,7 @@ def create_project(name: str) -> dict:
         con.execute("INSERT INTO projects(id, name, state, created_ts, num) "
                     "VALUES(?,?,?,?,?)",
                     (pid, name, "created", time.time(), num))
-    append_event(pid, "project.created", "operator", {"name": name})
+    append_event(pid, "project.created", actor, {"name": name})
     return {"id": pid, "name": name, "state": "created", "num": num}
 
 
@@ -385,7 +388,9 @@ def recent_events_all(limit: int = 120) -> list[dict]:
     with _connect() as con:
         rows = con.execute(
             "SELECT e.seq, e.project_id, e.type, e.actor, e.payload, e.ts,"
-            " p.name AS project_name, p.num AS project_num"
+            " p.name AS project_name, p.num AS project_num,"
+            " (SELECT id FROM clients c WHERE c.project_id=e.project_id)"
+            "   AS client_id"
             " FROM events e LEFT JOIN projects p ON p.id = e.project_id"
             " ORDER BY e.seq DESC LIMIT ?", (limit,)).fetchall()
     return [dict(r) | {"payload": json.loads(r["payload"] or "{}")} for r in rows]

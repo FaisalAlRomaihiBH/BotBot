@@ -83,7 +83,7 @@ def send_interview_message(pid: str, message: str) -> dict:
                              "Start a new project for another interview."}
 
         store.add_message(pid, "interview", "owner", message)
-        store.append_event(pid, "message.received", "owner", {})
+        store.append_event(pid, "message.received", "client", {})
         if project["state"] in ("created",):
             store.set_project_state(pid, "interviewing")
 
