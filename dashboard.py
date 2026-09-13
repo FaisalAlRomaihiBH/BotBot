@@ -1307,9 +1307,7 @@ function renderFlows(){
           <span class="fc-flowstate">${f.finished
             ? `<span class="fs-done">✓</span> Completed`
             : `<span class="spin"></span>${esc(FLOW_STATE[f.current_stage]||'—')}`}</span>
-          <span class="fc-idbig" title="${esc(f.flow_id)}">Project #${f.num ?? '—'}${
-            f.project_name && f.project_name !== f.name
-              ? ` · ${esc(f.project_name)}` : ''}
+          <span class="fc-idbig" title="${esc(f.project_name || '')} · ${esc(f.flow_id)}">Project ${f.num ?? '—'}
             ${f.is_test ? `<span class="fc-test">Test</span>` : ''}</span>
           ${f.client_id != null
             ? `<span class="fc-client">Client ${f.client_id}</span>` : ''}
