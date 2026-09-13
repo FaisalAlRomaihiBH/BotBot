@@ -124,30 +124,30 @@ body.view-flows #flows{display:flex}
 body.view-log #log{display:flex}
 #flows{flex-direction:column;margin:14px 20px 20px;gap:12px;min-height:0}
 
-/* ---------- live log ---------- */
+/* ---------- live log: a terminal ---------- */
 body.view-log #main{overflow:hidden}
 #log{flex:1;flex-direction:column;margin:14px 20px 20px;min-height:0;
-  background:var(--panel);border:1px solid var(--border);border-radius:8px}
-#log-head{display:flex;align-items:center;gap:10px;padding:10px 16px;
-  border-bottom:1px solid var(--border)}
-#log-head .t{font:600 11px var(--sans);text-transform:uppercase;
-  letter-spacing:.07em;color:var(--text2)}
-#log-head .m{font:10.5px var(--mono);color:var(--muted);margin-left:auto}
-#log-body{flex:1;overflow-y:auto;min-height:0}
-#log-body table{width:100%;border-collapse:collapse;font-size:12px}
-#log-body th{position:sticky;top:0;background:var(--panel);z-index:1;
-  font:600 10px var(--sans);text-transform:uppercase;letter-spacing:.06em;
-  color:var(--muted);text-align:left;padding:8px 14px;
-  border-bottom:1px solid var(--border)}
-#log-body td{padding:6px 14px;border-bottom:1px solid var(--border);
-  vertical-align:top;color:var(--text2)}
-#log-body td.lt{font:10.5px var(--mono);color:var(--muted);white-space:nowrap}
-#log-body td.lp{white-space:nowrap;color:var(--text)}
-#log-body td.le{font:11.5px var(--mono);color:var(--accent)}
-#log-body td.le.err{color:var(--red)}
-#log-body td.la{font:11px var(--mono)}
-#log-body td.ld{font:10.5px var(--mono);max-width:340px;overflow:hidden;
-  text-overflow:ellipsis;white-space:nowrap}
+  background:#0a0a0a;border:1px solid var(--border);border-radius:8px;
+  overflow:hidden}
+#log-head{display:flex;align-items:center;gap:7px;padding:8px 14px;
+  background:var(--panel);border-bottom:1px solid var(--border)}
+#log-head .dot{width:11px;height:11px;border-radius:50%;flex:none}
+#log-head .t{font:600 11px var(--mono);color:var(--text2);margin-left:8px}
+#log-head .m{font:10px var(--mono);color:var(--muted);margin-left:auto}
+#log-body{flex:1;overflow-y:auto;min-height:0;padding:12px 14px;
+  font:11.5px/1.75 var(--mono);color:#c8c8c8;overflow-wrap:break-word}
+#log-body .ln{white-space:pre-wrap}
+#log-body .ts{color:#5c6370}
+#log-body .pr{color:#61afef}
+#log-body .ev{color:#98c379}
+#log-body .ev.err{color:#e06c75;font-weight:600}
+#log-body .ev.warn{color:#e5c07b}
+#log-body .ac{color:#c678dd}
+#log-body .dt{color:#7f848e}
+#log-body .cursor{display:inline-block;width:7px;height:13px;
+  background:#98c379;vertical-align:-2px;animation:blink 1.1s step-end infinite}
+@keyframes blink{50%{opacity:0}}
+@media (prefers-reduced-motion:reduce){#log-body .cursor{animation:none}}
 
 /* ---------- chatbot flow cards ---------- */
 #flows-list{display:flex;flex-direction:column;gap:12px}
@@ -475,7 +475,7 @@ body.view-log #run-header{display:none}
       <button id="sb-toggle" title="Collapse">⟨⟩</button></div>
     <nav id="sb-nav">
       <div class="nav-item active" id="nav-home" data-view="home"><span class="nav-ico">◎</span><span class="nav-label">Home</span></div>
-      <div class="nav-item" id="nav-log" data-view="log"><span class="nav-ico">≡</span><span class="nav-label">Live Log</span></div>
+      <div class="nav-item" id="nav-log" data-view="log"><span class="nav-ico">&gt;_</span><span class="nav-label">Terminal</span></div>
       <div class="nav-item" id="nav-flows" data-view="flows"><span class="nav-ico">⇶</span><span class="nav-label">Chatbot Flows</span></div>
     </nav>
     <div id="sb-foot">
@@ -503,8 +503,12 @@ body.view-log #run-header{display:none}
     </div>
 
     <div id="log">
-      <div id="log-head"><span class="t">Live Log</span>
-        <span class="m" id="log-meta">refreshes every 3s</span></div>
+      <div id="log-head">
+        <span class="dot" style="background:#f87171"></span>
+        <span class="dot" style="background:#fbbf24"></span>
+        <span class="dot" style="background:#4ade80"></span>
+        <span class="t">botbot — terminal (live event log)</span>
+        <span class="m" id="log-meta">connecting…</span></div>
       <div id="log-body">Loading…</div>
     </div>
 
@@ -565,7 +569,7 @@ $('#sb-toggle').onclick = () => {
   if(document.body.className === 'view-home') renderGraph();
 };
 const VIEW_TITLES = {home:'Operations', flows:'Chatbot Flows',
-  chat:'Owner Test Chat', log:'Live Log'};
+  chat:'Owner Test Chat', log:'Terminal'};
 function showView(view){
   document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('active'));
   document.getElementById('nav-' + (view === 'chat' ? 'flows' : view))
@@ -884,26 +888,34 @@ let logSig = '';
 async function loadLog(){
   let events = [];
   try{ events = await (await fetch('/api/log')).json(); }
-  catch(e){ $('#log-meta').textContent = 'server unreachable'; return; }
-  $('#log-meta').textContent = 'refreshes every 3s · newest first';
+  catch(e){ $('#log-meta').textContent = 'disconnected'; return; }
+  $('#log-meta').textContent = 'live · refreshes every 3s';
   const sig = events.length ? String(events[0].seq) + ':' + events.length : '0';
   if(sig === logSig) return;   // nothing new — don't disturb the scroll
   logSig = sig;
-  const rows = events.map(e => {
+  const body = $('#log-body');
+  // terminal semantics: oldest at the top, newest at the prompt line; stick
+  // to the bottom unless the user has scrolled up to read history
+  const stick = body.scrollHeight - body.scrollTop - body.clientHeight < 40
+    || !body.dataset.filled;
+  const lines = events.slice().reverse().map(e => {
     const detail = Object.entries(e.payload||{})
-      .map(([k,v]) => `${k}=${typeof v==='object'?JSON.stringify(v):v}`).join(' · ');
-    const proj = e.project_id === '__system__' ? '(system)'
+      .map(([k,v]) => `${k}=${typeof v==='object'?JSON.stringify(v):v}`).join(' ');
+    const proj = e.project_id === '__system__' ? 'system'
       : e.project_num != null
-        ? `#${e.project_num}${e.project_name ? ' · '+e.project_name : ''}` : '—';
-    const err = /fail|error/.test(e.type) ? ' err' : '';
-    return `<tr><td class="lt">${new Date(e.ts*1000).toLocaleTimeString()}</td>
-      <td class="lp">${esc(proj)}</td><td class="le${err}">${esc(e.type)}</td>
-      <td class="la">${esc(e.actor)}</td><td class="ld" title="${esc(detail)}">${esc(detail)}</td></tr>`;
+        ? `#${e.project_num}${e.project_name ? ':'+e.project_name : ''}` : '?';
+    const cls = /fail|error/.test(e.type) ? ' err'
+      : /review.requested|reset/.test(e.type) ? ' warn' : '';
+    return `<div class="ln"><span class="ts">[${
+      new Date(e.ts*1000).toLocaleTimeString('en-GB')}]</span> <span class="pr">${
+      esc(proj)}</span> <span class="ev${cls}">${esc(e.type)}</span> <span class="ac">(${
+      esc(e.actor)})</span>${detail ? ` <span class="dt">${esc(detail)}</span>` : ''}</div>`;
   }).join('');
-  $('#log-body').innerHTML = events.length
-    ? `<table><tr><th>Time</th><th>Project</th><th>Event</th><th>Actor</th>
-        <th>Detail</th></tr>${rows}</table>`
-    : '<div style="padding:30px;text-align:center;color:var(--muted)">No recorded events yet.</div>';
+  body.innerHTML = (lines
+    || `<div class="ln dt">no recorded events yet — waiting…</div>`)
+    + `<div class="ln"><span class="pr">$</span> <span class="cursor"></span></div>`;
+  body.dataset.filled = '1';
+  if(stick) body.scrollTop = body.scrollHeight;
 }
 
 /* ================= Chatbot Flows (monitoring, read-only) ================= */
