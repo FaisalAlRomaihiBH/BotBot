@@ -183,9 +183,9 @@ body.view-log #main{overflow:hidden}
   overflow-x:auto}
 .fc-step{flex:1;min-width:150px;display:flex;flex-direction:column;
   align-items:center;text-align:center;position:relative}
-/* the Interview step carries the two fixed 200px metric cards: reserve the
-   room for them, otherwise the centered overflow clips the left card */
-.fc-step:first-child{min-width:430px}
+/* the Interview step carries the stacked metric cards: just enough room
+   for the single narrow column, so the path keeps its width for the rest */
+.fc-step:first-child{min-width:230px}
 .fc-step .cn{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--border);
   background:var(--panel2);display:grid;place-items:center;
   font:600 12px var(--mono);color:var(--muted);z-index:1;position:relative}
@@ -210,15 +210,18 @@ body.view-log #main{overflow:hidden}
 .fc-step .mcard{display:flex;flex-direction:column;align-items:center;gap:6px;
   border:1px solid var(--border);border-radius:10px;background:var(--panel2);
   padding:10px 12px;width:158px;flex:none}
-/* GROUPED metric cards: Messages | Timing | Cost — related facts live in
-   one card, each fact a fixed-height label/value line, View pinned at the
-   bottom; cards stretch to equal height so the three boxes stay aligned */
+/* GROUPED metric cards: Messages / Timing / Cost — related facts live in
+   one card. Cards STACK vertically in one narrow column so the step stays
+   slim, and every line is the same fixed-size label/value row. */
+.fc-step .mstack{flex-direction:column;align-items:stretch;width:186px;
+  gap:8px}
+.fc-step .mstack .mcard{width:100%}
 .fc-step .mhdr{font:600 8.5px var(--sans);font-style:normal;
   text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
 .fc-step .mkv{display:flex;justify-content:space-between;align-items:center;
-  width:100%;min-height:18px;font:10.5px var(--mono);color:var(--text2)}
-.fc-step .mkv b{color:var(--text);font-weight:500;white-space:nowrap}
-.fc-step .mtotal{font:600 15px var(--mono);color:var(--text)}
+  width:100%;min-height:18px;font:11px var(--mono);color:var(--text2)}
+.fc-step .mkv b{color:var(--text);font-weight:500;white-space:nowrap;
+  font-size:11px}
 .fc-step .mmodel{font:9.5px var(--mono);color:var(--muted);margin-top:2px;
   border:1px solid var(--border);border-radius:99px;padding:1px 8px}
 /* View pins to the card bottom; cards stretch to equal height */
@@ -1029,7 +1032,7 @@ function renderFlows(){
             <em>Model</em><b>${esc(m.model||'—')}</b></span>
         </span>` : ''}
 
-        ${t.id==='interviewing' && m && m.calls ? `<span class="mrow">
+        ${t.id==='interviewing' && m && m.calls ? `<span class="mrow mstack">
           <span class="mcard">
             <em class="mhdr">Messages</em>
             <span class="mkv" title="Messages received from the client">
@@ -1037,7 +1040,7 @@ function renderFlows(){
             <span class="mkv" title="Messages the bot sent">
               <span>Sent</span><b>${m.msgs_sent ?? '—'}</b></span>
             <span class="mjson"><a href="#" data-viewer="input"
-              data-pid="${f.flow_id}">View conversation</a></span>
+              data-pid="${f.flow_id}">View Input</a></span>
           </span>
           <span class="mcard">
             <em class="mhdr">Timing</em>
@@ -1052,8 +1055,9 @@ function renderFlows(){
           </span>
           <span class="mcard">
             <em class="mhdr">Cost</em>
-            <span class="mtotal" title="Total cost of this stage so far">${
-              m.cost_usd!=null ? '$'+m.cost_usd.toFixed(2) : '—'}</span>
+            <span class="mkv" title="Total cost of this stage so far">
+              <span>Total</span><b>${m.cost_usd!=null
+                ? '$'+m.cost_usd.toFixed(2) : '—'}</b></span>
             <span class="mkv" title="Input side (conversation fed into the model)">
               <span>Human</span><b>${m.cost_in_usd!=null
                 ? '$'+m.cost_in_usd.toFixed(2) : '—'}</b></span>
@@ -1063,7 +1067,7 @@ function renderFlows(){
             <span class="mkv" title="Input and output tokens">
               <span>In · Out</span><b>${fmtTok(m.tokens_in)} · ${fmtTok(m.tokens_out)}</b></span>
             ${f.head_rev ? `<span class="mjson"><a href="#" data-viewer="output"
-              data-pid="${f.flow_id}" data-rev="${f.head_rev}">View brief</a></span>` : ''}
+              data-pid="${f.flow_id}" data-rev="${f.head_rev}">View Output</a></span>` : ''}
           </span>
         </span>` : ''}
         </div></div>`;
