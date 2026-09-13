@@ -132,6 +132,18 @@ def _connect() -> sqlite3.Connection:
             con.execute(f"ALTER TABLE sim_personas ADD COLUMN {col} TEXT")
         except sqlite3.OperationalError:
             pass  # already present
+    # additive migration: full schema-shaped ground-truth identity + how
+    # complete it deliberately is (the completeness ladder), and per-run
+    # extraction scoring against that ground truth
+    for tbl, col, typ in (("sim_personas", "identity", "TEXT"),
+                          ("sim_personas", "completeness", "REAL"),
+                          ("sim_personas", "patience", "REAL"),
+                          ("sim_runs", "score", "REAL"),
+                          ("sim_runs", "missed", "TEXT")):
+        try:
+            con.execute(f"ALTER TABLE {tbl} ADD COLUMN {col} {typ}")
+        except sqlite3.OperationalError:
+            pass  # already present
     # additive migration: human-friendly sequential project number (display
     # identity; the stable internal id is unchanged). Backfilled by creation
     # order the first time.
@@ -463,12 +475,18 @@ def last_provider_event() -> dict | None:
 def sim_add_persona(name: str, kind: str, content: str,
                     industry: str | None = None,
                     company_size: str | None = None,
-                    traits: str | None = None) -> int:
+                    traits: str | None = None,
+                    identity: dict | None = None,
+                    completeness: float | None = None,
+                    patience: float | None = None) -> int:
     with _connect() as con:
         cur = con.execute(
             "INSERT INTO sim_personas(name, kind, content, industry, "
-            "company_size, traits, created_ts) VALUES(?,?,?,?,?,?,?)",
-            (name, kind, content, industry, company_size, traits, time.time()))
+            "company_size, traits, identity, completeness, patience, "
+            "created_ts) VALUES(?,?,?,?,?,?,?,?,?,?)",
+            (name, kind, content, industry, company_size, traits,
+             json.dumps(identity, ensure_ascii=False) if identity else None,
+             completeness, patience, time.time()))
         return cur.lastrowid
 
 
@@ -500,7 +518,7 @@ def sim_update_run(run_id: int, **fields) -> None:
     for k, v in fields.items():
         keys.append(f"{k}=?")
         vals.append(json.dumps(v, ensure_ascii=False)
-                    if k in ("transcript", "brief", "usage") else v)
+                    if k in ("transcript", "brief", "usage", "missed") else v)
     with _connect() as con:
         con.execute(f"UPDATE sim_runs SET {', '.join(keys)} WHERE id=?",
                     (*vals, run_id))
@@ -511,16 +529,18 @@ def sim_runs(limit: int = 300) -> list[dict]:
         rows = con.execute(
             "SELECT r.id, r.persona_id, r.status, r.interview_complete,"
             " r.cost_usd, r.error, r.started_ts, r.finished_ts, r.usage,"
-            " r.brief IS NOT NULL AS has_brief,"
+            " r.score, r.missed, r.brief IS NOT NULL AS has_brief,"
             " json_array_length(r.transcript) AS turns,"
             " p.name AS persona_name, p.kind AS persona_kind,"
-            " p.industry, p.company_size, p.traits"
+            " p.industry, p.company_size, p.traits, p.identity,"
+            " p.completeness, p.patience"
             " FROM sim_runs r JOIN sim_personas p ON p.id=r.persona_id"
             " ORDER BY r.id DESC LIMIT ?", (limit,)).fetchall()
     out = []
     for r in rows:
         d = dict(r)
-        d["usage"] = json.loads(d["usage"]) if d["usage"] else None
+        for k in ("usage", "missed", "identity"):
+            d[k] = json.loads(d[k]) if d[k] else None
         out.append(d)
     return out
 

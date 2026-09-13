@@ -54,21 +54,57 @@ Rules:
 GENERATOR_MODEL = "claude-sonnet-5"
 ANALYST_MODEL = "claude-opus-5"
 
-GENERATOR_PROMPT = """Generate {count} MAXIMALLY DIFFERENT fake business-owner
-personas for testing a chatbot-requirements interviewer. Vary aggressively:
-industry (food, trades, professional services, retail, beauty, automotive,
-events, manufacturing, health...), company size (solo up to ~30 staff),
-personality (patient/impatient, chatty/terse, tech-savvy/technophobe,
-suspicious/trusting), and communication style (some mix Arabic or Spanish
-words in). Each persona must include concrete facts: services with real
-prices, hours, team, location, a reason they want a chatbot, a rough budget.
+# The completeness ladder: how much of their own business each persona in a
+# batch actually knows. Spread across the batch so every sweep tests both
+# owners who know everything and owners who barely know anything.
+COMPLETENESS_LADDER = [1.0, 0.85, 0.7, 0.55, 0.4, 0.25, 0.9, 0.6]
+# ...and independently, how much conversation each persona tolerates: 1.0
+# chats happily and answers richly; 0.15 wants it over in a handful of
+# messages and starts pushing back. Interleaved so knowledge and patience
+# combinations vary across a batch (a knowledgeable-but-impatient owner is
+# a different test than a clueless-but-chatty one).
+PATIENCE_LADDER = [0.9, 0.3, 0.6, 0.15, 1.0, 0.45, 0.75, 0.2]
 
-Output ONLY a JSON array, each element:
-{{"name": "<short persona name>", "industry": "<industry>",
-  "company_size": "<e.g. solo / 3 staff / 12 staff>",
+PATIENCE_RULE = """
+PATIENCE LEVEL: {pct}% —
+- 80-100%: happy to talk, gives long detailed answers, volunteers extras.
+- 50-79%: cooperative but efficient; short answers; occasionally asks how
+  many more questions there are.
+- 25-49%: impatient; 1-sentence answers; after ~10 questions starts pushing
+  ("can we wrap this up?"), skips details unless pressed.
+- below 25%: wants this over NOW; minimal answers; after ~6 questions
+  demands it finish and threatens to leave; ignores non-essential questions."""
+
+GENERATOR_PROMPT = """Invent ONE fake business-owner persona for testing a
+chatbot-requirements interviewer. Make it MAXIMALLY DIFFERENT from these
+already generated in this batch: [{previous}]. Vary industry (food, trades,
+professional services, retail, beauty, automotive, events, manufacturing,
+health...), company size (solo up to ~30 staff), personality, language style
+(some mix Arabic or Spanish words in).
+
+Build the persona's GROUND-TRUTH IDENTITY as a JSON object using EXACTLY
+these field names (this is the interviewer's output schema):
+{fields}
+
+COMPLETENESS TARGET: this owner knows about {pct}% of their own business.
+- Fill about {pct}% of the fields that APPLY to this business with concrete,
+  internally consistent values (real prices with currency, real hours, named
+  team members, a numeric budget...). Lists of objects may be simplified to
+  lists of descriptive strings.
+- Every remaining APPLICABLE field goes into unknown_fields: things this
+  owner genuinely has not decided or does not know ("no idea what budget",
+  "hours change weekly, never fixed them"). During the interview they will
+  honestly say they don't know these.
+- Fields that DO NOT APPLY to this business (e.g. venue_capacity for a
+  remote consultant): omit them entirely, and do NOT count them in the
+  percentage.
+
+Output ONLY one JSON object:
+{{"name": "<owner name>", "industry": "<industry>",
+  "company_size": "<solo / 3 staff / 12 staff ...>",
   "traits": "<personality + communication style, one line>",
-  "profile": "<8-14 sentences: the full identity, facts, and voice the
-              roleplayer will use>"}}"""
+  "identity": {{...ground truth...}},
+  "unknown_fields": ["<field name>", ...]}}"""
 
 ANALYST_PROMPT = """You are an expert conversation designer and product
 analyst. Below: the CURRENT interviewer system prompt, the CURRENT output
@@ -128,19 +164,42 @@ def _run_sweep(test_id: int, count: int) -> None:
         from langchain_core.messages import HumanMessage
         from requirements_bot import _blocks_to_text
 
-        # 1) generate the fake identities (registered with industry/size/traits)
+        # 1) generate the fake identities: full schema-shaped ground truth,
+        # each persona at its own rung of the completeness ladder
+        from models import BusinessRequirements
+        field_names = ", ".join(BusinessRequirements.model_fields)
         store.sim_update_test(test_id, status="generating")
         gen = ChatAnthropic(model=GENERATOR_MODEL, max_tokens=8000)
-        reply = gen.invoke([HumanMessage(
-            content=GENERATOR_PROMPT.replace("{count}", str(count)))])
-        g_usage = _usage_of(reply)
-        text = _blocks_to_text(reply.content)
-        text = text[text.index("["):text.rindex("]") + 1]
-        personas = json.loads(text)[:count]
-        persona_ids = [store.sim_add_persona(
-            p.get("name", f"Persona {i+1}"), "ai", p.get("profile", ""),
-            industry=p.get("industry"), company_size=p.get("company_size"),
-            traits=p.get("traits")) for i, p in enumerate(personas)]
+        g_usage = {"fresh_in": 0, "cache_read": 0, "cache_write": 0, "out": 0}
+        persona_ids, summaries = [], []
+        for i in range(count):
+            level = COMPLETENESS_LADDER[i % len(COMPLETENESS_LADDER)]
+            patience = PATIENCE_LADDER[i % len(PATIENCE_LADDER)]
+            reply = gen.invoke([HumanMessage(content=(
+                GENERATOR_PROMPT
+                .replace("{previous}", "; ".join(summaries) or "(none yet)")
+                .replace("{fields}", field_names)
+                .replace("{pct}", str(int(level * 100)))))])
+            _acc(g_usage, _usage_of(reply))
+            text = _blocks_to_text(reply.content)
+            p = json.loads(text[text.index("{"):text.rindex("}") + 1])
+            identity = p.get("identity") or {}
+            unknown = p.get("unknown_fields") or []
+            content = (
+                "GROUND-TRUTH IDENTITY (JSON — everything this owner knows "
+                "about their business):\n"
+                + json.dumps(identity, ensure_ascii=False, indent=1)
+                + "\n\nFIELDS THIS OWNER GENUINELY DOES NOT KNOW OR HAS NOT "
+                "DECIDED (answer honestly that you don't know when asked):\n"
+                + (", ".join(unknown) or "(none)")
+                + "\n" + PATIENCE_RULE.replace("{pct}", str(int(patience * 100))))
+            persona_ids.append(store.sim_add_persona(
+                p.get("name", f"Persona {i+1}"), "ai", content,
+                industry=p.get("industry"), company_size=p.get("company_size"),
+                traits=p.get("traits"), identity=identity,
+                completeness=level, patience=patience))
+            summaries.append(f"{p.get('name')} ({p.get('industry')}, "
+                             f"{p.get('company_size')})")
 
         # 2) run every interview (in parallel, live-archived like any run)
         store.sim_update_test(test_id, status="running")
@@ -229,6 +288,30 @@ def _acc(total: dict, u: dict) -> None:
         total[k] += u.get(k, 0)
 
 
+def _empty(v) -> bool:
+    return v is None or v == [] or v == {} or (isinstance(v, str) and not v.strip())
+
+
+def _score_run(persona: dict, brief: dict | None) -> tuple[float | None, list]:
+    """Extraction score against the persona's ground-truth identity: of the
+    fields the owner actually KNEW, how many did the interview capture?
+    Returns (score 0..1, missed field names). None when there is no ground
+    truth (scripted/legacy personas) or no brief."""
+    identity = persona.get("identity")
+    if isinstance(identity, str):
+        try:
+            identity = json.loads(identity)
+        except Exception:
+            identity = None
+    if not identity or not brief:
+        return None, []
+    known = [k for k, v in identity.items() if not _empty(v) and k in brief]
+    if not known:
+        return None, []
+    missed = [k for k in known if _empty(brief.get(k))]
+    return round(1 - len(missed) / len(known), 3), missed
+
+
 def _execute(run_id: int, persona: dict) -> None:
     transcript: list[dict] = []
     p_usage = {"fresh_in": 0, "cache_read": 0, "cache_write": 0, "out": 0}
@@ -275,11 +358,13 @@ def _execute(run_id: int, persona: dict) -> None:
         cost += (store._cost_usd(PERSONA_MODEL, p_usage["fresh_in"],
                                  p_usage["cache_read"], p_usage["cache_write"],
                                  p_usage["out"]) or 0.0)
+        brief = turn.requirements.model_dump() if turn else None
+        score, missed = _score_run(persona, brief)
         store.sim_update_run(
             run_id, status="completed",
             interview_complete=int(bot.complete),
-            transcript=transcript,
-            brief=turn.requirements.model_dump() if turn else None,
+            transcript=transcript, brief=brief,
+            score=score, missed=missed,
             usage={"bot": bot.usage, "persona": p_usage},
             cost_usd=round(cost, 4), finished_ts=time.time())
     except Exception as e:

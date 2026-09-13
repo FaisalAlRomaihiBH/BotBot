@@ -1188,21 +1188,36 @@ function sizeBucket(s){
   return '16+ staff';
 }
 function count(map, key){ if(key) map.set(key, (map.get(key)||0)+1); }
+function ladderBucket(v, kind){
+  if(v == null) return null;
+  const p = Math.round(v * 100);
+  if(kind === 'know')
+    return p >= 90 ? 'knows everything' : p >= 65 ? 'knows most'
+      : p >= 45 ? 'knows half' : 'knows little';
+  return p >= 80 ? 'very patient' : p >= 50 ? 'cooperative'
+    : p >= 25 ? 'impatient' : 'wants it over';
+}
 function simAgg(runs){
   const industry = new Map(), size = new Map(), traits = new Map(),
-    outcome = new Map();
+    outcome = new Map(), know = new Map(), pat = new Map(),
+    langs = new Map(), chans = new Map();
   for(const r of runs){
     count(industry, r.industry);
     count(size, sizeBucket(r.company_size));
+    count(know, ladderBucket(r.completeness, 'know'));
+    count(pat, ladderBucket(r.patience, 'pat'));
     const t = (r.traits||'').toLowerCase();
     for(const w of TRAIT_WORDS)
       if(new RegExp('\\b' + w + '\\b').test(t)) count(traits, w);
     if(/language|arabic|spanish|mixes/.test(t)) count(traits, 'mixes languages');
+    const id = r.identity || {};
+    for(const l of (id.languages || [])) count(langs, String(l).slice(0, 16));
+    for(const c of (id.channels || [])) count(chans, String(c).slice(0, 18));
     count(outcome, r.status === 'running' ? 'running'
       : r.status === 'failed' ? 'failed'
       : r.interview_complete ? 'completed' : 'incomplete');
   }
-  return {industry, size, traits, outcome};
+  return {industry, size, traits, outcome, know, pat, langs, chans};
 }
 function fbar(title, map, denom, overlapping){
   if(!map.size) return '';
@@ -1231,12 +1246,21 @@ function simRunRow(r){
     <td style="color:var(--text)">${esc(r.persona_name)}</td>
     <td>${esc(r.industry || '—')}</td>
     <td>${esc(sizeBucket(r.company_size) || '—')}</td>
-    <td style="max-width:220px">${esc(r.traits || '—')}</td>
+    <td class="mono">${r.completeness != null
+      ? Math.round(r.completeness*100)+'%' : '—'}</td>
+    <td class="mono">${r.patience != null
+      ? Math.round(r.patience*100)+'%' : '—'}</td>
+    <td class="mono" ${r.missed && r.missed.length ? `title="Missed: ${
+      esc(r.missed.join(', '))}"` : ''}>${r.score != null
+      ? `<span style="color:${r.score >= .8 ? 'var(--green)'
+          : r.score >= .5 ? 'var(--amber)' : 'var(--red)'}">${
+          Math.round(r.score*100)}%</span>` : '—'}</td>
     <td>${st}</td>
     <td class="mono">${r.turns ?? 0}</td>
     <td class="mono">${r.cost_usd != null ? '$'+r.cost_usd.toFixed(2) : '—'}</td>
     <td class="mono">${dur}</td>
-    <td><button class="act" onclick="event.stopPropagation();simView(${r.id},'transcript')">Input</button>
+    <td style="white-space:nowrap"><button class="act" onclick="event.stopPropagation();simView(${r.id},'identity')">Identity</button>
+      <button class="act" onclick="event.stopPropagation();simView(${r.id},'transcript')">Input</button>
       ${r.has_brief ? `<button class="act" onclick="event.stopPropagation();simView(${r.id},'brief')">Output</button>` : ''}</td>
   </tr>`;
 }
@@ -1266,21 +1290,33 @@ function simtCard(t){
   }).join('');
   const agg = simAgg(runs);
   const n = runs.length || 1;
+  const scored = runs.filter(r => r.score != null);
+  const avgScore = scored.length
+    ? Math.round(scored.reduce((s, r) => s + r.score, 0) / scored.length * 100)
+    : null;
   const bars = runs.length ? `<div class="fbars">
       ${fbar('Industry', agg.industry, n, false)}
       ${fbar('Company size', agg.size, n, false)}
+      ${fbar('Owner knowledge', agg.know, n, false)}
+      ${fbar('Patience', agg.pat, n, false)}
       ${fbar('Personality', agg.traits, n, true)}
+      ${fbar('Languages', agg.langs, n, true)}
+      ${fbar('Channels wanted', agg.chans, n, true)}
       ${fbar('Interview outcome', agg.outcome, n, false)}
     </div>` : '';
   const table = open && runs.length ? `<div class="simt-table">
-    <table><tr><th>Persona</th><th>Industry</th><th>Size</th><th>Traits</th>
-      <th>Status</th><th>Turns</th><th>Cost</th><th>Duration</th><th></th></tr>
+    <table><tr><th>Persona</th><th>Industry</th><th>Size</th><th>Knows</th>
+      <th>Patience</th><th>Score</th><th>Status</th><th>Turns</th><th>Cost</th>
+      <th>Duration</th><th></th></tr>
       ${runs.map(simRunRow).join('')}</table></div>` : '';
   return `<div class="simt-card${open ? ' open' : ''}" data-tid="${t.id}">
     <div class="simt-top" role="button" tabindex="0" aria-expanded="${open}">
       <span class="n">Test ${t.id} · Persona Sweep &amp; Analysis
         (${t.params.count} personas)</span>
       <span class="ts">${new Date(t.started_ts*1000).toLocaleString()}</span>
+      ${avgScore != null ? `<span class="ts" style="color:var(--green);
+        font-weight:600" title="Average extraction score: of what each persona
+        actually knew, how much the interview captured">score ${avgScore}%</span>` : ''}
       <span class="cost">${t.cost_usd != null ? '$'+t.cost_usd.toFixed(2) : ''}</span>
       <span class="chev">${open ? '▾' : '▸'}</span></div>
     ${bars}
@@ -1304,6 +1340,12 @@ async function simReport(id){
 async function simView(id, what){
   const d = await (await fetch('/api/sim/run_detail?id='+id)).json();
   $('#viewer-dl').innerHTML = '';
+  if(what === 'identity'){
+    $('#viewer-title').textContent = `Run #${id} — ground-truth identity · ${d.persona_name}`;
+    $('#viewer-pre').textContent = d.persona_content || '(no identity)';
+    $('#viewer').classList.add('open');
+    return;
+  }
   if(what === 'transcript'){
     $('#viewer-title').textContent = `Run #${id} — conversation · ${d.persona_name}`;
     $('#viewer-pre').textContent = (d.transcript||[]).map(t =>
