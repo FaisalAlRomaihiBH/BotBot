@@ -576,6 +576,7 @@ def flows_summary() -> list[dict]:
             " (SELECT COUNT(*) FROM approvals a WHERE a.project_id=p.id AND"
             "   a.status='active') AS approved,"
             " (SELECT MAX(rev) FROM revisions v WHERE v.project_id=p.id) AS head_rev,"
+            " (SELECT id FROM clients c WHERE c.project_id=p.id) AS client_id,"
             " (SELECT json_extract(v.requirements,'$.business_name')"
             "   FROM revisions v WHERE v.project_id=p.id"
             "   ORDER BY v.rev DESC LIMIT 1) AS business_name,"

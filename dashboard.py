@@ -202,6 +202,7 @@ body.view-log #main{overflow:hidden}
 .fc-idbig{font:600 17px var(--sans);color:var(--text);white-space:nowrap;
   display:flex;align-items:center;gap:8px;letter-spacing:-.01em}
 .fc-ts{font:10.5px var(--mono);color:var(--muted);white-space:nowrap}
+.fc-client{font:600 11px var(--mono);color:var(--amber);white-space:nowrap}
 .fc-flowstate{font:600 11.5px var(--sans);color:var(--accent);margin-top:2px;
   display:flex;align-items:center;gap:7px}
 .fc-flowstate .spin{width:11px;height:11px}
@@ -520,7 +521,7 @@ body.view-clients #main{overflow:hidden}
     <nav id="sb-nav">
       <div class="nav-item active" id="nav-home" data-view="home"><span class="nav-ico">◎</span><span class="nav-label">Home</span></div>
       <div class="nav-item" id="nav-log" data-view="log"><span class="nav-ico">&gt;_</span><span class="nav-label">Terminal</span></div>
-      <div class="nav-item" id="nav-flows" data-view="flows"><span class="nav-ico">⇶</span><span class="nav-label">Chatbot Flows</span></div>
+      <div class="nav-item" id="nav-flows" data-view="flows"><span class="nav-ico">⇶</span><span class="nav-label">Workflows</span></div>
       <div class="nav-item" id="nav-clients" data-view="clients"><span class="nav-ico">◉</span><span class="nav-label">Clients</span></div>
     </nav>
     <div id="sb-foot">
@@ -553,10 +554,6 @@ body.view-clients #main{overflow:hidden}
 
     <div id="log">
       <div id="log-head">
-        <span class="dot" style="background:#f87171"></span>
-        <span class="dot" style="background:#fbbf24"></span>
-        <span class="dot" style="background:#4ade80"></span>
-        <span class="t">botbot — terminal (live event log)</span>
         <input class="log-filter" id="lf-proj" type="text" inputmode="numeric"
           placeholder="Project #" aria-label="Filter by project number"
           spellcheck="false">
@@ -611,7 +608,7 @@ body.view-clients #main{overflow:hidden}
 
     <div id="chat">
       <div id="chat-head">
-        <button class="act" id="chat-back" title="Back to Chatbot Flows">←</button>
+        <button class="act" id="chat-back" title="Back to Workflows">←</button>
         <span class="t" style="color:var(--amber)">Operator Test Mode</span>
         <select class="proj-select" id="proj-select-chat" aria-label="Select test session"></select>
         <button class="act" id="proj-new">+ New test session</button>
@@ -665,7 +662,7 @@ $('#sb-toggle').onclick = () => {
   $('#sidebar').classList.toggle('collapsed');
   if(document.body.className === 'view-home') renderGraph();
 };
-const VIEW_TITLES = {home:'Operations', flows:'Chatbot Flows',
+const VIEW_TITLES = {home:'Operations', flows:'Workflows',
   chat:'Operator Test Chat', log:'Terminal', clients:'Clients'};
 function showView(view){
   document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('active'));
@@ -1007,7 +1004,8 @@ async function loadClients(){
 
 function renderLogTable(events){
   const rows = events.map(e => {
-    const t = new Date(e.ts*1000).toLocaleTimeString('en-GB');
+    const d = new Date(e.ts*1000);
+    const t = `${d.toLocaleDateString('en-CA')} ${d.toLocaleTimeString('en-GB')}`;
     const proj = e.project_id === '__system__' ? 'system'
       : !e.project_id ? 'console' : `#${e.project_num ?? '?'}`;
     const client = e.client_id != null ? `Client${e.client_id}` : '—';
@@ -1126,9 +1124,10 @@ async function loadLog(){
     const actor = (e.actor === 'client' || e.actor === 'owner')
       && e.client_id != null ? `Client${e.client_id}` : e.actor;
     if(e.type === 'project.created'){
-      // the auto-generated name is just a timestamp — noise; keep it short
+      // keep WHO created it; drop the auto-generated name (just a timestamp)
       return `<div class="ln">${ts} <span class="prj">${esc(proj)}</span> ` +
-        `<span class="ev">project.created</span></div>`;
+        `<span class="ev">project.created</span> <span class="ac">(${
+        esc(actor)})</span></div>`;
     }
     if(e.type === 'ui.click'){
       // clicks read as an action; operator clicks carry no location prefix
@@ -1156,7 +1155,7 @@ async function loadLog(){
   if(stick) body.scrollTop = body.scrollHeight;
 }
 
-/* ================= Chatbot Flows (monitoring, read-only) ================= */
+/* ================= Workflows (monitoring, read-only) ================= */
 const flowsUI = {data:null, expanded:new Set(), tab:{}, detail:{}};
 
 const STAGE_ICONS = {interviewing:'💬', architecture:'📐', building:'🔨',
@@ -1312,6 +1311,8 @@ function renderFlows(){
             f.project_name && f.project_name !== f.name
               ? ` · ${esc(f.project_name)}` : ''}
             ${f.is_test ? `<span class="fc-test">Test</span>` : ''}</span>
+          ${f.client_id != null
+            ? `<span class="fc-client">Client ${f.client_id}</span>` : ''}
           <span class="fc-ts">${f.created_ts
             ? new Date(f.created_ts*1000).toLocaleString([], {month:'short',
                 day:'numeric', hour:'2-digit', minute:'2-digit',
@@ -1742,7 +1743,7 @@ def system_payload() -> dict:
 
 
 def flows_payload() -> dict:
-    """Read-model for the Chatbot Flows monitor: one deterministic projection
+    """Read-model for the Workflows monitor: one deterministic projection
     per journey, driven by recorded state only. Reading it never calls a
     model, creates an interview, or advances anything."""
     store.ensure_default_project()

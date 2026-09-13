@@ -134,6 +134,12 @@ Wrap your entire output in this format and provide no other text
         content = ([{"type": "text",
                      "text": self.INSTRUCTIONS + self.parser.get_format_instructions()}]
                    + blocks)
+        # Cost hygiene: a cache breakpoint after the LAST block, so a retry
+        # (unparseable reply) re-reads instructions + all uploaded materials
+        # at 10% price instead of re-buying the whole payload.
+        if isinstance(content[-1], dict):
+            content[-1] = dict(content[-1]) | {
+                "cache_control": {"type": "ephemeral"}}
         last_error = None
         for _ in range(attempts):
             reply = self.llm.invoke([HumanMessage(content=content)])
